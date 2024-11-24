@@ -235,7 +235,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      point_white_active0005_0: 7368328800628442790
+      point_white_active0005_1: 8121684317911316201
+      point_white_active0005_2: 3265952604933282261
+      point_white_active0005_3: -5868703868859435332
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
