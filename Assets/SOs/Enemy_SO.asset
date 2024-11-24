@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebc445ae527e0a4429d12284521f3b6a, type: 3}
+  m_Name: Enemy_SO
+  m_EditorClassIdentifier: 
+  pawn: {fileID: 2533179969505074583, guid: 5a329a228daa02849bf2a94636a1cbcf, type: 3}
+  rook: {fileID: 6402892968040458680, guid: 666e55479f5afe34badf6a7b5654f7ea, type: 3}
+  knight: {fileID: -5711848221618334454, guid: 888762c9c3666024eb515c19ba02bd86, type: 3}
+  bishop: {fileID: 1379780806020190625, guid: dfe647dfc872a814fb02d4c21eb2a8f8, type: 3}
+  king: {fileID: -4821530343430527414, guid: f7e4c9cb0fe5e7d4f86343cc0302045c, type: 3}
+  queen: {fileID: 7519753400087680208, guid: 2de24f2c962cb6746a5be0942ecca4c4, type: 3}

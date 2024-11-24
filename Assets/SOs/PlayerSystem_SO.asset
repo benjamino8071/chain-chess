@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71521afe9b42b7241b0548eb7cad2dbd, type: 3}
+  m_Name: PlayerSystem_SO
+  m_EditorClassIdentifier: 
+  moveSpeed: 4
+  walkThroughDoorSpeed: 0.5
+  pawn: {fileID: 2533179969505074583, guid: 80927466a7a81c048bde258fe0cdeafa, type: 3}
+  rook: {fileID: 6402892968040458680, guid: 8ecce7d5b11afa54db3926fd98cf2949, type: 3}
+  knight: {fileID: -5711848221618334454, guid: e36dfa630b14b10438cb3a8aea946ca7, type: 3}
+  bishop: {fileID: 1379780806020190625, guid: 52cb59fd2104be047a124a1eecc764cf, type: 3}
+  queen: {fileID: 7519753400087680208, guid: 35daaf531971a974a977c7dfde67d248, type: 3}
+  king: {fileID: -4821530343430527414, guid: 6ab63fb05b0cd654399b0b52e0e15650, type: 3}
+  roomNumberSaved: 0
+  startingPiece: 0

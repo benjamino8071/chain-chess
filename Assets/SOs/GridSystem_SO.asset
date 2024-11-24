@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ab09b642a0850444bf1d7577cb1ebe9, type: 3}
+  m_Name: GridSystem_SO
+  m_EditorClassIdentifier: 
+  baseColor: {r: 0.8584906, g: 0.8218853, b: 0.6924617, a: 1}
+  offsetColor: {r: 0.5660378, g: 0.39582592, b: 0.15752938, a: 1}
+  width: 12
+  height: 89
