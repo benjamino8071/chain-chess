@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class TimerUISystem : Dependency
+public class TimerUISystem : ElDependency
 {
     private PlayerSystem _playerSystem;
     
@@ -11,10 +11,10 @@ public class TimerUISystem : Dependency
     
     private bool _playTimer;
     
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
-        if (_creator.TryGetDependency("PlayerSystem", out PlayerSystem playerSystem))
+        base.GameStart(elCreator);
+        if (Creator.TryGetDependency("PlayerSystem", out PlayerSystem playerSystem))
         {
             _playerSystem = playerSystem;
         }
@@ -23,22 +23,22 @@ public class TimerUISystem : Dependency
         
         _timeText = GameObject.FindWithTag("TimeText").GetComponent<TextMeshProUGUI>();
         
-        if (_creator.playerSystemSo.roomNumberSaved == 0)
+        if (Creator.playerSystemSo.roomNumberSaved == 0)
         {
-            _creator.timerSo.currentTime = _creator.timerSo.maxTime;
+            Creator.timerSo.currentTime = Creator.timerSo.maxTime;
         }
         
-        string timeText = _creator.timerSo.currentTime.ToString("F2")+"s";
+        string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
         SetTimerText(timeText);
     }
 
     public override void GameEarlyUpdate(float dt)
     {
-        if (_playTimer && _creator.timerSo.currentTime > 0)
+        if (_playTimer && Creator.timerSo.currentTime > 0)
         {
-            _creator.timerSo.currentTime -= dt;
-            string timeText = _creator.timerSo.currentTime.ToString("F2")+"s";
-            if (_creator.timerSo.currentTime <= 0)
+            Creator.timerSo.currentTime -= dt;
+            string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
+            if (Creator.timerSo.currentTime <= 0)
             {
                 timeText = "0.00s";
                 _playerSystem.SetState(PlayerSystem.States.Captured);

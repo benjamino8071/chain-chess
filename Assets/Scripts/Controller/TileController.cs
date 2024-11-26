@@ -3,15 +3,33 @@ using UnityEngine;
 
 public class TileController : Controller
 {
-    private Creator _creator;
+    private ElCreator _elCreator;
     
     private Transform _tileInstance;
 
     private SpriteRenderer _tileHighlight;
     
-    public void SetTile(Transform tile, bool isOffset, Creator creator)
+    public void SetTile(Transform tile, ElCreator elCreator)
     {
-        _creator = creator;
+        _elCreator = elCreator;
+        
+        _tileInstance = tile;
+        
+        List<SpriteRenderer> tileChildren = new List<SpriteRenderer>(_tileInstance.GetComponentsInChildren<SpriteRenderer>(true));
+        foreach (SpriteRenderer childSprRend in tileChildren)
+        {
+            if (childSprRend.tag.Contains("TileHighlight"))
+            {
+                _tileHighlight = childSprRend;
+                ToggleHighlight(false);
+                break;
+            }
+        }
+    }
+    
+    public void SetTile(Transform tile, bool isOffset, ElCreator elCreator)
+    {
+        _elCreator = elCreator;
         
         _tileInstance = tile;
 
@@ -28,7 +46,7 @@ public class TileController : Controller
             }
         }
 
-        spriteRenderer.color = isOffset ? _creator.gridSystemSo.offsetColor : _creator.gridSystemSo.baseColor;
+        spriteRenderer.color = isOffset ? _elCreator.gridSystemSo.offsetColor : _elCreator.gridSystemSo.baseColor;
     }
 
     public void ToggleHighlight(bool show)

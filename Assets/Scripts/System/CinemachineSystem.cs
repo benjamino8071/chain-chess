@@ -2,22 +2,22 @@ using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
-public class CinemachineSystem : Dependency
+public class CinemachineSystem : ElDependency
 {
     private Animator _animator;
 
     private CinemachineStateDrivenCamera _cinemachineStateDrivenCamera;
 
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
+        base.GameStart(elCreator);
 
         GameObject cameraStateMachine = GameObject.FindWithTag("CameraStateMachine");
         _animator = cameraStateMachine.GetComponent<Animator>();
 
         _cinemachineStateDrivenCamera = cameraStateMachine.GetComponent<CinemachineStateDrivenCamera>();
         
-        _creator.StartACoRoutine(SetFirstState());
+        Creator.StartACoRoutine(SetFirstState());
     }
 
     private IEnumerator SetFirstState()
@@ -26,7 +26,7 @@ public class CinemachineSystem : Dependency
 
         yield return new WaitForSeconds(0.1f);
         
-        SwitchState(_creator.playerSystemSo.roomNumberSaved);
+        SwitchState(Creator.playerSystemSo.roomNumberSaved);
     }
 
     public void SwitchState(int roomNumber)

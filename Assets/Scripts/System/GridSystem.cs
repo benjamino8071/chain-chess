@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class GridSystem : Dependency
+public class GridSystem : ElDependency
 {
     private EnemiesSystem _enemiesSystem;
     
@@ -13,71 +13,83 @@ public class GridSystem : Dependency
     private Dictionary<Vector3, List<Vector3>> _connectedTiles = new();
 
     //Key = position of a door, Value = position of the door directly opposite this door (to get to different part of map)
-    private Dictionary<Vector3, SingleDoorPosition> _doorToDoorPositions = new();
+    private Dictionary<Vector3, SingleDoorPosition> _singleDoorPositions = new();
     
-    private Vector3 _currentTilePosition;
-
-    private bool _inPuzzle;
+    private Vector3 _highlightedPosition = Vector3.zero;
     
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
+        base.GameStart(elCreator);
 
-        if (_creator.TryGetDependency("EnemiesSystem", out EnemiesSystem enemiesSystem))
+        if (Creator.TryGetDependency("EnemiesSystem", out EnemiesSystem enemiesSystem))
         {
             _enemiesSystem = enemiesSystem;
         }
         
-        Transform tileParent = GameObject.FindWithTag("TileParent").transform;
-        
-        //Go through tilemap
-        GameObject tileMapTransform = GameObject.FindWithTag("Tilemap");
-        Tilemap tileMap = tileMapTransform.GetComponent<Tilemap>();
-        List<Vector3> _tileMapLocations = new();
-        for (int x = tileMap.cellBounds.xMin; x < tileMap.cellBounds.xMax; x++)
-        {
-            for (int y = tileMap.cellBounds.yMin; y < tileMap.cellBounds.yMax; y++)
-            {
-                Vector3Int localLocation = new Vector3Int(
-                    x: x,
-                    y: y,
-                    z: 0);
-               
-                Vector3 location = tileMap.CellToWorld(localLocation);
-                if (tileMap.HasTile(localLocation))
-                {
-                    _tileMapLocations.Add(location);
-                }
-            }
-        }
-
         foreach (GameObject doorPosition in GameObject.FindGameObjectsWithTag("DoorPosition"))
         {
             SingleDoorPosition singleDoorPosition = doorPosition.GetComponent<SingleDoorPosition>();
-            _doorToDoorPositions.Add(doorPosition.transform.position, singleDoorPosition);
+            _singleDoorPositions.Add(doorPosition.transform.position, singleDoorPosition);
         }
         
-        for (int x = 0; x < _creator.gridSystemSo.width; x++)
+        GameObject[] tilesAlreadyPlaced = GameObject.FindGameObjectsWithTag("Tile");
+        if (tilesAlreadyPlaced.Length > 0)
         {
-            for (int y = 1; y < _creator.gridSystemSo.height; y++)
+            foreach (GameObject tileChild in tilesAlreadyPlaced)
             {
-                Vector3 position = new Vector3(x + 0.5f, y + 0.5f, 0);
-                
-                GameObject spawnedTile =
-                    _creator.InstantiateGameObject(_creator.tilePrefab, position, Quaternion.identity);
-                spawnedTile.transform.SetParent(tileParent, true);
-                
-                spawnedTile.name = $"Tile {x} {y}";
-
-                var isOffset = (x + y) % 2 == 1;
-
                 TileController tileController = new TileController();
-                tileController.SetTile(spawnedTile.transform, isOffset, _creator);
-
-                Vector3 fing = new Vector3(x, y, 0);
-                if (!_tileMapLocations.Contains(fing))
+                tileController.SetTile(tileChild.transform, Creator);
+                
+                _validTiles.Add(tileChild.transform.position, tileController);
+            }
+        }
+        else
+        {
+            Transform tileParent = GameObject.FindWithTag("TileParent").transform;
+            
+            //Go through tilemap
+            GameObject tileMapTransform = GameObject.FindWithTag("Tilemap");
+            Tilemap tileMap = tileMapTransform.GetComponent<Tilemap>();
+            List<Vector3> _tileMapLocations = new();
+            for (int x = tileMap.cellBounds.xMin; x < tileMap.cellBounds.xMax; x++)
+            {
+                for (int y = tileMap.cellBounds.yMin; y < tileMap.cellBounds.yMax; y++)
                 {
-                    _validTiles.Add(spawnedTile.transform.position, tileController);
+                    Vector3Int localLocation = new Vector3Int(
+                        x: x,
+                        y: y,
+                        z: 0);
+               
+                    Vector3 location = tileMap.CellToWorld(localLocation);
+                    if (tileMap.HasTile(localLocation))
+                    {
+                        _tileMapLocations.Add(location);
+                    }
+                }
+            }
+        
+            for (int x = 0; x < Creator.gridSystemSo.width; x++)
+            {
+                for (int y = 1; y < Creator.gridSystemSo.height; y++)
+                {
+                    Vector3 position = new Vector3(x + 0.5f, y + 0.5f, 0);
+                
+                    GameObject spawnedTile =
+                        Creator.InstantiateGameObject(Creator.tilePrefab, position, Quaternion.identity);
+                    spawnedTile.transform.SetParent(tileParent, true);
+                
+                    spawnedTile.name = $"Tile {x} {y}";
+
+                    var isOffset = (x + y) % 2 == 1;
+
+                    TileController tileController = new TileController();
+                    tileController.SetTile(spawnedTile.transform, isOffset, Creator);
+
+                    Vector3 currPos = new Vector3(x, y, 0);
+                    if (!_tileMapLocations.Contains(currPos))
+                    {
+                        _validTiles.Add(spawnedTile.transform.position, tileController);
+                    }
                 }
             }
         }
@@ -120,11 +132,22 @@ public class GridSystem : Dependency
 
         if (Physics.Raycast(ray, out RaycastHit hitData))
         {
-            _currentTilePosition = hitData.transform.position;
-            foreach (TileController tileController in GetAllTileControllers())
+            if (_validTiles.ContainsKey(hitData.transform.position))
             {
-                tileController.ToggleHighlight(!_inPuzzle && tileController.GetPosition() == _currentTilePosition);
+                _highlightedPosition = hitData.transform.position;
             }
+            else if (IsDoorPosition(hitData.transform.position))
+            {
+                _highlightedPosition = hitData.transform.position;
+            }
+            else
+            {
+                _highlightedPosition = Vector3.zero;
+            }
+        }
+        else
+        {
+            _highlightedPosition = Vector3.zero;
         }
     }
 
@@ -135,18 +158,18 @@ public class GridSystem : Dependency
 
     public bool IsDoorPosition(Vector3 position)
     {
-        return _doorToDoorPositions.ContainsKey(position);
+        return _singleDoorPositions.ContainsKey(position);
     }
 
-    public bool TryGetSingleDoorPosition(Vector3 position, out SingleDoorPosition oppositeDoorPosition)
+    public bool TryGetSingleDoorPosition(Vector3 position, out SingleDoorPosition singleDoorPos)
     {
-        if (_doorToDoorPositions.TryGetValue(position, out SingleDoorPosition oppositeDoor))
+        if (_singleDoorPositions.TryGetValue(position, out SingleDoorPosition doorPos))
         {
-            oppositeDoorPosition = oppositeDoor;
+            singleDoorPos = doorPos;
             return true;
         }
 
-        oppositeDoorPosition = default;
+        singleDoorPos = default;
         return false;
     }
 
@@ -162,14 +185,9 @@ public class GridSystem : Dependency
 
     public Vector3 GetHighlightPosition()
     {
-        return _currentTilePosition;
+        return _highlightedPosition;
     }
-
-    public void SetInPuzzle(bool inPuzzle)
-    {
-        _inPuzzle = inPuzzle;
-    }
-
+    
     public List<Vector3> GetNearbyPositions(Vector3 position)
     {
         return _connectedTiles[position];

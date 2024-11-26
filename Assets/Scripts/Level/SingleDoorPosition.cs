@@ -20,6 +20,8 @@ public class SingleDoorPosition : MonoBehaviour
     
     [FormerlySerializedAs("_otherDoorRoomNumber")] public int otherDoorRoomNumber;
 
+    public bool isFirstDoor;
+    
     public bool isFinalDoor;
 
     public PlayerSystem_SO playerSystemSo;
@@ -27,9 +29,9 @@ public class SingleDoorPosition : MonoBehaviour
     private void Start()
     {
         //Open the door if the player is already passed this point
-        if (roomNumber < playerSystemSo.roomNumberSaved)
+        if (isDoorOpen || roomNumber < playerSystemSo.roomNumberSaved)
         {
-            SetDoorToOpen();
+            ForceDoorOpen();
         }
     }
 
@@ -47,15 +49,14 @@ public class SingleDoorPosition : MonoBehaviour
     {
         if(isDoorOpen)
             return;
-        _spriteRenderer.sprite = _doorOpenSprite;
-        isDoorOpen = true;
-        _otherDoor.SetDoorToOpen();
+        ForceDoorOpen();
     }
 
     private void ForceDoorOpen()
     {
         _spriteRenderer.sprite = _doorOpenSprite;
         isDoorOpen = true;
-        _otherDoor.SetDoorToOpen();
+        if(!isFinalDoor)
+            _otherDoor.SetDoorToOpen();
     }
 }

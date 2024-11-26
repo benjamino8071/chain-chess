@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class TurnInfoUISystem : Dependency
+public class TurnInfoUISystem : ElDependency
 {
     private PlayerSystem _playerSystem;
     private EnemiesSystem _enemiesSystem;
@@ -15,19 +15,19 @@ public class TurnInfoUISystem : Dependency
         Enemy
     }
     
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
+        base.GameStart(elCreator);
 
-        if (_creator.TryGetDependency("PlayerSystem", out PlayerSystem playerSystem))
+        if (Creator.TryGetDependency("PlayerSystem", out PlayerSystem playerSystem))
         {
             _playerSystem = playerSystem;
         }
-        if (_creator.TryGetDependency("EnemiesSystem", out EnemiesSystem enemiesSystem))
+        if (Creator.TryGetDependency("EnemiesSystem", out EnemiesSystem enemiesSystem))
         {
             _enemiesSystem = enemiesSystem;
         }
-        if (_creator.TryGetDependency("DoorsSystem", out DoorsSystem doorsSystem))
+        if (Creator.TryGetDependency("DoorsSystem", out DoorsSystem doorsSystem))
         {
             _doorsSystem = doorsSystem;
         }

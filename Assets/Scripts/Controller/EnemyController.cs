@@ -11,6 +11,7 @@ public class EnemyController : Controller
     private TurnInfoUISystem _turnInfoUISystem;
     private GameOverUISystem _gameOverUISystem;
     private TimerUISystem _timerUISystem;
+    private DoorsSystem _doorsSystem;
     
     private Transform _enemyInstance;
 
@@ -32,50 +33,73 @@ public class EnemyController : Controller
     private States _state;
     
     private Vector3 _positionChosen;
+
+    private int _roomNumber;
     
     private float _moveSpeed;
     private float _sinTime;
     
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
+        base.GameStart(elCreator);
 
-        if (_creator.TryGetDependency("GridSystem", out GridSystem gridSystem))
+        if (Creator.TryGetDependency("GridSystem", out GridSystem gridSystem))
         {
             _gridSystem = gridSystem;
         }
-        if (_creator.TryGetDependency("PlayerSystem", out PlayerSystem playerSystem))
+        if (Creator.TryGetDependency("PlayerSystem", out PlayerSystem playerSystem))
         {
             _playerSystem = playerSystem;
         }
-        if (_creator.TryGetDependency("EnemiesSystem", out EnemiesSystem enemiesSystem))
+        if (Creator.TryGetDependency("EnemiesSystem", out EnemiesSystem enemiesSystem))
         {
             _enemiesSystem = enemiesSystem;
         }
-        if (_creator.TryGetDependency("TurnInfoUISystem", out TurnInfoUISystem turnInfoUISystem))
+        if (Creator.TryGetDependency("TurnInfoUISystem", out TurnInfoUISystem turnInfoUISystem))
         {
             _turnInfoUISystem = turnInfoUISystem;
         }
-        if (_creator.TryGetDependency("GameOverUISystem", out GameOverUISystem gameOverUISystem))
+        if (Creator.TryGetDependency("GameOverUISystem", out GameOverUISystem gameOverUISystem))
         {
             _gameOverUISystem = gameOverUISystem;
         }
-        if (_creator.TryGetDependency("TimerUISystem", out TimerUISystem timerUISystem))
+        if (Creator.TryGetDependency("TimerUISystem", out TimerUISystem timerUISystem))
         {
             _timerUISystem = timerUISystem;
+        }
+        if (Creator.TryGetDependency("DoorsSystem", out DoorsSystem doorsSystem))
+        {
+            _doorsSystem = doorsSystem;
         }
         
         SetState(States.WaitingForTurn);
     }
     
-    public void SetEnemyInstance(Vector3 position, Piece piece)
+    public void SetEnemyInstance(Vector3 position, Piece piece, List<SingleDoorPosition> doorPositionsOrdered)
     {
         _enemyInstance =
-            _creator.InstantiateGameObject(_creator.enemyPrefab, position, Quaternion.identity).transform;
-
+            Creator.InstantiateGameObject(Creator.enemyPrefab, position, Quaternion.identity).transform;
+        
         _spriteRenderer = _enemyInstance.GetComponentInChildren<SpriteRenderer>(); //Should only be ONE SpriteRenderer under _enemyInstance
 
         _playerAnimator = _enemyInstance.GetComponentInChildren<Animator>();
+        
+        for (int i = 0; i < doorPositionsOrdered.Count; i++)
+        {
+            float currentDoorYpos = doorPositionsOrdered[i].transform.position.y;
+            float nextDoorYpos = doorPositionsOrdered[i+1].transform.position.y;
+
+            if (position.y > currentDoorYpos && position.y < nextDoorYpos)
+            {
+                int currentRoomNumber = doorPositionsOrdered[i].roomNumber;
+                int nextRoomNumber = doorPositionsOrdered[i+1].roomNumber;
+                if (currentRoomNumber == nextRoomNumber)
+                {
+                    _roomNumber = currentRoomNumber;
+                    break;
+                }
+            }
+        }
         
         SetPiece(piece);
     }
@@ -88,22 +112,22 @@ public class EnemyController : Controller
                 _spriteRenderer.sprite = default;
                 break;
             case Piece.Pawn:
-                _spriteRenderer.sprite = _creator.enemySo.pawn;
+                _spriteRenderer.sprite = Creator.enemySo.pawn;
                 break;
             case Piece.Rook:
-                _spriteRenderer.sprite = _creator.enemySo.rook;
+                _spriteRenderer.sprite = Creator.enemySo.rook;
                 break;
             case Piece.Knight:
-                _spriteRenderer.sprite = _creator.enemySo.knight;
+                _spriteRenderer.sprite = Creator.enemySo.knight;
                 break;
             case Piece.Bishop:
-                _spriteRenderer.sprite = _creator.enemySo.bishop;
+                _spriteRenderer.sprite = Creator.enemySo.bishop;
                 break;
             case Piece.Queen:
-                _spriteRenderer.sprite = _creator.enemySo.queen;
+                _spriteRenderer.sprite = Creator.enemySo.queen;
                 break;
             case Piece.King:
-                _spriteRenderer.sprite = _creator.enemySo.king;
+                _spriteRenderer.sprite = Creator.enemySo.king;
                 break;
         }
         
@@ -308,7 +332,7 @@ public class EnemyController : Controller
                         _positionChosen = possiblePositions[chosenPositionIndex];
                     }
                     
-                    _moveSpeed = _creator.playerSystemSo.moveSpeed;
+                    _moveSpeed = Creator.playerSystemSo.moveSpeed;
                     SetState(States.MoveToTile);
                     TriggerJumpAnimation();
                 }
@@ -392,6 +416,6 @@ public class EnemyController : Controller
     public int GetRoomNumber()
     {
         //11.5f is the halfway point, along the y-axis, between each room
-        return (int)(_enemyInstance.position.y / 11.5f);
+        return _roomNumber;
     }
 }

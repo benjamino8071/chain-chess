@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerSystem : Dependency
+public class PlayerSystem : ElDependency
 {
     private GridSystem _gridSystem;
     private EnemiesSystem _enemiesSystem;
@@ -30,6 +30,8 @@ public class PlayerSystem : Dependency
     private float _moveSpeed;
     private float _sinTime;
 
+    private int _roomNumber;
+
     public enum States
     {
         WaitingForDefaultPiece,
@@ -52,51 +54,51 @@ public class PlayerSystem : Dependency
     private float _fadeInAnimTimer;
 
     
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
+        base.GameStart(elCreator);
 
-        if (_creator.TryGetDependency("GridSystem", out GridSystem gridSystem))
+        if (Creator.TryGetDependency("GridSystem", out GridSystem gridSystem))
         {
             _gridSystem = gridSystem;
         }
-        if (_creator.TryGetDependency("EnemiesSystem", out EnemiesSystem enemiesSystem))
+        if (Creator.TryGetDependency("EnemiesSystem", out EnemiesSystem enemiesSystem))
         {
             _enemiesSystem = enemiesSystem;
         }
-        if (_creator.TryGetDependency("CinemachineSystem", out CinemachineSystem cinemachineSystem))
+        if (Creator.TryGetDependency("CinemachineSystem", out CinemachineSystem cinemachineSystem))
         {
             _cinemachineSystem = cinemachineSystem;
         }
-        if (_creator.TryGetDependency("TurnInfoUISystem", out TurnInfoUISystem turnInfoUISystem))
+        if (Creator.TryGetDependency("TurnInfoUISystem", out TurnInfoUISystem turnInfoUISystem))
         {
             _turnInfoUISystem = turnInfoUISystem;
         }
-        if (_creator.TryGetDependency("TimerUISystem", out TimerUISystem timerUISystem))
+        if (Creator.TryGetDependency("TimerUISystem", out TimerUISystem timerUISystem))
         {
             _timerUISystem = timerUISystem;
         }
-        if (_creator.TryGetDependency("CapturedPiecesUISystem", out CapturedPiecesUISystem capturedPiecesUISystem))
+        if (Creator.TryGetDependency("CapturedPiecesUISystem", out CapturedPiecesUISystem capturedPiecesUISystem))
         {
             _capturedPiecesUISystem = capturedPiecesUISystem;
         }
-        if (_creator.TryGetDependency("EndGameUISystem", out EndGameUISystem endGameUISystem))
+        if (Creator.TryGetDependency("EndGameUISystem", out EndGameUISystem endGameUISystem))
         {
             _endGameUISystem = endGameUISystem;
         }
-        if (_creator.TryGetDependency("AudioSystem", out AudioSystem audioSystem))
+        if (Creator.TryGetDependency("AudioSystem", out AudioSystem audioSystem))
         {
             _audioSystem = audioSystem;
         }
-        if (_creator.TryGetDependency("GameOverUISystem", out GameOverUISystem gameOverUISystem))
+        if (Creator.TryGetDependency("GameOverUISystem", out GameOverUISystem gameOverUISystem))
         {
             _gameOverUISystem = gameOverUISystem;
         }
         
         Transform playerSpawnPosition = GameObject.FindWithTag("PlayerSpawnPosition").transform;
-        Vector3 spawnPos = playerSpawnPosition.position + new Vector3(0, _creator.playerSystemSo.roomNumberSaved * 11f, 0);
+        Vector3 spawnPos = playerSpawnPosition.position + new Vector3(0, Creator.playerSystemSo.roomNumberSaved * 11f, 0);
         
-        _playerCharacter = _creator.InstantiateGameObject(_creator.playerPrefab, spawnPos, Quaternion.identity).transform;
+        _playerCharacter = Creator.InstantiateGameObject(Creator.playerPrefab, spawnPos, Quaternion.identity).transform;
 
         _playerAnimator = _playerCharacter.GetComponentInChildren<Animator>();
         
@@ -114,7 +116,7 @@ public class PlayerSystem : Dependency
         for (int i = 0; i < _validPositionsVisuals.Capacity; i++)
         {
             GameObject validPos =
-                _creator.InstantiateGameObject(_creator.validPositionPrefab, Vector3.zero, Quaternion.identity);
+                Creator.InstantiateGameObject(Creator.validPositionPrefab, Vector3.zero, Quaternion.identity);
             _validPositionsVisuals.Add(validPos.transform);
         }
         
@@ -123,8 +125,8 @@ public class PlayerSystem : Dependency
 
     public void SetDefaultPiece(Piece piece)
     {
-        _creator.playerSystemSo.startingPiece = piece;
-        _capturedPieces.AddFirst(_creator.playerSystemSo.startingPiece);
+        Creator.playerSystemSo.startingPiece = piece;
+        _capturedPieces.AddFirst(Creator.playerSystemSo.startingPiece);
     }
 
     private float Evaluate(float x)
@@ -147,6 +149,12 @@ public class PlayerSystem : Dependency
             case States.Idle:
                 if(_movesInThisTurn.Count == 0) return;
                 
+                if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
+                {
+                    UpdatePlayerPosition();
+                }
+                
+                /*
                 Piece piece = _movesInThisTurn.Peek();
                 bool isPawn = piece == Piece.Pawn;
                 Vector3 posInFrontOfPlayer = _playerCharacter.position + new Vector3(0, 1, 0);
@@ -176,6 +184,7 @@ public class PlayerSystem : Dependency
                     
                     _movesInThisTurn.Dequeue();
                 }
+                */
                 break;
             case States.Moving:
                 if (_playerCharacter.position != _jumpPosition)
@@ -208,7 +217,8 @@ public class PlayerSystem : Dependency
                             {
                                 _doorPositionOnOut = singleDoorPosition.GetPlayerPositionOnOut();
                                 _roomNumberOnOut = singleDoorPosition.GetOtherDoorRoomNumber();
-                                _moveSpeed = _creator.playerSystemSo.walkThroughDoorSpeed;
+                                _roomNumber = _roomNumberOnOut;
+                                _moveSpeed = Creator.playerSystemSo.walkThroughDoorSpeed;
                                 TriggerFadeOutAnimation();
                                 SetState(States.FadeOutBeforeDoorWalk);
                                 _timerUISystem.StopTimer();
@@ -265,10 +275,10 @@ public class PlayerSystem : Dependency
                     //Experimenting with having the play lose the chain after going into a new room
                     _movesInThisTurn.Clear();
                     _capturedPieces.Clear();
-                    _capturedPieces.AddFirst(_creator.playerSystemSo.startingPiece);
+                    _capturedPieces.AddFirst(Creator.playerSystemSo.startingPiece);
                     _capturedPiecesUISystem.InNewRoomReset();
-                    _capturedPiecesUISystem.ShowNewPiece(_creator.playerSystemSo.startingPiece, true);
-                    _creator.playerSystemSo.roomNumberSaved = GetRoomNumber();
+                    _capturedPiecesUISystem.ShowNewPiece(Creator.playerSystemSo.startingPiece, true);
+                    Creator.playerSystemSo.roomNumberSaved = GetRoomNumber();
                     SetState(States.Idle);
                     _timerUISystem.StartTimer();
                 }
@@ -297,15 +307,18 @@ public class PlayerSystem : Dependency
             Vector3 newPos = _playerCharacter.position + pieceMove;
             
             if(positionRequested != newPos) continue;
-            
-            if(!_gridSystem.IsPositionValid(newPos)) continue;
+            Debug.Log("Found position requested");
             
             if (_gridSystem.TryGetSingleDoorPosition(newPos, out SingleDoorPosition singleDoorPosition))
             {
                 //If this door is locked, we cannot allow access
+                Debug.Log("Door requested. is this door open? "+singleDoorPosition.isDoorOpen);
                 if(!singleDoorPosition.isDoorOpen) continue;
+                Debug.Log("Player wants to go through door ");
             }
-                        
+            else if(!_gridSystem.IsPositionValid(newPos))
+                continue;
+            
             if (piece == Piece.Pawn && _enemiesSystem.IsEnemyAtThisPosition(newPos) && pieceMove == new Vector3(0, 1, 0))
             {
                 //Cannot take a piece that is directly in front of pawn
@@ -320,10 +333,10 @@ public class PlayerSystem : Dependency
                 _movesInThisTurn.Enqueue(enemyPiece);
                 _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
             }
-                    
+            
             // Set our position as a fraction of the distance between the markers.
             _jumpPosition = positionRequested;
-            _moveSpeed = _creator.playerSystemSo.moveSpeed;
+            _moveSpeed = Creator.playerSystemSo.moveSpeed;
             SetState(States.Moving);
                     
             TriggerJumpAnimation();
@@ -355,9 +368,9 @@ public class PlayerSystem : Dependency
                     //canMoveToNextSpot = canMoveToNextSpot && singleDoorPosition.isDoorOpen;
                     if(!singleDoorPosition.isDoorOpen) break;
                 }
-                
+                else if(!_gridSystem.IsPositionValid(nextSpot))
+                    break;
                 //If we have found an invalid position, we have explored this path the furthest
-                if(!_gridSystem.IsPositionValid(nextSpot)) break;
                 
                 //If, while exploring this path we find an enemy and the position of that enemy is NOT the position requested,
                 //then it is impossible for the player to choose a position past this enemy.
@@ -387,7 +400,7 @@ public class PlayerSystem : Dependency
                     
                 // Set our position as a fraction of the distance between the markers.
                 _jumpPosition = positionRequested;
-                _moveSpeed = _creator.playerSystemSo.moveSpeed;
+                _moveSpeed = Creator.playerSystemSo.moveSpeed;
                 SetState(States.Moving);
                 
                 TriggerJumpAnimation();
@@ -513,14 +526,14 @@ public class PlayerSystem : Dependency
         {
             Vector3 positionFromPlayer = _playerCharacter.position + move;
                     
-            if (_gridSystem.TryGetSingleDoorPosition(positionFromPlayer, out SingleDoorPosition knightSingDoorPos))
+            if (_gridSystem.TryGetSingleDoorPosition(positionFromPlayer, out SingleDoorPosition singleDoorPos))
             {
                 //If this door is locked, we cannot allow access
-                if(!knightSingDoorPos.isDoorOpen) continue;
+                if(!singleDoorPos.isDoorOpen) continue;
             }
-                            
-            if(!_gridSystem.IsPositionValid(positionFromPlayer)) continue;
-                            
+            else if(!_gridSystem.IsPositionValid(positionFromPlayer))
+                continue;
+            
             validMoves.Add(positionFromPlayer);
         }
 
@@ -533,19 +546,18 @@ public class PlayerSystem : Dependency
         foreach (Vector3 diagonal in moves)
         {
             Vector3 furthestPointOfDiagonal = _playerCharacter.position;
-
             while (true)
             {
                 Vector3 nextSpot = furthestPointOfDiagonal + diagonal;
-                        
                 if (_gridSystem.TryGetSingleDoorPosition(nextSpot, out SingleDoorPosition knightSingDoorPos))
                 {
                     //If this door is locked, we cannot allow access
-                    if(!knightSingDoorPos.isDoorOpen) break;
+                    if(!knightSingDoorPos.isDoorOpen) 
+                        break;
                 }
-                            
-                if(!_gridSystem.IsPositionValid(nextSpot)) break;
-                                
+                else if(!_gridSystem.IsPositionValid(nextSpot))
+                    break;
+                
                 furthestPointOfDiagonal = nextSpot;
                 validMoves.Add(furthestPointOfDiagonal);
                         
@@ -683,22 +695,22 @@ public class PlayerSystem : Dependency
                 _playerSprite.sprite = default;
                 break;
             case Piece.Pawn:
-                _playerSprite.sprite = _creator.playerSystemSo.pawn;
+                _playerSprite.sprite = Creator.playerSystemSo.pawn;
                 break;
             case Piece.Rook:
-                _playerSprite.sprite = _creator.playerSystemSo.rook;
+                _playerSprite.sprite = Creator.playerSystemSo.rook;
                 break;
             case Piece.Knight:
-                _playerSprite.sprite = _creator.playerSystemSo.knight;
+                _playerSprite.sprite = Creator.playerSystemSo.knight;
                 break;
             case Piece.Bishop:
-                _playerSprite.sprite = _creator.playerSystemSo.bishop;
+                _playerSprite.sprite = Creator.playerSystemSo.bishop;
                 break;
             case Piece.Queen:
-                _playerSprite.sprite = _creator.playerSystemSo.queen;
+                _playerSprite.sprite = Creator.playerSystemSo.queen;
                 break;
             case Piece.King:
-                _playerSprite.sprite = _creator.playerSystemSo.king;
+                _playerSprite.sprite = Creator.playerSystemSo.king;
                 break;
         }
     }
@@ -728,7 +740,7 @@ public class PlayerSystem : Dependency
             case States.Idle:
                 if (_movesInThisTurn.Count == 0)
                 {
-                    UpdateSprite(_creator.playerSystemSo.startingPiece);
+                    UpdateSprite(Creator.playerSystemSo.startingPiece);
                     //Reset possible moves
                     foreach (Piece capturedPiece in _capturedPieces)
                     {
@@ -738,7 +750,7 @@ public class PlayerSystem : Dependency
                 }
                 break;
             case States.WaitingForTurn:
-                UpdateSprite(_creator.playerSystemSo.startingPiece);
+                UpdateSprite(Creator.playerSystemSo.startingPiece);
                 break;
         }
         _state = state;
@@ -756,7 +768,6 @@ public class PlayerSystem : Dependency
 
     public int GetRoomNumber()
     {
-        //11.5f is the halway point, along the y-axis, between each room
-        return (int)(_playerCharacter.position.y / 11f);
+        return _roomNumber;
     }
 }

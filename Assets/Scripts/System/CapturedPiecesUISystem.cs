@@ -3,7 +3,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CapturedPiecesUISystem : Dependency
+public class CapturedPiecesUISystem : ElDependency
 {
     private Transform _capturedPiecesParent;
     
@@ -12,9 +12,9 @@ public class CapturedPiecesUISystem : Dependency
     private LinkedList<RectTransform> _capturedPiecesImages = new ();
 
     
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
+        base.GameStart(elCreator);
 
         _capturedPiecesParent = GameObject.FindWithTag("CapturedPiecesParent").transform;
 
@@ -30,12 +30,12 @@ public class CapturedPiecesUISystem : Dependency
         {
             RectTransform lastPieceTransform = _capturedPiecesImages.Last.Value;
 
-            newPieceImage = _creator.InstantiateGameObject(_creator.capturedPieceImagePrefab,
+            newPieceImage = Creator.InstantiateGameObject(Creator.capturedPieceImagePrefab,
                 lastPieceTransform.position + new Vector3(150, 0, 0), Quaternion.identity);
         }
         else
         {
-            newPieceImage = _creator.InstantiateGameObject(_creator.capturedPieceImagePrefab,
+            newPieceImage = Creator.InstantiateGameObject(Creator.capturedPieceImagePrefab,
                 _capturedPiecesParent.position, Quaternion.identity);
         }
 
@@ -45,22 +45,22 @@ public class CapturedPiecesUISystem : Dependency
         switch (piece)
         {
             case Piece.Pawn:
-                visual.sprite = _creator.playerSystemSo.pawn;
+                visual.sprite = Creator.playerSystemSo.pawn;
                 break;
             case Piece.Rook:
-                visual.sprite = _creator.playerSystemSo.rook;
+                visual.sprite = Creator.playerSystemSo.rook;
                 break;
             case Piece.Knight:
-                visual.sprite = _creator.playerSystemSo.knight;
+                visual.sprite = Creator.playerSystemSo.knight;
                 break;
             case Piece.Bishop:
-                visual.sprite = _creator.playerSystemSo.bishop;
+                visual.sprite = Creator.playerSystemSo.bishop;
                 break;
             case Piece.Queen:
-                visual.sprite = _creator.playerSystemSo.queen;
+                visual.sprite = Creator.playerSystemSo.queen;
                 break;
             case Piece.King:
-                visual.sprite = _creator.playerSystemSo.king;
+                visual.sprite = Creator.playerSystemSo.king;
                 break;
         }
         
@@ -69,7 +69,7 @@ public class CapturedPiecesUISystem : Dependency
         if (!isFirstPiece)
         {
             Vector3 posBehindNewPieceImage = newPieceImage.transform.position - new Vector3(75, 0, 0);
-            GameObject arrowPointingToNextPiece = _creator.InstantiateGameObject(_creator.arrowPointingToNextPiecePrefab,
+            GameObject arrowPointingToNextPiece = Creator.InstantiateGameObject(Creator.arrowPointingToNextPiecePrefab,
                 posBehindNewPieceImage, Quaternion.identity);
             
             arrowPointingToNextPiece.transform.SetParent(_capturedPiecesParent, true);

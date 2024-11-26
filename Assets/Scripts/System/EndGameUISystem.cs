@@ -2,13 +2,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class EndGameUISystem : Dependency
+public class EndGameUISystem : ElDependency
 {
     private Transform _endGameGUI;
     
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
+        base.GameStart(elCreator);
 
         _endGameGUI = GameObject.FindWithTag("EndGame").transform;
 
@@ -20,9 +20,9 @@ public class EndGameUISystem : Dependency
 
     private void TryAgain()
     {
-        _creator.playerSystemSo.startingPiece = Piece.NotChosen;
-        _creator.playerSystemSo.roomNumberSaved = 0;
-        _creator.timerSo.currentTime = _creator.timerSo.maxTime;
+        Creator.playerSystemSo.startingPiece = Piece.NotChosen;
+        Creator.playerSystemSo.roomNumberSaved = 0;
+        Creator.timerSo.currentTime = Creator.timerSo.maxTime;
         
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

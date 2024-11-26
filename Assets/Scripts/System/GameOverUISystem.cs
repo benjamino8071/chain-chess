@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameOverUISystem : Dependency
+public class GameOverUISystem : ElDependency
 {
     private Transform _gameOverGUI;
 
@@ -11,9 +11,9 @@ public class GameOverUISystem : Dependency
 
     private Button _tryAgainButton;
     
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
+        base.GameStart(elCreator);
 
         _gameOverGUI = GameObject.FindWithTag("GameOver").transform;
 
@@ -34,16 +34,16 @@ public class GameOverUISystem : Dependency
 
     private void ContinueFromRoomX()
     {
-        _creator.timerSo.currentTime -= _creator.timerSo.contFromRoomPenalty;
+        Creator.timerSo.currentTime -= Creator.timerSo.contFromRoomPenalty;
         
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void GiveUp()
     {
-        _creator.playerSystemSo.startingPiece = Piece.NotChosen;
-        _creator.playerSystemSo.roomNumberSaved = 0;
-        _creator.timerSo.currentTime = _creator.timerSo.maxTime;
+        Creator.playerSystemSo.startingPiece = Piece.NotChosen;
+        Creator.playerSystemSo.roomNumberSaved = 0;
+        Creator.timerSo.currentTime = Creator.timerSo.maxTime;
         
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
@@ -51,7 +51,7 @@ public class GameOverUISystem : Dependency
     public void ShowGameOver()
     {
         //Player has died in room 0 (silly player) - just restart the game
-        if (_creator.playerSystemSo.roomNumberSaved == 0 || _creator.timerSo.currentTime <= _creator.timerSo.contFromRoomPenalty)
+        if (Creator.playerSystemSo.roomNumberSaved == 0 || Creator.timerSo.currentTime <= Creator.timerSo.contFromRoomPenalty)
         {
             _continueButton.gameObject.SetActive(false);
             _giveUpButton.gameObject.SetActive(false);

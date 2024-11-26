@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
 using UnityEngine;
 
-public class EnemiesSystem : Dependency
+public class EnemiesSystem : ElDependency
 {
     private CapturedPiecesUISystem _capturedPiecesUISystem;
     private DoorsSystem _doorsSystem;
@@ -10,15 +12,15 @@ public class EnemiesSystem : Dependency
 
     private List<Vector3> _positionsTakenByOtherEnemies = new();
     
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
+        base.GameStart(elCreator);
         
-        if (_creator.TryGetDependency("CapturedPiecesUISystem", out CapturedPiecesUISystem capturedPiecesUISystem))
+        if (Creator.TryGetDependency("CapturedPiecesUISystem", out CapturedPiecesUISystem capturedPiecesUISystem))
         {
             _capturedPiecesUISystem = capturedPiecesUISystem;
         }
-        if (_creator.TryGetDependency("DoorsSystem", out DoorsSystem doorsSystem))
+        if (Creator.TryGetDependency("DoorsSystem", out DoorsSystem doorsSystem))
         {
             _doorsSystem = doorsSystem;
         }
@@ -28,12 +30,19 @@ public class EnemiesSystem : Dependency
             //Do NOT create enemy controllers for the enemies in rooms before us
             //To get the room number of the spawn position we divide by 11
             int roomNumber = (int)(enemySpawnPosition.transform.position.y / 11f);
-            if(roomNumber < _creator.playerSystemSo.roomNumberSaved) continue;
+            if(roomNumber < Creator.playerSystemSo.roomNumberSaved) continue;
             
             EnemyController enemyController = new EnemyController();
-            enemyController.GameStart(creator);
+            enemyController.GameStart(elCreator);
             Piece piece = enemySpawnPosition.GetComponent<EnemyPiece>().piece;
-            enemyController.SetEnemyInstance(enemySpawnPosition.transform.position, piece);
+            
+            //Get the order of the doors, in ascending order based on y-value
+            List<SingleDoorPosition> doors = _doorsSystem.GetDoorPositions().ToList();
+            doors.Sort((a, b) => a.transform.position.y.CompareTo(b.transform.position.y));
+            
+            Debug.Log("Doors: "+doors.Count);
+            
+            enemyController.SetEnemyInstance(enemySpawnPosition.transform.position, piece, doors);
             _enemyControllers.Add(enemyController);
         }
     }

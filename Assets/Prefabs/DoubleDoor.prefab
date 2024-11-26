@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4357411283779366861}
   - component: {fileID: 3466823501286347093}
+  - component: {fileID: 6589836344069618149}
   m_Layer: 0
   m_Name: DoorPosition (1)
   m_TagString: DoorPosition
@@ -56,6 +57,27 @@ MonoBehaviour:
   otherDoorRoomNumber: 0
   isFinalDoor: 0
   playerSystemSo: {fileID: 11400000, guid: b42972874f912ca47a5745f157580007, type: 2}
+--- !u!65 &6589836344069618149
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29258839171802140}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3205457477226220889
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,6 +270,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1264838005906117988}
   - component: {fileID: 2177734546474285445}
+  - component: {fileID: 844326519946454475}
   m_Layer: 0
   m_Name: DoorPosition
   m_TagString: DoorPosition
@@ -294,6 +317,27 @@ MonoBehaviour:
   otherDoorRoomNumber: 0
   isFinalDoor: 0
   playerSystemSo: {fileID: 11400000, guid: b42972874f912ca47a5745f157580007, type: 2}
+--- !u!65 &844326519946454475
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8075235552408415789}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &9181182671502728440
 GameObject:
   m_ObjectHideFlags: 0

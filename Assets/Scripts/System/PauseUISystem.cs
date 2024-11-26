@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PauseUISystem : Dependency
+public class PauseUISystem : ElDependency
 {
     private PlayerSystem _playerSystem;
     
@@ -12,11 +12,11 @@ public class PauseUISystem : Dependency
 
     private bool _canShow;
     
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
+        base.GameStart(elCreator);
         
-        if(_creator.TryGetDependency("PlayerSystem", out PlayerSystem playerSystem))
+        if(Creator.TryGetDependency("PlayerSystem", out PlayerSystem playerSystem))
         {
             _playerSystem = playerSystem;
         }
@@ -38,9 +38,9 @@ public class PauseUISystem : Dependency
 
     private void GiveUp()
     {
-        _creator.playerSystemSo.startingPiece = Piece.NotChosen;
-        _creator.playerSystemSo.roomNumberSaved = 0;
-        _creator.timerSo.currentTime = _creator.timerSo.maxTime;
+        Creator.playerSystemSo.startingPiece = Piece.NotChosen;
+        Creator.playerSystemSo.roomNumberSaved = 0;
+        Creator.timerSo.currentTime = Creator.timerSo.maxTime;
         
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

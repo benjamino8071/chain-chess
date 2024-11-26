@@ -39,6 +39,7 @@ TagManager:
   - Continue
   - TryAgain
   - Creator
+  - Tile
   layers:
   - Default
   - TransparentFX

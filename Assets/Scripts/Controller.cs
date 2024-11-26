@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Controller : Dependency
+public class Controller : ElDependency
 {
     
 }

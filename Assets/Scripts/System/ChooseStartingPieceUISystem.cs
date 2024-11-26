@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChooseStartingPieceUISystem : Dependency
+public class ChooseStartingPieceUISystem : ElDependency
 {
     private PlayerSystem _playerSystem;
     private TurnInfoUISystem _turnInfoUISystem;
@@ -11,36 +11,36 @@ public class ChooseStartingPieceUISystem : Dependency
     
     private Transform _chooseStartingPiece;
     
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
+        base.GameStart(elCreator);
 
-        if (_creator.TryGetDependency("PlayerSystem", out PlayerSystem playerSystem))
+        if (Creator.TryGetDependency("PlayerSystem", out PlayerSystem playerSystem))
         {
             _playerSystem = playerSystem;
         }
-        if (_creator.TryGetDependency("TurnInfoUISystem", out TurnInfoUISystem turnInfoUISystem))
+        if (Creator.TryGetDependency("TurnInfoUISystem", out TurnInfoUISystem turnInfoUISystem))
         {
             _turnInfoUISystem = turnInfoUISystem;
         }
-        if (_creator.TryGetDependency("TimerUISystem", out TimerUISystem timerUISystem))
+        if (Creator.TryGetDependency("TimerUISystem", out TimerUISystem timerUISystem))
         {
             _timerUISystem = timerUISystem;
         }
-        if (_creator.TryGetDependency("CapturedPiecesUISystem", out CapturedPiecesUISystem capturedPiecesUISystem))
+        if (Creator.TryGetDependency("CapturedPiecesUISystem", out CapturedPiecesUISystem capturedPiecesUISystem))
         {
             _capturedPiecesUISystem = capturedPiecesUISystem;
         }
         
         _chooseStartingPiece = GameObject.FindWithTag("ChooseStartingPiece").transform;
         
-        if (_creator.playerSystemSo.startingPiece != Piece.NotChosen && _creator.playerSystemSo.roomNumberSaved > 0)
+        if (Creator.playerSystemSo.startingPiece != Piece.NotChosen && Creator.playerSystemSo.roomNumberSaved > 0)
         {
             //The player is continuing from the latest room. Just set piece straight away
             _chooseStartingPiece.gameObject.SetActive(false);
             ShowNewPiece();
             
-            _creator.StartACoRoutine(WaitToShowPiece());
+            Creator.StartACoRoutine(WaitToShowPiece());
         }
         else
         {
@@ -76,7 +76,7 @@ public class ChooseStartingPieceUISystem : Dependency
     {
         yield return new WaitForSeconds(1.7f);
         
-        PieceChosen(_creator.playerSystemSo.startingPiece);
+        PieceChosen(Creator.playerSystemSo.startingPiece);
     }
 
     private void ChoosePawn()
@@ -125,6 +125,6 @@ public class ChooseStartingPieceUISystem : Dependency
 
     private void ShowNewPiece()
     {
-        _capturedPiecesUISystem.ShowNewPiece(_creator.playerSystemSo.startingPiece, true);
+        _capturedPiecesUISystem.ShowNewPiece(Creator.playerSystemSo.startingPiece, true);
     }
 }

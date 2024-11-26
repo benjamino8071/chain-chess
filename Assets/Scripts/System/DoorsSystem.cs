@@ -1,15 +1,19 @@
 using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
 using UnityEngine;
 
-public class DoorsSystem : Dependency
+public class DoorsSystem : ElDependency
 {
     //Assumption we can make: door 0 of the room the player is in will ALWAYS be
     //First Key = Room Number, Second Key = Door Number
     private Dictionary<int, Dictionary<int, List<SingleDoorPosition>>> _roomDoors = new();
+
+    private LinkedList<SingleDoorPosition> _doorPositions = new ();
     
-    public override void GameStart(Creator creator)
+    public override void GameStart(ElCreator elCreator)
     {
-        base.GameStart(creator);
+        base.GameStart(elCreator);
 
         GameObject[] doorPositions = GameObject.FindGameObjectsWithTag("DoorPosition");
         foreach (GameObject doorPosition in doorPositions)
@@ -44,6 +48,7 @@ public class DoorsSystem : Dependency
                 };
                 _roomDoors.Add(singleDoorPosition.roomNumber, newDoorNumbers);
             }
+            _doorPositions.AddLast(singleDoorPosition);
         }
     }
 
@@ -70,5 +75,15 @@ public class DoorsSystem : Dependency
         }
 
         return false;
+    }
+
+    public LinkedList<SingleDoorPosition> GetDoorPositions()
+    {
+        return _doorPositions;
+    }
+
+    public Dictionary<int, Dictionary<int, List<SingleDoorPosition>>> GetRoomDoors()
+    {
+        return _roomDoors;
     }
 }
