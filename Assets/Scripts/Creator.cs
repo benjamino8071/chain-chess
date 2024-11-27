@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Creator : MonoBehaviour
 {
+    public GridSystem_SO gridSystemSo;
+    
     protected List<Dependency> _dependencies = new();
 
     private void Awake()
@@ -45,7 +47,7 @@ public class Creator : MonoBehaviour
         return Instantiate(creatorGridPrefab, position, rotation);
     }
 
-    public bool NewTryGetDependency<T>(out T dependency) where T : ElDependency
+    public bool NewTryGetDependency<T>(out T dependency) where T : Dependency
     {
         foreach (Dependency dependent  in _dependencies)
         {

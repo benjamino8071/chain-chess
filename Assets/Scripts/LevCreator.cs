@@ -4,7 +4,6 @@ public class LevCreator : Creator
 {
     [Header("SOs")]
     public Input_SO inputSo;
-    public GridSystem_SO gridSystemSo;
     public PlayerSystem_SO playerSystemSo;
     public Enemy_SO enemySo;
     public Timer_SO timerSo;
@@ -20,7 +19,7 @@ public class LevCreator : Creator
     public override void CreateDependencies()
     {
         _dependencies.Add(new LevAudioSystem());
-        _dependencies.Add(new LevCapturedPiecesUISystem());
+        _dependencies.Add(new LevChainUISystem());
         _dependencies.Add(new LevCinemachineSystem());
         _dependencies.Add(new LevDoorsSystem());
         _dependencies.Add(new LevEnemiesSystem());

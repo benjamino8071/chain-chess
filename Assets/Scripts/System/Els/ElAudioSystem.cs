@@ -2,15 +2,17 @@ using UnityEngine;
 
 public class ElAudioSystem : ElDependency
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private AudioSource _pieceMoveAudio;
+    
+    public override void GameStart(ElCreator elCreator)
     {
+        base.GameStart(elCreator);
         
+        _pieceMoveAudio = Camera.main.GetComponent<AudioSource>();
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    public void PlayerPieceMoveSfx()
     {
-        
+        _pieceMoveAudio.Play();
     }
 }

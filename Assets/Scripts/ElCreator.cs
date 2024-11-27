@@ -4,7 +4,6 @@ public class ElCreator : Creator
 {
     [Header("SOs")]
     public Input_SO inputSo;
-    public GridSystem_SO gridSystemSo;
     public PlayerSystem_SO playerSystemSo;
     public Enemy_SO enemySo;
     public Timer_SO timerSo;

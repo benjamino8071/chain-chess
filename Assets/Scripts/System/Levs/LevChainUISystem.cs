@@ -3,7 +3,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ElChainUISystem : ElDependency
+public class LevChainUISystem : LevDependency
 {
     private Transform _capturedPiecesParent;
     
@@ -12,9 +12,9 @@ public class ElChainUISystem : ElDependency
     private LinkedList<RectTransform> _capturedPiecesImages = new ();
 
     
-    public override void GameStart(ElCreator elCreator)
+    public override void GameStart(LevCreator levCreator)
     {
-        base.GameStart(elCreator);
+        base.GameStart(levCreator);
 
         _capturedPiecesParent = GameObject.FindWithTag("ChainParent").transform;
 

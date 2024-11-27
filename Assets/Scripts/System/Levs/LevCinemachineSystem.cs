@@ -1,16 +1,33 @@
+using System.Collections;
 using UnityEngine;
 
 public class LevCinemachineSystem : LevDependency
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private Animator _animator;
+    
+    public override void GameStart(LevCreator levCreator)
     {
+        base.GameStart(levCreator);
+
+        GameObject cameraStateMachine = GameObject.FindWithTag("CameraStateMachine");
+        _animator = cameraStateMachine.GetComponent<Animator>();
         
+        Creator.StartACoRoutine(SetFirstState());
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator SetFirstState()
     {
+        SwitchState(0);
+
+        yield return new WaitForSeconds(0.1f);
         
+        SwitchState(Creator.playerSystemSo.roomNumberSaved);
+    }
+
+    public void SwitchState(int roomNumber)
+    {
+        string roomStateName = "Room" + roomNumber + "Cam";
+        
+        _animator.Play(roomStateName);
     }
 }
