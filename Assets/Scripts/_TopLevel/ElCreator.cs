@@ -17,14 +17,15 @@ public class ElCreator : Creator
     public GameObject arrowPointingToNextPiecePrefab;
 
     private void Start()
-    { 
+    {
         Random.InitState(42);
         
         Camera.main.backgroundColor = Color.black;
         
-        foreach (ElDependency dependency in _dependencies)
+        foreach (Dependency dependency in _dependencies)
         {
-            dependency.GameStart(this);
+            ElDependency elDependency = (ElDependency)dependency;
+            elDependency.GameStart(this);
         }
     }
     

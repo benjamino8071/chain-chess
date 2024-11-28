@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class LevEnemiesSystem : LevDependency
 {
-    private CapturedPiecesUISystem _capturedPiecesUISystem;
-    private DoorsSystem _doorsSystem;
+    private LevChainUISystem _chainUISystem;
+    private LevDoorsSystem _doorsSystem;
     
     private List<LevEnemyController> _enemyControllers = new ();
 
@@ -16,22 +16,17 @@ public class LevEnemiesSystem : LevDependency
     {
         base.GameStart(levCreator);
         
-        if (levCreator.NewTryGetDependency(out CapturedPiecesUISystem capturedPiecesUISystem))
+        if (levCreator.NewTryGetDependency(out LevChainUISystem levChainUISystem))
         {
-            _capturedPiecesUISystem = capturedPiecesUISystem;
+            _chainUISystem = levChainUISystem;
         }
-        if (Creator.NewTryGetDependency(out DoorsSystem doorsSystem))
+        if (Creator.NewTryGetDependency(out LevDoorsSystem levDoorsSystem))
         {
-            _doorsSystem = doorsSystem;
+            _doorsSystem = levDoorsSystem;
         }
 
         foreach (GameObject enemySpawnPosition in GameObject.FindGameObjectsWithTag("EnemySpawnPosition"))
         {
-            //Do NOT create enemy controllers for the enemies in rooms before us
-            //To get the room number of the spawn position we divide by 11
-            int roomNumber = (int)(enemySpawnPosition.transform.position.y / 11f);
-            if(roomNumber < Creator.playerSystemSo.roomNumberSaved) continue;
-            
             LevEnemyController enemyController = new LevEnemyController();
             enemyController.GameStart(levCreator);
             Piece piece = enemySpawnPosition.GetComponent<EnemyPiece>().piece;
@@ -39,8 +34,6 @@ public class LevEnemiesSystem : LevDependency
             //Get the order of the doors, in ascending order based on y-value
             List<SingleDoorPosition> doors = _doorsSystem.GetDoorPositions().ToList();
             doors.Sort((a, b) => a.transform.position.y.CompareTo(b.transform.position.y));
-            
-            Debug.Log("Doors: "+doors.Count);
             
             enemyController.SetEnemyInstance(enemySpawnPosition.transform.position, piece, doors);
             _enemyControllers.Add(enemyController);
@@ -83,7 +76,7 @@ public class LevEnemiesSystem : LevDependency
 
     public void PieceCaptured(LevEnemyController enemyController, int roomNumber)
     {
-        _capturedPiecesUISystem.ShowNewPiece(enemyController.GetPiece());
+        _chainUISystem.ShowNewPiece(enemyController.GetPiece());
         
         enemyController.PieceCaptured();
         

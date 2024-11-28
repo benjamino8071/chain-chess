@@ -10,6 +10,7 @@ public class LevEnemyController : LevController
     private LevEnemiesSystem _enemiesSystem;
     private LevRestartLevelSystem _restartLevelSystem;
     private LevDoorsSystem _doorsSystem;
+    private LevTurnSystem _turnSystem;
     
     private Transform _enemyInstance;
 
@@ -60,6 +61,10 @@ public class LevEnemyController : LevController
         if (levCreator.NewTryGetDependency(out LevDoorsSystem levDoorsSystem))
         {
             _doorsSystem = levDoorsSystem;
+        }
+        if (levCreator.NewTryGetDependency(out LevTurnSystem levTurnSystem))
+        {
+            _turnSystem = levTurnSystem;
         }
         
         SetState(States.WaitingForTurn);
@@ -329,6 +334,7 @@ public class LevEnemyController : LevController
                 else
                 {
                     SetState(States.WaitingForTurn);
+                    _turnSystem.SwitchTurn(LevTurnSystem.Turn.Player);
                 }
                 break;
             case States.MoveToTile:
@@ -353,6 +359,7 @@ public class LevEnemyController : LevController
                     else
                     {
                         SetState(States.WaitingForTurn);
+                        _turnSystem.SwitchTurn(LevTurnSystem.Turn.Player);
                     }
                 }
                 break;

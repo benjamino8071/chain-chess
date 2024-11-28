@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,6 @@ public class Creator : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Update function called!");
         foreach (Dependency dependency in _dependencies)
         {
             dependency.GameEarlyUpdate(Time.deltaTime);

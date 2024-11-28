@@ -4,42 +4,47 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - TileParent
-  - PlayerCamera
-  - TileHighlight
-  - Enemy
   - AnswerButton
   - AnswerButtonText
-  - PlayerVisual
-  - PlayerSpawnPosition
-  - DoorPosition
-  - Tilemap
   - CameraStateMachine
   - CapturedPiecesParent
-  - TurnInfoText
-  - EnemySpawnPosition
-  - ResetButton
-  - GameOver
-  - ChoosePawn
-  - ChooseRook
-  - ChooseKnight
+  - ChainParent
   - ChooseBishop
   - ChooseKing
+  - ChooseKnight
+  - ChoosePawn
   - ChooseQueen
+  - ChooseRook
   - ChooseStartingPiece
+  - Continue
+  - Creator
+  - DoorPosition
+  - EndGame
+  - Enemy
+  - EnemySpawnPosition
+  - GameOver
+  - GiveUp
+  - LevelText
   - Pause
   - PauseButton
+  - PlayerCamera
+  - PlayerSpawnPosition
+  - PlayerVisual
+  - ResetButton
+  - SelectedBackground
+  - TileHighlight
   - Timer
   - TimeText
-  - SelectedBackground
-  - Visual
-  - LevelText
-  - EndGame
-  - GiveUp
-  - Continue
-  - TryAgain
-  - Creator
+  - TurnInfoText
   - Tile
+  - Tilemap
+  - TileParent
+  - TryAgain
+  - Visual
+  - LevelComplete
+  - Retry
+  - NextLevel
+  - Exit
   layers:
   - Default
   - TransparentFX

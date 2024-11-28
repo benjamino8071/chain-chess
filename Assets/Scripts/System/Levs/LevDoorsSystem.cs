@@ -95,4 +95,19 @@ public class LevDoorsSystem : LevDependency
 
         return false;
     }
+    
+    public bool TryGetSingleDoorPosition(Vector3 position, out SingleDoorPosition singleDoorPos)
+    {
+        foreach (SingleDoorPosition singleDoorPosition in _doorPositions)
+        {
+            if (singleDoorPosition.transform.position == position)
+            {
+                singleDoorPos = singleDoorPosition;
+                return true;
+            }
+        }
+
+        singleDoorPos = default;
+        return false;
+    }
 }
