@@ -26,8 +26,12 @@ public class LevLevelCompleteUISystem : LevDependency
                 case "NextLevel":
                     button.onClick.AddListener(() =>
                     {
-                        string nextSceneName = "TutorialLevel" + Creator.nextLevelNumber + "Scene";
-                        SceneManager.LoadScene(nextSceneName);
+                        if (Creator.nextLevelNumber >= 1)
+                        {
+                            string nextSceneName = "TutorialLevel" + Creator.nextLevelNumber + "Scene";
+                            SceneManager.LoadScene(nextSceneName);
+                        }
+
                     });
                     break;
                 case "Exit":

@@ -45,6 +45,7 @@ public class LevPlayerSystem : LevDependency
         DoorWalk,
         FadeInAfterDoorWalk,
         Captured,
+        LevelComplete,
         EndGame
     }
 
@@ -55,6 +56,8 @@ public class LevPlayerSystem : LevDependency
 
     private float _timeAtFadeIn;
     private float _fadeInAnimTimer;
+    private float _timeAtFadeOut;
+    private float _fadeOutAnimTimer;
     
     public override void GameStart(LevCreator levCreator)
     {
@@ -167,8 +170,9 @@ public class LevPlayerSystem : LevDependency
                             {
                                 //Player has won!!
                                 TriggerFadeOutAnimation();
-                                SetState(States.EndGame);
-                                _levelCompleteUISystem.Show();
+                                _fadeOutAnimTimer = dt;
+                                _timeAtFadeOut = dt;
+                                SetState(States.LevelComplete);
                             }
                             else
                             {
@@ -247,6 +251,14 @@ public class LevPlayerSystem : LevDependency
                 {
                     SetState(States.EndGame);
                     //TODO: _restartLevelSystem.ShowGameOver();
+                }
+                break;
+            case States.LevelComplete:
+                //Wait 1 second before we show the level complete screen
+                if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
+                {
+                    SetState(States.EndGame);
+                    _levelCompleteUISystem.Show();
                 }
                 break;
             case States.EndGame:

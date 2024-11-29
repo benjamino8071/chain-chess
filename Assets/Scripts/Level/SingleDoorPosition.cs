@@ -23,13 +23,10 @@ public class SingleDoorPosition : MonoBehaviour
     public bool isFirstDoor;
     
     public bool isFinalDoor;
-
-    public PlayerSystem_SO playerSystemSo;
     
     private void Start()
     {
-        //Open the door if the player is already passed this point
-        if (isDoorOpen || roomNumber < playerSystemSo.roomNumberSaved)
+        if (isDoorOpen)
         {
             ForceDoorOpen();
         }
@@ -47,7 +44,7 @@ public class SingleDoorPosition : MonoBehaviour
 
     public void SetDoorToOpen()
     {
-        if(isDoorOpen)
+        if(isDoorOpen || isFirstDoor)
             return;
         ForceDoorOpen();
     }

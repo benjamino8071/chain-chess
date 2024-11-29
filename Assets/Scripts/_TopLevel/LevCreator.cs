@@ -23,6 +23,10 @@ public class LevCreator : Creator
     
     private void Start()
     {
+        Random.InitState(42);
+        
+        Camera.main.backgroundColor = Color.black;
+        
         foreach (Dependency dependency in _dependencies)
         {
             LevDependency levDependency = (LevDependency)dependency;
