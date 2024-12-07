@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ public class ElChainUISystem : ElDependency
     
     private Vector3 _chainParentInitialPos;
     
-    private LinkedList<RectTransform> _chainPiecesImages = new ();
+    private LinkedList<(Piece, RectTransform, Image)> _chainPiecesImages = new ();
     
     public override void GameStart(ElCreator elCreator)
     {
@@ -25,10 +26,11 @@ public class ElChainUISystem : ElDependency
 
     public void ShowNewPiece(Piece piece, bool isFirstPiece = false)
     {
+        Debug.Log("Showing new piece "+piece);
         GameObject newPieceImage;
         if (_chainPiecesImages.Count != 0)
         {
-            RectTransform lastPieceTransform = _chainPiecesImages.Last.Value;
+            RectTransform lastPieceTransform = _chainPiecesImages.Last.Value.Item2;
 
             newPieceImage = Creator.InstantiateGameObject(Creator.capturedPieceImagePrefab,
                 lastPieceTransform.position + new Vector3(150, 0, 0), Quaternion.identity);
@@ -40,32 +42,12 @@ public class ElChainUISystem : ElDependency
         }
 
         Image visual = newPieceImage.GetComponentInChildren<Image>();
-        
-        //Set the sprite based on the piece
-        switch (piece)
-        {
-            case Piece.Pawn:
-                visual.sprite = Creator.playerSystemSo.pawn;
-                break;
-            case Piece.Rook:
-                visual.sprite = Creator.playerSystemSo.rook;
-                break;
-            case Piece.Knight:
-                visual.sprite = Creator.playerSystemSo.knight;
-                break;
-            case Piece.Bishop:
-                visual.sprite = Creator.playerSystemSo.bishop;
-                break;
-            case Piece.Queen:
-                visual.sprite = Creator.playerSystemSo.queen;
-                break;
-            case Piece.King:
-                visual.sprite = Creator.playerSystemSo.king;
-                break;
-        }
+
+        visual.sprite = GetSprite(piece);
         
         newPieceImage.transform.SetParent(_chainParent, true);
 
+        //For every other piece we first want to add an arrow indicating the order for the chain
         if (!isFirstPiece)
         {
             Vector3 posBehindNewPieceImage = newPieceImage.transform.position - new Vector3(75, 0, 0);
@@ -74,10 +56,10 @@ public class ElChainUISystem : ElDependency
             
             arrowPointingToNextPiece.transform.SetParent(_chainParent, true);
 
-            _chainPiecesImages.AddLast(arrowPointingToNextPiece.GetComponent<RectTransform>());
+            _chainPiecesImages.AddLast((piece, arrowPointingToNextPiece.GetComponent<RectTransform>(), visual));
         }
         
-        _chainPiecesImages.AddLast(newPieceImage.GetComponent<RectTransform>());
+        _chainPiecesImages.AddLast((piece, newPieceImage.GetComponent<RectTransform>(), visual));
     }
 
     public void ResetPosition()
@@ -87,9 +69,9 @@ public class ElChainUISystem : ElDependency
 
     public void NewRoomClearChain()
     {
-        foreach (RectTransform capturedPiecesImage in _chainPiecesImages)
+        foreach ((Piece, RectTransform, Image) capturedPiecesImage in _chainPiecesImages)
         {
-            capturedPiecesImage.gameObject.SetActive(false);
+            capturedPiecesImage.Item2.gameObject.SetActive(false);
         }
         _chainPiecesImages.Clear();
     }
@@ -98,5 +80,47 @@ public class ElChainUISystem : ElDependency
     {
         //Move _capturedPiecesParent along
         _chainParent.position += new Vector3(-150, 0, 0);
+    }
+
+    public void PawnPromoted(int index, Piece promotedPiece)
+    {
+        LinkedListNode<(Piece, RectTransform, Image)> temp = _chainPiecesImages.First;
+        int tempIndex = 0;
+        while (temp != null)
+        {
+            if (index == tempIndex)
+            {
+                (Piece, RectTransform, Image) value = temp.Value;
+                value.Item1 = promotedPiece;
+                value.Item3.sprite = GetSprite(promotedPiece);
+                temp.Value = value;
+                break;
+            }
+
+            tempIndex++;
+            temp = temp.Next;
+        }
+    }
+
+    private Sprite GetSprite(Piece piece)
+    {
+        switch (piece)
+        {
+            case Piece.Pawn:
+                return Creator.playerSystemSo.pawn;
+            case Piece.Rook:
+                return Creator.playerSystemSo.rook;
+            case Piece.Knight:
+                return Creator.playerSystemSo.knight;
+            case Piece.Bishop:
+                return Creator.playerSystemSo.bishop;
+            case Piece.Queen:
+                return Creator.playerSystemSo.queen;
+            case Piece.King:
+                return Creator.playerSystemSo.king;
+        }
+        
+        //Given the logic of the code we should never get here but have to add something
+        return default;
     }
 }

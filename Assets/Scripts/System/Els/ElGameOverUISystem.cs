@@ -30,7 +30,6 @@ public class ElGameOverUISystem : ElDependency
         {
             if (button.CompareTag("RestartRoom"))
             {
-                //TODO: Restart from the room number saved
                 button.onClick.AddListener(() =>
                 {
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);

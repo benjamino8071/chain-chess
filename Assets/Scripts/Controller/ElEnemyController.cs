@@ -358,6 +358,20 @@ public class ElEnemyController : ElController
                     }
                     else
                     {
+                        //IF this enemy is the pawn and it has reached the last row in the room, then PROMOTE it
+                        if (_piece == Piece.Pawn)
+                        {
+                            Vector3 posInFront = _enemyInstance.position + new Vector3(0, -1, 0);
+                            if (!_gridSystem.IsPositionValid(posInFront) ||
+                                _gridSystem.TryGetSingleDoorPosition(posInFront, out SingleDoorPosition foo))
+                            {
+                                //PROMOTE PIECE
+                                //TODO: Make it possible for the pawn to be any of the 4 pieces
+                                SetPiece(Piece.Queen);
+                                break;
+                            }
+                        }
+                        
                         SetState(States.WaitingForTurn);
                         _turnSystem.SwitchTurn(ElTurnSystem.Turn.Player);
                     }

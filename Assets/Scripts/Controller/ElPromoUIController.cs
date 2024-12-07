@@ -1,0 +1,81 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ElPromoUIController : ElController
+{
+    private Transform _promoCanvas;
+
+    private Piece _chosenPiece;
+    
+    public override void GameStart(ElCreator elCreator)
+    {
+        base.GameStart(elCreator);
+    }
+
+    public void Initialise(Transform playerObject)
+    {
+        _promoCanvas = playerObject.GetComponentInChildren<Canvas>().transform;
+        
+        Button[] promoButtons = playerObject.GetComponentsInChildren<Button>();
+        foreach (Button promoButton in promoButtons)
+        {
+            if (promoButton.CompareTag("ChooseQueen"))
+            {
+                promoButton.onClick.AddListener(() =>
+                {
+                    SelectPromotion(Piece.Queen);
+                });
+            }
+            else if (promoButton.CompareTag("ChooseRook"))
+            {
+                promoButton.onClick.AddListener(() =>
+                {
+                    SelectPromotion(Piece.Rook);
+                });
+            }
+            else if (promoButton.CompareTag("ChooseKnight"))
+            {
+                promoButton.onClick.AddListener(() =>
+                {
+                    SelectPromotion(Piece.Knight);
+                });
+            }
+            else if (promoButton.CompareTag("ChooseBishop"))
+            {
+                promoButton.onClick.AddListener(() =>
+                {
+                    SelectPromotion(Piece.Bishop);
+                });
+            }
+        }
+        
+        Hide();
+    }
+
+    private void SelectPromotion(Piece piece)
+    {
+        _chosenPiece = piece;
+    }
+
+    public void Show()
+    {
+        _chosenPiece = Piece.NotChosen;
+        _promoCanvas.gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        _promoCanvas.gameObject.SetActive(false);
+        _chosenPiece = Piece.NotChosen;
+    }
+
+    public bool IsPromoChosen()
+    {
+        return _chosenPiece != Piece.NotChosen;
+    }
+
+    public Piece PieceChosen()
+    {
+        return _chosenPiece;
+    }
+}

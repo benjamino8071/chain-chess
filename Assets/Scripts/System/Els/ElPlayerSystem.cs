@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,8 +19,10 @@ public class ElPlayerSystem : ElDependency
     private ElTurnSystem _turnInfoUISystem;
     private ElRoomNumberUISystem _roomNumberUISystem;
 
-    //Note: The first node is King
+    private ElPromoUIController _promoUIController;
+    
     private LinkedList<Piece> _capturedPieces = new();
+    private LinkedListNode<Piece> _currentPiece;
     private Queue<Piece> _movesInThisTurn = new();
     
     private Transform _playerCharacter;
@@ -41,6 +44,7 @@ public class ElPlayerSystem : ElDependency
         WaitingForTurn,
         Idle,
         Moving,
+        PawnPromo,
         FadeOutBeforeDoorWalk,
         DoorWalk,
         FadeInAfterDoorWalk,
@@ -50,7 +54,6 @@ public class ElPlayerSystem : ElDependency
     }
 
     private Piece _currentRoomStartPiece;
-    private Piece _currentPiece;
     
     private States _state;
     
@@ -101,7 +104,7 @@ public class ElPlayerSystem : ElDependency
         {
             _roomNumberUISystem = roomNumberUISystem;
         }
-
+        
         _currentRoomStartPiece = Creator.startingPiece;
         _roomNumber = Creator.playerSystemSo.roomNumberSaved;
         
@@ -109,7 +112,10 @@ public class ElPlayerSystem : ElDependency
         Vector3 spawnPos = playerSpawnPosition.position + new Vector3(0, Creator.playerSystemSo.roomNumberSaved * 11f, 0);
         
         _playerCharacter = Creator.InstantiateGameObject(Creator.playerPrefab, spawnPos, Quaternion.identity).transform;
-
+        _promoUIController = new ElPromoUIController();
+        _promoUIController.GameStart(elCreator);
+        _promoUIController.Initialise(_playerCharacter);
+        
         _playerAnimator = _playerCharacter.GetComponentInChildren<Animator>();
         
         _jumpPosition = _playerCharacter.position;
@@ -151,44 +157,40 @@ public class ElPlayerSystem : ElDependency
             case States.WaitingForTurn:
                 break;
             case States.Idle:
-                if(_movesInThisTurn.Count == 0) return;
+                if(_movesInThisTurn.Count == 0) 
+                    return;
                 
-                if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
+                if (_movesInThisTurn.Peek() == Piece.Pawn)
                 {
-                    UpdatePlayerPosition();
-                }
-                
-                /*
-                Piece piece = _movesInThisTurn.Peek();
-                bool isPawn = piece == Piece.Pawn;
-                Vector3 posInFrontOfPlayer = _playerCharacter.position + new Vector3(0, 1, 0);
-
-                bool isInFrontOfClosedDoor = false;
-                if (_gridSystem.TryGetSingleDoorPosition(posInFrontOfPlayer, out SingleDoorPosition checkDoorOpen))
-                {
-                    isInFrontOfClosedDoor = !checkDoorOpen.isDoorOpen;
-                }
-                
-                bool stuckAsPawn = isPawn &&
-                                   (_enemiesSystem.IsEnemyAtThisPosition(posInFrontOfPlayer) || !_gridSystem.IsPositionValid(posInFrontOfPlayer) || isInFrontOfClosedDoor);
-                if (!stuckAsPawn)
-                {
-                    if (_creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
+                    Vector3 posInFront = _playerCharacter.position + new Vector3(0, 1, 0);
+                    
+                    if(!_gridSystem.IsPositionValid(posInFront) || _gridSystem.TryGetSingleDoorPosition(posInFront, out SingleDoorPosition checkDoorOpen))
+                    {
+                        Debug.Log("PLAYER IS PAWN IN LAST ROW OF CURRENT ROOM - PROMOTE");
+                        _promoUIController.Show();
+                        SetState(States.PawnPromo);
+                    }
+                    else if(_enemiesSystem.IsEnemyAtThisPosition(posInFront))
+                    {
+                        _jumpPosition = _playerCharacter.position;
+                        _moveSpeed = Creator.playerSystemSo.moveSpeed;
+                        SetState(States.Moving);
+                    
+                        TriggerJumpAnimation();
+                    
+                        _movesInThisTurn.Dequeue();
+                    }
+                    else if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
                     {
                         UpdatePlayerPosition();
                     }
+                    
                 }
-                else
+                else if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
                 {
-                    _jumpPosition = _playerCharacter.position;
-                    _moveSpeed = _creator.playerSystemSo.moveSpeed;
-                    SetState(States.Moving);
-                    
-                    TriggerJumpAnimation();
-                    
-                    _movesInThisTurn.Dequeue();
+                    UpdatePlayerPosition();
                 }
-                */
+
                 break;
             case States.Moving:
                 if (_playerCharacter.position != _jumpPosition)
@@ -197,6 +199,7 @@ public class ElPlayerSystem : ElDependency
                     _sinTime = Mathf.Clamp(_sinTime, 0f, Mathf.PI);
                     float t = Evaluate(_sinTime);
                     _playerCharacter.position = Vector3.Lerp(_playerCharacter.position, _jumpPosition, t);
+                    break;
                 }
                 
                 if (_playerCharacter.position == _jumpPosition)
@@ -231,7 +234,64 @@ public class ElPlayerSystem : ElDependency
                             break;
                         }
                     }
+                    
+                    //IF the player is a pawn, we want to check what's directly in front of the player.
+                    //IF it is an invalid position OR a door, then the player has a pawn and is at the end of the room. Therefore enable promotion
+                    if (_currentPiece.Value == Piece.Pawn)
+                    {
+                        Vector3 posInFront = _playerCharacter.position + new Vector3(0, 1, 0);
+                        if (!_gridSystem.IsPositionValid(posInFront) ||
+                            _gridSystem.TryGetSingleDoorPosition(posInFront, out SingleDoorPosition foo))
+                        {
+                            Debug.Log("PLAYER IS PAWN IN LAST ROW OF CURRENT ROOM - PROMOTE");
+                            _promoUIController.Show();
+                            SetState(States.PawnPromo);
+                            break;
+                        }
+                    }
+                    
+                    _currentPiece = _currentPiece.Next;
+                    if (_movesInThisTurn.Count > 0)
+                    {
+                        //Allow player to make another move
+                        UpdateSprite(_movesInThisTurn.Peek());
+                        SetState(States.Idle);
+                        _chainUISystem.HighlightNextPiece();
+                    }
+                    else
+                    {
+                        SetState(States.WaitingForTurn);
+                        _turnInfoUISystem.SwitchTurn(ElTurnSystem.Turn.Enemy);
+                    }
+                }
+                break;
+            case States.PawnPromo:
+                if (_promoUIController.IsPromoChosen())
+                {
+                    //TODO: In _capturedPieces, update the piece to whatever was chosen
+                    _currentPiece.Value = _promoUIController.PieceChosen();
+                    
+                    //TODO: In _chainUISystem, update the chain sprite
+                    Debug.Log("Number of captured pieces: "+_capturedPieces.Count);
+                    int index = 0;
+                    LinkedListNode<Piece> temp = _capturedPieces.First;
+                    while (temp != null)
+                    {
+                        if(temp == _currentPiece)
+                            break;
 
+                        index++;
+                        temp = temp.Next;
+                    }
+
+                    index *= 2; //Have to double index for the chainUI as for every other index, there is an arrow sprite which we NEVER want to change
+                    _chainUISystem.PawnPromoted(index, _promoUIController.PieceChosen());
+                    
+                    _promoUIController.Hide();
+                    
+                    _currentPiece = _currentPiece.Next;
+                    _movesInThisTurn.Dequeue();
+                    
                     if (_movesInThisTurn.Count > 0)
                     {
                         //Allow player to make another move
@@ -252,7 +312,7 @@ public class ElPlayerSystem : ElDependency
                     _cinemachineSystem.SwitchState(_roomNumberOnOut);
                     _roomNumberUISystem.UpdateRoomNumberText();
                     
-                    _currentRoomStartPiece = _currentPiece;
+                    _currentRoomStartPiece = _currentPiece.Value;
                     _chainUISystem.NewRoomClearChain();
                     _chainUISystem.ResetPosition();
                     _chainUISystem.ShowNewPiece(_currentRoomStartPiece, true);
@@ -357,7 +417,8 @@ public class ElPlayerSystem : ElDependency
             
             TriggerJumpAnimation();
             _audioSystem.PlayerPieceMoveSfx();
-            _currentPiece = _movesInThisTurn.Dequeue();
+            
+            _movesInThisTurn.Dequeue();
         }
     }
 
@@ -422,7 +483,8 @@ public class ElPlayerSystem : ElDependency
                 
                 TriggerJumpAnimation();
                 _audioSystem.PlayerPieceMoveSfx();
-                _currentPiece = _movesInThisTurn.Dequeue();
+
+                _movesInThisTurn.Dequeue();
 
                 foundSpot = true;
                 break;
@@ -744,7 +806,7 @@ public class ElPlayerSystem : ElDependency
 
     private void TriggerFadeInAnimation()
     {
-       _playerAnimator.SetTrigger("FadeIn");
+        _playerAnimator.SetTrigger("FadeIn");
     }
     
     public void SetState(States state)
@@ -764,6 +826,7 @@ public class ElPlayerSystem : ElDependency
                     {
                         _movesInThisTurn.Enqueue(capturedPiece);
                     }
+                    _currentPiece = _capturedPieces.First;
                     _chainUISystem.ResetPosition();
                 }
                 break;
