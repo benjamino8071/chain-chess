@@ -49,6 +49,9 @@ public class ElPlayerSystem : ElDependency
         EndGame
     }
 
+    private Piece _currentRoomStartPiece;
+    private Piece _currentPiece;
+    
     private States _state;
     
     private Vector3 _doorPositionOnOut;
@@ -99,6 +102,7 @@ public class ElPlayerSystem : ElDependency
             _roomNumberUISystem = roomNumberUISystem;
         }
 
+        _currentRoomStartPiece = Creator.startingPiece;
         _roomNumber = Creator.playerSystemSo.roomNumberSaved;
         
         Transform playerSpawnPosition = GameObject.FindWithTag("PlayerSpawnPosition").transform;
@@ -126,14 +130,9 @@ public class ElPlayerSystem : ElDependency
             _validPositionsVisuals.Add(validPos.transform);
         }
         
-        SetDefaultPiece(Creator.startingPiece);
-        SetState(States.Idle);
-    }
-
-    public void SetDefaultPiece(Piece piece)
-    {
-        Creator.startingPiece = piece;
         _capturedPieces.AddFirst(Creator.startingPiece);
+
+        SetState(States.Idle);
     }
 
     private float Evaluate(float x)
@@ -252,6 +251,11 @@ public class ElPlayerSystem : ElDependency
                 {
                     _cinemachineSystem.SwitchState(_roomNumberOnOut);
                     _roomNumberUISystem.UpdateRoomNumberText();
+                    
+                    _currentRoomStartPiece = _currentPiece;
+                    _chainUISystem.NewRoomClearChain();
+                    _chainUISystem.ResetPosition();
+                    _chainUISystem.ShowNewPiece(_currentRoomStartPiece, true);
                     SetState(States.DoorWalk);
                 }
                 break;
@@ -272,6 +276,7 @@ public class ElPlayerSystem : ElDependency
                     TriggerFadeInAnimation();
                     _fadeInAnimTimer = dt;
                     _timeAtFadeIn = dt;
+                    
                     SetState(States.FadeInAfterDoorWalk);
                 }
                 break;
@@ -282,10 +287,8 @@ public class ElPlayerSystem : ElDependency
                     //Chain resets when player goes into new room
                     _movesInThisTurn.Clear();
                     _capturedPieces.Clear();
-                    _capturedPieces.AddFirst(Creator.startingPiece);
-                    _chainUISystem.InNewRoomReset();
-                    _chainUISystem.ShowNewPiece(Creator.startingPiece, true);
-                    //Creator.playerSystemSo.roomNumberSaved = GetRoomNumber();
+                    _capturedPieces.AddFirst(_currentRoomStartPiece);
+                    
                     SetState(States.Idle);
                     _timerUISystem.StartTimer();
                 }
@@ -322,14 +325,11 @@ public class ElPlayerSystem : ElDependency
             Vector3 newPos = _playerCharacter.position + pieceMove;
             
             if(positionRequested != newPos) continue;
-            Debug.Log("Found position requested");
             
             if (_gridSystem.TryGetSingleDoorPosition(newPos, out SingleDoorPosition singleDoorPosition))
             {
                 //If this door is locked, we cannot allow access
-                Debug.Log("Door requested. is this door open? "+singleDoorPosition.isDoorOpen);
                 if(!singleDoorPosition.isDoorOpen) continue;
-                Debug.Log("Player wants to go through door ");
             }
             else if(!_gridSystem.IsPositionValid(newPos))
                 continue;
@@ -357,7 +357,7 @@ public class ElPlayerSystem : ElDependency
             
             TriggerJumpAnimation();
             _audioSystem.PlayerPieceMoveSfx();
-            _movesInThisTurn.Dequeue();
+            _currentPiece = _movesInThisTurn.Dequeue();
         }
     }
 
@@ -422,7 +422,7 @@ public class ElPlayerSystem : ElDependency
                 
                 TriggerJumpAnimation();
                 _audioSystem.PlayerPieceMoveSfx();
-                _movesInThisTurn.Dequeue();
+                _currentPiece = _movesInThisTurn.Dequeue();
 
                 foundSpot = true;
                 break;
@@ -758,17 +758,17 @@ public class ElPlayerSystem : ElDependency
             case States.Idle:
                 if (_movesInThisTurn.Count == 0)
                 {
-                    UpdateSprite(Creator.startingPiece);
+                    UpdateSprite(_currentRoomStartPiece);
                     //Reset possible moves
                     foreach (Piece capturedPiece in _capturedPieces)
                     {
                         _movesInThisTurn.Enqueue(capturedPiece);
                     }
-                    _chainUISystem.Reset();
+                    _chainUISystem.ResetPosition();
                 }
                 break;
             case States.WaitingForTurn:
-                UpdateSprite(Creator.startingPiece);
+                UpdateSprite(_currentRoomStartPiece);
                 break;
         }
         _state = state;

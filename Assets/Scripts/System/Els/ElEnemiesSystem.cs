@@ -40,8 +40,6 @@ public class ElEnemiesSystem : ElDependency
             List<SingleDoorPosition> doors = _doorsSystem.GetDoorPositions().ToList();
             doors.Sort((a, b) => a.transform.position.y.CompareTo(b.transform.position.y));
             
-            Debug.Log("Doors: "+doors.Count);
-            
             enemyController.SetEnemyInstance(enemySpawnPosition.transform.position, piece, doors);
             _enemyControllers.Add(enemyController);
         }
@@ -97,7 +95,6 @@ public class ElEnemiesSystem : ElDependency
 
     public void SetStateForAllEnemies(ElEnemyController.States state)
     {
-        Debug.Log("SetStateForAllEnemies called. State is: "+state+" Number of enemy controllers: "+_enemyControllers.Count);
         foreach (ElEnemyController enemyController in _enemyControllers)
         {
             if (enemyController.GetState() != ElEnemyController.States.Captured)

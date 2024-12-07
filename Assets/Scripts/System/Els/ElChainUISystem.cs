@@ -5,31 +5,30 @@ using UnityEngine.UI;
 
 public class ElChainUISystem : ElDependency
 {
-    private Transform _capturedPiecesParent;
+    private Transform _chainParent;
     
-    private Vector3 _capturedPiecesParentInitialPos;
+    private Vector3 _chainParentInitialPos;
     
-    private LinkedList<RectTransform> _capturedPiecesImages = new ();
-
+    private LinkedList<RectTransform> _chainPiecesImages = new ();
     
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
 
-        _capturedPiecesParent = GameObject.FindWithTag("ChainParent").transform;
+        _chainParent = GameObject.FindWithTag("ChainParent").transform;
 
-        _capturedPiecesParentInitialPos = _capturedPiecesParent.position;
+        _chainParentInitialPos = _chainParent.position;
         
-        Reset();
+        ResetPosition();
         ShowNewPiece(Creator.startingPiece, true);
     }
 
     public void ShowNewPiece(Piece piece, bool isFirstPiece = false)
     {
         GameObject newPieceImage;
-        if (_capturedPiecesImages.Count != 0)
+        if (_chainPiecesImages.Count != 0)
         {
-            RectTransform lastPieceTransform = _capturedPiecesImages.Last.Value;
+            RectTransform lastPieceTransform = _chainPiecesImages.Last.Value;
 
             newPieceImage = Creator.InstantiateGameObject(Creator.capturedPieceImagePrefab,
                 lastPieceTransform.position + new Vector3(150, 0, 0), Quaternion.identity);
@@ -37,7 +36,7 @@ public class ElChainUISystem : ElDependency
         else
         {
             newPieceImage = Creator.InstantiateGameObject(Creator.capturedPieceImagePrefab,
-                _capturedPiecesParent.position, Quaternion.identity);
+                _chainParent.position, Quaternion.identity);
         }
 
         Image visual = newPieceImage.GetComponentInChildren<Image>();
@@ -65,7 +64,7 @@ public class ElChainUISystem : ElDependency
                 break;
         }
         
-        newPieceImage.transform.SetParent(_capturedPiecesParent, true);
+        newPieceImage.transform.SetParent(_chainParent, true);
 
         if (!isFirstPiece)
         {
@@ -73,31 +72,31 @@ public class ElChainUISystem : ElDependency
             GameObject arrowPointingToNextPiece = Creator.InstantiateGameObject(Creator.arrowPointingToNextPiecePrefab,
                 posBehindNewPieceImage, Quaternion.identity);
             
-            arrowPointingToNextPiece.transform.SetParent(_capturedPiecesParent, true);
+            arrowPointingToNextPiece.transform.SetParent(_chainParent, true);
 
-            _capturedPiecesImages.AddLast(arrowPointingToNextPiece.GetComponent<RectTransform>());
+            _chainPiecesImages.AddLast(arrowPointingToNextPiece.GetComponent<RectTransform>());
         }
         
-        _capturedPiecesImages.AddLast(newPieceImage.GetComponent<RectTransform>());
+        _chainPiecesImages.AddLast(newPieceImage.GetComponent<RectTransform>());
     }
 
-    public void Reset()
+    public void ResetPosition()
     {
-        _capturedPiecesParent.position = _capturedPiecesParentInitialPos;
+        _chainParent.position = _chainParentInitialPos;
     }
 
-    public void InNewRoomReset()
+    public void NewRoomClearChain()
     {
-        foreach (RectTransform capturedPiecesImage in _capturedPiecesImages)
+        foreach (RectTransform capturedPiecesImage in _chainPiecesImages)
         {
             capturedPiecesImage.gameObject.SetActive(false);
         }
-        _capturedPiecesImages.Clear();
+        _chainPiecesImages.Clear();
     }
 
     public void HighlightNextPiece()
     {
         //Move _capturedPiecesParent along
-        _capturedPiecesParent.position += new Vector3(-150, 0, 0);
+        _chainParent.position += new Vector3(-150, 0, 0);
     }
 }
