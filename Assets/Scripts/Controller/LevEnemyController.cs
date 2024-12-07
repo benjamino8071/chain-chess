@@ -8,7 +8,6 @@ public class LevEnemyController : LevController
     private LevGridSystem _gridSystem;
     private LevPlayerSystem _playerSystem;
     private LevEnemiesSystem _enemiesSystem;
-    private LevRestartLevelSystem _restartLevelSystem;
     private LevDoorsSystem _doorsSystem;
     private LevTurnSystem _turnSystem;
     
@@ -53,10 +52,6 @@ public class LevEnemyController : LevController
         if (levCreator.NewTryGetDependency(out LevEnemiesSystem levEnemiesSystem))
         {
             _enemiesSystem = levEnemiesSystem;
-        }
-        if (levCreator.NewTryGetDependency(out LevRestartLevelSystem levRestartLevelSystem))
-        {
-            _restartLevelSystem = levRestartLevelSystem;
         }
         if (levCreator.NewTryGetDependency(out LevDoorsSystem levDoorsSystem))
         {

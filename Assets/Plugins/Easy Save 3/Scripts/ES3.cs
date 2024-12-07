@@ -503,8 +503,6 @@ public class ES3
         if (settings.location == Location.Cache)
             return ES3File.GetOrCreateCachedFile(settings).Load<T>(key, defaultValue);
 
-        Debug.Log(settings.FullPath + " " + settings.location);
-
         using (var reader = ES3Reader.Create(settings))
         {
             if (reader == null)

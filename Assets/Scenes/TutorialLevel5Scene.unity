@@ -8030,7 +8030,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4031326518813841097, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
       propertyPath: m_text
-      value: Level 1
+      value: Level 5
       objectReference: {fileID: 0}
     - target: {fileID: 5791107282672550181, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
       propertyPath: m_Pivot.x

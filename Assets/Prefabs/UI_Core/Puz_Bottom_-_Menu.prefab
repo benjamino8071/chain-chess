@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 5935920476754213831}
   - component: {fileID: 7400121562194268032}
   m_Layer: 5
-  m_Name: Bottom_-_Menu
+  m_Name: Puz_Bottom_-_Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 5047512154166940155}
   - component: {fileID: 4031326518813841097}
   m_Layer: 5
-  m_Name: Level_Text
+  m_Name: Puzzle_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -262,7 +262,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Level 999
+  m_text: Puzzle 999
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

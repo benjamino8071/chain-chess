@@ -4,8 +4,8 @@ using UnityEngine.Serialization;
 [CreateAssetMenu]
 public class PlayerSystem_SO : ScriptableObject
 {
-    [FormerlySerializedAs("_moveSpeed")] public float moveSpeed;
-    [FormerlySerializedAs("_walkThroughDoorSpeed")] public float walkThroughDoorSpeed;
+    public float moveSpeed;
+    public float walkThroughDoorSpeed;
 
     public Sprite pawn;
     public Sprite rook;

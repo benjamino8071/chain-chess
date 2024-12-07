@@ -45,6 +45,9 @@ TagManager:
   - Retry
   - NextLevel
   - Exit
+  - RestartLevel
+  - RestartRoom
+  - PlayerCapturedText
   layers:
   - Default
   - TransparentFX

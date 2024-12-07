@@ -21,6 +21,7 @@ public class ElChainUISystem : ElDependency
         _capturedPiecesParentInitialPos = _capturedPiecesParent.position;
         
         Reset();
+        ShowNewPiece(Creator.startingPiece, true);
     }
 
     public void ShowNewPiece(Piece piece, bool isFirstPiece = false)

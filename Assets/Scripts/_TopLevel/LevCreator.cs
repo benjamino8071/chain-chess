@@ -47,7 +47,5 @@ public class LevCreator : Creator
         _dependencies.Add(new LevPauseUISystem());
         _dependencies.Add(new LevPlayerSystem());
         _dependencies.Add(new LevRestartLevelSystem());
-        
-        Debug.Log("DEPENDENCIES CREATED!");
     }
 }

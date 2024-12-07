@@ -84,4 +84,30 @@ public class ElDoorsSystem : ElDependency
     {
         return _roomDoors;
     }
+    
+    public bool IsDoorPosition(Vector3 position)
+    {
+        foreach (SingleDoorPosition singleDoorPosition in _doorPositions)
+        {
+            if (singleDoorPosition.transform.position == position)
+                return true;
+        }
+
+        return false;
+    }
+    
+    public bool TryGetSingleDoorPosition(Vector3 position, out SingleDoorPosition singleDoorPos)
+    {
+        foreach (SingleDoorPosition singleDoorPosition in _doorPositions)
+        {
+            if (singleDoorPosition.transform.position == position)
+            {
+                singleDoorPos = singleDoorPosition;
+                return true;
+            }
+        }
+
+        singleDoorPos = default;
+        return false;
+    }
 }

@@ -244,10 +244,13 @@ namespace ES3Internal
                     return globalRef;
             }
 
-            if (type != null)
-                ES3Debug.LogWarning("Reference for " + type + " with ID " + id + " could not be found in Easy Save's reference manager. See <a href=\"https://docs.moodkie.com/easy-save-3/es3-guides/saving-and-loading-references/#reference-could-not-be-found-warning\">the Saving and Loading References guide</a> for more information.", this);
-            else
-                ES3Debug.LogWarning("Reference with ID " + id + " could not be found in Easy Save's reference manager. See <a href=\"https://docs.moodkie.com/easy-save-3/es3-guides/saving-and-loading-references/#reference-could-not-be-found-warning\">the Saving and Loading References guide</a> for more information.", this);
+            if (!suppressWarnings)
+            {
+                if (type != null)
+                    ES3Debug.LogWarning("Reference for " + type + " with ID " + id + " could not be found in Easy Save's reference manager. See <a href=\"https://docs.moodkie.com/easy-save-3/es3-guides/saving-and-loading-references/#reference-could-not-be-found-warning\">the Saving and Loading References guide</a> for more information.", this);
+                else
+                    ES3Debug.LogWarning("Reference with ID " + id + " could not be found in Easy Save's reference manager. See <a href=\"https://docs.moodkie.com/easy-save-3/es3-guides/saving-and-loading-references/#reference-could-not-be-found-warning\">the Saving and Loading References guide</a> for more information.", this);
+            }
 
             return null;
         }

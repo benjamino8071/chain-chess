@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ElCreator : Creator
 {
@@ -16,6 +17,12 @@ public class ElCreator : Creator
     public GameObject capturedPieceImagePrefab;
     public GameObject arrowPointingToNextPiecePrefab;
 
+    [Header("Starting Piece")]
+    public Piece startingPiece;
+
+    [Header("Start timer on load")] 
+    public bool startTimerOnLoad;
+    
     private void Start()
     {
         Random.InitState(42);
@@ -31,15 +38,19 @@ public class ElCreator : Creator
     
     public override void CreateDependencies()
     {
-        _dependencies.Add(new ElGridSystem());
-        _dependencies.Add(new ElDoorsSystem());
-        _dependencies.Add(new ElPlayerSystem());
-        _dependencies.Add(new ElEnemiesSystem());
-        _dependencies.Add(new ElCinemachineSystem());
         _dependencies.Add(new ElAudioSystem());
+        _dependencies.Add(new ElTurnSystem());
         _dependencies.Add(new ElChainUISystem());
+        _dependencies.Add(new ElCinemachineSystem());
+        _dependencies.Add(new ElDoorsSystem());
+        _dependencies.Add(new ElEnemiesSystem());
+        _dependencies.Add(new ElGridSystem());
         _dependencies.Add(new ElPauseUISystem());
+        _dependencies.Add(new ElPlayerSystem());
         _dependencies.Add(new ElGameOverUISystem());
-        _dependencies.Add(new ElStartingPieceUISystem());
+        _dependencies.Add(new ElTimerUISystem());
+        _dependencies.Add(new ElRoomNumberUISystem());
+        
+        //_dependencies.Add(new ElStartingPieceUISystem());
     }
 }
