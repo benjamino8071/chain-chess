@@ -25,7 +25,7 @@ public class ElCreator : Creator
     
     private void Start()
     {
-        Random.InitState(42);
+        Random.InitState(playerSystemSo.levelNumberSaved);
         
         Camera.main.backgroundColor = Color.black;
         
@@ -43,8 +43,8 @@ public class ElCreator : Creator
         _dependencies.Add(new ElChainUISystem());
         _dependencies.Add(new ElCinemachineSystem());
         _dependencies.Add(new ElDoorsSystem());
-        _dependencies.Add(new ElEnemiesSystem());
         _dependencies.Add(new ElGridSystem());
+        _dependencies.Add(new ElEnemiesSystem());
         _dependencies.Add(new ElPauseUISystem());
         _dependencies.Add(new ElPlayerSystem());
         _dependencies.Add(new ElGameOverUISystem());

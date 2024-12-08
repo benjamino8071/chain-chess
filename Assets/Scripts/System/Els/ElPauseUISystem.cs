@@ -37,7 +37,6 @@ public class ElPauseUISystem : ElDependency
             {
                 button.onClick.AddListener(() =>
                 {
-                    Creator.playerSystemSo.startingPiece = Piece.NotChosen;
                     Creator.playerSystemSo.roomNumberSaved = 0;
                     Creator.timerSo.currentTime = Creator.timerSo.maxTime;
                     

@@ -8,6 +8,8 @@ public class ElGameOverUISystem : ElDependency
     private Transform _gameOverUI;
 
     private TextMeshProUGUI _titleText;
+
+    private Button _restartRoomButton;
     
     public override void GameStart(ElCreator elCreator)
     {
@@ -30,8 +32,10 @@ public class ElGameOverUISystem : ElDependency
         {
             if (button.CompareTag("RestartRoom"))
             {
-                button.onClick.AddListener(() =>
+                _restartRoomButton = button;
+                _restartRoomButton.onClick.AddListener(() =>
                 {
+                    Creator.timerSo.currentTime -= Creator.timerSo.contFromRoomPenalty;
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 });
             }
@@ -39,7 +43,6 @@ public class ElGameOverUISystem : ElDependency
             {
                 button.onClick.AddListener(() =>
                 {
-                    Creator.playerSystemSo.startingPiece = Piece.NotChosen;
                     Creator.playerSystemSo.roomNumberSaved = 0;
                     Creator.timerSo.currentTime = Creator.timerSo.maxTime;
         
@@ -55,8 +58,9 @@ public class ElGameOverUISystem : ElDependency
         Hide();
     }
 
-    public void Show(string message)
+    public void Show(string message, bool showRestartRoom)
     {
+        _restartRoomButton.gameObject.SetActive(showRestartRoom);
         _titleText.text = message;
         _gameOverUI.gameObject.SetActive(true);
     }

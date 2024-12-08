@@ -46,7 +46,6 @@ public class ElTimerUISystem : ElDependency
     private void SetTimerText(string timeText)
     {
         _timeText.SetText(timeText);
-
     }
 
     public void StartTimer()

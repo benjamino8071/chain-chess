@@ -18,7 +18,7 @@ public class ElChainUISystem : ElDependency
 
         _chainParent = GameObject.FindWithTag("ChainParent").transform;
 
-        _chainParentInitialPos = _chainParent.position;
+        _chainParentInitialPos = _chainParent.localPosition;
         
         ResetPosition();
         ShowNewPiece(Creator.startingPiece, true);
@@ -26,35 +26,39 @@ public class ElChainUISystem : ElDependency
 
     public void ShowNewPiece(Piece piece, bool isFirstPiece = false)
     {
-        Debug.Log("Showing new piece "+piece);
         GameObject newPieceImage;
         if (_chainPiecesImages.Count != 0)
         {
             RectTransform lastPieceTransform = _chainPiecesImages.Last.Value.Item2;
 
-            newPieceImage = Creator.InstantiateGameObject(Creator.capturedPieceImagePrefab,
-                lastPieceTransform.position + new Vector3(150, 0, 0), Quaternion.identity);
+            newPieceImage = Creator.InstantiateGameObjectWithParent(Creator.capturedPieceImagePrefab, _chainParent);
+
+            newPieceImage.transform.localPosition += lastPieceTransform.localPosition + new Vector3(250, 0, 0);
+            //newPieceImage = Creator.InstantiateGameObject(Creator.capturedPieceImagePrefab, lastPieceTransform.localPosition + new Vector3(150, 0, 0), Quaternion.identity);
         }
         else
         {
-            newPieceImage = Creator.InstantiateGameObject(Creator.capturedPieceImagePrefab,
-                _chainParent.position, Quaternion.identity);
+            newPieceImage = Creator.InstantiateGameObjectWithParent(Creator.capturedPieceImagePrefab, _chainParent);
         }
 
-        Image visual = newPieceImage.GetComponentInChildren<Image>();
+        Image visual = newPieceImage.GetComponent<Image>();
 
         visual.sprite = GetSprite(piece);
         
-        newPieceImage.transform.SetParent(_chainParent, true);
+        //newPieceImage.transform.SetParent(_chainParent, true);
 
         //For every other piece we first want to add an arrow indicating the order for the chain
         if (!isFirstPiece)
         {
-            Vector3 posBehindNewPieceImage = newPieceImage.transform.position - new Vector3(75, 0, 0);
-            GameObject arrowPointingToNextPiece = Creator.InstantiateGameObject(Creator.arrowPointingToNextPiecePrefab,
-                posBehindNewPieceImage, Quaternion.identity);
+            Vector3 posBehindNewPieceImage = newPieceImage.transform.localPosition - new Vector3(125, 0, 0);
+
+            GameObject arrowPointingToNextPiece = Creator.InstantiateGameObjectWithParent(Creator.arrowPointingToNextPiecePrefab, _chainParent);
+
+            arrowPointingToNextPiece.transform.localPosition = posBehindNewPieceImage;
             
-            arrowPointingToNextPiece.transform.SetParent(_chainParent, true);
+            //GameObject arrowPointingToNextPiece = Creator.InstantiateGameObject(Creator.arrowPointingToNextPiecePrefab, posBehindNewPieceImage, Quaternion.identity);
+            
+            //arrowPointingToNextPiece.transform.SetParent(_chainParent, true);
 
             _chainPiecesImages.AddLast((piece, arrowPointingToNextPiece.GetComponent<RectTransform>(), visual));
         }
@@ -64,7 +68,7 @@ public class ElChainUISystem : ElDependency
 
     public void ResetPosition()
     {
-        _chainParent.position = _chainParentInitialPos;
+        _chainParent.localPosition = _chainParentInitialPos;
     }
 
     public void NewRoomClearChain()
@@ -79,7 +83,7 @@ public class ElChainUISystem : ElDependency
     public void HighlightNextPiece()
     {
         //Move _capturedPiecesParent along
-        _chainParent.position += new Vector3(-150, 0, 0);
+        _chainParent.localPosition += new Vector3(-250, 0, 0);
     }
 
     public void PawnPromoted(int index, Piece promotedPiece)

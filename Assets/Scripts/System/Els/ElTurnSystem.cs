@@ -10,6 +10,7 @@ public class ElTurnSystem : ElDependency
         Player,
         Enemy
     }
+    private Turn _currentTurn;
 
     public override void GameStart(ElCreator elCreator)
     {
@@ -39,7 +40,7 @@ public class ElTurnSystem : ElDependency
         {
             nextTurn = Turn.Player;
         }
-        
+
         switch (nextTurn)
         {
             case Turn.Player:
@@ -50,5 +51,11 @@ public class ElTurnSystem : ElDependency
                 _enemiesSystem.SetStateForAllEnemies(ElEnemyController.States.ChooseTile);
                 break;
         }
+        _currentTurn = nextTurn;
+    }
+
+    public Turn GetTurn()
+    {
+        return _currentTurn;
     }
 }

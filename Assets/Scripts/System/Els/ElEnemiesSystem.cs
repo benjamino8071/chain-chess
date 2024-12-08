@@ -7,6 +7,7 @@ public class ElEnemiesSystem : ElDependency
 {
     private ElChainUISystem _capturedPiecesUISystem;
     private ElDoorsSystem _doorsSystem;
+    private ElTurnSystem _turnSystem;
     
     private List<ElEnemyController> _enemyControllers = new ();
 
@@ -24,25 +25,93 @@ public class ElEnemiesSystem : ElDependency
         {
             _doorsSystem = doorsSystem;
         }
-
-        foreach (GameObject enemySpawnPosition in GameObject.FindGameObjectsWithTag("EnemySpawnPosition"))
+        if (Creator.NewTryGetDependency(out ElTurnSystem turnSystem))
         {
-            //Do NOT create enemy controllers for the enemies in rooms before us
-            //To get the room number of the spawn position we divide by 11
-            int roomNumber = (int)(enemySpawnPosition.transform.position.y / 11f);
-            if(roomNumber < Creator.playerSystemSo.roomNumberSaved) continue;
+            _turnSystem = turnSystem;
+        }
+
+        if (Creator.enemySo.cachedSpawnPoints.Count == 0)
+        { 
+            for (int roomNum = 0; roomNum < 8; roomNum++)
+            {
+                Dictionary<Vector3, (Piece, int)> positions = new();
+                while (positions.Count < 3 + roomNum)
+                {
+                    int xPosTemp = Random.Range(2, 10);
+                    //An x-value of 5 or 6 is directly in front of a door0.
+                    //These spaces MUST be free for the player when they walk into a new room
+                    while (xPosTemp == 5 || xPosTemp == 6)
+                    {
+                        xPosTemp = Random.Range(2, 10);
+                    }
+                    float xPos = xPosTemp + 0.5f;
+                    
+                    float yPos = Random.Range(3, 11) + 0.5f + roomNum * 11;
+
+                    Vector3 chosenPos = new Vector3(xPos, yPos, 0);
+
+                    //Each enemy should start on its own piece
+                    if (!positions.ContainsKey(chosenPos))
+                    {
+                        int pieceNum = Random.Range(0, 6);
+                        //We do NOT want pawns to be in the last row
+                        //So if chosenPos.y = last row y-value, then we find another piece
+                        if (pieceNum == 0 && yPos == 3.5f + roomNum * 11)
+                        {
+                            pieceNum = Random.Range(1, 6);
+                        }
+                        
+                        Piece chosenPiece = Piece.Pawn;
+                        switch (pieceNum)
+                        {
+                            case 0:
+                                chosenPiece = Piece.Pawn;
+                                break;
+                            case 1:
+                                chosenPiece = Piece.Rook;
+                                break;
+                            case 2:
+                                chosenPiece = Piece.Knight;
+                                break;
+                            case 3:
+                                chosenPiece = Piece.Bishop;
+                                break;
+                            case 4:
+                                chosenPiece = Piece.Queen;
+                                break;
+                            case 5:
+                                chosenPiece = Piece.King;
+                                break;
+                        }
+                        
+                        positions.Add(chosenPos, (chosenPiece, roomNum));
+
+                    }
+                }
+
+                foreach (KeyValuePair<Vector3,(Piece, int)> kvp in positions)
+                {
+                    Creator.enemySo.cachedSpawnPoints[kvp.Key] = (kvp.Value.Item1, kvp.Value.Item2);
+                }
+            }
+        }
+        
+        List<SingleDoorPosition> doors = _doorsSystem.GetDoorPositions().ToList();
+        doors.Sort((a, b) => a.transform.position.y.CompareTo(b.transform.position.y));
+
+        foreach (KeyValuePair<Vector3, (Piece, int)> cachedSpawn in Creator.enemySo.cachedSpawnPoints)
+        {
+            if(cachedSpawn.Value.Item2 < Creator.playerSystemSo.roomNumberSaved)
+                continue;
             
             ElEnemyController enemyController = new ElEnemyController();
             enemyController.GameStart(elCreator);
-            Piece piece = enemySpawnPosition.GetComponent<EnemyPiece>().piece;
             
-            //Get the order of the doors, in ascending order based on y-value
-            List<SingleDoorPosition> doors = _doorsSystem.GetDoorPositions().ToList();
-            doors.Sort((a, b) => a.transform.position.y.CompareTo(b.transform.position.y));
-            
-            enemyController.SetEnemyInstance(enemySpawnPosition.transform.position, piece, doors);
+            enemyController.SetEnemyInstance(cachedSpawn.Key, cachedSpawn.Value.Item1, doors);
             _enemyControllers.Add(enemyController);
+            _haveEnemyControllersFinishedMove.Add(enemyController, false);
         }
+
     }
 
     public override void GameUpdate(float dt)
@@ -50,6 +119,26 @@ public class ElEnemiesSystem : ElDependency
         foreach (ElEnemyController enemyController in _enemyControllers)
         {
             enemyController.GameUpdate(dt);
+        }
+
+        if (_turnSystem.GetTurn() == ElTurnSystem.Turn.Enemy)
+        {
+            bool allEnemiesMoved = true;
+            foreach (KeyValuePair<ElEnemyController, bool> hasFinishedMove in _haveEnemyControllersFinishedMove)
+            {
+                if(hasFinishedMove.Key.GetRoomNumber() != Creator.playerSystemSo.roomNumberSaved)
+                    continue;
+                
+                if (!hasFinishedMove.Value)
+                {
+                    allEnemiesMoved = false;
+                    break;
+                }
+            }
+            if (allEnemiesMoved)
+            {
+                _turnSystem.SwitchTurn(ElTurnSystem.Turn.Player);
+            }
         }
     }
 
@@ -86,6 +175,7 @@ public class ElEnemiesSystem : ElDependency
         enemyController.PieceCaptured();
         
         _enemyControllers.Remove(enemyController);
+        _haveEnemyControllersFinishedMove.Remove(enemyController);
 
         if (IsEnemiesInRoomCleared(roomNumber))
         {
@@ -93,8 +183,18 @@ public class ElEnemiesSystem : ElDependency
         }
     }
 
+    private Dictionary<ElEnemyController, bool> _haveEnemyControllersFinishedMove = new();
+
     public void SetStateForAllEnemies(ElEnemyController.States state)
     {
+        if (state == ElEnemyController.States.ChooseTile)
+        {
+            foreach (ElEnemyController enemyController in _enemyControllers)
+            {
+                _haveEnemyControllersFinishedMove[enemyController] = false;
+            }
+        }
+        
         foreach (ElEnemyController enemyController in _enemyControllers)
         {
             if (enemyController.GetState() != ElEnemyController.States.Captured)
@@ -131,5 +231,10 @@ public class ElEnemiesSystem : ElDependency
     public void ClearPositionsTakenByOtherEnemiesForThisTurn()
     {
         _positionsTakenByOtherEnemies.Clear();
+    }
+
+    public void EnemyControllerMoved(ElEnemyController enemyController)
+    {
+        _haveEnemyControllersFinishedMove[enemyController] = true;
     }
 }

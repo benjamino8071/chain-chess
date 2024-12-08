@@ -47,6 +47,11 @@ public class Creator : MonoBehaviour
         return Instantiate(creatorGridPrefab, position, rotation);
     }
 
+    public GameObject InstantiateGameObjectWithParent(GameObject newObject, Transform parent)
+    {
+        return Instantiate(newObject, parent);
+    }
+
     public bool NewTryGetDependency<T>(out T dependency) where T : Dependency
     {
         foreach (Dependency dependent  in _dependencies)

@@ -8,7 +8,6 @@ public class ElEnemyController : ElController
     private ElPlayerSystem _playerSystem;
     private ElEnemiesSystem _enemiesSystem;
     private ElDoorsSystem _doorsSystem;
-    private ElTurnSystem _turnSystem;
     private ElTimerUISystem _timerUISystem;
     
     private Transform _enemyInstance;
@@ -57,10 +56,6 @@ public class ElEnemyController : ElController
         {
             _doorsSystem = levDoorsSystem;
         }
-        if (elCreator.NewTryGetDependency(out ElTurnSystem levTurnSystem))
-        {
-            _turnSystem = levTurnSystem;
-        }
         if (elCreator.NewTryGetDependency(out ElTimerUISystem timerUISystem))
         {
             _timerUISystem = timerUISystem;
@@ -74,7 +69,7 @@ public class ElEnemyController : ElController
         _enemyInstance =
             Creator.InstantiateGameObject(Creator.enemyPrefab, position, Quaternion.identity).transform;
         
-        _spriteRenderer = _enemyInstance.GetComponentInChildren<SpriteRenderer>(); //Should only be ONE SpriteRenderer under _enemyInstance
+        _spriteRenderer = _enemyInstance.GetComponentInChildren<SpriteRenderer>();
 
         _playerAnimator = _enemyInstance.GetComponentInChildren<Animator>();
         
@@ -87,6 +82,7 @@ public class ElEnemyController : ElController
             {
                 int currentRoomNumber = doorPositionsOrdered[i].roomNumber;
                 int nextRoomNumber = doorPositionsOrdered[i+1].roomNumber;
+                
                 if (currentRoomNumber == nextRoomNumber)
                 {
                     _roomNumber = currentRoomNumber;
@@ -333,7 +329,7 @@ public class ElEnemyController : ElController
                 else
                 {
                     SetState(States.WaitingForTurn);
-                    _turnSystem.SwitchTurn(ElTurnSystem.Turn.Player);
+                    _enemiesSystem.EnemyControllerMoved(this);
                 }
                 break;
             case States.MoveToTile:
@@ -365,16 +361,14 @@ public class ElEnemyController : ElController
                             if (!_gridSystem.IsPositionValid(posInFront) ||
                                 _gridSystem.TryGetSingleDoorPosition(posInFront, out SingleDoorPosition foo))
                             {
-                                //PROMOTE PIECE
                                 //TODO: Make it possible for the pawn to be any of the 4 pieces
                                 SetPiece(Piece.Queen);
-                                break;
                             }
                         }
                         
                         SetState(States.WaitingForTurn);
-                        _turnSystem.SwitchTurn(ElTurnSystem.Turn.Player);
                     }
+                    _enemiesSystem.EnemyControllerMoved(this);
                 }
                 break;
             case States.Captured:

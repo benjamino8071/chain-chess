@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Here the Player is allowed to move until
@@ -50,6 +51,7 @@ public class ElPlayerSystem : ElDependency
         FadeInAfterDoorWalk,
         Captured,
         TimerExpired,
+        LevelComplete,
         EndGame
     }
 
@@ -158,7 +160,7 @@ public class ElPlayerSystem : ElDependency
                 break;
             case States.Idle:
                 if(_movesInThisTurn.Count == 0) 
-                    return;
+                    break;
                 
                 if (_movesInThisTurn.Peek() == Piece.Pawn)
                 {
@@ -166,31 +168,26 @@ public class ElPlayerSystem : ElDependency
                     
                     if(!_gridSystem.IsPositionValid(posInFront) || _gridSystem.TryGetSingleDoorPosition(posInFront, out SingleDoorPosition checkDoorOpen))
                     {
-                        Debug.Log("PLAYER IS PAWN IN LAST ROW OF CURRENT ROOM - PROMOTE");
                         _promoUIController.Show();
-                        SetState(States.PawnPromo);
-                    }
-                    else if(_enemiesSystem.IsEnemyAtThisPosition(posInFront))
-                    {
-                        _jumpPosition = _playerCharacter.position;
-                        _moveSpeed = Creator.playerSystemSo.moveSpeed;
-                        SetState(States.Moving);
-                    
-                        TriggerJumpAnimation();
-                    
+                        
                         _movesInThisTurn.Dequeue();
-                    }
-                    else if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
-                    {
-                        UpdatePlayerPosition();
+                        SetState(States.PawnPromo);
+                        break;
                     }
                     
+                    if(_enemiesSystem.IsEnemyAtThisPosition(posInFront))
+                    {
+                        TriggerJumpAnimation();
+
+                        _movesInThisTurn.Dequeue();
+                        break;
+                    }
                 }
-                else if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
+                
+                if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
                 {
                     UpdatePlayerPosition();
                 }
-
                 break;
             case States.Moving:
                 if (_playerCharacter.position != _jumpPosition)
@@ -217,8 +214,7 @@ public class ElPlayerSystem : ElDependency
                                 //Player has won!!
                                 _timerUISystem.StopTimer();
                                 TriggerFadeOutAnimation();
-                                SetState(States.EndGame);
-                                //TODO: Figure out what happens when the player clears a level _gameOverUISystem.Show();
+                                SetState(States.LevelComplete);
                             }
                             else
                             {
@@ -234,6 +230,16 @@ public class ElPlayerSystem : ElDependency
                             break;
                         }
                     }
+                    else if (_enemiesSystem.TryGetEnemyAtPosition(_playerCharacter.position,
+                                 out ElEnemyController enemyController))
+                    {
+                        //Add this player to the 'captured pieces' list
+                        Piece enemyPiece = enemyController.GetPiece();
+                        Debug.Log("Taking enemy piece: "+enemyPiece);
+                        _capturedPieces.AddLast(enemyPiece);
+                        _movesInThisTurn.Enqueue(enemyPiece);
+                        _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
+                    }
                     
                     //IF the player is a pawn, we want to check what's directly in front of the player.
                     //IF it is an invalid position OR a door, then the player has a pawn and is at the end of the room. Therefore enable promotion
@@ -243,7 +249,6 @@ public class ElPlayerSystem : ElDependency
                         if (!_gridSystem.IsPositionValid(posInFront) ||
                             _gridSystem.TryGetSingleDoorPosition(posInFront, out SingleDoorPosition foo))
                         {
-                            Debug.Log("PLAYER IS PAWN IN LAST ROW OF CURRENT ROOM - PROMOTE");
                             _promoUIController.Show();
                             SetState(States.PawnPromo);
                             break;
@@ -268,11 +273,8 @@ public class ElPlayerSystem : ElDependency
             case States.PawnPromo:
                 if (_promoUIController.IsPromoChosen())
                 {
-                    //TODO: In _capturedPieces, update the piece to whatever was chosen
                     _currentPiece.Value = _promoUIController.PieceChosen();
                     
-                    //TODO: In _chainUISystem, update the chain sprite
-                    Debug.Log("Number of captured pieces: "+_capturedPieces.Count);
                     int index = 0;
                     LinkedListNode<Piece> temp = _capturedPieces.First;
                     while (temp != null)
@@ -290,8 +292,8 @@ public class ElPlayerSystem : ElDependency
                     _promoUIController.Hide();
                     
                     _currentPiece = _currentPiece.Next;
-                    _movesInThisTurn.Dequeue();
                     
+                    Debug.Log("Moves left after pawn promo: "+_movesInThisTurn.Count);
                     if (_movesInThisTurn.Count > 0)
                     {
                         //Allow player to make another move
@@ -362,7 +364,7 @@ public class ElPlayerSystem : ElDependency
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
                     SetState(States.EndGame);
-                    _gameOverUISystem.Show("Captured");
+                    _gameOverUISystem.Show("Captured", Creator.timerSo.currentTime > Creator.timerSo.contFromRoomPenalty);
                 }
                 break;
             case States.TimerExpired:
@@ -370,7 +372,19 @@ public class ElPlayerSystem : ElDependency
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
                     SetState(States.EndGame);
-                    _gameOverUISystem.Show("Timer Expired");
+                    _gameOverUISystem.Show("Timer Expired", false);
+                }
+                break;
+            case States.LevelComplete:
+                //Wait 1 second before we load the next level
+                if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
+                {
+                    Creator.enemySo.ResetCachedSpawnPoints();
+                    Creator.playerSystemSo.levelNumberSaved++;
+                    Creator.playerSystemSo.roomNumberSaved = 0;
+                    Creator.timerSo.currentTime = Creator.timerSo.maxTime;
+                    
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 }
                 break;
             case States.EndGame:
@@ -399,7 +413,8 @@ public class ElPlayerSystem : ElDependency
                 //Cannot take a piece that is directly in front of pawn
                 continue;
             }
-                        
+            
+            /*
             if (_enemiesSystem.TryGetEnemyAtPosition(newPos, out ElEnemyController enemyController))
             {
                 //Add this player to the 'captured pieces' list
@@ -408,6 +423,7 @@ public class ElPlayerSystem : ElDependency
                 _movesInThisTurn.Enqueue(enemyPiece);
                 _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
             }
+            */
             
             // Set our position as a fraction of the distance between the markers.
             _jumpPosition = positionRequested;
@@ -466,6 +482,7 @@ public class ElPlayerSystem : ElDependency
                     continue;
                 }
                 
+                /*
                 if (_enemiesSystem.TryGetEnemyAtPosition(nextSpot, out ElEnemyController enemyController))
                 {
                     //Add this player to the 'captured pieces' list
@@ -474,6 +491,7 @@ public class ElPlayerSystem : ElDependency
                     _movesInThisTurn.Enqueue(enemyPiece);
                     _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
                 }
+                */
                     
                 // Set our position as a fraction of the distance between the markers.
                 _jumpPosition = positionRequested;
