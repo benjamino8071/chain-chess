@@ -177,10 +177,21 @@ public class ElPlayerSystem : ElDependency
                     
                     if(_enemiesSystem.IsEnemyAtThisPosition(posInFront))
                     {
-                        TriggerJumpAnimation();
+                        Vector3 posOnSideLeft = _playerCharacter.position + new Vector3(-1, 1, 0);
+                        bool enemyOnLeft = _enemiesSystem.IsEnemyAtThisPosition(posOnSideLeft);
+                        Vector3 posOnSideRight = _playerCharacter.position + new Vector3(1, 1, 0);
+                        bool enemyOnRight = _enemiesSystem.IsEnemyAtThisPosition(posOnSideRight);
 
-                        _movesInThisTurn.Dequeue();
-                        break;
+                        if (!enemyOnLeft && !enemyOnRight)
+                        {
+                            TriggerJumpAnimation();
+
+                            _movesInThisTurn.Dequeue();
+                        
+                            SetState(States.WaitingForTurn);
+                            _turnInfoUISystem.SwitchTurn(ElTurnSystem.Turn.Enemy);
+                            break;
+                        }
                     }
                 }
                 
@@ -272,7 +283,8 @@ public class ElPlayerSystem : ElDependency
             case States.PawnPromo:
                 if (_promoUIController.IsPromoChosen())
                 {
-                    _currentPiece.Value = _promoUIController.PieceChosen();
+                    Piece pieceChosen = _promoUIController.PieceChosen();
+                    _currentPiece.Value = pieceChosen;
                     
                     int index = 0;
                     LinkedListNode<Piece> temp = _capturedPieces.First;
@@ -286,7 +298,7 @@ public class ElPlayerSystem : ElDependency
                     }
 
                     index *= 2; //Have to double index for the chainUI as for every other index, there is an arrow sprite which we NEVER want to change
-                    _chainUISystem.PawnPromoted(index, _promoUIController.PieceChosen());
+                    _chainUISystem.PawnPromoted(index, pieceChosen);
                     
                     _promoUIController.Hide();
                     
@@ -301,6 +313,7 @@ public class ElPlayerSystem : ElDependency
                     }
                     else
                     {
+                        UpdateSprite(pieceChosen);
                         SetState(States.WaitingForTurn);
                         _turnInfoUISystem.SwitchTurn(ElTurnSystem.Turn.Enemy);
                     }
@@ -380,7 +393,7 @@ public class ElPlayerSystem : ElDependency
                     Creator.enemySo.ResetCachedSpawnPoints();
                     Creator.playerSystemSo.levelNumberSaved++;
                     Creator.playerSystemSo.roomNumberSaved = 0;
-                    Creator.timerSo.currentTime = Creator.timerSo.maxTime;
+                    Creator.timerSo.currentTime += Creator.timerSo.levelCompleteBonus;
                     
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 }

@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ElEnemyController : ElController
 {
@@ -361,8 +363,26 @@ public class ElEnemyController : ElController
                             if (!_gridSystem.IsPositionValid(posInFront) ||
                                 _gridSystem.TryGetSingleDoorPosition(posInFront, out SingleDoorPosition foo))
                             {
-                                //TODO: Make it possible for the pawn to be any of the 4 pieces
-                                SetPiece(Piece.Queen);
+                                //Queen is obviously the best option so we weight the chance of selecting Queen in its favour
+                                //However we still want the opportunity for a pawn to de-promote.
+                                List<Piece> promoChances = new()
+                                {
+                                    Piece.Queen,
+                                    Piece.Queen,
+                                    Piece.Queen,
+                                    Piece.Knight,
+                                    Piece.Rook,
+                                    Piece.Bishop
+                                };
+                                
+                                // Use the milliseconds as a seed
+                                System.Random localRandom = new System.Random(DateTime.Now.Millisecond);
+
+                                // Generate a random index
+                                int promoIndex = localRandom.Next(0, promoChances.Count);
+
+                                // Use the index to set the piece
+                                SetPiece(promoChances[promoIndex]);
                             }
                         }
                         

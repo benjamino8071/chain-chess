@@ -8,6 +8,7 @@ public class ElEnemiesSystem : ElDependency
     private ElChainUISystem _capturedPiecesUISystem;
     private ElDoorsSystem _doorsSystem;
     private ElTurnSystem _turnSystem;
+    private ElTimerUISystem _timerUISystem;
     
     private List<ElEnemyController> _enemyControllers = new ();
 
@@ -29,13 +30,17 @@ public class ElEnemiesSystem : ElDependency
         {
             _turnSystem = turnSystem;
         }
+        if (Creator.NewTryGetDependency(out ElTimerUISystem timerUISystem))
+        {
+            _timerUISystem = timerUISystem;
+        }
 
         if (Creator.enemySo.cachedSpawnPoints.Count == 0)
         { 
             for (int roomNum = 0; roomNum < 8; roomNum++)
             {
                 Dictionary<Vector3, (Piece, int)> positions = new();
-                while (positions.Count < 3 + roomNum)
+                while (positions.Count < 3 + roomNum + Creator.playerSystemSo.levelNumberSaved)
                 {
                     int xPosTemp = Random.Range(2, 10);
                     //An x-value of 5 or 6 is directly in front of a door0.
@@ -53,36 +58,35 @@ public class ElEnemiesSystem : ElDependency
                     //Each enemy should start on its own piece
                     if (!positions.ContainsKey(chosenPos))
                     {
-                        int pieceNum = Random.Range(0, 6);
+                        List<Piece> selectedPiece = new()
+                        {
+                            Piece.Pawn,
+                            Piece.Rook,
+                            Piece.Knight,
+                            Piece.Bishop,
+                            Piece.Queen,
+                            Piece.King
+                        };
+                        
                         //We do NOT want pawns to be in the last row
                         //So if chosenPos.y = last row y-value, then we find another piece
-                        if (pieceNum == 0 && yPos == 3.5f + roomNum * 11)
+                        if (yPos == 3.5f + roomNum * 11)
                         {
-                            pieceNum = Random.Range(1, 6);
+                            selectedPiece.Remove(Piece.Pawn);
                         }
-                        
-                        Piece chosenPiece = Piece.Pawn;
-                        switch (pieceNum)
+                        //We don't want queens to appear until room 3
+                        if (Creator.playerSystemSo.roomNumberSaved < 3)
                         {
-                            case 0:
-                                chosenPiece = Piece.Pawn;
-                                break;
-                            case 1:
-                                chosenPiece = Piece.Rook;
-                                break;
-                            case 2:
-                                chosenPiece = Piece.Knight;
-                                break;
-                            case 3:
-                                chosenPiece = Piece.Bishop;
-                                break;
-                            case 4:
-                                chosenPiece = Piece.Queen;
-                                break;
-                            case 5:
-                                chosenPiece = Piece.King;
-                                break;
+                            selectedPiece.Remove(Piece.Queen);
                         }
+                        //We don't want kings to appear until room 6
+                        if (Creator.playerSystemSo.roomNumberSaved < 6)
+                        {
+                            selectedPiece.Remove(Piece.King);
+                        }
+
+                        int indexChosen = Random.Range(0, selectedPiece.Count);
+                        Piece chosenPiece = selectedPiece[indexChosen];
                         
                         positions.Add(chosenPos, (chosenPiece, roomNum));
 
@@ -159,6 +163,11 @@ public class ElEnemiesSystem : ElDependency
 
         if (IsEnemiesInRoomCleared(roomNumber))
         {
+            if (roomNumber == 7)
+            {
+                //Beaten the level! So we stop the timer
+                _timerUISystem.StopTimer();
+            }
             _doorsSystem.SetRoomDoorsOpen(roomNumber);
         }
     }
