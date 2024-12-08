@@ -48,6 +48,8 @@ TagManager:
   - RestartLevel
   - RestartRoom
   - PlayerCapturedText
+  - GUITop
+  - GUIBottom
   layers:
   - Default
   - TransparentFX

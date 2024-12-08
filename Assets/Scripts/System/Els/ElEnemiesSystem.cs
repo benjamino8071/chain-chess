@@ -163,11 +163,6 @@ public class ElEnemiesSystem : ElDependency
 
         if (IsEnemiesInRoomCleared(roomNumber))
         {
-            if (roomNumber == 7)
-            {
-                //Beaten the level! So we stop the timer
-                _timerUISystem.StopTimer();
-            }
             _doorsSystem.SetRoomDoorsOpen(roomNumber);
         }
     }

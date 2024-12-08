@@ -1,5 +1,8 @@
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class ElCreator : Creator
 {
@@ -8,6 +11,7 @@ public class ElCreator : Creator
     public PlayerSystem_SO playerSystemSo;
     public Enemy_SO enemySo;
     public Timer_SO timerSo;
+    public MainMenu_SO mainMenuSo;
     
     [Header("Prefabs")]
     public GameObject playerPrefab;
@@ -22,9 +26,15 @@ public class ElCreator : Creator
 
     [Header("Start timer on load")] 
     public bool startTimerOnLoad;
+
+    [Header("GUITopBottom")] 
+    public GameObject guiTop;
+    public GameObject guiBottom;
     
     private void Start()
     {
+        SceneManager.sceneUnloaded += SceneManager_SceneUnloaded;
+        
         Random.InitState(playerSystemSo.levelNumberSaved);
         
         Camera.main.backgroundColor = Color.black;
@@ -34,8 +44,33 @@ public class ElCreator : Creator
             ElDependency elDependency = (ElDependency)dependency;
             elDependency.GameStart(this);
         }
+
+        if (playerSystemSo.firstMoveMadeWhileShowingMainMenu)
+        {
+            ShowGUITop();
+            ShowGUIBottom();
+        }
+        else
+        {
+            HideGUITop();
+            HideGUIBottom();
+        }
     }
-    
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneUnloaded -= SceneManager_SceneUnloaded;
+    }
+
+    private void SceneManager_SceneUnloaded(Scene sceneUnloaded)
+    {
+        if (sceneUnloaded.name == "MainMenuScene")
+        {
+            ShowGUITop();
+            ShowGUIBottom();
+        }
+    }
+
     public override void CreateDependencies()
     {
         _dependencies.Add(new ElAudioSystem());
@@ -52,5 +87,25 @@ public class ElCreator : Creator
         _dependencies.Add(new ElRoomNumberUISystem());
         
         //_dependencies.Add(new ElStartingPieceUISystem());
+    }
+
+    public void ShowGUITop()
+    {
+        guiTop.SetActive(true);
+    }
+    
+    public void HideGUITop()
+    {
+        guiTop.SetActive(false);
+    }
+
+    public void ShowGUIBottom()
+    {
+        guiBottom.SetActive(true);
+    }
+
+    public void HideGUIBottom()
+    {
+        guiBottom.SetActive(false);
     }
 }

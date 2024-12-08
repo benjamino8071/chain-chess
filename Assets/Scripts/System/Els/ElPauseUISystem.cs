@@ -30,6 +30,8 @@ public class ElPauseUISystem : ElDependency
             {
                 button.onClick.AddListener(() =>
                 {
+                    Creator.playerSystemSo.roomNumberSaved = 0;
+                    
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 });
             }
@@ -42,7 +44,7 @@ public class ElPauseUISystem : ElDependency
                     Creator.playerSystemSo.roomNumberSaved = 0;
                     Creator.timerSo.currentTime = Creator.timerSo.maxTime;
                     
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                    SceneManager.LoadScene("MainMenuScene");
                 });
             }
         }

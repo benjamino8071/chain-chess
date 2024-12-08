@@ -10,7 +10,6 @@ public class LevCreator : Creator
     [Header("Prefabs")]
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
-    public GameObject tilePrefab;
     public GameObject validPositionPrefab;
     public GameObject capturedPieceImagePrefab;
     public GameObject arrowPointingToNextPiecePrefab;
@@ -47,5 +46,6 @@ public class LevCreator : Creator
         _dependencies.Add(new LevPauseUISystem());
         _dependencies.Add(new LevPlayerSystem());
         _dependencies.Add(new LevRestartLevelSystem());
+        _dependencies.Add(new LevGameOverUISystem());
     }
 }

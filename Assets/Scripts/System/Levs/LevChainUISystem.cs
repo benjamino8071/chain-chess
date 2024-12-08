@@ -1,103 +1,121 @@
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LevChainUISystem : LevDependency
 {
-    private Transform _capturedPiecesParent;
+    private Transform _chainParent;
     
-    private Vector3 _capturedPiecesParentInitialPos;
+    private Vector3 _chainParentInitialPos;
     
-    private LinkedList<RectTransform> _capturedPiecesImages = new ();
-
+    private LinkedList<(Piece, RectTransform, Image)> _chainPiecesImages = new ();
     
     public override void GameStart(LevCreator levCreator)
     {
         base.GameStart(levCreator);
-
-        _capturedPiecesParent = GameObject.FindWithTag("ChainParent").transform;
-
-        _capturedPiecesParentInitialPos = _capturedPiecesParent.position;
         
-        Reset();
+        _chainParent = GameObject.FindWithTag("ChainParent").transform;
+
+        _chainParentInitialPos = _chainParent.localPosition;
+        
+        ResetPosition();
         ShowNewPiece(Creator.startingPiece, true);
     }
 
     public void ShowNewPiece(Piece piece, bool isFirstPiece = false)
     {
         GameObject newPieceImage;
-        if (_capturedPiecesImages.Count != 0)
+        if (_chainPiecesImages.Count != 0)
         {
-            RectTransform lastPieceTransform = _capturedPiecesImages.Last.Value;
+            RectTransform lastPieceTransform = _chainPiecesImages.Last.Value.Item2;
 
-            newPieceImage = Creator.InstantiateGameObject(Creator.capturedPieceImagePrefab,
-                lastPieceTransform.position + new Vector3(150, 0, 0), Quaternion.identity);
+            newPieceImage = Creator.InstantiateGameObjectWithParent(Creator.capturedPieceImagePrefab, _chainParent);
+
+            newPieceImage.transform.localPosition += lastPieceTransform.localPosition + new Vector3(250, 0, 0);
         }
         else
         {
-            newPieceImage = Creator.InstantiateGameObject(Creator.capturedPieceImagePrefab,
-                _capturedPiecesParent.position, Quaternion.identity);
+            newPieceImage = Creator.InstantiateGameObjectWithParent(Creator.capturedPieceImagePrefab, _chainParent);
         }
 
-        Image visual = newPieceImage.GetComponentInChildren<Image>();
-        
-        //Set the sprite based on the piece
-        switch (piece)
-        {
-            case Piece.Pawn:
-                visual.sprite = Creator.playerSystemSo.pawn;
-                break;
-            case Piece.Rook:
-                visual.sprite = Creator.playerSystemSo.rook;
-                break;
-            case Piece.Knight:
-                visual.sprite = Creator.playerSystemSo.knight;
-                break;
-            case Piece.Bishop:
-                visual.sprite = Creator.playerSystemSo.bishop;
-                break;
-            case Piece.Queen:
-                visual.sprite = Creator.playerSystemSo.queen;
-                break;
-            case Piece.King:
-                visual.sprite = Creator.playerSystemSo.king;
-                break;
-        }
-        
-        newPieceImage.transform.SetParent(_capturedPiecesParent, true);
+        Image visual = newPieceImage.GetComponent<Image>();
 
+        visual.sprite = GetSprite(piece);
+        
+        //For every other piece we first want to add an arrow indicating the order for the chain
         if (!isFirstPiece)
         {
-            Vector3 posBehindNewPieceImage = newPieceImage.transform.position - new Vector3(75, 0, 0);
-            GameObject arrowPointingToNextPiece = Creator.InstantiateGameObject(Creator.arrowPointingToNextPiecePrefab,
-                posBehindNewPieceImage, Quaternion.identity);
-            
-            arrowPointingToNextPiece.transform.SetParent(_capturedPiecesParent, true);
+            Vector3 posBehindNewPieceImage = newPieceImage.transform.localPosition - new Vector3(125, 0, 0);
 
-            _capturedPiecesImages.AddLast(arrowPointingToNextPiece.GetComponent<RectTransform>());
+            GameObject arrowPointingToNextPiece = Creator.InstantiateGameObjectWithParent(Creator.arrowPointingToNextPiecePrefab, _chainParent);
+
+            arrowPointingToNextPiece.transform.localPosition = posBehindNewPieceImage;
+
+            _chainPiecesImages.AddLast((piece, arrowPointingToNextPiece.GetComponent<RectTransform>(), visual));
         }
         
-        _capturedPiecesImages.AddLast(newPieceImage.GetComponent<RectTransform>());
+        _chainPiecesImages.AddLast((piece, newPieceImage.GetComponent<RectTransform>(), visual));
     }
 
-    public void Reset()
+    public void ResetPosition()
     {
-        _capturedPiecesParent.position = _capturedPiecesParentInitialPos;
+        _chainParent.localPosition = _chainParentInitialPos;
     }
 
-    public void InNewRoomReset()
+    public void NewRoomClearChain()
     {
-        foreach (RectTransform capturedPiecesImage in _capturedPiecesImages)
+        foreach ((Piece, RectTransform, Image) capturedPiecesImage in _chainPiecesImages)
         {
-            capturedPiecesImage.gameObject.SetActive(false);
+            capturedPiecesImage.Item2.gameObject.SetActive(false);
         }
-        _capturedPiecesImages.Clear();
+        _chainPiecesImages.Clear();
     }
 
     public void HighlightNextPiece()
     {
         //Move _capturedPiecesParent along
-        _capturedPiecesParent.position += new Vector3(-150, 0, 0);
+        _chainParent.localPosition += new Vector3(-250, 0, 0);
+    }
+
+    public void PawnPromoted(int index, Piece promotedPiece)
+    {
+        LinkedListNode<(Piece, RectTransform, Image)> temp = _chainPiecesImages.First;
+        int tempIndex = 0;
+        while (temp != null)
+        {
+            if (index == tempIndex)
+            {
+                (Piece, RectTransform, Image) value = temp.Value;
+                value.Item1 = promotedPiece;
+                value.Item3.sprite = GetSprite(promotedPiece);
+                temp.Value = value;
+                break;
+            }
+
+            tempIndex++;
+            temp = temp.Next;
+        }
+    }
+
+    private Sprite GetSprite(Piece piece)
+    {
+        switch (piece)
+        {
+            case Piece.Pawn:
+                return Creator.playerSystemSo.pawn;
+            case Piece.Rook:
+                return Creator.playerSystemSo.rook;
+            case Piece.Knight:
+                return Creator.playerSystemSo.knight;
+            case Piece.Bishop:
+                return Creator.playerSystemSo.bishop;
+            case Piece.Queen:
+                return Creator.playerSystemSo.queen;
+            case Piece.King:
+                return Creator.playerSystemSo.king;
+        }
+        
+        //Given the logic of the code we should never get here but have to add something
+        return default;
     }
 }

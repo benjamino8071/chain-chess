@@ -28,17 +28,19 @@ public class LevLevelCompleteUISystem : LevDependency
                     {
                         if (Creator.nextLevelNumber >= 1)
                         {
-                            string nextSceneName = "TutorialLevel" + Creator.nextLevelNumber + "Scene";
+                            string nextSceneName = "Puzzle" + Creator.nextLevelNumber + "Scene";
                             SceneManager.LoadScene(nextSceneName);
                         }
-
+                        else
+                        {
+                            SceneManager.LoadScene("MainMenuScene");
+                        }
                     });
                     break;
                 case "Exit":
-                    //TODO: Add 'exit to main menu' action
                     button.onClick.AddListener(() =>
                     {
-                        Debug.Log("ADD A MAIN MENU");
+                        SceneManager.LoadScene("MainMenuScene");
                     });
                     break;
             }

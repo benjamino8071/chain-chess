@@ -17,5 +17,6 @@ public class PlayerSystem_SO : ScriptableObject
     //The room number is saved after a player enters a room and can move around
     public int levelNumberSaved;
     public int roomNumberSaved;
+    public bool firstMoveMadeWhileShowingMainMenu;
     public Piece startingPiece = Piece.NotChosen;
 }

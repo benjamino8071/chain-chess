@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +13,7 @@ public class ElChainUISystem : ElDependency
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
-
+        
         _chainParent = GameObject.FindWithTag("ChainParent").transform;
 
         _chainParentInitialPos = _chainParent.localPosition;
@@ -34,7 +32,6 @@ public class ElChainUISystem : ElDependency
             newPieceImage = Creator.InstantiateGameObjectWithParent(Creator.capturedPieceImagePrefab, _chainParent);
 
             newPieceImage.transform.localPosition += lastPieceTransform.localPosition + new Vector3(250, 0, 0);
-            //newPieceImage = Creator.InstantiateGameObject(Creator.capturedPieceImagePrefab, lastPieceTransform.localPosition + new Vector3(150, 0, 0), Quaternion.identity);
         }
         else
         {
@@ -45,8 +42,6 @@ public class ElChainUISystem : ElDependency
 
         visual.sprite = GetSprite(piece);
         
-        //newPieceImage.transform.SetParent(_chainParent, true);
-
         //For every other piece we first want to add an arrow indicating the order for the chain
         if (!isFirstPiece)
         {
@@ -55,10 +50,6 @@ public class ElChainUISystem : ElDependency
             GameObject arrowPointingToNextPiece = Creator.InstantiateGameObjectWithParent(Creator.arrowPointingToNextPiecePrefab, _chainParent);
 
             arrowPointingToNextPiece.transform.localPosition = posBehindNewPieceImage;
-            
-            //GameObject arrowPointingToNextPiece = Creator.InstantiateGameObject(Creator.arrowPointingToNextPiecePrefab, posBehindNewPieceImage, Quaternion.identity);
-            
-            //arrowPointingToNextPiece.transform.SetParent(_chainParent, true);
 
             _chainPiecesImages.AddLast((piece, arrowPointingToNextPiece.GetComponent<RectTransform>(), visual));
         }

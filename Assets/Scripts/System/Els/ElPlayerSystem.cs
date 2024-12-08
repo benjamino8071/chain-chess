@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -64,7 +63,6 @@ public class ElPlayerSystem : ElDependency
 
     private float _timeAtFadeIn;
     private float _fadeInAnimTimer;
-
     
     public override void GameStart(ElCreator elCreator)
     {
@@ -153,6 +151,9 @@ public class ElPlayerSystem : ElDependency
         HideAllValidMoves();
         
         UpdateValidMoves();
+        
+        if(Creator.mainMenuSo.isPuzzleCanvasShowing)
+            return;
         
         switch (_state)
         {
@@ -425,18 +426,12 @@ public class ElPlayerSystem : ElDependency
                 continue;
             }
             
-            /*
-            if (_enemiesSystem.TryGetEnemyAtPosition(newPos, out ElEnemyController enemyController))
+            if (!Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu)
             {
-                //Add this player to the 'captured pieces' list
-                Piece enemyPiece = enemyController.GetPiece();
-                _capturedPieces.AddLast(enemyPiece);
-                _movesInThisTurn.Enqueue(enemyPiece);
-                _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
+                SceneManager.UnloadSceneAsync("MainMenuScene");
+                Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu = true;
             }
-            */
             
-            // Set our position as a fraction of the distance between the markers.
             _jumpPosition = positionRequested;
             _moveSpeed = Creator.playerSystemSo.moveSpeed;
             _timerUISystem.StartTimer();
@@ -492,19 +487,13 @@ public class ElPlayerSystem : ElDependency
                     newPos = nextSpot;
                     continue;
                 }
-                
-                /*
-                if (_enemiesSystem.TryGetEnemyAtPosition(nextSpot, out ElEnemyController enemyController))
-                {
-                    //Add this player to the 'captured pieces' list
-                    Piece enemyPiece = enemyController.GetPiece();
-                    _capturedPieces.AddLast(enemyPiece);
-                    _movesInThisTurn.Enqueue(enemyPiece);
-                    _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
-                }
-                */
                     
-                // Set our position as a fraction of the distance between the markers.
+                if (!Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu)
+                {
+                    SceneManager.UnloadSceneAsync("MainMenuScene");
+                    Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu = true;
+                }
+                
                 _jumpPosition = positionRequested;
                 _moveSpeed = Creator.playerSystemSo.moveSpeed;
                 _timerUISystem.StartTimer();

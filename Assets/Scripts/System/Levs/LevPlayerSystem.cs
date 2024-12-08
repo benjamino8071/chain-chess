@@ -15,9 +15,9 @@ public class LevPlayerSystem : LevDependency
     private LevChainUISystem _chainUISystem;
     private LevLevelCompleteUISystem _levelCompleteUISystem;
     private LevAudioSystem _audioSystem;
-    private LevRestartLevelSystem _restartLevelSystem;
     private LevDoorsSystem _doorsSystem;
     private LevTurnSystem _turnSystem;
+    private LevGameOverUISystem _gameOverUISystem;
     
     private LinkedList<Piece> _capturedPieces = new();
     private Queue<Piece> _movesInThisTurn = new();
@@ -87,10 +87,6 @@ public class LevPlayerSystem : LevDependency
         {
             _audioSystem = levAudioSystem;
         }
-        if (levCreator.NewTryGetDependency(out LevRestartLevelSystem levRestartLevelSystem))
-        {
-            _restartLevelSystem = levRestartLevelSystem;
-        }
         if (levCreator.NewTryGetDependency(out LevDoorsSystem levDoorsSystem))
         {
             _doorsSystem = levDoorsSystem;
@@ -99,10 +95,16 @@ public class LevPlayerSystem : LevDependency
         {
             _turnSystem = levTurnSystem;
         }
+        if (levCreator.NewTryGetDependency(out LevGameOverUISystem gameOverUISystem))
+        {
+            _gameOverUISystem = gameOverUISystem;
+        }
         
         Transform playerSpawnPosition = GameObject.FindWithTag("PlayerSpawnPosition").transform;
         
         _playerCharacter = Creator.InstantiateGameObject(Creator.playerPrefab, playerSpawnPosition.position, Quaternion.identity).transform;
+        
+         _playerCharacter.GetComponentInChildren<Canvas>().gameObject.SetActive(false);
         
         _playerAnimator = _playerCharacter.GetComponentInChildren<Animator>();
         
@@ -236,7 +238,7 @@ public class LevPlayerSystem : LevDependency
                     _movesInThisTurn.Clear();
                     _capturedPieces.Clear();
                     _capturedPieces.AddFirst(Creator.playerSystemSo.startingPiece);
-                    _chainUISystem.InNewRoomReset();
+                    _chainUISystem.NewRoomClearChain();
                     _chainUISystem.ShowNewPiece(Creator.playerSystemSo.startingPiece, true);
                     SetState(States.Idle);
                 }
@@ -250,7 +252,7 @@ public class LevPlayerSystem : LevDependency
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
                     SetState(States.EndGame);
-                    //TODO: _restartLevelSystem.ShowGameOver();
+                    _gameOverUISystem.Show();
                 }
                 break;
             case States.LevelComplete:
@@ -283,15 +285,14 @@ public class LevPlayerSystem : LevDependency
         {
             Vector3 newPos = _playerCharacter.position + pieceMove;
             
-            if(positionRequested != newPos) continue;
-            Debug.Log("Found position requested");
+            if(positionRequested != newPos) 
+                continue;
             
             if (_doorsSystem.TryGetSingleDoorPosition(newPos, out SingleDoorPosition singleDoorPosition))
             {
                 //If this door is locked, we cannot allow access
-                Debug.Log("Door requested. is this door open? "+singleDoorPosition.isDoorOpen);
-                if(!singleDoorPosition.isDoorOpen) continue;
-                Debug.Log("Player wants to go through door ");
+                if(!singleDoorPosition.isDoorOpen) 
+                    continue;
             }
             else if(!_gridSystem.IsPositionValid(newPos))
                 continue;
@@ -723,7 +724,7 @@ public class LevPlayerSystem : LevDependency
                     {
                         _movesInThisTurn.Enqueue(capturedPiece);
                     }
-                    _chainUISystem.Reset();
+                    _chainUISystem.ResetPosition();
                 }
                 break;
             case States.WaitingForTurn:

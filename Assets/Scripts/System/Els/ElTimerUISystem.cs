@@ -4,6 +4,7 @@ using UnityEngine;
 public class ElTimerUISystem : ElDependency
 {
     private ElPlayerSystem _playerSystem;
+    private ElPauseUISystem _pauseUISystem;
     
     private TextMeshProUGUI _timeText;
     
@@ -16,10 +17,14 @@ public class ElTimerUISystem : ElDependency
         {
             _playerSystem = playerSystem;
         }
+        if (Creator.NewTryGetDependency(out ElPauseUISystem pauseUISystem))
+        {
+            _pauseUISystem = pauseUISystem;
+        }
         
         _timeText = GameObject.FindWithTag("Timer").GetComponent<TextMeshProUGUI>();
         
-        if (Creator.playerSystemSo.roomNumberSaved == 0)
+        if (Creator.playerSystemSo.roomNumberSaved == 0 && Creator.playerSystemSo.levelNumberSaved == 0)
         {
             Creator.timerSo.currentTime = Creator.timerSo.maxTime;
         }
@@ -30,13 +35,14 @@ public class ElTimerUISystem : ElDependency
 
     public override void GameEarlyUpdate(float dt)
     {
-        if (_playTimer && Creator.timerSo.currentTime > 0)
+        if (_playTimer && Creator.timerSo.currentTime > 0 && _playerSystem.GetState() != ElPlayerSystem.States.EndGame)
         {
             Creator.timerSo.currentTime -= dt;
             string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
             if (Creator.timerSo.currentTime <= 0)
             {
                 timeText = "0.00s";
+                _pauseUISystem.Hide();
                 _playerSystem.SetState(ElPlayerSystem.States.TimerExpired);
             }
             SetTimerText(timeText);
