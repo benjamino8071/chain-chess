@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ElGameOverUISystem : ElDependency
 {
+    private ElPauseUISystem _pauseUISystem;
+    
     private Transform _gameOverUI;
 
     private TextMeshProUGUI _titleText;
@@ -14,6 +16,11 @@ public class ElGameOverUISystem : ElDependency
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
+
+        if (Creator.NewTryGetDependency(out ElPauseUISystem pauseUISystem))
+        {
+            _pauseUISystem = pauseUISystem;
+        }
 
         _gameOverUI = GameObject.FindWithTag("GameOver").transform;
 
@@ -51,7 +58,15 @@ public class ElGameOverUISystem : ElDependency
             }
             else if (button.CompareTag("Exit"))
             {
-                //TODO: Exit to main menu
+                button.onClick.AddListener(() =>
+                {
+                    Creator.enemySo.ResetCachedSpawnPoints();
+                    Creator.playerSystemSo.levelNumberSaved = 0;
+                    Creator.playerSystemSo.roomNumberSaved = 0;
+                    Creator.timerSo.currentTime = Creator.timerSo.maxTime;
+                    
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                });
             }
         }
 
@@ -62,6 +77,8 @@ public class ElGameOverUISystem : ElDependency
     {
         _restartRoomButton.gameObject.SetActive(showRestartRoom);
         _titleText.text = message;
+        
+        _pauseUISystem.Hide();
         _gameOverUI.gameObject.SetActive(true);
     }
 

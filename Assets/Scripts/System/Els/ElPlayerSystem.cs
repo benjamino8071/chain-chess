@@ -235,7 +235,6 @@ public class ElPlayerSystem : ElDependency
                     {
                         //Add this player to the 'captured pieces' list
                         Piece enemyPiece = enemyController.GetPiece();
-                        Debug.Log("Taking enemy piece: "+enemyPiece);
                         _capturedPieces.AddLast(enemyPiece);
                         _movesInThisTurn.Enqueue(enemyPiece);
                         _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
@@ -293,7 +292,6 @@ public class ElPlayerSystem : ElDependency
                     
                     _currentPiece = _currentPiece.Next;
                     
-                    Debug.Log("Moves left after pawn promo: "+_movesInThisTurn.Count);
                     if (_movesInThisTurn.Count > 0)
                     {
                         //Allow player to make another move
@@ -849,7 +847,7 @@ public class ElPlayerSystem : ElDependency
                 }
                 break;
             case States.WaitingForTurn:
-                UpdateSprite(_currentRoomStartPiece);
+                //UpdateSprite(_currentRoomStartPiece);
                 break;
         }
         _state = state;

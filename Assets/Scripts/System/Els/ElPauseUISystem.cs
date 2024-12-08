@@ -37,6 +37,8 @@ public class ElPauseUISystem : ElDependency
             {
                 button.onClick.AddListener(() =>
                 {
+                    Creator.enemySo.ResetCachedSpawnPoints();
+                    Creator.playerSystemSo.levelNumberSaved = 0;
                     Creator.playerSystemSo.roomNumberSaved = 0;
                     Creator.timerSo.currentTime = Creator.timerSo.maxTime;
                     
@@ -68,15 +70,13 @@ public class ElPauseUISystem : ElDependency
         _pauseButton.gameObject.SetActive(_pauseGUI.gameObject.activeSelf || _playerSystem.GetState() == ElPlayerSystem.States.Idle);
     }
 
-    private void Show()
+    public void Show()
     {
         _pauseGUI.gameObject.SetActive(true);
-
     }
 
-    private void Hide()
+    public void Hide()
     {
         _pauseGUI.gameObject.SetActive(false);
-
     }
 }

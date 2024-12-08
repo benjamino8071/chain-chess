@@ -29,9 +29,8 @@ public class ElTurnSystem : ElDependency
 
     public void SwitchTurn(Turn nextTurn)
     {
-        if(_playerSystem.GetState() == ElPlayerSystem.States.Captured)
+        if(_playerSystem.GetState() != ElPlayerSystem.States.WaitingForTurn)
             return;
-        
         
         //If there are no enemies left in room, we force turn to stay on player
         //Also we open doors

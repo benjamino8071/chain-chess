@@ -120,26 +120,6 @@ public class ElEnemiesSystem : ElDependency
         {
             enemyController.GameUpdate(dt);
         }
-
-        if (_turnSystem.GetTurn() == ElTurnSystem.Turn.Enemy)
-        {
-            bool allEnemiesMoved = true;
-            foreach (KeyValuePair<ElEnemyController, bool> hasFinishedMove in _haveEnemyControllersFinishedMove)
-            {
-                if(hasFinishedMove.Key.GetRoomNumber() != Creator.playerSystemSo.roomNumberSaved)
-                    continue;
-                
-                if (!hasFinishedMove.Value)
-                {
-                    allEnemiesMoved = false;
-                    break;
-                }
-            }
-            if (allEnemiesMoved)
-            {
-                _turnSystem.SwitchTurn(ElTurnSystem.Turn.Player);
-            }
-        }
     }
 
     public bool IsEnemyAtThisPosition(Vector3 position)
@@ -236,5 +216,22 @@ public class ElEnemiesSystem : ElDependency
     public void EnemyControllerMoved(ElEnemyController enemyController)
     {
         _haveEnemyControllersFinishedMove[enemyController] = true;
+        
+        bool allEnemiesMoved = true;
+        foreach (KeyValuePair<ElEnemyController, bool> hasFinishedMove in _haveEnemyControllersFinishedMove)
+        {
+            if(hasFinishedMove.Key.GetRoomNumber() != Creator.playerSystemSo.roomNumberSaved)
+                continue;
+                
+            if (!hasFinishedMove.Value)
+            {
+                allEnemiesMoved = false;
+                break;
+            }
+        }
+        if (allEnemiesMoved)
+        {
+            _turnSystem.SwitchTurn(ElTurnSystem.Turn.Player);
+        }
     }
 }
