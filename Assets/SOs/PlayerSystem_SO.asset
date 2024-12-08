@@ -21,5 +21,5 @@ MonoBehaviour:
   queen: {fileID: 7519753400087680208, guid: 35daaf531971a974a977c7dfde67d248, type: 3}
   king: {fileID: -4821530343430527414, guid: 6ab63fb05b0cd654399b0b52e0e15650, type: 3}
   levelNumberSaved: 0
-  roomNumberSaved: 0
+  roomNumberSaved: 2
   startingPiece: 0
