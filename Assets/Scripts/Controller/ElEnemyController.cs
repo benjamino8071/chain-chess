@@ -43,27 +43,27 @@ public class ElEnemyController : ElController
     {
         base.GameStart(elCreator);
 
-        if (elCreator.NewTryGetDependency(out ElGridSystem levGridSystem))
+        if (elCreator.TryGetDependency(out ElGridSystem levGridSystem))
         {
             _gridSystem = levGridSystem;
         }
-        if (elCreator.NewTryGetDependency(out ElPlayerSystem levPlayerSystem))
+        if (elCreator.TryGetDependency(out ElPlayerSystem levPlayerSystem))
         {
             _playerSystem = levPlayerSystem;
         }
-        if (elCreator.NewTryGetDependency(out ElEnemiesSystem levEnemiesSystem))
+        if (elCreator.TryGetDependency(out ElEnemiesSystem levEnemiesSystem))
         {
             _enemiesSystem = levEnemiesSystem;
         }
-        if (elCreator.NewTryGetDependency(out ElDoorsSystem levDoorsSystem))
+        if (elCreator.TryGetDependency(out ElDoorsSystem levDoorsSystem))
         {
             _doorsSystem = levDoorsSystem;
         }
-        if (elCreator.NewTryGetDependency(out ElTimerUISystem timerUISystem))
+        if (elCreator.TryGetDependency(out ElTimerUISystem timerUISystem))
         {
             _timerUISystem = timerUISystem;
         }
-        if (elCreator.NewTryGetDependency(out ElAudioSystem audioSystem))
+        if (elCreator.TryGetDependency(out ElAudioSystem audioSystem))
         {
             _audioSystem = audioSystem;
         }

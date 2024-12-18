@@ -15,12 +15,12 @@ public class LevTurnSystem : LevDependency
     {
         base.GameStart(levCreator);
 
-        if (Creator.NewTryGetDependency(out LevPlayerSystem levPlayerSystem))
+        if (Creator.TryGetDependency(out LevPlayerSystem levPlayerSystem))
         {
             _playerSystem = levPlayerSystem;
         }
 
-        if (Creator.NewTryGetDependency(out LevEnemiesSystem levEnemiesSystem))
+        if (Creator.TryGetDependency(out LevEnemiesSystem levEnemiesSystem))
         {
             _enemiesSystem = levEnemiesSystem;
         }

@@ -75,43 +75,43 @@ public class ElPlayerSystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        if (Creator.NewTryGetDependency(out ElGridSystem gridSystem))
+        if (Creator.TryGetDependency(out ElGridSystem gridSystem))
         {
             _gridSystem = gridSystem;
         }
-        if (Creator.NewTryGetDependency(out ElEnemiesSystem enemiesSystem))
+        if (Creator.TryGetDependency(out ElEnemiesSystem enemiesSystem))
         {
             _enemiesSystem = enemiesSystem;
         }
-        if (Creator.NewTryGetDependency(out ElCinemachineSystem cinemachineSystem))
+        if (Creator.TryGetDependency(out ElCinemachineSystem cinemachineSystem))
         {
             _cinemachineSystem = cinemachineSystem;
         }
-        if (Creator.NewTryGetDependency(out ElTimerUISystem timerUISystem))
+        if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
         {
             _timerUISystem = timerUISystem;
         }
-        if (Creator.NewTryGetDependency(out ElChainUISystem chainUISystem))
+        if (Creator.TryGetDependency(out ElChainUISystem chainUISystem))
         {
             _chainUISystem = chainUISystem;
         }
-        if (Creator.NewTryGetDependency(out ElAudioSystem audioSystem))
+        if (Creator.TryGetDependency(out ElAudioSystem audioSystem))
         {
             _audioSystem = audioSystem;
         }
-        if (Creator.NewTryGetDependency(out ElGameOverUISystem gameOverUISystem))
+        if (Creator.TryGetDependency(out ElGameOverUISystem gameOverUISystem))
         {
             _gameOverUISystem = gameOverUISystem;
         }
-        if (Creator.NewTryGetDependency(out ElTurnSystem turnSystem))
+        if (Creator.TryGetDependency(out ElTurnSystem turnSystem))
         {
             _turnInfoUISystem = turnSystem;
         }
-        if (Creator.NewTryGetDependency(out ElRoomNumberUISystem roomNumberUISystem))
+        if (Creator.TryGetDependency(out ElRoomNumberUISystem roomNumberUISystem))
         {
             _roomNumberUISystem = roomNumberUISystem;
         }
-        if (Creator.NewTryGetDependency(out ElScoreEntryUISystem scoreEntryUISystem))
+        if (Creator.TryGetDependency(out ElScoreEntryUISystem scoreEntryUISystem))
         {
             _scoreEntryUISystem = scoreEntryUISystem;
         }

@@ -22,7 +22,7 @@ public class ElScoreEntryUISystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        if (Creator.NewTryGetDependency(out ElPauseUISystem pauseUISystem))
+        if (Creator.TryGetDependency(out ElPauseUISystem pauseUISystem))
         {
             _pauseUISystem = pauseUISystem;
         }

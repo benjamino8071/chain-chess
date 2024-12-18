@@ -17,15 +17,15 @@ public class ElEnemiesSystem : ElDependency
     {
         base.GameStart(elCreator);
         
-        if (Creator.NewTryGetDependency(out ElChainUISystem capturedPiecesUISystem))
+        if (Creator.TryGetDependency(out ElChainUISystem capturedPiecesUISystem))
         {
             _capturedPiecesUISystem = capturedPiecesUISystem;
         }
-        if (Creator.NewTryGetDependency(out ElDoorsSystem doorsSystem))
+        if (Creator.TryGetDependency(out ElDoorsSystem doorsSystem))
         {
             _doorsSystem = doorsSystem;
         }
-        if (Creator.NewTryGetDependency(out ElTurnSystem turnSystem))
+        if (Creator.TryGetDependency(out ElTurnSystem turnSystem))
         {
             _turnSystem = turnSystem;
         }

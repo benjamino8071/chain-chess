@@ -63,39 +63,39 @@ public class LevPlayerSystem : LevDependency
     {
         base.GameStart(levCreator);
         
-        if (levCreator.NewTryGetDependency(out LevGridSystem levGridSystem))
+        if (levCreator.TryGetDependency(out LevGridSystem levGridSystem))
         {
             _gridSystem = levGridSystem;
         }
-        if (levCreator.NewTryGetDependency(out LevEnemiesSystem levEnemiesSystem))
+        if (levCreator.TryGetDependency(out LevEnemiesSystem levEnemiesSystem))
         {
             _enemiesSystem = levEnemiesSystem;
         }
-        if (levCreator.NewTryGetDependency(out LevCinemachineSystem levCinemachineSystem))
+        if (levCreator.TryGetDependency(out LevCinemachineSystem levCinemachineSystem))
         {
             _cinemachineSystem = levCinemachineSystem;
         }
-        if (levCreator.NewTryGetDependency(out LevChainUISystem levChainUISystem))
+        if (levCreator.TryGetDependency(out LevChainUISystem levChainUISystem))
         {
             _chainUISystem = levChainUISystem;
         }
-        if (levCreator.NewTryGetDependency(out LevLevelCompleteUISystem levLevelCompleteSystem))
+        if (levCreator.TryGetDependency(out LevLevelCompleteUISystem levLevelCompleteSystem))
         {
             _levelCompleteUISystem = levLevelCompleteSystem;
         }
-        if (levCreator.NewTryGetDependency(out LevAudioSystem levAudioSystem))
+        if (levCreator.TryGetDependency(out LevAudioSystem levAudioSystem))
         {
             _audioSystem = levAudioSystem;
         }
-        if (levCreator.NewTryGetDependency(out LevDoorsSystem levDoorsSystem))
+        if (levCreator.TryGetDependency(out LevDoorsSystem levDoorsSystem))
         {
             _doorsSystem = levDoorsSystem;
         }
-        if (levCreator.NewTryGetDependency(out LevTurnSystem levTurnSystem))
+        if (levCreator.TryGetDependency(out LevTurnSystem levTurnSystem))
         {
             _turnSystem = levTurnSystem;
         }
-        if (levCreator.NewTryGetDependency(out LevGameOverUISystem gameOverUISystem))
+        if (levCreator.TryGetDependency(out LevGameOverUISystem gameOverUISystem))
         {
             _gameOverUISystem = gameOverUISystem;
         }

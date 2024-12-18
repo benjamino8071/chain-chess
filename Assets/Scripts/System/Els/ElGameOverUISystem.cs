@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ElGameOverUISystem : ElDependency
 {
     private ElPauseUISystem _pauseUISystem;
+    private ElTimerUISystem _timerUISystem;
     
     private Transform _gameOverUI;
 
@@ -18,9 +19,13 @@ public class ElGameOverUISystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        if (Creator.NewTryGetDependency(out ElPauseUISystem pauseUISystem))
+        if (Creator.TryGetDependency(out ElPauseUISystem pauseUISystem))
         {
             _pauseUISystem = pauseUISystem;
+        }
+        if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
+        {
+            _timerUISystem = timerUISystem;
         }
 
         _gameOverUI = GameObject.FindWithTag("GameOver").transform;
@@ -83,6 +88,7 @@ public class ElGameOverUISystem : ElDependency
         _titleText.text = message;
         
         _pauseUISystem.Hide();
+        _timerUISystem.HideTimerChangeAmount();
         _gameOverUI.gameObject.SetActive(true);
     }
 

@@ -21,7 +21,7 @@ public class ElGridSystem : ElDependency
     {
         base.GameStart(elCreator);
         
-        if (Creator.NewTryGetDependency(out ElEnemiesSystem enemiesSystem))
+        if (Creator.TryGetDependency(out ElEnemiesSystem enemiesSystem))
         {
             _enemiesSystem = enemiesSystem;
         }

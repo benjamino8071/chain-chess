@@ -16,7 +16,7 @@ public class ElPauseUISystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        if (elCreator.NewTryGetDependency(out ElPlayerSystem playerSystem))
+        if (elCreator.TryGetDependency(out ElPlayerSystem playerSystem))
         {
             _playerSystem = playerSystem;
         }

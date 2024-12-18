@@ -16,7 +16,7 @@ public class LevGridSystem : LevDependency
     {
         base.GameStart(levCreator);
 
-        if (levCreator.NewTryGetDependency(out LevDoorsSystem levDoorsSystem))
+        if (levCreator.TryGetDependency(out LevDoorsSystem levDoorsSystem))
         {
             _levDoorsSystem = levDoorsSystem;
         }

@@ -15,20 +15,20 @@ public class ElTimerUISystem : ElDependency
     private bool _playTimer;
 
     private float _timeToHideBonusTxt;
-    private int _recentTimeChangeAmount;
+    private float _recentTimeChangeAmount;
     
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
-        if (Creator.NewTryGetDependency(out ElPlayerSystem playerSystem))
+        if (Creator.TryGetDependency(out ElPlayerSystem playerSystem))
         {
             _playerSystem = playerSystem;
         }
-        if (Creator.NewTryGetDependency(out ElPauseUISystem pauseUISystem))
+        if (Creator.TryGetDependency(out ElPauseUISystem pauseUISystem))
         {
             _pauseUISystem = pauseUISystem;
         }
-        if (Creator.NewTryGetDependency(out ElAudioSystem audioSystem))
+        if (Creator.TryGetDependency(out ElAudioSystem audioSystem))
         {
             _audioSystem = audioSystem;
         }
@@ -59,6 +59,7 @@ public class ElTimerUISystem : ElDependency
         if (_playTimer && Creator.timerSo.currentTime > 0 && _playerSystem.GetState() != ElPlayerSystem.States.EndGame)
         {
             Creator.timerSo.currentTime -= dt;
+            
             string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
             if (Creator.timerSo.currentTime <= 0)
             {
@@ -77,7 +78,7 @@ public class ElTimerUISystem : ElDependency
 
     public void AddTime(int pieceValue)
     {
-        int amountToAdd = pieceValue * Creator.timerSo.timerMultiplier;
+        float amountToAdd = pieceValue * Creator.timerSo.timerMultiplier;
         Creator.timerSo.currentTime += amountToAdd;
         
         string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
@@ -85,22 +86,25 @@ public class ElTimerUISystem : ElDependency
 
         if (_recentTimeChangeAmount >= 0)
         {
-            _recentTimeChangeAmount += pieceValue;
+            _recentTimeChangeAmount += amountToAdd;
         }
         else
         {
-            _recentTimeChangeAmount = pieceValue;
+            _recentTimeChangeAmount = amountToAdd;
         }
         
-        string amountAddText = $"+{_recentTimeChangeAmount}s";
+        string amountAddText = $"+{_recentTimeChangeAmount:0.##}s";
         ShowTimerChangeAmount(amountAddText);
         
-        Creator.timerSo.timerMultiplier *= 2;
+        Creator.timerSo.timerMultiplier *= 1.1f;
         
         float waveAmp = Mathf.Clamp(0.01f * Creator.timerSo.timerMultiplier, 0.01f, 0.1f);
-        _multiplierAmountText.text = $"<wave a={waveAmp}>Multiplier: {Creator.timerSo.timerMultiplier}x</wave>";
+        _multiplierAmountText.text = $"<wave a={waveAmp}>Multiplier: {Creator.timerSo.timerMultiplier:0.##}x</wave>";
+
+        float amount = Mathf.Log(Creator.timerSo.timerMultiplier) / Mathf.Log(1.1f) - 1;
+        Debug.Log("Amount of times the multiplier has changed: "+amount);
         
-        float pitch = Mathf.Clamp(0.9f + Mathf.Log(Creator.timerSo.timerMultiplier) / 50f, 0.9f, 1f);
+        float pitch = Mathf.Clamp(0.9f + Mathf.RoundToInt(amount) / 50f, 0.9f, 1f);
         _audioSystem.PlayEnemyCapturedSfx(pitch);
     }
 
@@ -144,7 +148,7 @@ public class ElTimerUISystem : ElDependency
         _timeToHideBonusTxt = Creator.timerSo.currentTime - 3f;
     }
 
-    private void HideTimerChangeAmount()
+    public void HideTimerChangeAmount()
     {
         _timerBonusText.text = "";
         _timeToHideBonusTxt = -1;

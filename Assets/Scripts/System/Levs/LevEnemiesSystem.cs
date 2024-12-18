@@ -16,11 +16,11 @@ public class LevEnemiesSystem : LevDependency
     {
         base.GameStart(levCreator);
         
-        if (levCreator.NewTryGetDependency(out LevChainUISystem levChainUISystem))
+        if (levCreator.TryGetDependency(out LevChainUISystem levChainUISystem))
         {
             _chainUISystem = levChainUISystem;
         }
-        if (Creator.NewTryGetDependency(out LevDoorsSystem levDoorsSystem))
+        if (Creator.TryGetDependency(out LevDoorsSystem levDoorsSystem))
         {
             _doorsSystem = levDoorsSystem;
         }

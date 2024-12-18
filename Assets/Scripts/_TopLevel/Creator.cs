@@ -52,22 +52,7 @@ public class Creator : MonoBehaviour
         return Instantiate(newObject, parent);
     }
 
-    public bool NewTryGetDependency<T>(out T dependency) where T : Dependency
-    {
-        foreach (Dependency dependent  in _dependencies)
-        {
-            if (dependent is T)
-            {
-                dependency = (T) dependent;
-                return true;
-            }
-        }
-
-        dependency = default;
-        return false;
-    }
-
-    public bool TryGetDependency<T>(string className, out T dependency) where T : ElDependency
+    public bool TryGetDependency<T>(out T dependency) where T : Dependency
     {
         foreach (Dependency dependent  in _dependencies)
         {

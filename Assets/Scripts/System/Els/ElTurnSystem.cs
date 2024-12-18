@@ -17,15 +17,15 @@ public class ElTurnSystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        if (Creator.NewTryGetDependency(out ElPlayerSystem playerSystem))
+        if (Creator.TryGetDependency(out ElPlayerSystem playerSystem))
         {
             _playerSystem = playerSystem;
         }
-        if (Creator.NewTryGetDependency(out ElEnemiesSystem enemiesSystem))
+        if (Creator.TryGetDependency(out ElEnemiesSystem enemiesSystem))
         {
             _enemiesSystem = enemiesSystem;
         }
-        if (Creator.NewTryGetDependency(out ElTimerUISystem timerUISystem))
+        if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
         {
             _timerUISystem = timerUISystem;
         }
