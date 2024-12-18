@@ -46,14 +46,14 @@ public class ElTimerUISystem : ElDependency
         SetTimerText(timeText);
         
         _multiplierAmountText.text = $"<wave a={0.01f}>Multiplier: 1x</wave>";
-        ResetTimerBonus(true);
+        ResetTimerChangedAmount(true);
     }
 
     public override void GameEarlyUpdate(float dt)
     {
         if (Creator.timerSo.currentTime <= _timeToHideBonusTxt)
         {
-            HideTimerBonus();
+            HideTimerChangeAmount();
         }
         
         if (_playTimer && Creator.timerSo.currentTime > 0 && _playerSystem.GetState() != ElPlayerSystem.States.EndGame)
@@ -93,7 +93,7 @@ public class ElTimerUISystem : ElDependency
         }
         
         string amountAddText = $"+{_recentTimeChangeAmount}s";
-        ShowTimerBonus(amountAddText);
+        ShowTimerChangeAmount(amountAddText);
         
         Creator.timerSo.timerMultiplier *= 2;
         
@@ -121,7 +121,10 @@ public class ElTimerUISystem : ElDependency
         }
         
         string amountRemoveText = $"{_recentTimeChangeAmount}s";
-        ShowTimerBonus(amountRemoveText, true);
+        ShowTimerChangeAmount(amountRemoveText, true);
+
+        float pitch = Random.Range(0.9f, 1.1f);
+        _audioSystem.PlayTimeLostSfx(pitch);
     }
 
     public void StartTimer()
@@ -134,21 +137,21 @@ public class ElTimerUISystem : ElDependency
         _playTimer = false;
     }
     
-    private void ShowTimerBonus(string textToShow, bool showInRed = false)
+    private void ShowTimerChangeAmount(string textToShow, bool showInRed = false)
     {
         _timerBonusText.text = textToShow;
         _timerBonusText.color = showInRed ? Color.red : Color.green;
         _timeToHideBonusTxt = Creator.timerSo.currentTime - 3f;
     }
 
-    private void HideTimerBonus()
+    private void HideTimerChangeAmount()
     {
         _timerBonusText.text = "";
         _timeToHideBonusTxt = -1;
         _recentTimeChangeAmount = 0;
     }
 
-    public void ResetTimerBonus(bool hide)
+    public void ResetTimerChangedAmount(bool hide)
     {
         if (Creator.timerSo.timerMultiplier != 1)
         {
@@ -158,7 +161,7 @@ public class ElTimerUISystem : ElDependency
 
         if (hide)
         {
-            HideTimerBonus();
+            HideTimerChangeAmount();
         }
     }
 }

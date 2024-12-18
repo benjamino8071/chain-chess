@@ -31,6 +31,8 @@ public class ElCreator : Creator
     [Header("GUITopBottom")] 
     public GameObject guiTop;
     public GameObject guiBottom;
+
+    public GameObject fakeGrid;
     
     private void Start()
     {
@@ -39,6 +41,11 @@ public class ElCreator : Creator
         Random.InitState(playerSystemSo.levelNumberSaved);
         
         Camera.main.backgroundColor = Color.black;
+
+        if (playerSystemSo.levelNumberSaved == 0)
+        {
+            fakeGrid.SetActive(false);
+        }
         
         foreach (Dependency dependency in _dependencies)
         {

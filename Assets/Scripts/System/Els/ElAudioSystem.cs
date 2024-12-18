@@ -5,6 +5,7 @@ public class ElAudioSystem : ElDependency
     private AudioSource _pieceMoveAudio;
     private AudioSource _enemyCapturedAudio;
     private AudioSource _capturedByEnemyAudio;
+    private AudioSource _timeLostAudio;
     
     public override void GameStart(ElCreator elCreator)
     {
@@ -26,6 +27,10 @@ public class ElAudioSystem : ElDependency
             {
                 _capturedByEnemyAudio = audioSource;
             }
+            else if (audioSource.CompareTag("Retry"))
+            {
+                _timeLostAudio = audioSource;
+            }
         }
     }
     
@@ -33,6 +38,12 @@ public class ElAudioSystem : ElDependency
     {
         _pieceMoveAudio.pitch = pitch;
         _pieceMoveAudio.Play();
+    }
+    
+    public void PlayTimeLostSfx(float pitch)
+    {
+        _timeLostAudio.pitch = pitch;
+        _timeLostAudio.Play();
     }
 
     /// <summary>

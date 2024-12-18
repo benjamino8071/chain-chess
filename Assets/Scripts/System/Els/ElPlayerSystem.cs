@@ -242,7 +242,7 @@ public class ElPlayerSystem : ElDependency
                     {
                         if (singleDoorPosition.isDoorOpen)
                         {
-                            _timerUISystem.ResetTimerBonus(true);
+                            _timerUISystem.ResetTimerChangedAmount(true);
                             if (singleDoorPosition.isFinalDoor)
                             {
                                 _timerUISystem.StopTimer();
@@ -300,7 +300,7 @@ public class ElPlayerSystem : ElDependency
                     else
                     {
                         //Player has not captured an enemy so we must reset the multiplier
-                        _timerUISystem.ResetTimerBonus(false);
+                        _timerUISystem.ResetTimerChangedAmount(false);
                     }
                     
                     //IF the player is a pawn, we want to check what's directly in front of the player.
@@ -425,7 +425,7 @@ public class ElPlayerSystem : ElDependency
                 //Wait 1 second before we show the game over screen
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
-                    _timerUISystem.ResetTimerBonus(false);
+                    _timerUISystem.ResetTimerChangedAmount(false);
                     SetState(States.EndGame);
                     _gameOverUISystem.Show("Captured", Creator.timerSo.currentTime > Creator.timerSo.contFromRoomPenalty);
                 }
@@ -434,7 +434,7 @@ public class ElPlayerSystem : ElDependency
                 //Wait 1 second before we show the game over screen
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
-                    _timerUISystem.ResetTimerBonus(false);
+                    _timerUISystem.ResetTimerChangedAmount(false);
                     if (AuthenticationService.Instance.IsSignedIn)
                     {
                         CheckScore();
