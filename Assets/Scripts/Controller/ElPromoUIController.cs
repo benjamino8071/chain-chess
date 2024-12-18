@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class ElPromoUIController : ElController
 {
+    private ElTimerUISystem _timerUISystem;
+    
     private Transform _promoCanvas;
 
     private Piece _chosenPiece;
@@ -10,6 +12,11 @@ public class ElPromoUIController : ElController
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
+        
+        if (Creator.NewTryGetDependency(out ElTimerUISystem timerUISystem))
+        {
+            _timerUISystem = timerUISystem;
+        }
     }
 
     public void Initialise(Transform playerObject)
@@ -24,6 +31,7 @@ public class ElPromoUIController : ElController
                 promoButton.onClick.AddListener(() =>
                 {
                     SelectPromotion(Piece.Queen);
+                    _timerUISystem.RemoveTime(9);
                 });
             }
             else if (promoButton.CompareTag("ChooseRook"))
@@ -31,6 +39,7 @@ public class ElPromoUIController : ElController
                 promoButton.onClick.AddListener(() =>
                 {
                     SelectPromotion(Piece.Rook);
+                    _timerUISystem.RemoveTime(5);
                 });
             }
             else if (promoButton.CompareTag("ChooseKnight"))
@@ -38,6 +47,7 @@ public class ElPromoUIController : ElController
                 promoButton.onClick.AddListener(() =>
                 {
                     SelectPromotion(Piece.Knight);
+                    _timerUISystem.RemoveTime(3);
                 });
             }
             else if (promoButton.CompareTag("ChooseBishop"))
@@ -45,6 +55,7 @@ public class ElPromoUIController : ElController
                 promoButton.onClick.AddListener(() =>
                 {
                     SelectPromotion(Piece.Bishop);
+                    _timerUISystem.RemoveTime(3);
                 });
             }
         }

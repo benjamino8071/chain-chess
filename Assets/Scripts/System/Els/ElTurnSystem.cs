@@ -4,6 +4,7 @@ public class ElTurnSystem : ElDependency
 {
     private ElPlayerSystem _playerSystem;
     private ElEnemiesSystem _enemiesSystem;
+    private ElTimerUISystem _timerUISystem;
     
     public enum Turn
     {
@@ -20,10 +21,13 @@ public class ElTurnSystem : ElDependency
         {
             _playerSystem = playerSystem;
         }
-
         if (Creator.NewTryGetDependency(out ElEnemiesSystem enemiesSystem))
         {
             _enemiesSystem = enemiesSystem;
+        }
+        if (Creator.NewTryGetDependency(out ElTimerUISystem timerUISystem))
+        {
+            _timerUISystem = timerUISystem;
         }
     }
 
@@ -44,6 +48,7 @@ public class ElTurnSystem : ElDependency
         {
             case Turn.Player:
                 _enemiesSystem.ClearPositionsTakenByOtherEnemiesForThisTurn();
+                _timerUISystem.ResetTimerBonus(false);
                 _playerSystem.SetState(ElPlayerSystem.States.Idle);
                 break;
             case Turn.Enemy:

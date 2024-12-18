@@ -19,4 +19,6 @@ public class PlayerSystem_SO : ScriptableObject
     public int roomNumberSaved;
     public bool firstMoveMadeWhileShowingMainMenu;
     public Piece startingPiece = Piece.NotChosen;
+
+    public AudioClip pieceMovedSfx;
 }

@@ -1,5 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using TMPro;
+using Unity.Services.Authentication;
+using Unity.Services.Leaderboards;
+using Unity.Services.Leaderboards.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,6 +24,7 @@ public class ElPlayerSystem : ElDependency
     private ElGameOverUISystem _gameOverUISystem;
     private ElTurnSystem _turnInfoUISystem;
     private ElRoomNumberUISystem _roomNumberUISystem;
+    private ElScoreEntryUISystem _scoreEntryUISystem;
 
     private ElPromoUIController _promoUIController;
     
@@ -104,8 +111,12 @@ public class ElPlayerSystem : ElDependency
         {
             _roomNumberUISystem = roomNumberUISystem;
         }
+        if (Creator.NewTryGetDependency(out ElScoreEntryUISystem scoreEntryUISystem))
+        {
+            _scoreEntryUISystem = scoreEntryUISystem;
+        }
         
-        _currentRoomStartPiece = Creator.startingPiece;
+        _currentRoomStartPiece = Creator.playerSystemSo.levelNumberSaved == 0 ? Creator.startingPiece : Creator.playerSystemSo.startingPiece;
         _roomNumber = Creator.playerSystemSo.roomNumberSaved;
         
         Transform playerSpawnPosition = GameObject.FindWithTag("PlayerSpawnPosition").transform;
@@ -135,8 +146,8 @@ public class ElPlayerSystem : ElDependency
                 Creator.InstantiateGameObject(Creator.validPositionPrefab, Vector3.zero, Quaternion.identity);
             _validPositionsVisuals.Add(validPos.transform);
         }
-        
-        _capturedPieces.AddFirst(Creator.startingPiece);
+
+        _capturedPieces.AddFirst(_currentRoomStartPiece);
 
         SetState(States.Idle);
     }
@@ -152,7 +163,7 @@ public class ElPlayerSystem : ElDependency
         
         UpdateValidMoves();
         
-        if(Creator.mainMenuSo.isPuzzleCanvasShowing)
+        if(Creator.mainMenuSo.isOtherMainMenuCanvasShowing)
             return;
         
         switch (_state)
@@ -188,9 +199,19 @@ public class ElPlayerSystem : ElDependency
                             TriggerJumpAnimation();
 
                             _movesInThisTurn.Dequeue();
-                        
-                            SetState(States.WaitingForTurn);
-                            _turnInfoUISystem.SwitchTurn(ElTurnSystem.Turn.Enemy);
+
+                            if (_movesInThisTurn.Count > 0)
+                            {
+                                //Allow player to make another move
+                                UpdateSprite(_movesInThisTurn.Peek());
+                                SetState(States.Idle);
+                                _chainUISystem.HighlightNextPiece();
+                            }
+                            else
+                            {
+                                SetState(States.WaitingForTurn);
+                                _turnInfoUISystem.SwitchTurn(ElTurnSystem.Turn.Enemy);
+                            }
                             break;
                         }
                     }
@@ -221,10 +242,12 @@ public class ElPlayerSystem : ElDependency
                     {
                         if (singleDoorPosition.isDoorOpen)
                         {
+                            _timerUISystem.ResetTimerBonus(true);
                             if (singleDoorPosition.isFinalDoor)
                             {
-                                //Player has won!!
                                 _timerUISystem.StopTimer();
+                                Creator.playerSystemSo.startingPiece = _currentPiece.Value;
+                                
                                 TriggerFadeOutAnimation();
                                 SetState(States.LevelComplete);
                             }
@@ -247,9 +270,37 @@ public class ElPlayerSystem : ElDependency
                     {
                         //Add this player to the 'captured pieces' list
                         Piece enemyPiece = enemyController.GetPiece();
+                        
+                        switch (enemyPiece)
+                        {
+                            case Piece.Pawn:
+                                _timerUISystem.AddTime(1);
+                                break;
+                            case Piece.Knight:
+                                _timerUISystem.AddTime(3);
+                                break;
+                            case Piece.Bishop:
+                                _timerUISystem.AddTime(3);
+                                break;
+                            case Piece.Rook:
+                                _timerUISystem.AddTime(5);
+                                break;
+                            case Piece.King:
+                                _timerUISystem.AddTime(9);
+                                break;
+                            case Piece.Queen:
+                                _timerUISystem.AddTime(9);
+                                break;
+                        }
+                        
                         _capturedPieces.AddLast(enemyPiece);
                         _movesInThisTurn.Enqueue(enemyPiece);
                         _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
+                    }
+                    else
+                    {
+                        //Player has not captured an enemy so we must reset the multiplier
+                        _timerUISystem.ResetTimerBonus(false);
                     }
                     
                     //IF the player is a pawn, we want to check what's directly in front of the player.
@@ -364,7 +415,6 @@ public class ElPlayerSystem : ElDependency
                     _capturedPieces.AddFirst(_currentRoomStartPiece);
                     
                     SetState(States.Idle);
-                    _timerUISystem.StartTimer();
                 }
                 else
                 {
@@ -375,6 +425,7 @@ public class ElPlayerSystem : ElDependency
                 //Wait 1 second before we show the game over screen
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
+                    _timerUISystem.ResetTimerBonus(false);
                     SetState(States.EndGame);
                     _gameOverUISystem.Show("Captured", Creator.timerSo.currentTime > Creator.timerSo.contFromRoomPenalty);
                 }
@@ -383,8 +434,16 @@ public class ElPlayerSystem : ElDependency
                 //Wait 1 second before we show the game over screen
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
+                    _timerUISystem.ResetTimerBonus(false);
+                    if (AuthenticationService.Instance.IsSignedIn)
+                    {
+                        CheckScore();
+                    }
+                    else
+                    {
+                        _gameOverUISystem.Show("Timer Expired", false);
+                    }
                     SetState(States.EndGame);
-                    _gameOverUISystem.Show("Timer Expired", false);
                 }
                 break;
             case States.LevelComplete:
@@ -395,12 +454,58 @@ public class ElPlayerSystem : ElDependency
                     Creator.playerSystemSo.levelNumberSaved++;
                     Creator.playerSystemSo.roomNumberSaved = 0;
                     Creator.timerSo.currentTime += Creator.timerSo.levelCompleteBonus;
+                    Creator.playerSystemSo.startingPiece = _currentPiece.Value;
                     
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 }
                 break;
             case States.EndGame:
                 break;
+        }
+    }
+
+    private async void CheckScore()
+    {
+        //First we add the player's score
+        //Score examples:
+        //Level 1 Room 7 = Score of 7
+        //Level 2 Room 1 = Score of 9
+        double score = Creator.playerSystemSo.levelNumberSaved * 8 + Creator.playerSystemSo.roomNumberSaved + 1;
+        
+        LeaderboardScoresPage topScores = await LeaderboardsService.Instance.GetScoresAsync(Creator.scoreboardSo.ScoreboardID, new GetScoresOptions(){Offset = 0, Limit = 11});
+        //If there are less than 10 entries then we guarantee the player makes it onto the scoreboard
+        if (topScores.Results.Count < 10)
+        {
+            try
+            {
+                LeaderboardEntry leaderboardEntry = await LeaderboardsService.Instance.GetPlayerScoreAsync(Creator.scoreboardSo.ScoreboardID);
+                //Only need the player to enter their score if it is better than their previous score
+                if (leaderboardEntry.Score < score)
+                {
+                    _scoreEntryUISystem.Show(score);
+                }
+                else
+                {
+                    _gameOverUISystem.Show("Timer Expired", false);
+                }
+            }
+            catch (Exception e)
+            {
+                _scoreEntryUISystem.Show(score);
+            }
+        }
+        else
+        {
+            LeaderboardEntry lowestEntry = topScores.Results[^1];
+        
+            if (lowestEntry.Score < score)
+            {
+                _scoreEntryUISystem.Show(score);
+            }
+            else
+            {
+                _gameOverUISystem.Show("Timer Expired", false);
+            }
         }
     }
 
@@ -438,7 +543,7 @@ public class ElPlayerSystem : ElDependency
             SetState(States.Moving);
             
             TriggerJumpAnimation();
-            _audioSystem.PlayerPieceMoveSfx();
+            _audioSystem.PlayerPieceMoveSfx(1);
             
             _movesInThisTurn.Dequeue();
         }
@@ -500,10 +605,10 @@ public class ElPlayerSystem : ElDependency
                 SetState(States.Moving);
                 
                 TriggerJumpAnimation();
-                _audioSystem.PlayerPieceMoveSfx();
+                _audioSystem.PlayerPieceMoveSfx(1);
 
                 _movesInThisTurn.Dequeue();
-
+                
                 foundSpot = true;
                 break;
             }
@@ -832,6 +937,9 @@ public class ElPlayerSystem : ElDependency
         switch (state)
         {
             case States.Captured:
+                _audioSystem.PlayCapturedByEnemySfx();
+                TriggerFadeOutAnimation();
+                break;
             case States.TimerExpired:
                 TriggerFadeOutAnimation();
                 break;
@@ -847,9 +955,6 @@ public class ElPlayerSystem : ElDependency
                     _currentPiece = _capturedPieces.First;
                     _chainUISystem.ResetPosition();
                 }
-                break;
-            case States.WaitingForTurn:
-                //UpdateSprite(_currentRoomStartPiece);
                 break;
         }
         _state = state;

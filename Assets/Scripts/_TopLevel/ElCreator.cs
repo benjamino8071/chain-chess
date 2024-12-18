@@ -12,6 +12,7 @@ public class ElCreator : Creator
     public Enemy_SO enemySo;
     public Timer_SO timerSo;
     public MainMenu_SO mainMenuSo;
+    public Scoreboard_SO scoreboardSo;
     
     [Header("Prefabs")]
     public GameObject playerPrefab;
@@ -83,6 +84,7 @@ public class ElCreator : Creator
         _dependencies.Add(new ElPauseUISystem());
         _dependencies.Add(new ElPlayerSystem());
         _dependencies.Add(new ElGameOverUISystem());
+        _dependencies.Add(new ElScoreEntryUISystem());
         _dependencies.Add(new ElTimerUISystem());
         _dependencies.Add(new ElRoomNumberUISystem());
         

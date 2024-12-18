@@ -11,6 +11,7 @@ public class ElEnemyController : ElController
     private ElEnemiesSystem _enemiesSystem;
     private ElDoorsSystem _doorsSystem;
     private ElTimerUISystem _timerUISystem;
+    private ElAudioSystem _audioSystem;
     
     private Transform _enemyInstance;
 
@@ -61,6 +62,10 @@ public class ElEnemyController : ElController
         if (elCreator.NewTryGetDependency(out ElTimerUISystem timerUISystem))
         {
             _timerUISystem = timerUISystem;
+        }
+        if (elCreator.NewTryGetDependency(out ElAudioSystem audioSystem))
+        {
+            _audioSystem = audioSystem;
         }
         
         SetState(States.WaitingForTurn);
@@ -327,6 +332,7 @@ public class ElEnemyController : ElController
                     _moveSpeed = Creator.playerSystemSo.moveSpeed;
                     SetState(States.MoveToTile);
                     TriggerJumpAnimation();
+                    _audioSystem.PlayerPieceMoveSfx(0.5f);
                 }
                 else
                 {

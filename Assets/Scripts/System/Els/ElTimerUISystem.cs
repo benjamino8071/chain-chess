@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -5,10 +6,16 @@ public class ElTimerUISystem : ElDependency
 {
     private ElPlayerSystem _playerSystem;
     private ElPauseUISystem _pauseUISystem;
+    private ElAudioSystem _audioSystem;
     
     private TextMeshProUGUI _timeText;
+    private TextMeshProUGUI _timerBonusText;
+    private TextMeshProUGUI _multiplierAmountText;
     
     private bool _playTimer;
+
+    private float _timeToHideBonusTxt;
+    private int _recentTimeChangeAmount;
     
     public override void GameStart(ElCreator elCreator)
     {
@@ -21,8 +28,14 @@ public class ElTimerUISystem : ElDependency
         {
             _pauseUISystem = pauseUISystem;
         }
+        if (Creator.NewTryGetDependency(out ElAudioSystem audioSystem))
+        {
+            _audioSystem = audioSystem;
+        }
         
         _timeText = GameObject.FindWithTag("Timer").GetComponent<TextMeshProUGUI>();
+        _timerBonusText = GameObject.FindWithTag("TimerBonus").GetComponent<TextMeshProUGUI>();
+        _multiplierAmountText = GameObject.FindWithTag("MultiplierAmount").GetComponent<TextMeshProUGUI>();
         
         if (Creator.playerSystemSo.roomNumberSaved == 0 && Creator.playerSystemSo.levelNumberSaved == 0)
         {
@@ -31,10 +44,18 @@ public class ElTimerUISystem : ElDependency
         
         string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
         SetTimerText(timeText);
+        
+        _multiplierAmountText.text = $"<wave a={0.01f}>Multiplier: 1x</wave>";
+        ResetTimerBonus(true);
     }
 
     public override void GameEarlyUpdate(float dt)
     {
+        if (Creator.timerSo.currentTime <= _timeToHideBonusTxt)
+        {
+            HideTimerBonus();
+        }
+        
         if (_playTimer && Creator.timerSo.currentTime > 0 && _playerSystem.GetState() != ElPlayerSystem.States.EndGame)
         {
             Creator.timerSo.currentTime -= dt;
@@ -54,6 +75,55 @@ public class ElTimerUISystem : ElDependency
         _timeText.SetText(timeText);
     }
 
+    public void AddTime(int pieceValue)
+    {
+        int amountToAdd = pieceValue * Creator.timerSo.timerMultiplier;
+        Creator.timerSo.currentTime += amountToAdd;
+        
+        string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
+        SetTimerText(timeText);
+
+        if (_recentTimeChangeAmount >= 0)
+        {
+            _recentTimeChangeAmount += pieceValue;
+        }
+        else
+        {
+            _recentTimeChangeAmount = pieceValue;
+        }
+        
+        string amountAddText = $"+{_recentTimeChangeAmount}s";
+        ShowTimerBonus(amountAddText);
+        
+        Creator.timerSo.timerMultiplier *= 2;
+        
+        float waveAmp = Mathf.Clamp(0.01f * Creator.timerSo.timerMultiplier, 0.01f, 0.1f);
+        _multiplierAmountText.text = $"<wave a={waveAmp}>Multiplier: {Creator.timerSo.timerMultiplier}x</wave>";
+        
+        float pitch = Mathf.Clamp(0.9f + Mathf.Log(Creator.timerSo.timerMultiplier) / 50f, 0.9f, 1f);
+        _audioSystem.PlayEnemyCapturedSfx(pitch);
+    }
+
+    public void RemoveTime(int amount)
+    {
+        Creator.timerSo.currentTime -= amount;
+        
+        string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
+        SetTimerText(timeText);
+
+        if (_recentTimeChangeAmount >= 0)
+        {
+            _recentTimeChangeAmount = -amount;
+        }
+        else
+        {
+            _recentTimeChangeAmount -= amount;
+        }
+        
+        string amountRemoveText = $"{_recentTimeChangeAmount}s";
+        ShowTimerBonus(amountRemoveText, true);
+    }
+
     public void StartTimer()
     {
         _playTimer = true;
@@ -64,13 +134,31 @@ public class ElTimerUISystem : ElDependency
         _playTimer = false;
     }
     
-    private void Show()
+    private void ShowTimerBonus(string textToShow, bool showInRed = false)
     {
-        _timeText.gameObject.SetActive(true);
+        _timerBonusText.text = textToShow;
+        _timerBonusText.color = showInRed ? Color.red : Color.green;
+        _timeToHideBonusTxt = Creator.timerSo.currentTime - 3f;
     }
 
-    private void Hide()
+    private void HideTimerBonus()
     {
-        _timeText.gameObject.SetActive(false);
+        _timerBonusText.text = "";
+        _timeToHideBonusTxt = -1;
+        _recentTimeChangeAmount = 0;
+    }
+
+    public void ResetTimerBonus(bool hide)
+    {
+        if (Creator.timerSo.timerMultiplier != 1)
+        {
+            Creator.timerSo.timerMultiplier = 1;
+            _multiplierAmountText.text = $"<wave a={0.01f}>Multiplier: 1x</wave>";
+        }
+
+        if (hide)
+        {
+            HideTimerBonus();
+        }
     }
 }

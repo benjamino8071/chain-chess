@@ -8,7 +8,6 @@ public class ElEnemiesSystem : ElDependency
     private ElChainUISystem _capturedPiecesUISystem;
     private ElDoorsSystem _doorsSystem;
     private ElTurnSystem _turnSystem;
-    private ElTimerUISystem _timerUISystem;
     
     private List<ElEnemyController> _enemyControllers = new ();
 
@@ -29,10 +28,6 @@ public class ElEnemiesSystem : ElDependency
         if (Creator.NewTryGetDependency(out ElTurnSystem turnSystem))
         {
             _turnSystem = turnSystem;
-        }
-        if (Creator.NewTryGetDependency(out ElTimerUISystem timerUISystem))
-        {
-            _timerUISystem = timerUISystem;
         }
 
         if (Creator.enemySo.cachedSpawnPoints.Count == 0)

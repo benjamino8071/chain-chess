@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu]
 public class MainMenu_SO : ScriptableObject
 {
-    public bool isPuzzleCanvasShowing;
+    [FormerlySerializedAs("isPuzzleCanvasShowing")] public bool isOtherMainMenuCanvasShowing;
 }

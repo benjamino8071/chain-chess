@@ -17,21 +17,21 @@ public class PuzzlesGUI : MonoBehaviour
     {
         SceneManager.UnloadSceneAsync("EndlessScene");
         
-        mainMenuSo.isPuzzleCanvasShowing = false;
+        mainMenuSo.isOtherMainMenuCanvasShowing = false;
         string sceneName = "Puzzle" + puzzleNum + "Scene";
         SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
     }
 
     public void Show()
     {
-        mainMenuSo.isPuzzleCanvasShowing = true;
+        mainMenuSo.isOtherMainMenuCanvasShowing = true;
         canvasToShowOnGoBack.gameObject.SetActive(false);
         puzzleCanvas.gameObject.SetActive(true);
     }
     
     public void Hide()
     {
-        mainMenuSo.isPuzzleCanvasShowing = false;
+        mainMenuSo.isOtherMainMenuCanvasShowing = false;
         puzzleCanvas.gameObject.SetActive(false);
         canvasToShowOnGoBack.gameObject.SetActive(true);
     }

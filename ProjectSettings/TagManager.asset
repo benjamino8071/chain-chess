@@ -50,6 +50,15 @@ TagManager:
   - PlayerCapturedText
   - GUITop
   - GUIBottom
+  - Name
+  - Entry
+  - Submit
+  - Up
+  - Down
+  - Output
+  - Choice
+  - TimerBonus
+  - MultiplierAmount
   layers:
   - Default
   - TransparentFX
