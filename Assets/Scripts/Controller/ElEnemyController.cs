@@ -21,10 +21,12 @@ public class ElEnemyController : ElController
     
     private Piece _piece;
 
-    private enum PieceEffectType
+    public enum PieceEffectType
     {
         None,
-        Glitched
+        Glitched,
+        Chain,
+        Capture
     }
     private PieceEffectType _pieceEffectType;
     
@@ -109,8 +111,10 @@ public class ElEnemyController : ElController
 
         List<PieceEffectType> pieceEffectTypes = new()
         {
-            PieceEffectType.None,
-            PieceEffectType.Glitched,
+            //PieceEffectType.None,
+            //PieceEffectType.Glitched,
+            //PieceEffectType.Chain,
+            PieceEffectType.Capture,
         };
         
         // Use the milliseconds as a seed
@@ -130,6 +134,12 @@ public class ElEnemyController : ElController
                 break;
             case PieceEffectType.Glitched:
                 _spriteRenderer.material = Creator.enemySo.glitchedMat;
+                break;
+            case PieceEffectType.Chain:
+                _spriteRenderer.material = Creator.enemySo.chainMat;
+                break;
+            case PieceEffectType.Capture:
+                _spriteRenderer.material = Creator.enemySo.captureMat;
                 break;
         }
         
@@ -364,16 +374,20 @@ public class ElEnemyController : ElController
                         _positionChosen = possiblePositions[chosenPositionIndex];
                     }
                     
-                    _moveSpeed = Creator.playerSystemSo.moveSpeed;
-                    SetState(States.MoveToTile);
-                    TriggerJumpAnimation();
-                    _audioSystem.PlayerPieceMoveSfx(0.5f);
+                    // _moveSpeed = Creator.playerSystemSo.moveSpeed;
+                    // SetState(States.MoveToTile);
+                    // TriggerJumpAnimation();
+                    // _audioSystem.PlayerPieceMoveSfx(0.5f);
                 }
                 else
                 {
-                    SetState(States.WaitingForTurn);
-                    _enemiesSystem.EnemyControllerMoved(this);
+                    _enemiesSystem.AddPositionTakenByEnemyForThisTurn(_enemyInstance.position);
+                    _positionChosen = _enemyInstance.position;
                 }
+                _moveSpeed = Creator.playerSystemSo.moveSpeed;
+                SetState(States.MoveToTile);
+                TriggerJumpAnimation();
+                _audioSystem.PlayerPieceMoveSfx(0.5f);
                 break;
             case States.MoveToTile:
                 if (_enemyInstance.position != _positionChosen)
@@ -471,6 +485,10 @@ public class ElEnemyController : ElController
                             // Use the index to set the piece
                             SetPiece(glitchedPieceChanges[index]);
                         }
+                        else if (_pieceEffectType == PieceEffectType.Capture)
+                        {
+                            
+                        }
                         
                         SetState(States.WaitingForTurn);
                     }
@@ -525,5 +543,142 @@ public class ElEnemyController : ElController
     {
         //11.5f is the halfway point, along the y-axis, between each room
         return _roomNumber;
+    }
+
+    public PieceEffectType GetPieceEffectType()
+    {
+        return _pieceEffectType;
+    }
+
+    public bool AllowMovementIfEffectTypeIsCapture()
+    {
+        if(_pieceEffectType != PieceEffectType.Capture)
+            return false;
+        
+        //State machine
+        List<Vector3> possiblePositions = new();
+        switch (_piece) 
+        {
+            case Piece.Pawn:
+                List<Vector3> pawnMoves = new();
+                        
+                Vector3 defaultMove = new Vector3(0, -1, 0); if (_enemyInstance.position + defaultMove != _playerSystem.GetPlayerPosition())
+                {
+                    pawnMoves.Add(defaultMove);
+                }
+                        
+                Vector3 bottomLeft = new Vector3(-1, -1, 0);
+                if (_enemyInstance.position + bottomLeft == _playerSystem.GetPlayerPosition())
+                {
+                    pawnMoves.Add(bottomLeft);
+                }
+                        
+                Vector3 bottomRight = new Vector3(1, -1, 0);
+                if (_enemyInstance.position + bottomRight == _playerSystem.GetPlayerPosition())
+                {
+                    pawnMoves.Add(bottomRight);
+                }
+                        
+                List<Vector3> pawnPossPosi = CheckPossibleDefinitePositions(pawnMoves);
+                possiblePositions = possiblePositions.Concat(pawnPossPosi).ToList();
+                break;
+            case Piece.Rook:
+                List<Vector3> rookMoves = new() 
+                {
+                    new Vector3(-1, 0, 0), 
+                    new Vector3(1, 0, 0), 
+                    new Vector3(0, 1, 0), 
+                    new Vector3(0, -1, 0)
+                };
+
+                List<Vector3> rookPossPosi = CheckPossibleIndefinitePositions(rookMoves);
+                possiblePositions = possiblePositions.Concat(rookPossPosi).ToList();
+                break;
+            case Piece.Knight:
+                List<Vector3> knightMoves = new()
+                {
+                    new Vector3(1, 2, 0),
+                    new Vector3(-1, 2, 0),
+                    new Vector3(1, -2, 0),
+                    new Vector3(-1, -2, 0),
+                    new Vector3(-2, 1, 0),
+                    new Vector3(-2, -1, 0),
+                    new Vector3(2, 1, 0),
+                    new Vector3(2, -1, 0)
+                };
+                        
+                List<Vector3> knightPossPosi = CheckPossibleDefinitePositions(knightMoves);
+                possiblePositions = possiblePositions.Concat(knightPossPosi).ToList();
+                break;
+            case Piece.Bishop:
+                List<Vector3> bishopMoves = new() 
+                { 
+                    new Vector3(1, 1, 0), 
+                    new Vector3(-1, 1, 0), 
+                    new Vector3(1, -1, 0), 
+                    new Vector3(-1, -1, 0)
+                };
+                List<Vector3> bishopPossPosi = CheckPossibleIndefinitePositions(bishopMoves);
+                possiblePositions = possiblePositions.Concat(bishopPossPosi).ToList(); 
+                break;
+            case Piece.Queen:
+                List<Vector3> queenMoves = new() 
+                { 
+                    new Vector3(-1, 0, 0),
+                    new Vector3(1, 0, 0),
+                    new Vector3(0, 1, 0),
+                    new Vector3(0, -1, 0),
+                    new Vector3(1, 1, 0),
+                    new Vector3(-1, 1, 0),
+                    new Vector3(1, -1, 0),
+                    new Vector3(-1, -1, 0)
+                };
+                        
+                List<Vector3> queenPossPosi = CheckPossibleIndefinitePositions(queenMoves); 
+                possiblePositions = possiblePositions.Concat(queenPossPosi).ToList(); 
+                break;
+            case Piece.King:
+                List<Vector3> kingMoves = new()
+                {
+                    new Vector3(-1, 0, 0),
+                    new Vector3(1, 0, 0),
+                    new Vector3(0, 1, 0),
+                    new Vector3(0, -1, 0),
+                    new Vector3(1, 1, 0),
+                    new Vector3(-1, 1, 0),
+                    new Vector3(1, -1, 0),
+                    new Vector3(-1, -1, 0)
+                };
+
+                List<Vector3> kingPossPosi = CheckPossibleDefinitePositions(kingMoves);
+                possiblePositions = possiblePositions.Concat(kingPossPosi).ToList();
+                break;
+        }
+                
+        if (possiblePositions.Count > 0) 
+        {
+            //Go through each position and see if the player is at that position. If they are, capture it!
+            bool foundPlayer = false;
+            foreach (Vector3 possiblePosition in possiblePositions)
+            {
+                if (_playerSystem.GetPlayerPosition() == possiblePosition)
+                {
+                    _positionChosen = possiblePosition;
+                    foundPlayer = true;
+                    break;
+                }
+            }
+
+            if (foundPlayer)
+            {
+                _moveSpeed = Creator.playerSystemSo.moveSpeed;
+                SetState(States.MoveToTile);
+                TriggerJumpAnimation();
+                _audioSystem.PlayerPieceMoveSfx(0.5f);
+                return true;
+            }
+        }
+
+        return false;
     }
 }

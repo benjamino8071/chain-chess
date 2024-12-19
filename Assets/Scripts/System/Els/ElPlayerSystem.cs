@@ -166,6 +166,8 @@ public class ElPlayerSystem : ElDependency
         if(Creator.mainMenuSo.isOtherMainMenuCanvasShowing)
             return;
         
+        Debug.Log("STATE: "+_state);
+        
         switch (_state)
         {
             case States.WaitingForTurn:
@@ -236,6 +238,14 @@ public class ElPlayerSystem : ElDependency
                 {
                     _playerCharacter.position = new Vector3(((int)_playerCharacter.position.x) + 0.5f, ((int)_playerCharacter.position.y) + 0.5f, 0);
                     _sinTime = 0;
+                    
+                    //If Capture enemies exist, then we need to check the position the player has moved to is safe. If not, then it's game over for the player!
+                    if (_enemiesSystem.CheckIfEnemiesCanCapture())
+                    {
+                        //Game over!!!
+                        SetState(States.WaitingForTurn);
+                        return;
+                    }
 
                     //Check if the player's position is a door position
                     if (_gridSystem.TryGetSingleDoorPosition(_playerCharacter.position, out SingleDoorPosition singleDoorPosition))
@@ -243,9 +253,9 @@ public class ElPlayerSystem : ElDependency
                         if (singleDoorPosition.isDoorOpen)
                         {
                             _timerUISystem.ResetTimerChangedAmount(true);
+                            _timerUISystem.StopTimer();
                             if (singleDoorPosition.isFinalDoor)
                             {
-                                _timerUISystem.StopTimer();
                                 Creator.playerSystemSo.startingPiece = _currentPiece.Value;
                                 
                                 TriggerFadeOutAnimation();
@@ -253,7 +263,6 @@ public class ElPlayerSystem : ElDependency
                             }
                             else
                             {
-                                _timerUISystem.StopTimer();
                                 _doorPositionOnOut = singleDoorPosition.GetPlayerPositionOnOut();
                                 _roomNumberOnOut = singleDoorPosition.GetOtherDoorRoomNumber();
                                 _roomNumber = _roomNumberOnOut;

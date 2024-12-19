@@ -233,4 +233,26 @@ public class ElEnemiesSystem : ElDependency
             _turnSystem.SwitchTurn(ElTurnSystem.Turn.Player);
         }
     }
+    
+    public bool CheckIfEnemiesCanCapture()
+    {
+        List<ElEnemyController> captureTypePieces = new();
+        
+        foreach (ElEnemyController enemyController in _enemyControllers)
+        {
+            if (enemyController.GetPieceEffectType() == ElEnemyController.PieceEffectType.Capture)
+            {
+                captureTypePieces.Add(enemyController);
+            }
+        }
+
+        bool foundPlayer = false;
+        foreach (ElEnemyController enemyController in captureTypePieces)
+        {
+            if (enemyController.AllowMovementIfEffectTypeIsCapture())
+                foundPlayer = true;
+        }
+
+        return foundPlayer;
+    }
 }
