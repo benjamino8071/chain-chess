@@ -18,6 +18,9 @@ public class ElEnemyController : ElController
     private SpriteRenderer _spriteRenderer;
     
     private Animator _playerAnimator;
+
+    private LinkedList<Piece> _chain;
+    private LinkedListNode<Piece> _currentPieceInChain;
     
     private Piece _piece;
 
@@ -111,9 +114,9 @@ public class ElEnemyController : ElController
 
         List<PieceEffectType> pieceEffectTypes = new()
         {
-            //PieceEffectType.None,
-            //PieceEffectType.Glitched,
-            //PieceEffectType.Chain,
+            PieceEffectType.None,
+            PieceEffectType.Glitched,
+            PieceEffectType.Chain,
             PieceEffectType.Capture,
         };
         
@@ -136,6 +139,20 @@ public class ElEnemyController : ElController
                 _spriteRenderer.material = Creator.enemySo.glitchedMat;
                 break;
             case PieceEffectType.Chain:
+                _chain = new();
+                _chain.AddFirst(_piece);
+                List<Piece> pieces = new()
+                {
+                    Piece.Bishop,
+                    Piece.Rook,
+                    Piece.Knight,
+                    Piece.Queen,
+                };
+                System.Random localRandom = new System.Random(DateTime.Now.Millisecond);
+                
+                int index = localRandom.Next(0, pieces.Count);
+                _chain.AddLast(pieces[index]);
+                _currentPieceInChain = _chain.First;
                 _spriteRenderer.material = Creator.enemySo.chainMat;
                 break;
             case PieceEffectType.Capture:
@@ -373,18 +390,13 @@ public class ElEnemyController : ElController
                         _enemiesSystem.AddPositionTakenByEnemyForThisTurn(possiblePositions[chosenPositionIndex]);
                         _positionChosen = possiblePositions[chosenPositionIndex];
                     }
-                    
-                    // _moveSpeed = Creator.playerSystemSo.moveSpeed;
-                    // SetState(States.MoveToTile);
-                    // TriggerJumpAnimation();
-                    // _audioSystem.PlayerPieceMoveSfx(0.5f);
                 }
                 else
                 {
                     _enemiesSystem.AddPositionTakenByEnemyForThisTurn(_enemyInstance.position);
                     _positionChosen = _enemyInstance.position;
                 }
-                _moveSpeed = Creator.playerSystemSo.moveSpeed;
+                _moveSpeed = Creator.enemySo.moveSpeed;
                 SetState(States.MoveToTile);
                 TriggerJumpAnimation();
                 _audioSystem.PlayerPieceMoveSfx(0.5f);
@@ -485,9 +497,27 @@ public class ElEnemyController : ElController
                             // Use the index to set the piece
                             SetPiece(glitchedPieceChanges[index]);
                         }
-                        else if (_pieceEffectType == PieceEffectType.Capture)
+                        else if (_pieceEffectType == PieceEffectType.Chain)
                         {
+                            if (promoted)
+                            {
+                                _currentPieceInChain.Value = _piece;
+                                Debug.Log("This player promoted! Updating piece in chain to "+_currentPieceInChain.Value);
+                            }
                             
+                            if (_currentPieceInChain.Next is not null)
+                            {
+                                _currentPieceInChain = _currentPieceInChain.Next;
+                                Debug.Log("Moving again! Next piece will be "+_currentPieceInChain.Value);
+                                SetPiece(_currentPieceInChain.Value);
+                                SetState(States.ChooseTile);
+                                return;
+                            }
+                            else
+                            {
+                                _currentPieceInChain = _chain.First;
+                                SetPiece(_currentPieceInChain.Value);
+                            }
                         }
                         
                         SetState(States.WaitingForTurn);

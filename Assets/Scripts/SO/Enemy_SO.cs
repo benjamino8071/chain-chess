@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu]
 public class Enemy_SO : ScriptableObject
 {
+    public float moveSpeed;
+    
     public Sprite pawn;
     public Sprite rook;
     public Sprite knight;

@@ -20,3 +20,5 @@ MonoBehaviour:
   queen: {fileID: 7519753400087680208, guid: 2de24f2c962cb6746a5be0942ecca4c4, type: 3}
   noneMat: {fileID: 2100000, guid: cc460e5b1c6c0bd498b44195a0c3da99, type: 2}
   glitchedMat: {fileID: 2100000, guid: 5afb5ad234e5f7b4e924c69aace4499c, type: 2}
+  chainMat: {fileID: 2100000, guid: 1e155935f67404c4b87a00eebdc7a534, type: 2}
+  captureMat: {fileID: 2100000, guid: 1e155935f67404c4b87a00eebdc7a534, type: 2}

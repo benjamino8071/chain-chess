@@ -166,8 +166,6 @@ public class ElPlayerSystem : ElDependency
         if(Creator.mainMenuSo.isOtherMainMenuCanvasShowing)
             return;
         
-        Debug.Log("STATE: "+_state);
-        
         switch (_state)
         {
             case States.WaitingForTurn:
