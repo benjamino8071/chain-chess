@@ -12,6 +12,10 @@ public class Enemy_SO : ScriptableObject
     public Sprite king;
     public Sprite queen;
 
+    [Header("Piece Effect Type Materials")]
+    public Material noneMat;
+    public Material glitchedMat;
+
     //Key = spawn point, Value = (chosen piece, room number)
     public Dictionary<Vector3, (Piece, int)> cachedSpawnPoints = new();
 

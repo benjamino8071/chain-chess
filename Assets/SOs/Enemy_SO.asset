@@ -18,3 +18,5 @@ MonoBehaviour:
   bishop: {fileID: 1379780806020190625, guid: dfe647dfc872a814fb02d4c21eb2a8f8, type: 3}
   king: {fileID: -4821530343430527414, guid: f7e4c9cb0fe5e7d4f86343cc0302045c, type: 3}
   queen: {fileID: 7519753400087680208, guid: 2de24f2c962cb6746a5be0942ecca4c4, type: 3}
+  noneMat: {fileID: 2100000, guid: cc460e5b1c6c0bd498b44195a0c3da99, type: 2}
+  glitchedMat: {fileID: 2100000, guid: 5afb5ad234e5f7b4e924c69aace4499c, type: 2}

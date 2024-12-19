@@ -20,6 +20,13 @@ public class ElEnemyController : ElController
     private Animator _playerAnimator;
     
     private Piece _piece;
+
+    private enum PieceEffectType
+    {
+        None,
+        Glitched
+    }
+    private PieceEffectType _pieceEffectType;
     
     public enum States
     {
@@ -97,8 +104,36 @@ public class ElEnemyController : ElController
                 }
             }
         }
-        
+
         SetPiece(piece);
+
+        List<PieceEffectType> pieceEffectTypes = new()
+        {
+            PieceEffectType.None,
+            PieceEffectType.Glitched,
+        };
+        
+        // Use the milliseconds as a seed
+        System.Random localRandom = new System.Random(DateTime.Now.Millisecond);
+
+        // Generate a random index
+        int index = localRandom.Next(0, pieceEffectTypes.Count);
+        SetPieceEffectType(pieceEffectTypes[index]);
+    }
+
+    private void SetPieceEffectType(PieceEffectType pieceEffectType)
+    {
+        switch (pieceEffectType)
+        {
+            case PieceEffectType.None:
+                _spriteRenderer.material = Creator.enemySo.noneMat;
+                break;
+            case PieceEffectType.Glitched:
+                _spriteRenderer.material = Creator.enemySo.glitchedMat;
+                break;
+        }
+        
+        _pieceEffectType = pieceEffectType;
     }
 
     private void SetPiece(Piece piece)
@@ -363,6 +398,7 @@ public class ElEnemyController : ElController
                     else
                     {
                         //IF this enemy is the pawn and it has reached the last row in the room, then PROMOTE it
+                        bool promoted = false;
                         if (_piece == Piece.Pawn)
                         {
                             Vector3 posInFront = _enemyInstance.position + new Vector3(0, -1, 0);
@@ -389,7 +425,51 @@ public class ElEnemyController : ElController
 
                                 // Use the index to set the piece
                                 SetPiece(promoChances[promoIndex]);
+
+                                promoted = true;
                             }
+                        }
+                        
+                        if (!promoted && _pieceEffectType == PieceEffectType.Glitched)
+                        {
+                            List<Piece> glitchedPieceChanges = new()
+                            {
+                                Piece.Knight,
+                                Piece.Knight,
+                                Piece.Rook,
+                                Piece.Rook,
+                                Piece.Bishop,
+                                Piece.Bishop,
+                                Piece.Queen
+                            };
+
+                            switch (_piece)
+                            {
+                                case Piece.Knight:
+                                    glitchedPieceChanges.Remove(Piece.Knight);
+                                    glitchedPieceChanges.Remove(Piece.Knight);
+                                    break;
+                                case Piece.Rook:
+                                    glitchedPieceChanges.Remove(Piece.Rook);
+                                    glitchedPieceChanges.Remove(Piece.Rook);
+                                    break;
+                                case Piece.Bishop:
+                                    glitchedPieceChanges.Remove(Piece.Bishop);
+                                    glitchedPieceChanges.Remove(Piece.Bishop);
+                                    break;
+                                case Piece.Queen:
+                                    glitchedPieceChanges.Remove(Piece.Queen);
+                                    break;
+                            }
+                                
+                            // Use the milliseconds as a seed
+                            System.Random localRandom = new System.Random(DateTime.Now.Millisecond);
+
+                            // Generate a random index
+                            int index = localRandom.Next(0, glitchedPieceChanges.Count);
+
+                            // Use the index to set the piece
+                            SetPiece(glitchedPieceChanges[index]);
                         }
                         
                         SetState(States.WaitingForTurn);
