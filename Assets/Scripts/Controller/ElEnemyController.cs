@@ -115,16 +115,13 @@ public class ElEnemyController : ElController
         List<PieceEffectType> pieceEffectTypes = new()
         {
             PieceEffectType.None,
-            PieceEffectType.Glitched,
-            PieceEffectType.Chain,
-            PieceEffectType.Capture,
+            // PieceEffectType.Glitched,
+            // PieceEffectType.Chain,
+            // PieceEffectType.Capture,
         };
-        
-        // Use the milliseconds as a seed
-        System.Random localRandom = new System.Random(DateTime.Now.Millisecond);
 
         // Generate a random index
-        int index = localRandom.Next(0, pieceEffectTypes.Count);
+        int index = Creator.randomGenerator.Next(0, pieceEffectTypes.Count);
         SetPieceEffectType(pieceEffectTypes[index]);
     }
 
@@ -148,9 +145,8 @@ public class ElEnemyController : ElController
                     Piece.Knight,
                     Piece.Queen,
                 };
-                System.Random localRandom = new System.Random(DateTime.Now.Millisecond);
                 
-                int index = localRandom.Next(0, pieces.Count);
+                int index = Creator.randomGenerator.Next(0, pieces.Count);
                 _chain.AddLast(pieces[index]);
                 _currentPieceInChain = _chain.First;
                 _spriteRenderer.material = Creator.enemySo.chainMat;
@@ -443,11 +439,9 @@ public class ElEnemyController : ElController
                                     Piece.Bishop
                                 };
                                 
-                                // Use the milliseconds as a seed
-                                System.Random localRandom = new System.Random(DateTime.Now.Millisecond);
 
                                 // Generate a random index
-                                int promoIndex = localRandom.Next(0, promoChances.Count);
+                                int promoIndex = Creator.randomGenerator.Next(0, promoChances.Count);
 
                                 // Use the index to set the piece
                                 SetPiece(promoChances[promoIndex]);
@@ -487,12 +481,9 @@ public class ElEnemyController : ElController
                                     glitchedPieceChanges.Remove(Piece.Queen);
                                     break;
                             }
-                                
-                            // Use the milliseconds as a seed
-                            System.Random localRandom = new System.Random(DateTime.Now.Millisecond);
-
+                            
                             // Generate a random index
-                            int index = localRandom.Next(0, glitchedPieceChanges.Count);
+                            int index = Creator.randomGenerator.Next(0, glitchedPieceChanges.Count);
 
                             // Use the index to set the piece
                             SetPiece(glitchedPieceChanges[index]);

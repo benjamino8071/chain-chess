@@ -33,12 +33,15 @@ public class ElCreator : Creator
     public GameObject guiBottom;
 
     public GameObject fakeGrid;
+
+    public System.Random randomGenerator;
     
     private void Start()
     {
         SceneManager.sceneUnloaded += SceneManager_SceneUnloaded;
         
-        Random.InitState(playerSystemSo.levelNumberSaved);
+        randomGenerator = new System.Random(DateTime.Now.Millisecond);
+        Random.InitState(DateTime.Now.Millisecond);
         
         Camera.main.backgroundColor = Color.black;
 

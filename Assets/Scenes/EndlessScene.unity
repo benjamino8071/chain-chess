@@ -5188,7 +5188,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 94.7
+  field of view: 66
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -6329,7 +6329,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 94.7
+    FieldOfView: 95
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -7377,7 +7377,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 94.7
+    FieldOfView: 95
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -11107,6 +11107,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 820112914}
     m_Modifications:
+    - target: {fileID: 1880381949437092618, guid: eff612408094dfd438f7462c55564517, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880381949437092618, guid: eff612408094dfd438f7462c55564517, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880381949437092618, guid: eff612408094dfd438f7462c55564517, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 152.9377
+      objectReference: {fileID: 0}
+    - target: {fileID: 3066856946390733955, guid: eff612408094dfd438f7462c55564517, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3066856946390733955, guid: eff612408094dfd438f7462c55564517, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3066856946390733955, guid: eff612408094dfd438f7462c55564517, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 152.9377
+      objectReference: {fileID: 0}
     - target: {fileID: 5268290298210041585, guid: eff612408094dfd438f7462c55564517, type: 3}
       propertyPath: m_Name
       value: Top_-_Chain
@@ -11145,7 +11169,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9072887715208983578, guid: eff612408094dfd438f7462c55564517, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 431.811
+      value: 371.9291
       objectReference: {fileID: 0}
     - target: {fileID: 9072887715208983578, guid: eff612408094dfd438f7462c55564517, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11181,7 +11205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9072887715208983578, guid: eff612408094dfd438f7462c55564517, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -215.90552
+      value: -185.96436
       objectReference: {fileID: 0}
     - target: {fileID: 9072887715208983578, guid: eff612408094dfd438f7462c55564517, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -20077,7 +20101,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 94.7
+    FieldOfView: 95
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -21750,7 +21774,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 94.7
+    FieldOfView: 95
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -24270,6 +24294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridSystemSo: {fileID: 11400000, guid: b1b948b72a163f44dabc05d553b8ae0b, type: 2}
+  cinemachineSo: {fileID: 11400000, guid: 76944452bd91d3e46a1547ec90710822, type: 2}
   inputSo: {fileID: 11400000, guid: 389182d9fe2b7ef4497ec958f46c0386, type: 2}
   playerSystemSo: {fileID: 11400000, guid: b42972874f912ca47a5745f157580007, type: 2}
   enemySo: {fileID: 11400000, guid: f2bc2f0c9938dec42a80867cd663f34b, type: 2}
@@ -27574,7 +27599,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.8
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -29099,7 +29124,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 94.7
+    FieldOfView: 95
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -31967,7 +31992,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 94.7
+    FieldOfView: 95
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -54427,7 +54452,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 94.7
+    FieldOfView: 66
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -64111,7 +64136,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 94.7
+    FieldOfView: 95
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -67728,7 +67753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8732973694634052732, guid: 1f7ec5cd8260ef54490c64d74b87fce7, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 347.7
+      value: 363.8101
       objectReference: {fileID: 0}
     - target: {fileID: 8732973694634052732, guid: 1f7ec5cd8260ef54490c64d74b87fce7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -67764,7 +67789,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8732973694634052732, guid: 1f7ec5cd8260ef54490c64d74b87fce7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 173.84772
+      value: 181.90295
       objectReference: {fileID: 0}
     - target: {fileID: 8732973694634052732, guid: 1f7ec5cd8260ef54490c64d74b87fce7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

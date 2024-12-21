@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebc445ae527e0a4429d12284521f3b6a, type: 3}
   m_Name: Enemy_SO
   m_EditorClassIdentifier: 
+  moveSpeed: 2
   pawn: {fileID: 2533179969505074583, guid: 5a329a228daa02849bf2a94636a1cbcf, type: 3}
   rook: {fileID: 6402892968040458680, guid: 666e55479f5afe34badf6a7b5654f7ea, type: 3}
   knight: {fileID: -5711848221618334454, guid: 888762c9c3666024eb515c19ba02bd86, type: 3}
@@ -20,5 +21,5 @@ MonoBehaviour:
   queen: {fileID: 7519753400087680208, guid: 2de24f2c962cb6746a5be0942ecca4c4, type: 3}
   noneMat: {fileID: 2100000, guid: cc460e5b1c6c0bd498b44195a0c3da99, type: 2}
   glitchedMat: {fileID: 2100000, guid: 5afb5ad234e5f7b4e924c69aace4499c, type: 2}
-  chainMat: {fileID: 2100000, guid: 1e155935f67404c4b87a00eebdc7a534, type: 2}
+  chainMat: {fileID: 2100000, guid: e76cfe5e58629f449af696ed6f57501e, type: 2}
   captureMat: {fileID: 2100000, guid: 1e155935f67404c4b87a00eebdc7a534, type: 2}

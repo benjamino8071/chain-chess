@@ -120,7 +120,12 @@ public class ElPlayerSystem : ElDependency
         _roomNumber = Creator.playerSystemSo.roomNumberSaved;
         
         Transform playerSpawnPosition = GameObject.FindWithTag("PlayerSpawnPosition").transform;
-        Vector3 spawnPos = playerSpawnPosition.position + new Vector3(0, Creator.playerSystemSo.roomNumberSaved * 11f, 0);
+        Vector3 spawnPos = playerSpawnPosition.position;
+        if (Creator.playerSystemSo.levelNumberSaved > 0 || Creator.playerSystemSo.roomNumberSaved > 0)
+        {
+            spawnPos.x = Creator.playerSystemSo.xValueToStartOn;
+        }
+        spawnPos += new Vector3(0, Creator.playerSystemSo.roomNumberSaved * 11f, 0);
         
         _playerCharacter = Creator.InstantiateGameObject(Creator.playerPrefab, spawnPos, Quaternion.identity).transform;
         _promoUIController = new ElPromoUIController();
@@ -252,6 +257,7 @@ public class ElPlayerSystem : ElDependency
                         {
                             _timerUISystem.ResetTimerChangedAmount(true);
                             _timerUISystem.StopTimer();
+                            Creator.playerSystemSo.xValueToStartOn = singleDoorPosition.transform.position.x;
                             if (singleDoorPosition.isFinalDoor)
                             {
                                 Creator.playerSystemSo.startingPiece = _currentPiece.Value;
