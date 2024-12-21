@@ -25,6 +25,7 @@ public class ElPlayerSystem : ElDependency
     private ElTurnSystem _turnInfoUISystem;
     private ElRoomNumberUISystem _roomNumberUISystem;
     private ElScoreEntryUISystem _scoreEntryUISystem;
+    private ElShopSystem _shopSystem;
 
     private ElPromoUIController _promoUIController;
     
@@ -114,6 +115,10 @@ public class ElPlayerSystem : ElDependency
         if (Creator.TryGetDependency(out ElScoreEntryUISystem scoreEntryUISystem))
         {
             _scoreEntryUISystem = scoreEntryUISystem;
+        }
+        if (Creator.TryGetDependency(out ElShopSystem shopSystem))
+        {
+            _shopSystem = shopSystem;
         }
         
         _currentRoomStartPiece = Creator.playerSystemSo.levelNumberSaved == 0 ? Creator.startingPiece : Creator.playerSystemSo.startingPiece;
@@ -250,7 +255,6 @@ public class ElPlayerSystem : ElDependency
                         return;
                     }
 
-                    //Check if the player's position is a door position
                     if (_gridSystem.TryGetSingleDoorPosition(_playerCharacter.position, out SingleDoorPosition singleDoorPosition))
                     {
                         if (singleDoorPosition.isDoorOpen)
@@ -330,6 +334,18 @@ public class ElPlayerSystem : ElDependency
                         }
                     }
                     
+                    if (GetRoomNumber() == Creator.shopSo.shopRoomNumber)
+                    {
+                        if (_shopSystem.TryGetShopPieceAtPosition(_playerCharacter.position, out Piece piece))
+                        {
+                            _currentPiece.Value = piece;
+                            _chainUISystem.NewRoomClearChain();
+                            _chainUISystem.ShowNewPiece(piece, true);
+                            _currentRoomStartPiece = piece;
+                            SetState(States.Idle);
+                            break;
+                        }
+                    }
                     _currentPiece = _currentPiece.Next;
                     if (_movesInThisTurn.Count > 0)
                     {

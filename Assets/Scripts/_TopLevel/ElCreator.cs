@@ -13,6 +13,7 @@ public class ElCreator : Creator
     public Timer_SO timerSo;
     public MainMenu_SO mainMenuSo;
     public Scoreboard_SO scoreboardSo;
+    public Shop_SO shopSo;
     
     [Header("Prefabs")]
     public GameObject playerPrefab;
@@ -21,6 +22,7 @@ public class ElCreator : Creator
     public GameObject validPositionPrefab;
     public GameObject capturedPieceImagePrefab;
     public GameObject arrowPointingToNextPiecePrefab;
+    public GameObject shopItemPrefab;
 
     [Header("Starting Piece")]
     public Piece startingPiece;
@@ -42,6 +44,13 @@ public class ElCreator : Creator
         
         randomGenerator = new System.Random(DateTime.Now.Millisecond);
         Random.InitState(DateTime.Now.Millisecond);
+
+        // if (enemySo.cachedSpawnPoints.Count == 0)
+        // {
+        //     shopSo.shopRoomNumber = randomGenerator.Next(1, 1);
+        // }
+        
+        shopSo.shopRoomNumber = randomGenerator.Next(1, 1);
         
         Camera.main.backgroundColor = Color.black;
 
@@ -89,6 +98,7 @@ public class ElCreator : Creator
         _dependencies.Add(new ElChainUISystem());
         _dependencies.Add(new ElCinemachineSystem());
         _dependencies.Add(new ElDoorsSystem());
+        _dependencies.Add(new ElShopSystem());
         _dependencies.Add(new ElGridSystem());
         _dependencies.Add(new ElEnemiesSystem());
         _dependencies.Add(new ElPauseUISystem());
@@ -97,8 +107,6 @@ public class ElCreator : Creator
         _dependencies.Add(new ElScoreEntryUISystem());
         _dependencies.Add(new ElTimerUISystem());
         _dependencies.Add(new ElRoomNumberUISystem());
-        
-        //_dependencies.Add(new ElStartingPieceUISystem());
     }
 
     public void ShowGUITop()

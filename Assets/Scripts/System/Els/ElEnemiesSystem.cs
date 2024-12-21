@@ -30,10 +30,18 @@ public class ElEnemiesSystem : ElDependency
             _turnSystem = turnSystem;
         }
 
+        if (Creator.playerSystemSo.roomNumberSaved == 0)
+        {
+            Creator.enemySo.ResetCachedSpawnPoints();
+        }
+
         if (Creator.enemySo.cachedSpawnPoints.Count == 0)
         { 
-            for (int roomNum = 0; roomNum < 8; roomNum++)
+            for (int roomNum = 0; roomNum < 9; roomNum++)
             {
+                if (roomNum == Creator.shopSo.shopRoomNumber)
+                    continue;
+                
                 Dictionary<Vector3, (Piece, int)> positions = new();
                 while (positions.Count < 3 + roomNum + Creator.playerSystemSo.levelNumberSaved)
                 {

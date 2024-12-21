@@ -59,6 +59,8 @@ TagManager:
   - Choice
   - TimerBonus
   - MultiplierAmount
+  - Shop
+  - Item
   layers:
   - Default
   - TransparentFX

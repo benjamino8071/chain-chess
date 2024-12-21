@@ -22,7 +22,7 @@ MonoBehaviour:
   king: {fileID: -4821530343430527414, guid: 6ab63fb05b0cd654399b0b52e0e15650, type: 3}
   levelNumberSaved: 0
   xValueToStartOn: 5.5
-  roomNumberSaved: 0
-  firstMoveMadeWhileShowingMainMenu: 0
+  roomNumberSaved: 3
+  firstMoveMadeWhileShowingMainMenu: 1
   startingPiece: 5
   pieceMovedSfx: {fileID: 8300000, guid: 469e8b9b6277b4e4fa7cfada6a9673da, type: 3}

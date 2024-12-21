@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ab09b642a0850444bf1d7577cb1ebe9, type: 3}
-  m_Name: GridSystem_SO
+  m_Script: {fileID: 11500000, guid: d2e5eb9ec6b645444b2d781b1b42c267, type: 3}
+  m_Name: Shop_SO
   m_EditorClassIdentifier: 
-  baseColor: {r: 0.8584906, g: 0.8218853, b: 0.6924617, a: 1}
-  offsetColor: {r: 0.5660378, g: 0.39582592, b: 0.15752938, a: 1}
-  width: 12
-  height: 101
+  shopRoomNumber: 0

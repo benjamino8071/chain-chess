@@ -56,7 +56,7 @@ public class ElTimerUISystem : ElDependency
             HideTimerChangeAmount();
         }
         
-        if (_playTimer && Creator.timerSo.currentTime > 0 && _playerSystem.GetState() != ElPlayerSystem.States.EndGame)
+        if (_playTimer && Creator.timerSo.currentTime > 0 && _playerSystem.GetState() != ElPlayerSystem.States.EndGame && Creator.playerSystemSo.roomNumberSaved != Creator.shopSo.shopRoomNumber)
         {
             Creator.timerSo.currentTime -= dt;
             
@@ -102,7 +102,6 @@ public class ElTimerUISystem : ElDependency
         _multiplierAmountText.text = $"<wave a={waveAmp}>Multiplier: {Creator.timerSo.timerMultiplier:0.##}x</wave>";
 
         float amount = Mathf.Log(Creator.timerSo.timerMultiplier) / Mathf.Log(1.1f) - 1;
-        Debug.Log("Amount of times the multiplier has changed: "+amount);
         
         float pitch = Mathf.Clamp(0.9f + Mathf.RoundToInt(amount) / 50f, 0.9f, 1f);
         _audioSystem.PlayEnemyCapturedSfx(pitch);
