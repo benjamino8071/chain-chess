@@ -446,9 +446,16 @@ public class ElPlayerSystem : ElDependency
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
                     _timerUISystem.ResetTimerChangedAmount(false);
-                    if (AuthenticationService.Instance.IsSignedIn)
+                    if (AuthenticationService.Instance is not null)
                     {
-                        CheckScore();
+                        if (AuthenticationService.Instance.IsSignedIn)
+                        {
+                            CheckScore();
+                        }
+                        else
+                        {
+                            _gameOverUISystem.Show("Timer Expired", false);
+                        }
                     }
                     else
                     {

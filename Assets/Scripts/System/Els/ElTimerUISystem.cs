@@ -101,7 +101,7 @@ public class ElTimerUISystem : ElDependency
         string amountAddText = $"+{_recentTimeChangeAmount:0.##}s";
         ShowTimerChangeAmount(amountAddText);
         
-        Creator.timerSo.timerMultiplier *= 1.1f;
+        Creator.timerSo.timerMultiplier *= Creator.timerSo.timerMultiplierMultiplier;
         
         float waveAmp = Mathf.Clamp(0.01f * Creator.timerSo.timerMultiplier, 0.01f, 0.1f);
         _multiplierAmountText.text = $"<wave a={waveAmp}>Multiplier: {Creator.timerSo.timerMultiplier:0.##}x</wave>";

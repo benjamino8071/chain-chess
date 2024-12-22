@@ -10,6 +10,8 @@ public class ElPauseUISystem : ElDependency
 
     private Button _pauseButton;
 
+    private PauseUITextInfo _pauseUITextInfo;
+
     private bool _canShow;
     
     public override void GameStart(ElCreator elCreator)
@@ -22,6 +24,8 @@ public class ElPauseUISystem : ElDependency
         }
 
         _pauseGUI = GameObject.FindWithTag("Pause").transform;
+        
+        _pauseUITextInfo = _pauseGUI.GetComponentInChildren<PauseUITextInfo>();
 
         Button[] buttons = _pauseGUI.GetComponentsInChildren<Button>();
         foreach (Button button in buttons)
@@ -50,6 +54,7 @@ public class ElPauseUISystem : ElDependency
             }
         });
         
+        UpdateTextInfo();
         Hide();
     }
 
@@ -66,5 +71,21 @@ public class ElPauseUISystem : ElDependency
     public void Hide()
     {
         _pauseGUI.gameObject.SetActive(false);
+    }
+    
+    public void UpdateTextInfo()
+    {
+        _pauseUITextInfo.pawnCapValueText.text = $"Pawn Capture Value: +{Creator.timerSo.capturePieceTimeAdd[Piece.Pawn]:0.##}s";
+        _pauseUITextInfo.knightCapValueText.text = $"Knight Capture Value: +{Creator.timerSo.capturePieceTimeAdd[Piece.Knight]:0.##}s";
+        _pauseUITextInfo.bishopCapValueText.text = $"Bishop Capture Value: +{Creator.timerSo.capturePieceTimeAdd[Piece.Bishop]:0.##}s";
+        _pauseUITextInfo.rookCapValueText.text = $"Rook Capture Value: +{Creator.timerSo.capturePieceTimeAdd[Piece.Rook]:0.##}s";
+        _pauseUITextInfo.queenCapValueText.text = $"Queen Capture Value: +{Creator.timerSo.capturePieceTimeAdd[Piece.Queen]:0.##}s";
+        _pauseUITextInfo.kingCapValueText.text = $"King Capture Value: +{Creator.timerSo.capturePieceTimeAdd[Piece.King]:0.##}s";
+        
+        float mulMulPer = (Creator.timerSo.timerMultiplierMultiplier * 100) - 100;
+        _pauseUITextInfo.pieceCapMulMulText.text = $"Consecutive Capture Multiplier Increase: \u2191{(int)mulMulPer}%";
+
+        float restartRoomPenaltyPer = (1 / Creator.timerSo.playerRespawnDivideCost) * 100;
+        _pauseUITextInfo.restartRoomTimePenalty.text = $"Restart Room Time Penalty: -{(int)restartRoomPenaltyPer}% Current Time";
     }
 }

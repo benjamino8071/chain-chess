@@ -12,6 +12,8 @@ public class Timer_SO : ScriptableObject
     
     public float timerMultiplier = 1;
 
+    public float timerMultiplierMultiplier = 1.11f;
+
     public float timePenaltyOnReload = 0;
 
     public float showTimeChangeAmount = 3;
@@ -41,7 +43,8 @@ public class Timer_SO : ScriptableObject
         playerRespawnDivideCost = 2;
 
         timerMultiplier = 1;
-
+        timerMultiplierMultiplier = 1.11f;
+        
         timePenaltyOnReload = 0;
         
         capturePieceTimeAdd[Piece.Pawn] = 1;

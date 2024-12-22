@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 public class ElShopSystem : ElDependency
 {
     private ElTimerUISystem _timerUISystem;
+    private ElPauseUISystem _pauseUISystem;
     
     public enum UpgradeTypes
     {
@@ -48,6 +49,10 @@ public class ElShopSystem : ElDependency
         if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
         {
             _timerUISystem = timerUISystem;
+        }
+        if (Creator.TryGetDependency(out ElPauseUISystem pauseUISystem))
+        {
+            _pauseUISystem = pauseUISystem;
         }
         
         GameObject shop = GameObject.FindWithTag("Shop");
@@ -235,6 +240,7 @@ public class ElShopSystem : ElDependency
                 Creator.shopSo.artefactsSprites[pos].sprite = default;
                 Creator.shopSo.artefactsPositions.Remove(pos);
                 Creator.shopSo.itemsTakenInLevelCount++;
+                _pauseUISystem.UpdateTextInfo();
                 return;
             }
         }
@@ -249,20 +255,20 @@ public class ElShopSystem : ElDependency
                 switch (Creator.shopSo.upgradesPositions[pos])
                 {
                     case UpgradeTypes.IncreaseMultiplierAmount:
-                        Creator.timerSo.timerMultiplier *= 1.25f;
+                        Creator.timerSo.timerMultiplierMultiplier += 0.11f;
                         break;
                     case UpgradeTypes.IncreaseBaseAmountGained:
                         List<Piece> enemyPieces = Creator.timerSo.capturePieceTimeAdd.Keys.ToList();
                         foreach (Piece piece in enemyPieces)
                         {
-                            Creator.timerSo.capturePieceTimeAdd[piece] *= 1.25f;
+                            Creator.timerSo.capturePieceTimeAdd[piece] += 1;
                         }
                         break;
                     case UpgradeTypes.ReducePromotionCost:
                         List<Piece> promoPieces = Creator.timerSo.capturePieceTimeAdd.Keys.ToList();
                         foreach (Piece piece in promoPieces)
                         {
-                            Creator.timerSo.capturePieceTimeAdd[piece] *= 1.25f;
+                            Creator.timerSo.capturePieceTimeAdd[piece] -= 1;
                         }
                         break;
                     case UpgradeTypes.ReduceRespawnCost:
@@ -276,6 +282,7 @@ public class ElShopSystem : ElDependency
                 Creator.shopSo.upgradesSprites[pos].sprite = default;
                 Creator.shopSo.upgradesPositions.Remove(pos);
                 Creator.shopSo.itemsTakenInLevelCount++;
+                _pauseUISystem.UpdateTextInfo();
                 return;
             }
         }
