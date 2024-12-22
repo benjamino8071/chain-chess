@@ -6,6 +6,7 @@ public class ElAudioSystem : ElDependency
     private AudioSource _enemyCapturedAudio;
     private AudioSource _capturedByEnemyAudio;
     private AudioSource _timeLostAudio;
+    private AudioSource _levelUpAudio;
     
     public override void GameStart(ElCreator elCreator)
     {
@@ -30,6 +31,10 @@ public class ElAudioSystem : ElDependency
             else if (audioSource.CompareTag("Retry"))
             {
                 _timeLostAudio = audioSource;
+            }
+            else if (audioSource.CompareTag("Up"))
+            {
+                _levelUpAudio = audioSource;
             }
         }
     }
@@ -59,5 +64,10 @@ public class ElAudioSystem : ElDependency
     public void PlayCapturedByEnemySfx()
     {
         _capturedByEnemyAudio.Play();
+    }
+
+    public void PlayerLevelUpSfx()
+    {
+        _levelUpAudio.Play();
     }
 }

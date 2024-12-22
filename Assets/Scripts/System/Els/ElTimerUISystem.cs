@@ -112,7 +112,7 @@ public class ElTimerUISystem : ElDependency
         _audioSystem.PlayEnemyCapturedSfx(pitch);
     }
 
-    public void RemoveTime(float amount)
+    public void RemoveTime(float amount, bool playSfx = true)
     {
         Creator.timerSo.currentTime -= amount;
         
@@ -132,7 +132,8 @@ public class ElTimerUISystem : ElDependency
         ShowTimerChangeAmount(amountRemoveText, true);
 
         float pitch = Random.Range(0.9f, 1.1f);
-        _audioSystem.PlayTimeLostSfx(pitch);
+        if(playSfx)
+            _audioSystem.PlayTimeLostSfx(pitch);
     }
 
     public void StartTimer()

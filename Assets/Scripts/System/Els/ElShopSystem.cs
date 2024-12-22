@@ -7,6 +7,7 @@ public class ElShopSystem : ElDependency
 {
     private ElTimerUISystem _timerUISystem;
     private ElPauseUISystem _pauseUISystem;
+    private ElAudioSystem _audioSystem;
     
     public enum UpgradeTypes
     {
@@ -53,6 +54,10 @@ public class ElShopSystem : ElDependency
         if (Creator.TryGetDependency(out ElPauseUISystem pauseUISystem))
         {
             _pauseUISystem = pauseUISystem;
+        }
+        if (Creator.TryGetDependency(out ElAudioSystem audioSystem))
+        {
+            _audioSystem = audioSystem;
         }
         
         GameObject shop = GameObject.FindWithTag("Shop");
@@ -222,6 +227,7 @@ public class ElShopSystem : ElDependency
         {
             if ((int)pos.x == (int)playerPosition.x && (int)pos.y == (int)playerPosition.y)
             {
+                _audioSystem.PlayerLevelUpSfx();
                 switch (Creator.shopSo.artefactsPositions[pos])
                 {
                     case ArtefactTypes.CaptureKingClearRoom:
@@ -235,7 +241,7 @@ public class ElShopSystem : ElDependency
                 }
                 
                 int cost = _artefactsCost[Creator.shopSo.artefactsPositions[pos]];
-                _timerUISystem.RemoveTime(cost);
+                _timerUISystem.RemoveTime(cost, false);
                 
                 Creator.shopSo.artefactsSprites[pos].sprite = default;
                 Creator.shopSo.artefactsPositions.Remove(pos);
@@ -252,6 +258,7 @@ public class ElShopSystem : ElDependency
         {
             if ((int)pos.x == (int)playerPosition.x && (int)pos.y == (int)playerPosition.y)
             {
+                _audioSystem.PlayerLevelUpSfx();
                 switch (Creator.shopSo.upgradesPositions[pos])
                 {
                     case UpgradeTypes.IncreaseMultiplierAmount:
@@ -277,7 +284,7 @@ public class ElShopSystem : ElDependency
                 }
                 
                 int cost = _upgradesCost[Creator.shopSo.upgradesPositions[pos]];
-                _timerUISystem.RemoveTime(cost);
+                _timerUISystem.RemoveTime(cost, false);
                 
                 Creator.shopSo.upgradesSprites[pos].sprite = default;
                 Creator.shopSo.upgradesPositions.Remove(pos);

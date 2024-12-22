@@ -94,6 +94,6 @@ public class ElPauseUISystem : ElDependency
         _pauseUITextInfo.pieceCapMulMulText.text = $"Consecutive Capture Multiplier Increase: \u2191{(int)mulMulPer}%";
 
         float restartRoomPenaltyPer = (1 / Creator.timerSo.playerRespawnDivideCost) * 100;
-        _pauseUITextInfo.restartRoomTimePenalty.text = $"Restart Room Time Penalty: -{(int)restartRoomPenaltyPer}% Current Time";
+        _pauseUITextInfo.restartRoomTimePenalty.text = $"Restart Room Time Penalty: -{(int)restartRoomPenaltyPer}%";
     }
 }

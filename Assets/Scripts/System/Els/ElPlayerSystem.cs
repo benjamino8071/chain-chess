@@ -8,6 +8,7 @@ using Unity.Services.Leaderboards;
 using Unity.Services.Leaderboards.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// Here the Player is allowed to move until
@@ -361,6 +362,7 @@ public class ElPlayerSystem : ElDependency
             case States.PawnPromo:
                 if (_promoUIController.IsPromoChosen())
                 {
+                    _audioSystem.PlayerLevelUpSfx();
                     Piece pieceChosen = _promoUIController.PieceChosen();
                     _currentPiece.Value = pieceChosen;
                     
