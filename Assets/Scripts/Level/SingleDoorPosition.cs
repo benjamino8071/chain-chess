@@ -7,6 +7,7 @@ public class SingleDoorPosition : MonoBehaviour
     [SerializeField] SingleDoorPosition _otherDoor;
     
     [SerializeField] private Sprite _doorOpenSprite;
+    [SerializeField] private Sprite _doorClosedSprite;
     
     [SerializeField] private SpriteRenderer _spriteRenderer;
     
@@ -47,6 +48,16 @@ public class SingleDoorPosition : MonoBehaviour
         if(isDoorOpen || isFirstDoor)
             return;
         ForceDoorOpen();
+    }
+
+    public void SetDoorToClose()
+    {
+        if (isDoorOpen)
+        {
+            _spriteRenderer.sprite = _doorClosedSprite;
+            isDoorOpen = false;
+            _otherDoor.SetDoorToClose();
+        }
     }
 
     private void ForceDoorOpen()

@@ -62,7 +62,21 @@ public class ElDoorsSystem : ElDependency
         {
             foreach (SingleDoorPosition singleDoorPosition in singleDoorPositions)
             {
-                singleDoorPosition.SetDoorToOpen();
+                if(singleDoorPosition.doorNumber == 1)
+                    singleDoorPosition.SetDoorToOpen();
+            }
+        }
+    }
+
+    public void SetRoomDoorsClosed(int roomNumber)
+    {
+        Dictionary<int, List<SingleDoorPosition>> doorsInRoom = _roomDoors[roomNumber];
+        foreach (List<SingleDoorPosition> singleDoorPositions in doorsInRoom.Values)
+        {
+            foreach (SingleDoorPosition singleDoorPosition in singleDoorPositions)
+            {
+                if(singleDoorPosition.doorNumber == 0)
+                    singleDoorPosition.SetDoorToClose();
             }
         }
     }

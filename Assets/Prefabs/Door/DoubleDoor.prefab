@@ -49,14 +49,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _otherDoor: {fileID: 0}
   _doorOpenSprite: {fileID: -836577275992906049, guid: 8075096d560d1a742a9c73fcd7a938eb, type: 3}
+  _doorClosedSprite: {fileID: -3939724472882138839, guid: f4cbbbbb24966d34aa53622e39237c94, type: 3}
   _spriteRenderer: {fileID: 1076873392149283944}
   _playerPositionOnOut: {fileID: 7257747100009102043}
   isDoorOpen: 0
   roomNumber: 0
   doorNumber: 0
   otherDoorRoomNumber: 0
+  isFirstDoor: 0
   isFinalDoor: 0
-  playerSystemSo: {fileID: 11400000, guid: b42972874f912ca47a5745f157580007, type: 2}
 --- !u!65 &6589836344069618149
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -309,14 +310,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _otherDoor: {fileID: 0}
   _doorOpenSprite: {fileID: -836577275992906049, guid: 8075096d560d1a742a9c73fcd7a938eb, type: 3}
+  _doorClosedSprite: {fileID: -3939724472882138839, guid: f4cbbbbb24966d34aa53622e39237c94, type: 3}
   _spriteRenderer: {fileID: 2749494834009059674}
   _playerPositionOnOut: {fileID: 8637478267031890381}
   isDoorOpen: 0
   roomNumber: 0
   doorNumber: 0
   otherDoorRoomNumber: 0
+  isFirstDoor: 0
   isFinalDoor: 0
-  playerSystemSo: {fileID: 11400000, guid: b42972874f912ca47a5745f157580007, type: 2}
 --- !u!65 &844326519946454475
 BoxCollider:
   m_ObjectHideFlags: 0

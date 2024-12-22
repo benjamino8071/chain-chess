@@ -26,6 +26,7 @@ public class ElPlayerSystem : ElDependency
     private ElRoomNumberUISystem _roomNumberUISystem;
     private ElScoreEntryUISystem _scoreEntryUISystem;
     private ElShopSystem _shopSystem;
+    private ElDoorsSystem _doorsSystem;
 
     private ElPromoUIController _promoUIController;
     
@@ -119,6 +120,11 @@ public class ElPlayerSystem : ElDependency
         if (Creator.TryGetDependency(out ElShopSystem shopSystem))
         {
             _shopSystem = shopSystem;
+        }
+
+        if (Creator.TryGetDependency(out ElDoorsSystem doorsSystem))
+        {
+            _doorsSystem = doorsSystem;
         }
         
         _currentRoomStartPiece = Creator.playerSystemSo.startingPiece;
@@ -433,7 +439,7 @@ public class ElPlayerSystem : ElDependency
                     _movesInThisTurn.Clear();
                     _capturedPieces.Clear();
                     _capturedPieces.AddFirst(_currentRoomStartPiece);
-                    
+                    _doorsSystem.SetRoomDoorsClosed(GetRoomNumber());
                     SetState(States.Idle);
                 }
                 else
