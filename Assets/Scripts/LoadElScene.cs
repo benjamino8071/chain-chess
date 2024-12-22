@@ -10,6 +10,7 @@ public class LoadElScene : MonoBehaviour
     public PlayerSystem_SO playerSystemSo;
     public Timer_SO timerSo;
     public Enemy_SO enemySo;
+    public Shop_SO shopSo;
     
     public bool resetCachedDataOnStart;
     
@@ -24,6 +25,7 @@ public class LoadElScene : MonoBehaviour
             playerSystemSo.ResetData();
             timerSo.ResetData();
             enemySo.ResetData();
+            shopSo.ResetData();
         }
         
         SceneManager.sceneLoaded += SceneManagerOnsceneLoaded;

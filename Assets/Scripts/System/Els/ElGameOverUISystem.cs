@@ -69,12 +69,6 @@ public class ElGameOverUISystem : ElDependency
             {
                 button.onClick.AddListener(() =>
                 {
-                    Creator.enemySo.ResetData();
-                    Creator.playerSystemSo.levelNumberSaved = 0;
-                    Creator.playerSystemSo.roomNumberSaved = 0;
-                    Creator.timerSo.currentTime = Creator.timerSo.startingTime;
-                    Creator.shopSo.ResetCaches();
-                    
                     SceneManager.LoadScene("MainMenuScene");
                 });
             }

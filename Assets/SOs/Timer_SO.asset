@@ -12,10 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff9b430cf0d68e649a1dd30eefe80598, type: 3}
   m_Name: Timer_SO
   m_EditorClassIdentifier: 
-  maxTime: 100
-  contFromRoomPenalty: 10
-  levelCompleteBonus: 0
-  currentTime: 95.62727
-  pieceCaptureBonus: 0
+  startingTime: 100
+  currentTime: 100
+  playerRespawnDivideCost: 2
   timerMultiplier: 1
-  pieceCapturedSfx: {fileID: 8300000, guid: 09f7ee07b81774e2ea9e35333571d914, type: 3}

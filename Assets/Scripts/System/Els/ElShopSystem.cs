@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -86,10 +85,8 @@ public class ElShopSystem : ElDependency
                 SpriteRenderer shopItemSprRend = shopItem.GetComponent<SpriteRenderer>();
                 
                 //So if the player has respawned, then we do NOT want to change the cache
-                if (Creator.shopSo.artefactsPositions.Count > 0)
+                if (Creator.shopSo.artefactsPositions.Count + Creator.shopSo.upgradesPositions.Count + Creator.shopSo.itemsTakenInLevelCount >= 4)
                 {
-                    Debug.Log("Cached artefact positions already exist");
-                    
                     //Just set the right sprite to shopItem based on whether it is in artefacts or upgrades
                     if (Creator.shopSo.artefactsPositions.ContainsKey(shopItem.transform.position))
                     {
@@ -108,6 +105,7 @@ public class ElShopSystem : ElDependency
                                 shopItemSprRend.sprite = Creator.shopSo.useCapturedPieceStraightAwaySprite;
                                 break;
                         }
+                        Creator.shopSo.artefactsSprites[shopItem.transform.position] = shopItemSprRend;
                     }
                     else if (Creator.shopSo.upgradesPositions.ContainsKey(shopItem.transform.position))
                     {
@@ -126,14 +124,12 @@ public class ElShopSystem : ElDependency
                                 shopItemSprRend.sprite = Creator.shopSo.reduceRespawnCostSprite;
                                 break;
                         }
+                        Creator.shopSo.upgradesSprites[shopItem.transform.position] = shopItemSprRend;
                     }
                 }
                 else
                 {
-                    Debug.Log("Cached artefact positions don't exist");
-                    
                     int isArtefact = Random.Range(0, 2);
-                    Debug.Log("Is artefact? "+isArtefact);
                     
                     if (isArtefact == 1)
                     {
@@ -236,8 +232,9 @@ public class ElShopSystem : ElDependency
                 int cost = _artefactsCost[Creator.shopSo.artefactsPositions[pos]];
                 _timerUISystem.RemoveTime(cost);
                 
-                Creator.shopSo.artefactsSprites[pos].gameObject.SetActive(false);
+                Creator.shopSo.artefactsSprites[pos].sprite = default;
                 Creator.shopSo.artefactsPositions.Remove(pos);
+                Creator.shopSo.itemsTakenInLevelCount++;
                 return;
             }
         }
@@ -275,9 +272,10 @@ public class ElShopSystem : ElDependency
                 
                 int cost = _upgradesCost[Creator.shopSo.upgradesPositions[pos]];
                 _timerUISystem.RemoveTime(cost);
-
-                Creator.shopSo.upgradesSprites[pos].gameObject.SetActive(false);
+                
+                Creator.shopSo.upgradesSprites[pos].sprite = default;
                 Creator.shopSo.upgradesPositions.Remove(pos);
+                Creator.shopSo.itemsTakenInLevelCount++;
                 return;
             }
         }

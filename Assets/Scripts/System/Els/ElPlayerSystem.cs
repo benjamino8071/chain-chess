@@ -462,6 +462,7 @@ public class ElPlayerSystem : ElDependency
                 //Wait 1 second before we load the next level
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
+                    Creator.shopSo.ResetData();
                     Creator.enemySo.ResetData();
                     Creator.playerSystemSo.levelNumberSaved++;
                     Creator.playerSystemSo.roomNumberSaved = 0;

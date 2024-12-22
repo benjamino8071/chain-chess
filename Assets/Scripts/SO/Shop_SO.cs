@@ -27,15 +27,16 @@ public class Shop_SO : ScriptableObject
     [NonSerialized] public Dictionary<Vector3, ElShopSystem.ArtefactTypes> artefactsPositions = new();
     [NonSerialized] public Dictionary<Vector3, SpriteRenderer> artefactsSprites = new();
     [NonSerialized] public List<ElShopSystem.ArtefactTypes> artefactsChosen = new(3);
+    [NonSerialized] public int itemsTakenInLevelCount;
 
-    [Button]
-    public void ResetCaches()
+    public void ResetData()
     {
         upgradesPositions.Clear();
         upgradesSprites.Clear();
         artefactsPositions.Clear();
         artefactsSprites.Clear();
         artefactsChosen.Clear();
+        itemsTakenInLevelCount = 0;
         Debug.Log("Shop_SO caches cleared");
     }
 }
