@@ -69,7 +69,7 @@ public class ElTimerUISystem : ElDependency
             if (Creator.timerSo.currentTime <= 0)
             {
                 timeText = "0.00s";
-                _pauseUISystem.Hide();
+                _pauseUISystem.Hide(false);
                 _playerSystem.SetState(ElPlayerSystem.States.TimerExpired);
             }
             SetTimerText(timeText);

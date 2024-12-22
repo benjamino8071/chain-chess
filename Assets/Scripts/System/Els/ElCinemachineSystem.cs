@@ -79,11 +79,6 @@ public class ElCinemachineSystem : ElDependency
         SwitchState(Creator.playerSystemSo.roomNumberSaved);
 
         yield return new WaitForSeconds(1.6f);
-        
-        if (Creator.startTimerOnLoad)
-        {
-            _timerUISystem.StartTimer();
-        }
     }
 
     public void SwitchState(int roomNumber)

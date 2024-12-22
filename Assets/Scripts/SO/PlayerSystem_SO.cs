@@ -18,6 +18,7 @@ public class PlayerSystem_SO : ScriptableObject
     public float xValueToStartOn;
     public int roomNumberSaved;
     public bool firstMoveMadeWhileShowingMainMenu;
+    public bool moveMadeInNewRoom;
     public Piece startingPiece = Piece.NotChosen;
 
     public void ResetData()
@@ -25,6 +26,7 @@ public class PlayerSystem_SO : ScriptableObject
         levelNumberSaved = 0;
         roomNumberSaved = 0;
         xValueToStartOn = 5.5f;
+        moveMadeInNewRoom = false;
         Debug.Log("PlayerSystem_SO cache reset");
     }
 }

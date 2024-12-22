@@ -54,13 +54,13 @@ public class ElPauseUISystem : ElDependency
             }
             else
             {
-                Hide();
+                Hide(true);
                 _playerSystem.SetState(ElPlayerSystem.States.Idle);
             }
         });
         
         UpdateTextInfo();
-        Hide();
+        Hide(false);
     }
 
     public override void GameEarlyUpdate(float dt)
@@ -74,10 +74,11 @@ public class ElPauseUISystem : ElDependency
         _pauseGUI.gameObject.SetActive(true);
     }
 
-    public void Hide()
+    public void Hide(bool startTimer)
     {
         _pauseGUI.gameObject.SetActive(false);
-        _timerUISystem.StartTimer();
+        if(startTimer && Creator.playerSystemSo.moveMadeInNewRoom)
+            _timerUISystem.StartTimer();
     }
     
     public void UpdateTextInfo()

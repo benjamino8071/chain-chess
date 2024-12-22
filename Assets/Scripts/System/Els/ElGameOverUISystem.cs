@@ -68,7 +68,7 @@ public class ElGameOverUISystem : ElDependency
         _restartRoomButton.gameObject.SetActive(showRestartRoom);
         _titleText.text = message;
         
-        _pauseUISystem.Hide();
+        _pauseUISystem.Hide(false);
         _timerUISystem.HideTimerChangeAmount();
         _gameOverUI.gameObject.SetActive(true);
     }

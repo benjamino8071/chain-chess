@@ -122,7 +122,7 @@ public class ElScoreEntryUISystem : ElDependency
     public void Show(double playerScore)
     {
         _playerScore = playerScore;
-        _pauseUISystem.Hide();
+        _pauseUISystem.Hide(false);
         _scoreEntryUI.gameObject.SetActive(true);
     }
 

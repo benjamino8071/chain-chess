@@ -407,6 +407,7 @@ public class ElPlayerSystem : ElDependency
                     _chainUISystem.NewRoomClearChain();
                     _chainUISystem.ResetPosition();
                     _chainUISystem.ShowNewPiece(_currentRoomStartPiece, true);
+                    Creator.playerSystemSo.moveMadeInNewRoom = false;
                     SetState(States.DoorWalk);
                 }
                 break;
@@ -574,6 +575,7 @@ public class ElPlayerSystem : ElDependency
             _jumpPosition = positionRequested;
             _moveSpeed = Creator.playerSystemSo.moveSpeed;
             _timerUISystem.StartTimer();
+            Creator.playerSystemSo.moveMadeInNewRoom = true;
             SetState(States.Moving);
             
             TriggerJumpAnimation();
@@ -637,6 +639,7 @@ public class ElPlayerSystem : ElDependency
                 _jumpPosition = positionRequested;
                 _moveSpeed = Creator.playerSystemSo.moveSpeed;
                 _timerUISystem.StartTimer();
+                Creator.playerSystemSo.moveMadeInNewRoom = true;
                 SetState(States.Moving);
                 
                 TriggerJumpAnimation();
