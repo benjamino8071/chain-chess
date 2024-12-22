@@ -44,7 +44,7 @@ public class ElCreator : Creator
 
         if (enemySo.cachedSpawnPoints.Count == 0)
         { 
-            shopSo.shopRoomNumber = randomGenerator.Next(2, 9);
+            shopSo.shopRoomNumber = randomGenerator.Next(2, 8);
         }
         
         Camera.main.backgroundColor = Color.black;

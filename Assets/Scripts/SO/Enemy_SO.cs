@@ -21,7 +21,7 @@ public class Enemy_SO : ScriptableObject
     public Material captureMat;
 
     //Key = spawn point, Value = (chosen piece, room number)
-    public Dictionary<Vector3, (Piece, int)> cachedSpawnPoints = new();
+    public Dictionary<Vector3, (Piece, int, ElEnemyController.PieceEffectType)> cachedSpawnPoints = new();
 
     public void ResetData()
     {

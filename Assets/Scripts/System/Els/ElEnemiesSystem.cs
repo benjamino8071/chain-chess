@@ -37,7 +37,7 @@ public class ElEnemiesSystem : ElDependency
                 if (roomNum == Creator.shopSo.shopRoomNumber)
                     continue;
                 
-                Dictionary<Vector3, (Piece, int)> positions = new();
+                Dictionary<Vector3, (Piece, int, ElEnemyController.PieceEffectType)> positions = new();
                 while (positions.Count < 3 + roomNum + Creator.playerSystemSo.levelNumberSaved)
                 {
                     int xPosTemp = Random.Range(2, 10);
@@ -86,14 +86,35 @@ public class ElEnemiesSystem : ElDependency
                         int indexChosen = Random.Range(0, selectedPiece.Count);
                         Piece chosenPiece = selectedPiece[indexChosen];
                         
-                        positions.Add(chosenPos, (chosenPiece, roomNum));
+                        List<ElEnemyController.PieceEffectType> pieceEffectTypes = new()
+                        {
+                            ElEnemyController.PieceEffectType.None,
+                        };
+
+                        if (Creator.playerSystemSo.levelNumberSaved >= 1)
+                        {
+                            pieceEffectTypes.Add(ElEnemyController.PieceEffectType.Glitched);
+                        }
+                        if (Creator.playerSystemSo.levelNumberSaved >= 2)
+                        {
+                            pieceEffectTypes.Add(ElEnemyController.PieceEffectType.Capture);
+                        }
+                        if (Creator.playerSystemSo.levelNumberSaved >= 3)
+                        {
+                            pieceEffectTypes.Add(ElEnemyController.PieceEffectType.Chain);
+                        }
+
+                        // Generate a random index
+                        int index = Creator.randomGenerator.Next(0, pieceEffectTypes.Count);
+                        
+                        positions.Add(chosenPos, (chosenPiece, roomNum, pieceEffectTypes[index]));
 
                     }
                 }
 
-                foreach (KeyValuePair<Vector3,(Piece, int)> kvp in positions)
+                foreach (KeyValuePair<Vector3,(Piece, int, ElEnemyController.PieceEffectType)> kvp in positions)
                 {
-                    Creator.enemySo.cachedSpawnPoints[kvp.Key] = (kvp.Value.Item1, kvp.Value.Item2);
+                    Creator.enemySo.cachedSpawnPoints[kvp.Key] = (kvp.Value.Item1, kvp.Value.Item2, kvp.Value.Item3);
                 }
             }
         }
@@ -101,7 +122,7 @@ public class ElEnemiesSystem : ElDependency
         List<SingleDoorPosition> doors = _doorsSystem.GetDoorPositions().ToList();
         doors.Sort((a, b) => a.transform.position.y.CompareTo(b.transform.position.y));
 
-        foreach (KeyValuePair<Vector3, (Piece, int)> cachedSpawn in Creator.enemySo.cachedSpawnPoints)
+        foreach (KeyValuePair<Vector3, (Piece, int, ElEnemyController.PieceEffectType)> cachedSpawn in Creator.enemySo.cachedSpawnPoints)
         {
             if(cachedSpawn.Value.Item2 < Creator.playerSystemSo.roomNumberSaved)
                 continue;
@@ -109,7 +130,7 @@ public class ElEnemiesSystem : ElDependency
             ElEnemyController enemyController = new ElEnemyController();
             enemyController.GameStart(elCreator);
             
-            enemyController.SetEnemyInstance(cachedSpawn.Key, cachedSpawn.Value.Item1, doors);
+            enemyController.SetEnemyInstance(cachedSpawn.Key, cachedSpawn.Value.Item1, cachedSpawn.Value.Item3, doors);
             _enemyControllers.Add(enemyController);
             _haveEnemyControllersFinishedMove.Add(enemyController, false);
         }

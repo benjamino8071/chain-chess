@@ -159,7 +159,16 @@ public class ElPlayerSystem : ElDependency
 
         _capturedPieces.AddFirst(_currentRoomStartPiece);
 
-        SetState(States.Idle);
+        if (Creator.playerSystemSo.levelNumberSaved > 0 && Creator.playerSystemSo.roomNumberSaved == 0 && Creator.timerSo.timePenaltyOnReload == 0)
+        {
+            UpdateSprite(_currentRoomStartPiece);
+            TriggerFadeInAnimation();
+            SetState(States.FadeInAfterDoorWalk);
+        }
+        else
+        {
+            SetState(States.Idle);
+        }
     }
 
     private float Evaluate(float x)
@@ -551,7 +560,8 @@ public class ElPlayerSystem : ElDependency
             
             if (!Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu)
             {
-                SceneManager.UnloadSceneAsync("MainMenuScene");
+                if(SceneManager.sceneCount > 1)
+                    SceneManager.UnloadSceneAsync("MainMenuScene");
                 Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu = true;
             }
             
@@ -613,7 +623,8 @@ public class ElPlayerSystem : ElDependency
                     
                 if (!Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu)
                 {
-                    SceneManager.UnloadSceneAsync("MainMenuScene");
+                    if(SceneManager.sceneCount > 1)
+                        SceneManager.UnloadSceneAsync("MainMenuScene");
                     Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu = true;
                 }
                 

@@ -83,7 +83,7 @@ public class ElEnemyController : ElController
         SetState(States.WaitingForTurn);
     }
     
-    public void SetEnemyInstance(Vector3 position, Piece piece, List<SingleDoorPosition> doorPositionsOrdered)
+    public void SetEnemyInstance(Vector3 position, Piece piece, PieceEffectType pieceEffectType, List<SingleDoorPosition> doorPositionsOrdered)
     {
         _enemyInstance =
             Creator.InstantiateGameObject(Creator.enemyPrefab, position, Quaternion.identity).transform;
@@ -111,18 +111,7 @@ public class ElEnemyController : ElController
         }
 
         SetPiece(piece);
-
-        List<PieceEffectType> pieceEffectTypes = new()
-        {
-            PieceEffectType.None,
-            // PieceEffectType.Glitched,
-            // PieceEffectType.Chain,
-            // PieceEffectType.Capture,
-        };
-
-        // Generate a random index
-        int index = Creator.randomGenerator.Next(0, pieceEffectTypes.Count);
-        SetPieceEffectType(pieceEffectTypes[index]);
+        SetPieceEffectType(pieceEffectType);
     }
 
     private void SetPieceEffectType(PieceEffectType pieceEffectType)
