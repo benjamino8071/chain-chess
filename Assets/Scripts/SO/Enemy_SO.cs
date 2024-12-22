@@ -23,10 +23,9 @@ public class Enemy_SO : ScriptableObject
     //Key = spawn point, Value = (chosen piece, room number)
     public Dictionary<Vector3, (Piece, int)> cachedSpawnPoints = new();
 
-    [Button]
-    public void ResetCachedSpawnPoints()
+    public void ResetData()
     {
         cachedSpawnPoints.Clear();
-        Debug.Log("Cached enemy spawn points cleared");
+        Debug.Log("Enemy_SO cache reset");
     }
 }

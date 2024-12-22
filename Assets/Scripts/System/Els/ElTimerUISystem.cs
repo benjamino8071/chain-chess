@@ -37,11 +37,6 @@ public class ElTimerUISystem : ElDependency
         _timerBonusText = GameObject.FindWithTag("TimerBonus").GetComponent<TextMeshProUGUI>();
         _multiplierAmountText = GameObject.FindWithTag("MultiplierAmount").GetComponent<TextMeshProUGUI>();
         
-        if (Creator.playerSystemSo.roomNumberSaved == 0 && Creator.playerSystemSo.levelNumberSaved == 0)
-        {
-            Creator.timerSo.currentTime = Creator.timerSo.maxTime;
-        }
-        
         string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
         SetTimerText(timeText);
         
@@ -76,7 +71,7 @@ public class ElTimerUISystem : ElDependency
         _timeText.SetText(timeText);
     }
 
-    public void AddTime(int pieceValue)
+    public void AddTime(float pieceValue)
     {
         float amountToAdd = pieceValue * Creator.timerSo.timerMultiplier;
         Creator.timerSo.currentTime += amountToAdd;
@@ -107,7 +102,7 @@ public class ElTimerUISystem : ElDependency
         _audioSystem.PlayEnemyCapturedSfx(pitch);
     }
 
-    public void RemoveTime(int amount)
+    public void RemoveTime(float amount)
     {
         Creator.timerSo.currentTime -= amount;
         

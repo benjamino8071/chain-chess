@@ -68,10 +68,10 @@ public class ElScoreEntryUISystem : ElDependency
             var scoreResponse = await LeaderboardsService.Instance.AddPlayerScoreAsync(Creator.scoreboardSo.ScoreboardID, _playerScore);
             Debug.Log(JsonConvert.SerializeObject(scoreResponse));
             
-            Creator.enemySo.ResetCachedSpawnPoints();
+            Creator.enemySo.ResetData();
             Creator.playerSystemSo.levelNumberSaved = 0;
             Creator.playerSystemSo.roomNumberSaved = 0;
-            Creator.timerSo.currentTime = Creator.timerSo.maxTime;
+            Creator.timerSo.currentTime = Creator.timerSo.startingTime;
                     
             SceneManager.LoadScene("MainMenuScene");
         }

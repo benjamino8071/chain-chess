@@ -30,11 +30,6 @@ public class ElEnemiesSystem : ElDependency
             _turnSystem = turnSystem;
         }
 
-        if (Creator.playerSystemSo.roomNumberSaved == 0)
-        {
-            Creator.enemySo.ResetCachedSpawnPoints();
-        }
-
         if (Creator.enemySo.cachedSpawnPoints.Count == 0)
         { 
             for (int roomNum = 0; roomNum < 9; roomNum++)

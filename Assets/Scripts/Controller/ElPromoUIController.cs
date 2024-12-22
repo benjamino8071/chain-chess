@@ -31,7 +31,7 @@ public class ElPromoUIController : ElController
                 promoButton.onClick.AddListener(() =>
                 {
                     SelectPromotion(Piece.Queen);
-                    _timerUISystem.RemoveTime(9);
+                    _timerUISystem.RemoveTime(Creator.timerSo.capturePieceTimeRemove[Piece.Queen]);
                 });
             }
             else if (promoButton.CompareTag("ChooseRook"))
@@ -39,7 +39,7 @@ public class ElPromoUIController : ElController
                 promoButton.onClick.AddListener(() =>
                 {
                     SelectPromotion(Piece.Rook);
-                    _timerUISystem.RemoveTime(5);
+                    _timerUISystem.RemoveTime(Creator.timerSo.capturePieceTimeRemove[Piece.Rook]);
                 });
             }
             else if (promoButton.CompareTag("ChooseKnight"))
@@ -47,7 +47,7 @@ public class ElPromoUIController : ElController
                 promoButton.onClick.AddListener(() =>
                 {
                     SelectPromotion(Piece.Knight);
-                    _timerUISystem.RemoveTime(3);
+                    _timerUISystem.RemoveTime(Creator.timerSo.capturePieceTimeRemove[Piece.Knight]);
                 });
             }
             else if (promoButton.CompareTag("ChooseBishop"))
@@ -55,7 +55,7 @@ public class ElPromoUIController : ElController
                 promoButton.onClick.AddListener(() =>
                 {
                     SelectPromotion(Piece.Bishop);
-                    _timerUISystem.RemoveTime(3);
+                    _timerUISystem.RemoveTime(Creator.timerSo.capturePieceTimeRemove[Piece.Bishop]);
                 });
             }
         }

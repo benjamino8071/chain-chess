@@ -50,7 +50,7 @@ public class ElCreator : Creator
         //     shopSo.shopRoomNumber = randomGenerator.Next(1, 1);
         // }
         
-        shopSo.shopRoomNumber = randomGenerator.Next(1, 1);
+        shopSo.shopRoomNumber = randomGenerator.Next(1, 2);
         
         Camera.main.backgroundColor = Color.black;
 
@@ -98,7 +98,6 @@ public class ElCreator : Creator
         _dependencies.Add(new ElChainUISystem());
         _dependencies.Add(new ElCinemachineSystem());
         _dependencies.Add(new ElDoorsSystem());
-        _dependencies.Add(new ElShopSystem());
         _dependencies.Add(new ElGridSystem());
         _dependencies.Add(new ElEnemiesSystem());
         _dependencies.Add(new ElPauseUISystem());
@@ -107,6 +106,7 @@ public class ElCreator : Creator
         _dependencies.Add(new ElScoreEntryUISystem());
         _dependencies.Add(new ElTimerUISystem());
         _dependencies.Add(new ElRoomNumberUISystem());
+        _dependencies.Add(new ElShopSystem());
     }
 
     public void ShowGUITop()

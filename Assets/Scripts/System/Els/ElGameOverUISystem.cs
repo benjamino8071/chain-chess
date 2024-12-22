@@ -59,8 +59,9 @@ public class ElGameOverUISystem : ElDependency
                 _restartRoomButton.onClick.AddListener(() =>
                 {
                     Creator.playerSystemSo.startingPiece = Piece.Queen;
-                    
-                    Creator.timerSo.currentTime -= Creator.timerSo.contFromRoomPenalty;
+
+                    float amountToRemove = Creator.timerSo.currentTime / Creator.timerSo.playerRespawnDivideCost;
+                    Creator.timerSo.currentTime -= amountToRemove;
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 });
             }
@@ -68,10 +69,11 @@ public class ElGameOverUISystem : ElDependency
             {
                 button.onClick.AddListener(() =>
                 {
-                    Creator.enemySo.ResetCachedSpawnPoints();
+                    Creator.enemySo.ResetData();
                     Creator.playerSystemSo.levelNumberSaved = 0;
                     Creator.playerSystemSo.roomNumberSaved = 0;
-                    Creator.timerSo.currentTime = Creator.timerSo.maxTime;
+                    Creator.timerSo.currentTime = Creator.timerSo.startingTime;
+                    Creator.shopSo.ResetCaches();
                     
                     SceneManager.LoadScene("MainMenuScene");
                 });

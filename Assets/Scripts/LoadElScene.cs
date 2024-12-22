@@ -8,12 +8,23 @@ public class LoadElScene : MonoBehaviour
     public GameObject loadingScreen;
 
     public PlayerSystem_SO playerSystemSo;
+    public Timer_SO timerSo;
+    public Enemy_SO enemySo;
+    
+    public bool resetCachedDataOnStart;
     
     private void Start()
     {
         playerSystemSo.firstMoveMadeWhileShowingMainMenu = false;
         
         tempCam.backgroundColor = Color.black;
+
+        if (resetCachedDataOnStart)
+        {
+            playerSystemSo.ResetData();
+            timerSo.ResetData();
+            enemySo.ResetData();
+        }
         
         SceneManager.sceneLoaded += SceneManagerOnsceneLoaded;
         SceneManager.sceneUnloaded += SceneManagerOnsceneUnloaded;

@@ -2,14 +2,54 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ElShopSystem : ElDependency
 {
+    private ElTimerUISystem _timerUISystem;
+    
+    public enum UpgradeTypes
+    {
+        ReducePromotionCost,
+        IncreaseMultiplierAmount,
+        IncreaseBaseAmountGained,
+        ReduceRespawnCost
+    }
+    
+    public enum ArtefactTypes
+    {
+        EnemyLineOfSight,
+        DestroyChainStayAlive,
+        UseCapturedPieceStraightAway,
+        CaptureKingClearRoom
+    }
+
+    private readonly Dictionary<UpgradeTypes, int> _upgradesCost = new()
+    {
+        { UpgradeTypes.ReducePromotionCost, 0 },
+        { UpgradeTypes.IncreaseMultiplierAmount, 0},
+        { UpgradeTypes.IncreaseBaseAmountGained , 0},
+        { UpgradeTypes.ReduceRespawnCost, 0}
+    };
+
+    private readonly Dictionary<ArtefactTypes, int> _artefactsCost = new()
+    {
+        { ArtefactTypes.EnemyLineOfSight, 0},
+        { ArtefactTypes.DestroyChainStayAlive, 0},
+        { ArtefactTypes.UseCapturedPieceStraightAway, 0},
+        { ArtefactTypes.CaptureKingClearRoom, 0}
+    };
+    
     private Dictionary<Vector3, ShopPiece> _shopPiecesPositions = new();
     
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
+
+        if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
+        {
+            _timerUISystem = timerUISystem;
+        }
         
         GameObject shop = GameObject.FindWithTag("Shop");
 
@@ -42,7 +82,120 @@ public class ElShopSystem : ElDependency
             }
             else
             {
-                Creator.InstantiateGameObjectWithParent(Creator.shopItemPrefab, childObj);
+                GameObject shopItem = Creator.InstantiateGameObjectWithParent(Creator.shopItemPrefab, childObj);
+                SpriteRenderer shopItemSprRend = shopItem.GetComponent<SpriteRenderer>();
+                
+                //So if the player has respawned, then we do NOT want to change the cache
+                if (Creator.shopSo.artefactsPositions.Count > 0)
+                {
+                    Debug.Log("Cached artefact positions already exist");
+                    
+                    //Just set the right sprite to shopItem based on whether it is in artefacts or upgrades
+                    if (Creator.shopSo.artefactsPositions.ContainsKey(shopItem.transform.position))
+                    {
+                        switch (Creator.shopSo.artefactsPositions[shopItem.transform.position])
+                        {
+                            case ArtefactTypes.CaptureKingClearRoom:
+                                shopItemSprRend.sprite = Creator.shopSo.captureKingClearRoomSprite;
+                                break;
+                            case ArtefactTypes.DestroyChainStayAlive:
+                                shopItemSprRend.sprite = Creator.shopSo.destroyChainStayAliveSprite;
+                                break;
+                            case ArtefactTypes.EnemyLineOfSight:
+                                shopItemSprRend.sprite = Creator.shopSo.enemyLineOfSightSprite;
+                                break;
+                            case ArtefactTypes.UseCapturedPieceStraightAway:
+                                shopItemSprRend.sprite = Creator.shopSo.useCapturedPieceStraightAwaySprite;
+                                break;
+                        }
+                    }
+                    else if (Creator.shopSo.upgradesPositions.ContainsKey(shopItem.transform.position))
+                    {
+                        switch (Creator.shopSo.upgradesPositions[shopItem.transform.position])
+                        {
+                            case UpgradeTypes.IncreaseMultiplierAmount:
+                                shopItemSprRend.sprite = Creator.shopSo.increaseMultiplierAmountSprite;
+                                break;
+                            case UpgradeTypes.IncreaseBaseAmountGained:
+                                shopItemSprRend.sprite = Creator.shopSo.increaseBaseAmountGainedSprite;
+                                break;
+                            case UpgradeTypes.ReducePromotionCost:
+                                shopItemSprRend.sprite = Creator.shopSo.reducePromotionCostSprite;
+                                break;
+                            case UpgradeTypes.ReduceRespawnCost:
+                                shopItemSprRend.sprite = Creator.shopSo.reduceRespawnCostSprite;
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.Log("Cached artefact positions don't exist");
+                    
+                    int isArtefact = Random.Range(0, 2);
+                    Debug.Log("Is artefact? "+isArtefact);
+                    
+                    if (isArtefact == 1)
+                    {
+                        List<ArtefactTypes> types = new()
+                        {
+                            ArtefactTypes.EnemyLineOfSight,
+                            ArtefactTypes.DestroyChainStayAlive,
+                            ArtefactTypes.UseCapturedPieceStraightAway,
+                            ArtefactTypes.CaptureKingClearRoom
+                        };
+                        int index = Random.Range(0, types.Count);
+                        
+                        Creator.shopSo.artefactsPositions.Add(shopItem.transform.position, types[index]);
+                        Creator.shopSo.artefactsSprites.Add(shopItem.transform.position, shopItemSprRend);
+                        
+                        switch (types[index])
+                        {
+                            case ArtefactTypes.CaptureKingClearRoom:
+                                shopItemSprRend.sprite = Creator.shopSo.captureKingClearRoomSprite;
+                                break;
+                            case ArtefactTypes.DestroyChainStayAlive:
+                                shopItemSprRend.sprite = Creator.shopSo.destroyChainStayAliveSprite;
+                                break;
+                            case ArtefactTypes.EnemyLineOfSight:
+                                shopItemSprRend.sprite = Creator.shopSo.enemyLineOfSightSprite;
+                                break;
+                            case ArtefactTypes.UseCapturedPieceStraightAway:
+                                shopItemSprRend.sprite = Creator.shopSo.useCapturedPieceStraightAwaySprite;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        List<UpgradeTypes> types = new()
+                        {
+                            UpgradeTypes.ReducePromotionCost,
+                            UpgradeTypes.IncreaseMultiplierAmount,
+                            UpgradeTypes.IncreaseBaseAmountGained,
+                            UpgradeTypes.ReduceRespawnCost
+                        };
+                        int index = Random.Range(0, types.Count);
+                        
+                        Creator.shopSo.upgradesPositions.Add(shopItem.transform.position, types[index]);
+                        Creator.shopSo.upgradesSprites.Add(shopItem.transform.position, shopItemSprRend);
+                        
+                        switch (types[index])
+                        {
+                            case UpgradeTypes.IncreaseMultiplierAmount:
+                                shopItemSprRend.sprite = Creator.shopSo.increaseMultiplierAmountSprite;
+                                break;
+                            case UpgradeTypes.IncreaseBaseAmountGained:
+                                shopItemSprRend.sprite = Creator.shopSo.increaseBaseAmountGainedSprite;
+                                break;
+                            case UpgradeTypes.ReducePromotionCost:
+                                shopItemSprRend.sprite = Creator.shopSo.reducePromotionCostSprite;
+                                break;
+                            case UpgradeTypes.ReduceRespawnCost:
+                                shopItemSprRend.sprite = Creator.shopSo.reduceRespawnCostSprite;
+                                break;
+                        }
+                    }
+                }
             }
         }
     }
@@ -60,5 +213,73 @@ public class ElShopSystem : ElDependency
         
         piece = Creator.playerSystemSo.startingPiece;
         return false;
+    }
+
+    public void TryGetArtefactAtPosition(Vector3 playerPosition)
+    {
+        foreach (Vector3 pos in Creator.shopSo.artefactsPositions.Keys)
+        {
+            if ((int)pos.x == (int)playerPosition.x && (int)pos.y == (int)playerPosition.y)
+            {
+                switch (Creator.shopSo.artefactsPositions[pos])
+                {
+                    case ArtefactTypes.CaptureKingClearRoom:
+                        break;
+                    case ArtefactTypes.DestroyChainStayAlive:
+                        break;
+                    case ArtefactTypes.EnemyLineOfSight:
+                        break;
+                    case ArtefactTypes.UseCapturedPieceStraightAway:
+                        break;
+                }
+                
+                int cost = _artefactsCost[Creator.shopSo.artefactsPositions[pos]];
+                _timerUISystem.RemoveTime(cost);
+                
+                Creator.shopSo.artefactsSprites[pos].gameObject.SetActive(false);
+                Creator.shopSo.artefactsPositions.Remove(pos);
+                return;
+            }
+        }
+    }
+
+    public void TryGetUpgradeAtPosition(Vector3 playerPosition)
+    {
+        foreach (Vector3 pos in Creator.shopSo.upgradesPositions.Keys)
+        {
+            if ((int)pos.x == (int)playerPosition.x && (int)pos.y == (int)playerPosition.y)
+            {
+                switch (Creator.shopSo.upgradesPositions[pos])
+                {
+                    case UpgradeTypes.IncreaseMultiplierAmount:
+                        Creator.timerSo.timerMultiplier *= 1.25f;
+                        break;
+                    case UpgradeTypes.IncreaseBaseAmountGained:
+                        List<Piece> enemyPieces = Creator.timerSo.capturePieceTimeAdd.Keys.ToList();
+                        foreach (Piece piece in enemyPieces)
+                        {
+                            Creator.timerSo.capturePieceTimeAdd[piece] *= 1.25f;
+                        }
+                        break;
+                    case UpgradeTypes.ReducePromotionCost:
+                        List<Piece> promoPieces = Creator.timerSo.capturePieceTimeAdd.Keys.ToList();
+                        foreach (Piece piece in promoPieces)
+                        {
+                            Creator.timerSo.capturePieceTimeAdd[piece] *= 1.25f;
+                        }
+                        break;
+                    case UpgradeTypes.ReduceRespawnCost:
+                        Creator.timerSo.playerRespawnDivideCost += 1;
+                        break;
+                }
+                
+                int cost = _upgradesCost[Creator.shopSo.upgradesPositions[pos]];
+                _timerUISystem.RemoveTime(cost);
+
+                Creator.shopSo.upgradesSprites[pos].gameObject.SetActive(false);
+                Creator.shopSo.upgradesPositions.Remove(pos);
+                return;
+            }
+        }
     }
 }

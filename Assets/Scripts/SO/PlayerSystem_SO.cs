@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu]
 public class PlayerSystem_SO : ScriptableObject
@@ -21,5 +20,11 @@ public class PlayerSystem_SO : ScriptableObject
     public bool firstMoveMadeWhileShowingMainMenu;
     public Piece startingPiece = Piece.NotChosen;
 
-    public AudioClip pieceMovedSfx;
+    public void ResetData()
+    {
+        levelNumberSaved = 0;
+        roomNumberSaved = 0;
+        xValueToStartOn = 5.5f;
+        Debug.Log("PlayerSystem_SO cache reset");
+    }
 }

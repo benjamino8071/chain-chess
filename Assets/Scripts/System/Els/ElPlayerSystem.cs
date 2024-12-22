@@ -288,27 +288,7 @@ public class ElPlayerSystem : ElDependency
                         //Add this player to the 'captured pieces' list
                         Piece enemyPiece = enemyController.GetPiece();
                         
-                        switch (enemyPiece)
-                        {
-                            case Piece.Pawn:
-                                _timerUISystem.AddTime(1);
-                                break;
-                            case Piece.Knight:
-                                _timerUISystem.AddTime(3);
-                                break;
-                            case Piece.Bishop:
-                                _timerUISystem.AddTime(3);
-                                break;
-                            case Piece.Rook:
-                                _timerUISystem.AddTime(5);
-                                break;
-                            case Piece.King:
-                                _timerUISystem.AddTime(9);
-                                break;
-                            case Piece.Queen:
-                                _timerUISystem.AddTime(9);
-                                break;
-                        }
+                        _timerUISystem.AddTime(Creator.timerSo.capturePieceTimeAdd[enemyPiece]);
                         
                         _capturedPieces.AddLast(enemyPiece);
                         _movesInThisTurn.Enqueue(enemyPiece);
@@ -336,6 +316,9 @@ public class ElPlayerSystem : ElDependency
                     
                     if (GetRoomNumber() == Creator.shopSo.shopRoomNumber)
                     {
+                        _shopSystem.TryGetArtefactAtPosition(_playerCharacter.position);
+                        _shopSystem.TryGetUpgradeAtPosition(_playerCharacter.position);
+                        
                         if (_shopSystem.TryGetShopPieceAtPosition(_playerCharacter.position, out Piece piece))
                         {
                             _currentPiece.Value = piece;
@@ -456,7 +439,7 @@ public class ElPlayerSystem : ElDependency
                 {
                     _timerUISystem.ResetTimerChangedAmount(false);
                     SetState(States.EndGame);
-                    _gameOverUISystem.Show("Captured", Creator.timerSo.currentTime > Creator.timerSo.contFromRoomPenalty);
+                    _gameOverUISystem.Show("Captured", true);
                 }
                 break;
             case States.TimerExpired:
@@ -479,10 +462,9 @@ public class ElPlayerSystem : ElDependency
                 //Wait 1 second before we load the next level
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
-                    Creator.enemySo.ResetCachedSpawnPoints();
+                    Creator.enemySo.ResetData();
                     Creator.playerSystemSo.levelNumberSaved++;
                     Creator.playerSystemSo.roomNumberSaved = 0;
-                    Creator.timerSo.currentTime += Creator.timerSo.levelCompleteBonus;
                     Creator.playerSystemSo.startingPiece = _currentPiece.Value;
                     
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
