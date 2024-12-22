@@ -121,7 +121,7 @@ public class ElPlayerSystem : ElDependency
             _shopSystem = shopSystem;
         }
         
-        _currentRoomStartPiece = Creator.playerSystemSo.levelNumberSaved == 0 ? Creator.startingPiece : Creator.playerSystemSo.startingPiece;
+        _currentRoomStartPiece = Creator.playerSystemSo.startingPiece;
         _roomNumber = Creator.playerSystemSo.roomNumberSaved;
         
         Transform playerSpawnPosition = GameObject.FindWithTag("PlayerSpawnPosition").transform;
@@ -262,10 +262,9 @@ public class ElPlayerSystem : ElDependency
                             _timerUISystem.ResetTimerChangedAmount(true);
                             _timerUISystem.StopTimer();
                             Creator.playerSystemSo.xValueToStartOn = singleDoorPosition.transform.position.x;
+                            Creator.playerSystemSo.startingPiece = _currentPiece.Value;
                             if (singleDoorPosition.isFinalDoor)
                             {
-                                Creator.playerSystemSo.startingPiece = _currentPiece.Value;
-                                
                                 TriggerFadeOutAnimation();
                                 SetState(States.LevelComplete);
                             }

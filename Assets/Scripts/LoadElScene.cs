@@ -20,6 +20,8 @@ public class LoadElScene : MonoBehaviour
         
         tempCam.backgroundColor = Color.black;
 
+        playerSystemSo.startingPiece = Piece.Queen;
+        
         if (resetCachedDataOnStart)
         {
             playerSystemSo.ResetData();

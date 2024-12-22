@@ -24,9 +24,6 @@ public class ElCreator : Creator
     public GameObject arrowPointingToNextPiecePrefab;
     public GameObject shopItemPrefab;
 
-    [Header("Starting Piece")]
-    public Piece startingPiece;
-
     [Header("Start timer on load")] 
     public bool startTimerOnLoad;
 

@@ -20,7 +20,7 @@ public class ElChainUISystem : ElDependency
         
         ResetPosition();
         
-        ShowNewPiece(Creator.playerSystemSo.levelNumberSaved == 0 ? Creator.startingPiece : Creator.playerSystemSo.startingPiece, true);
+        ShowNewPiece(Creator.playerSystemSo.startingPiece, true);
     }
 
     public void ShowNewPiece(Piece piece, bool isFirstPiece = false)

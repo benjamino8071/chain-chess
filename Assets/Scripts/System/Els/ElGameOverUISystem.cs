@@ -47,8 +47,6 @@ public class ElGameOverUISystem : ElDependency
                 _restartRoomButton = button;
                 _restartRoomButton.onClick.AddListener(() =>
                 {
-                    Creator.playerSystemSo.startingPiece = Piece.Queen;
-
                     Creator.timerSo.timePenaltyOnReload = Creator.timerSo.currentTime / Creator.timerSo.playerRespawnDivideCost;
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 });
