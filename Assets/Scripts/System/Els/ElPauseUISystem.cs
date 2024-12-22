@@ -26,16 +26,7 @@ public class ElPauseUISystem : ElDependency
         Button[] buttons = _pauseGUI.GetComponentsInChildren<Button>();
         foreach (Button button in buttons)
         {
-            if (button.CompareTag("ResetButton"))
-            {
-                button.onClick.AddListener(() =>
-                {
-                    Creator.playerSystemSo.roomNumberSaved = 0;
-                    
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                });
-            }
-            else if (button.CompareTag("Exit"))
+            if (button.CompareTag("Exit"))
             {
                 button.onClick.AddListener(() =>
                 {

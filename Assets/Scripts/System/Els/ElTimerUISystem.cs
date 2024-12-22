@@ -14,7 +14,7 @@ public class ElTimerUISystem : ElDependency
     
     private bool _playTimer;
 
-    private float _timeToHideBonusTxt;
+    private float _showTimeChangeAmountTimer;
     private float _recentTimeChangeAmount;
     
     public override void GameStart(ElCreator elCreator)
@@ -42,13 +42,23 @@ public class ElTimerUISystem : ElDependency
         
         _multiplierAmountText.text = $"<wave a={0.01f}>Multiplier: 1x</wave>";
         ResetTimerChangedAmount(true);
+
+        if (Creator.timerSo.timePenaltyOnReload > 0)
+        {
+            RemoveTime(Creator.timerSo.timePenaltyOnReload);
+            Creator.timerSo.timePenaltyOnReload = 0;
+        }
     }
 
     public override void GameEarlyUpdate(float dt)
     {
-        if (Creator.timerSo.currentTime <= _timeToHideBonusTxt)
+        if (_showTimeChangeAmountTimer > 0)
         {
-            HideTimerChangeAmount();
+            _showTimeChangeAmountTimer -= dt;
+            if (_showTimeChangeAmountTimer <= 0)
+            {
+                HideTimerChangeAmount();
+            }
         }
         
         if (_playTimer && Creator.timerSo.currentTime > 0 && _playerSystem.GetState() != ElPlayerSystem.States.EndGame && Creator.playerSystemSo.roomNumberSaved != Creator.shopSo.shopRoomNumber)
@@ -118,7 +128,7 @@ public class ElTimerUISystem : ElDependency
             _recentTimeChangeAmount -= amount;
         }
         
-        string amountRemoveText = $"{_recentTimeChangeAmount}s";
+        string amountRemoveText = $"{_recentTimeChangeAmount:0.##}s";
         ShowTimerChangeAmount(amountRemoveText, true);
 
         float pitch = Random.Range(0.9f, 1.1f);
@@ -139,13 +149,13 @@ public class ElTimerUISystem : ElDependency
     {
         _timerBonusText.text = textToShow;
         _timerBonusText.color = showInRed ? Color.red : Color.green;
-        _timeToHideBonusTxt = Creator.timerSo.currentTime - 3f;
+        _showTimeChangeAmountTimer = Creator.timerSo.showTimeChangeAmount;
     }
 
     public void HideTimerChangeAmount()
     {
         _timerBonusText.text = "";
-        _timeToHideBonusTxt = -1;
+        _showTimeChangeAmountTimer = 0;
         _recentTimeChangeAmount = 0;
     }
 

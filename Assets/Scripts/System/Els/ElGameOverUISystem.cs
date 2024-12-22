@@ -12,7 +12,6 @@ public class ElGameOverUISystem : ElDependency
 
     private TextMeshProUGUI _titleText;
 
-    private Button _restartLevelButton;
     private Button _restartRoomButton;
     
     public override void GameStart(ElCreator elCreator)
@@ -43,25 +42,14 @@ public class ElGameOverUISystem : ElDependency
         Button[] buttons = _gameOverUI.GetComponentsInChildren<Button>();
         foreach (Button button in buttons)
         {
-            if (button.CompareTag("RestartLevel"))
-            {
-                _restartLevelButton = button;
-                _restartLevelButton.onClick.AddListener(() =>
-                {
-                    Creator.playerSystemSo.roomNumberSaved = 0;
-        
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                });
-            }
-            else if (button.CompareTag("RestartRoom"))
+            if (button.CompareTag("RestartRoom"))
             {
                 _restartRoomButton = button;
                 _restartRoomButton.onClick.AddListener(() =>
                 {
                     Creator.playerSystemSo.startingPiece = Piece.Queen;
 
-                    float amountToRemove = Creator.timerSo.currentTime / Creator.timerSo.playerRespawnDivideCost;
-                    Creator.timerSo.currentTime -= amountToRemove;
+                    Creator.timerSo.timePenaltyOnReload = Creator.timerSo.currentTime / Creator.timerSo.playerRespawnDivideCost;
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 });
             }
@@ -80,7 +68,6 @@ public class ElGameOverUISystem : ElDependency
     public void Show(string message, bool showRestartRoom)
     {
         _restartRoomButton.gameObject.SetActive(showRestartRoom);
-        _restartLevelButton.gameObject.SetActive(Creator.timerSo.currentTime > 0);
         _titleText.text = message;
         
         _pauseUISystem.Hide();

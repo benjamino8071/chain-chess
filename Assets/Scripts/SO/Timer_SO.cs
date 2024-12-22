@@ -12,6 +12,10 @@ public class Timer_SO : ScriptableObject
     
     public float timerMultiplier = 1;
 
+    public float timePenaltyOnReload = 0;
+
+    public float showTimeChangeAmount = 3;
+
     public Dictionary<Piece, float> capturePieceTimeAdd = new()
     {
         {Piece.Pawn, 1},
@@ -37,6 +41,8 @@ public class Timer_SO : ScriptableObject
         playerRespawnDivideCost = 2;
 
         timerMultiplier = 1;
+
+        timePenaltyOnReload = 0;
         
         capturePieceTimeAdd[Piece.Pawn] = 1;
         capturePieceTimeAdd[Piece.Bishop] = 3;
