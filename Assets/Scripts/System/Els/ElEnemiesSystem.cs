@@ -55,14 +55,15 @@ public class ElEnemiesSystem : ElDependency
         }
 
         if (Creator.enemySo.cachedSpawnPoints.Count == 0)
-        { 
+        {
+            int numOfEnemies = -1;
             for (int roomNum = 0; roomNum < 9; roomNum++)
             {
                 if (roomNum == Creator.shopSo.shopRoomNumber)
                     continue;
-                
+                numOfEnemies++;
                 Dictionary<Vector3, (Piece, int, ElEnemyController.PieceEffectType)> positions = new();
-                while (positions.Count < 3 + roomNum + Creator.playerSystemSo.levelNumberSaved)
+                while (positions.Count < 3 + numOfEnemies + Creator.playerSystemSo.levelNumberSaved)
                 {
                     int xPosTemp = Random.Range(2, 10);
                     //An x-value of 5 or 6 is directly in front of a door0.
@@ -96,15 +97,26 @@ public class ElEnemiesSystem : ElDependency
                         {
                             selectedPiece.Remove(Piece.Pawn);
                         }
-                        //We don't want queens to appear until room 3
-                        if (Creator.playerSystemSo.roomNumberSaved < 3)
+
+                        if (roomNum < 5)
                         {
                             selectedPiece.Remove(Piece.Queen);
                         }
-                        //We don't want kings to appear until room 6
-                        if (Creator.playerSystemSo.roomNumberSaved < 6)
+
+                        if (roomNum < 7)
                         {
                             selectedPiece.Remove(Piece.King);
+                        }
+                        else
+                        {
+                            foreach ((Piece piece, int roomNumber, ElEnemyController.PieceEffectType pieceEffectType) positionsValue in positions.Values)
+                            {
+                                if (positionsValue.roomNumber == roomNum && positionsValue.piece == Piece.King)
+                                {
+                                    selectedPiece.Remove(Piece.King);
+                                    break;
+                                }
+                            }
                         }
 
                         int indexChosen = Random.Range(0, selectedPiece.Count);
