@@ -1,14 +1,18 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ElChainUISystem : ElDependency
 {
     private Transform _chainParent;
+
+    private TextMeshProUGUI _movesRemainingText;
     
     private Vector3 _chainParentInitialPos;
     
     private LinkedList<(Piece, RectTransform, Image)> _chainPiecesImages = new ();
+    private LinkedListNode<(Piece, RectTransform, Image)> _currentPiece;
     
     public override void GameStart(ElCreator elCreator)
     {
@@ -16,13 +20,18 @@ public class ElChainUISystem : ElDependency
         
         _chainParent = GameObject.FindWithTag("ChainParent").transform;
 
+        GameObject movesRemainingText = GameObject.FindWithTag("MovesRemaining");
+        _movesRemainingText = movesRemainingText.GetComponentInChildren<TextMeshProUGUI>();
+        
         _chainParentInitialPos = _chainParent.localPosition;
         
         ResetPosition();
         
         ShowNewPiece(Creator.playerSystemSo.startingPiece, true);
+        
+        UpdateMovesRemainingText(1);
     }
-
+    
     public void ShowNewPiece(Piece piece, bool isFirstPiece = false)
     {
         GameObject newPieceImage;
@@ -52,15 +61,24 @@ public class ElChainUISystem : ElDependency
 
             arrowPointingToNextPiece.transform.localPosition = posBehindNewPieceImage;
 
-            _chainPiecesImages.AddLast((piece, arrowPointingToNextPiece.GetComponent<RectTransform>(), visual));
+            _chainPiecesImages.AddLast((Piece.NotChosen, arrowPointingToNextPiece.GetComponent<RectTransform>(), visual));
         }
         
         _chainPiecesImages.AddLast((piece, newPieceImage.GetComponent<RectTransform>(), visual));
+        if (isFirstPiece)
+        {
+            _currentPiece = _chainPiecesImages.First;
+        }
     }
 
     public void ResetPosition()
     {
         _chainParent.localPosition = _chainParentInitialPos;
+        _currentPiece = _chainPiecesImages.First;
+        foreach ((Piece, RectTransform, Image) chainPiecesImage in _chainPiecesImages)
+        {
+            chainPiecesImage.Item3.color = new Color(1,1,1, 1);
+        }
     }
 
     public void NewRoomClearChain()
@@ -70,11 +88,14 @@ public class ElChainUISystem : ElDependency
             capturedPiecesImage.Item2.gameObject.SetActive(false);
         }
         _chainPiecesImages.Clear();
+        _currentPiece = null;
     }
 
     public void HighlightNextPiece()
     {
         //Move _capturedPiecesParent along
+        _currentPiece.Value.Item3.color = new Color(0.75f,0.75f,0.75f,1);
+        _currentPiece = _currentPiece.Next.Next;
         _chainParent.localPosition += new Vector3(-250, 0, 0);
     }
 
@@ -118,5 +139,10 @@ public class ElChainUISystem : ElDependency
         
         //Given the logic of the code we should never get here but have to add something
         return default;
+    }
+
+    public void UpdateMovesRemainingText(int movesRemaining)
+    {
+        _movesRemainingText.text = movesRemaining.ToString();
     }
 }

@@ -61,6 +61,7 @@ TagManager:
   - MultiplierAmount
   - Shop
   - Item
+  - MovesRemaining
   layers:
   - Default
   - TransparentFX

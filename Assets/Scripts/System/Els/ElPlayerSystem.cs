@@ -209,6 +209,7 @@ public class ElPlayerSystem : ElDependency
                         _promoUIController.Show();
                         
                         _movesInThisTurn.Dequeue();
+                        _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
                         SetState(States.PawnPromo);
                         break;
                     }
@@ -225,6 +226,7 @@ public class ElPlayerSystem : ElDependency
                             TriggerJumpAnimation();
 
                             _movesInThisTurn.Dequeue();
+                            _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
 
                             if (_movesInThisTurn.Count > 0)
                             {
@@ -262,6 +264,7 @@ public class ElPlayerSystem : ElDependency
                 {
                     _playerCharacter.position = new Vector3(((int)_playerCharacter.position.x) + 0.5f, ((int)_playerCharacter.position.y) + 0.5f, 0);
                     _sinTime = 0;
+                    _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
                     
                     //If Capture enemies exist, then we need to check the position the player has moved to is safe. If not, then it's game over for the player!
                     if (_enemiesSystem.CheckIfEnemiesCanCapture())
@@ -307,6 +310,7 @@ public class ElPlayerSystem : ElDependency
                         
                         _capturedPieces.AddLast(enemyPiece);
                         _movesInThisTurn.Enqueue(enemyPiece);
+                        _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
                         _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
                     }
                     else
@@ -345,6 +349,7 @@ public class ElPlayerSystem : ElDependency
                         }
                     }
                     _currentPiece = _currentPiece.Next;
+                    
                     if (_movesInThisTurn.Count > 0)
                     {
                         //Allow player to make another move
@@ -525,7 +530,7 @@ public class ElPlayerSystem : ElDependency
                     _gameOverUISystem.Show("Timer Expired", false);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _scoreEntryUISystem.Show(score);
             }
@@ -992,6 +997,7 @@ public class ElPlayerSystem : ElDependency
                     {
                         _movesInThisTurn.Enqueue(capturedPiece);
                     }
+                    _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
                     _currentPiece = _capturedPieces.First;
                     _chainUISystem.ResetPosition();
                 }
