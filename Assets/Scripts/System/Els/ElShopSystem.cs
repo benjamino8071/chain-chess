@@ -275,7 +275,11 @@ public class ElShopSystem : ElDependency
                         List<Piece> promoPieces = Creator.timerSo.capturePieceTimeAdd.Keys.ToList();
                         foreach (Piece piece in promoPieces)
                         {
-                            Creator.timerSo.capturePieceTimeAdd[piece] -= 1;
+                            Creator.timerSo.promotionTimeRemove[piece] -= 1;
+                            if (Creator.timerSo.promotionTimeRemove[piece] <= 0)
+                            {
+                                Creator.timerSo.promotionTimeRemove[piece] = 0;
+                            }
                         }
                         break;
                     case UpgradeTypes.ReduceRespawnCost:

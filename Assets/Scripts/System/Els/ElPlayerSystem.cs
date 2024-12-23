@@ -312,6 +312,7 @@ public class ElPlayerSystem : ElDependency
                         _movesInThisTurn.Enqueue(enemyPiece);
                         _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
                         _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
+                        
                     }
                     else
                     {
@@ -385,7 +386,7 @@ public class ElPlayerSystem : ElDependency
                     index *= 2; //Have to double index for the chainUI as for every other index, there is an arrow sprite which we NEVER want to change
                     _chainUISystem.PawnPromoted(index, pieceChosen);
                     
-                    _promoUIController.Hide();
+                    _promoUIController.Hide(true);
                     
                     _currentPiece = _currentPiece.Next;
                     

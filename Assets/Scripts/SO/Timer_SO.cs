@@ -28,7 +28,7 @@ public class Timer_SO : ScriptableObject
         {Piece.King, 9}
     };
     
-    public Dictionary<Piece, float> capturePieceTimeRemove = new()
+    public Dictionary<Piece, float> promotionTimeRemove = new()
     {
         {Piece.Bishop, 3},
         {Piece.Knight, 3},
@@ -54,10 +54,10 @@ public class Timer_SO : ScriptableObject
         capturePieceTimeAdd[Piece.Queen] = 9;
         capturePieceTimeAdd[Piece.King] = 9;
 
-        capturePieceTimeRemove[Piece.Bishop] = 3;
-        capturePieceTimeRemove[Piece.Knight] = 3;
-        capturePieceTimeRemove[Piece.Rook] = 5;
-        capturePieceTimeRemove[Piece.Queen] = 9;
+        promotionTimeRemove[Piece.Bishop] = 3;
+        promotionTimeRemove[Piece.Knight] = 3;
+        promotionTimeRemove[Piece.Rook] = 5;
+        promotionTimeRemove[Piece.Queen] = 9;
         Debug.Log("Timer_SO cache reset");
     }
 }

@@ -8,6 +8,7 @@ public class ElEnemiesSystem : ElDependency
     private ElChainUISystem _capturedPiecesUISystem;
     private ElDoorsSystem _doorsSystem;
     private ElTurnSystem _turnSystem;
+    private ElTimerUISystem _timerUISystem;
     
     private List<ElEnemyController> _enemyControllers = new ();
 
@@ -28,6 +29,10 @@ public class ElEnemiesSystem : ElDependency
         if (Creator.TryGetDependency(out ElTurnSystem turnSystem))
         {
             _turnSystem = turnSystem;
+        }
+        if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
+        {
+            _timerUISystem = timerUISystem;
         }
 
         if (Creator.enemySo.cachedSpawnPoints.Count == 0)
@@ -182,6 +187,7 @@ public class ElEnemiesSystem : ElDependency
 
         if (IsEnemiesInRoomCleared(roomNumber))
         {
+            _timerUISystem.StopTimer();
             _doorsSystem.SetRoomDoorsOpen(roomNumber);
         }
     }

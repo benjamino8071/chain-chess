@@ -7,6 +7,7 @@ public class ElTimerUISystem : ElDependency
     private ElPlayerSystem _playerSystem;
     private ElPauseUISystem _pauseUISystem;
     private ElAudioSystem _audioSystem;
+    private ElEnemiesSystem _enemiesSystem;
     
     private TextMeshProUGUI _timeText;
     private TextMeshProUGUI _timerBonusText;
@@ -31,6 +32,10 @@ public class ElTimerUISystem : ElDependency
         if (Creator.TryGetDependency(out ElAudioSystem audioSystem))
         {
             _audioSystem = audioSystem;
+        }
+        if (Creator.TryGetDependency(out ElEnemiesSystem enemiesSystem))
+        {
+            _enemiesSystem = enemiesSystem;
         }
         
         _timeText = GameObject.FindWithTag("Timer").GetComponent<TextMeshProUGUI>();
@@ -106,9 +111,9 @@ public class ElTimerUISystem : ElDependency
         float waveAmp = Mathf.Clamp(0.01f * Creator.timerSo.timerMultiplier, 0.01f, 0.1f);
         _multiplierAmountText.text = $"<wave a={waveAmp}>Multiplier: {Creator.timerSo.timerMultiplier:0.##}x</wave>";
 
-        float amount = Mathf.Log(Creator.timerSo.timerMultiplier) / Mathf.Log(1.1f) - 1;
+        float amount = Mathf.Log(Creator.timerSo.timerMultiplier) / Mathf.Log(Creator.timerSo.timerMultiplierMultiplier) - 1;
         
-        float pitch = Mathf.Clamp(0.9f + Mathf.RoundToInt(amount) / 50f, 0.9f, 1f);
+        float pitch = Mathf.Clamp(0.9f + Mathf.RoundToInt(amount) / 50f, 0.9f, 2f);
         _audioSystem.PlayEnemyCapturedSfx(pitch);
     }
 
@@ -138,7 +143,8 @@ public class ElTimerUISystem : ElDependency
 
     public void StartTimer()
     {
-        _playTimer = true;
+        if(!_enemiesSystem.IsEnemiesInRoomCleared(_playerSystem.GetRoomNumber()))
+            _playTimer = true;
     }
 
     public void StopTimer()
