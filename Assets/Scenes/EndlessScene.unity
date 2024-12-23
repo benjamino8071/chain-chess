@@ -4884,6 +4884,7 @@ MonoBehaviour:
   guiTop: {fileID: 1515226036}
   guiBottom: {fileID: 413109398}
   fakeGrid: {fileID: 568322803}
+  doorClosedSprite: {fileID: -3939724472882138839, guid: f4cbbbbb24966d34aa53622e39237c94, type: 3}
 --- !u!4 &728523578
 Transform:
   m_ObjectHideFlags: 0
@@ -6393,7 +6394,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 200
-  m_Sprite: {fileID: -3939724472882138839, guid: f4cbbbbb24966d34aa53622e39237c94, type: 3}
+  m_Sprite: {fileID: -836577275992906049, guid: 8075096d560d1a742a9c73fcd7a938eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -21650,7 +21651,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 200
-  m_Sprite: {fileID: -3939724472882138839, guid: f4cbbbbb24966d34aa53622e39237c94, type: 3}
+  m_Sprite: {fileID: -836577275992906049, guid: 8075096d560d1a742a9c73fcd7a938eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

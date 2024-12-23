@@ -174,6 +174,10 @@ public class ElPlayerSystem : ElDependency
         }
         else
         {
+            if (Creator.playerSystemSo.levelNumberSaved > 0)
+            {
+                Creator.CloseFakeDoors();
+            }
             SetState(States.Idle);
         }
     }

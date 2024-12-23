@@ -29,8 +29,13 @@ public class ElCreator : Creator
     public GameObject guiTop;
     public GameObject guiBottom;
 
+    [Header("Fake Grid")]
     public GameObject fakeGrid;
-
+    public Sprite doorClosedSprite;
+    
+    private SpriteRenderer fakeDoorOne;
+    private SpriteRenderer fakeDoorTwo;
+    
     public System.Random randomGenerator;
     
     private void Start()
@@ -50,6 +55,16 @@ public class ElCreator : Creator
         if (playerSystemSo.levelNumberSaved == 0)
         {
             fakeGrid.SetActive(false);
+        }
+        else
+        {
+            SpriteRenderer[] spriteRenderers = fakeGrid.GetComponentsInChildren<SpriteRenderer>();
+            Debug.Log("Number of spriteRenderers found as children of fakeGrid: "+spriteRenderers.Length);
+            if (spriteRenderers.Length == 2)
+            {
+                fakeDoorOne = spriteRenderers[0];
+                fakeDoorTwo = spriteRenderers[1];
+            }
         }
         
         foreach (Dependency dependency in _dependencies)
@@ -121,5 +136,11 @@ public class ElCreator : Creator
     public void HideGUIBottom()
     {
         guiBottom.SetActive(false);
+    }
+
+    public void CloseFakeDoors()
+    {
+        fakeDoorOne.sprite = doorClosedSprite;
+        fakeDoorTwo.sprite = doorClosedSprite;
     }
 }

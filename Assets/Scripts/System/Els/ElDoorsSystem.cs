@@ -47,7 +47,7 @@ public class ElDoorsSystem : ElDependency
                 _roomDoors.Add(singleDoorPosition.roomNumber, newDoorNumbers);
             }
 
-            if (singleDoorPosition.roomNumber == Creator.shopSo.shopRoomNumber && singleDoorPosition.doorNumber == 1)
+            if (singleDoorPosition.roomNumber == Creator.shopSo.shopRoomNumber && singleDoorPosition.doorNumber == 1 && Creator.playerSystemSo.roomNumberSaved <= Creator.shopSo.shopRoomNumber)
             {
                 singleDoorPosition.SetDoorToOpen();
             }
@@ -70,15 +70,23 @@ public class ElDoorsSystem : ElDependency
 
     public void SetRoomDoorsClosed(int roomNumber)
     {
-        Dictionary<int, List<SingleDoorPosition>> doorsInRoom = _roomDoors[roomNumber];
-        foreach (List<SingleDoorPosition> singleDoorPositions in doorsInRoom.Values)
+        if (roomNumber == 0)
         {
-            foreach (SingleDoorPosition singleDoorPosition in singleDoorPositions)
+            Creator.CloseFakeDoors();
+        }
+        else
+        {
+            Dictionary<int, List<SingleDoorPosition>> doorsInRoom = _roomDoors[roomNumber];
+            foreach (List<SingleDoorPosition> singleDoorPositions in doorsInRoom.Values)
             {
-                if(singleDoorPosition.doorNumber == 0)
-                    singleDoorPosition.SetDoorToClose();
+                foreach (SingleDoorPosition singleDoorPosition in singleDoorPositions)
+                {
+                    if(singleDoorPosition.doorNumber == 0)
+                        singleDoorPosition.SetDoorToClose();
+                }
             }
         }
+        
     }
 
     public bool IsDoorOpen(int roomNumber, int doorNumber)

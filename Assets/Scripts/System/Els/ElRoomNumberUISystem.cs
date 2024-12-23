@@ -16,7 +16,7 @@ public class ElRoomNumberUISystem : ElDependency
 
     public void UpdateRoomNumberText()
     {
-        int roomNum = Creator.playerSystemSo.levelNumberSaved * 8 + Creator.playerSystemSo.roomNumberSaved + 1;
+        int roomNum = Creator.playerSystemSo.levelNumberSaved * 10 + Creator.playerSystemSo.roomNumberSaved + 1;
         _roomNumberText.text = $"Room {roomNum}";
     }
 }
