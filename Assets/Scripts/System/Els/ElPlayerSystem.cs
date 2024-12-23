@@ -165,6 +165,8 @@ public class ElPlayerSystem : ElDependency
         }
 
         _capturedPieces.AddFirst(_currentRoomStartPiece);
+        
+        Creator.playerSystemSo.moveMadeInNewRoom = false;
 
         if (Creator.playerSystemSo.levelNumberSaved > 0 && Creator.playerSystemSo.roomNumberSaved == 0 && Creator.timerSo.timePenaltyOnReload == 0)
         {
