@@ -36,7 +36,7 @@ public class ElPromoUIController : ElController
                 promoButton.onClick.AddListener(() =>
                 {
                     SelectPromotion(Piece.Queen);
-                    _timerUISystem.RemoveTime(Creator.timerSo.promotionTimeRemove[Piece.Queen], false);
+                    _timerUISystem.RemoveTime(Creator.timerSo.timeCost[Piece.Queen], false);
                 });
                 _promoCostTexts.Add(Piece.Queen, promoButton.GetComponentInChildren<TMP_Text>());
             }
@@ -45,7 +45,7 @@ public class ElPromoUIController : ElController
                 promoButton.onClick.AddListener(() =>
                 {
                     SelectPromotion(Piece.Rook);
-                    _timerUISystem.RemoveTime(Creator.timerSo.promotionTimeRemove[Piece.Rook], false);
+                    _timerUISystem.RemoveTime(Creator.timerSo.timeCost[Piece.Rook], false);
                 });
                 _promoCostTexts.Add(Piece.Rook, promoButton.GetComponentInChildren<TMP_Text>());
             }
@@ -54,7 +54,7 @@ public class ElPromoUIController : ElController
                 promoButton.onClick.AddListener(() =>
                 {
                     SelectPromotion(Piece.Knight);
-                    _timerUISystem.RemoveTime(Creator.timerSo.promotionTimeRemove[Piece.Knight], false);
+                    _timerUISystem.RemoveTime(Creator.timerSo.timeCost[Piece.Knight], false);
                 });
                 _promoCostTexts.Add(Piece.Knight, promoButton.GetComponentInChildren<TMP_Text>());
             }
@@ -63,7 +63,7 @@ public class ElPromoUIController : ElController
                 promoButton.onClick.AddListener(() =>
                 {
                     SelectPromotion(Piece.Bishop);
-                    _timerUISystem.RemoveTime(Creator.timerSo.promotionTimeRemove[Piece.Bishop], false);
+                    _timerUISystem.RemoveTime(Creator.timerSo.timeCost[Piece.Bishop], false);
                 });
                 _promoCostTexts.Add(Piece.Bishop, promoButton.GetComponentInChildren<TMP_Text>());
             }
@@ -82,10 +82,10 @@ public class ElPromoUIController : ElController
         _timerUISystem.StopTimer();
         _chosenPiece = Piece.NotChosen;
 
-        List<Piece> keys = Creator.timerSo.promotionTimeRemove.Keys.ToList();
+        List<Piece> keys = Creator.timerSo.timeCost.Keys.ToList();
         foreach (Piece piece in keys)
         {
-            float timeToRemove = Creator.timerSo.promotionTimeRemove[piece];
+            float timeToRemove = Creator.timerSo.timeCost[piece];
             _promoCostTexts[piece].text = $"-{timeToRemove:0.#}s";
         }
         

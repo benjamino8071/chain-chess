@@ -264,7 +264,6 @@ public class ElPlayerSystem : ElDependency
                 {
                     _playerCharacter.position = new Vector3(((int)_playerCharacter.position.x) + 0.5f, ((int)_playerCharacter.position.y) + 0.5f, 0);
                     _sinTime = 0;
-                    _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
                     
                     //If Capture enemies exist, then we need to check the position the player has moved to is safe. If not, then it's game over for the player!
                     if (_enemiesSystem.CheckIfEnemiesCanCapture())
@@ -300,19 +299,24 @@ public class ElPlayerSystem : ElDependency
                             break;
                         }
                     }
-                    else if (_enemiesSystem.TryGetEnemyAtPosition(_playerCharacter.position,
+                    _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
+                    if (_enemiesSystem.TryGetEnemyAtPosition(_playerCharacter.position,
                                  out ElEnemyController enemyController))
                     {
                         //Add this player to the 'captured pieces' list
                         Piece enemyPiece = enemyController.GetPiece();
                         
-                        _timerUISystem.AddTime(Creator.timerSo.capturePieceTimeAdd[enemyPiece]);
-                        
+                        _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
+
+                        bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
+                        if (enemiesCleared)
+                        {
+                            _audioSystem.PlayRoomCompleteSfx();
+                        }
+                        _timerUISystem.AddTimeFromMultiplier(Creator.timerSo.capturePieceTimeAdd[enemyPiece], !enemiesCleared);
                         _capturedPieces.AddLast(enemyPiece);
                         _movesInThisTurn.Enqueue(enemyPiece);
                         _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
-                        _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
-                        
                     }
                     else
                     {
@@ -345,6 +349,7 @@ public class ElPlayerSystem : ElDependency
                             _chainUISystem.NewRoomClearChain();
                             _chainUISystem.ShowNewPiece(piece, true);
                             _currentRoomStartPiece = piece;
+                            _audioSystem.PlayerLevelUpSfx();
                             SetState(States.Idle);
                             break;
                         }

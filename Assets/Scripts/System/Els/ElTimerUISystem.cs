@@ -86,7 +86,27 @@ public class ElTimerUISystem : ElDependency
         _timeText.SetText(timeText);
     }
 
-    public void AddTime(float pieceValue)
+    public void AddTimeRegular(float amountToAdd)
+    {
+        Creator.timerSo.currentTime += amountToAdd;
+        
+        string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
+        SetTimerText(timeText);
+
+        if (_recentTimeChangeAmount >= 0)
+        {
+            _recentTimeChangeAmount += amountToAdd;
+        }
+        else
+        {
+            _recentTimeChangeAmount = amountToAdd;
+        }
+        
+        string amountAddText = $"+{_recentTimeChangeAmount:0.##}s";
+        ShowTimerChangeAmount(amountAddText);
+    }
+
+    public void AddTimeFromMultiplier(float pieceValue, bool playSfx)
     {
         float amountToAdd = pieceValue * Creator.timerSo.timerMultiplier;
         Creator.timerSo.currentTime += amountToAdd;
@@ -111,10 +131,13 @@ public class ElTimerUISystem : ElDependency
         float waveAmp = Mathf.Clamp(0.01f * Creator.timerSo.timerMultiplier, 0.01f, 0.1f);
         _multiplierAmountText.text = $"<wave a={waveAmp}>Multiplier: {Creator.timerSo.timerMultiplier:0.##}x</wave>";
 
-        float amount = Mathf.Log(Creator.timerSo.timerMultiplier) / Mathf.Log(Creator.timerSo.timerMultiplierMultiplier) - 1;
+        if (playSfx)
+        {
+            float amount = Mathf.Log(Creator.timerSo.timerMultiplier) / Mathf.Log(Creator.timerSo.timerMultiplierMultiplier) - 1;
         
-        float pitch = Mathf.Clamp(0.9f + Mathf.RoundToInt(amount) / 50f, 0.9f, 2f);
-        _audioSystem.PlayEnemyCapturedSfx(pitch);
+            float pitch = Mathf.Clamp(0.9f + Mathf.RoundToInt(amount) / 50f, 0.9f, 2f);
+            _audioSystem.PlayEnemyCapturedSfx(pitch);
+        }
     }
 
     public void RemoveTime(float amount, bool playSfx = true)

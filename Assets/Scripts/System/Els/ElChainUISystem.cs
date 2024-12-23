@@ -89,6 +89,7 @@ public class ElChainUISystem : ElDependency
         }
         _chainPiecesImages.Clear();
         _currentPiece = null;
+        _movesRemainingText.text = "1";
     }
 
     public void HighlightNextPiece()

@@ -183,7 +183,7 @@ public class ElEnemyController : ElController
         return _piece;
     }
 
-    private List<Vector3> CheckPossibleDefinitePositions(List<Vector3> moves)
+    public List<Vector3> CheckPossibleDefinitePositions(List<Vector3> moves)
     {
         List<Vector3> possibleMoves = new();
         foreach (Vector3 knightMove in moves)
@@ -207,7 +207,7 @@ public class ElEnemyController : ElController
         return possibleMoves;
     }
 
-    private List<Vector3> CheckPossibleIndefinitePositions(List<Vector3> moves)
+    public List<Vector3> CheckPossibleIndefinitePositions(List<Vector3> moves)
     {
         List<Vector3> possibleMoves = new ();
         
@@ -226,17 +226,13 @@ public class ElEnemyController : ElController
                 if(!_gridSystem.IsPositionValid(nextSpot)) break;
                                 
                 furthestPointOfDiagonal = nextSpot;
+                possibleMoves.Add(furthestPointOfDiagonal);
                 
                 if (_playerSystem.GetPlayerPosition() == furthestPointOfDiagonal)
                     break;
             }
-
-            if (furthestPointOfDiagonal != _enemyInstance.position && !_enemiesSystem.IsPositionTakenByOtherEnemyForThisTurn(furthestPointOfDiagonal))
-            {
-                possibleMoves.Add(furthestPointOfDiagonal);
-            }
         }
-
+        
         return possibleMoves;
     }
 

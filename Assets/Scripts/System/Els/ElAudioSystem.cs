@@ -7,6 +7,9 @@ public class ElAudioSystem : ElDependency
     private AudioSource _capturedByEnemyAudio;
     private AudioSource _timeLostAudio;
     private AudioSource _levelUpAudio;
+    private AudioSource _doorOpenAudio;
+    private AudioSource _doorClosedAudio;
+    private AudioSource _roomCompleteAudio;
     
     public override void GameStart(ElCreator elCreator)
     {
@@ -35,6 +38,10 @@ public class ElAudioSystem : ElDependency
             else if (audioSource.CompareTag("Up"))
             {
                 _levelUpAudio = audioSource;
+            }
+            else if (audioSource.CompareTag("LevelComplete"))
+            {
+                _roomCompleteAudio = audioSource;
             }
         }
     }
@@ -69,5 +76,20 @@ public class ElAudioSystem : ElDependency
     public void PlayerLevelUpSfx()
     {
         _levelUpAudio.Play();
+    }
+
+    public void PlayDoorOpenSfx()
+    {
+        _doorOpenAudio.Play();
+    }
+
+    public void PlayDoorClosedSfx()
+    {
+        _doorClosedAudio.Play();
+    }
+
+    public void PlayRoomCompleteSfx()
+    {
+        _roomCompleteAudio.Play();
     }
 }

@@ -17,17 +17,26 @@ public class Shop_SO : ScriptableObject
 
     //Artefact sprites
     [Header("Artefacts")]
-    public Sprite enemyLineOfSightSprite;
+    public Sprite pawnLosSprite;
+    public Sprite knightLosSprite;
+    public Sprite bishopLosSprite;
+    public Sprite rookLosSprite;
+    public Sprite queenLosSprite;
+    public Sprite kingLosSprite;
+    
     public Sprite destroyChainStayAliveSprite;
     public Sprite useCapturedPieceStraightAwaySprite;
     public Sprite captureKingClearRoomSprite;
 
-    [NonSerialized] public Dictionary<Vector3, ElShopSystem.UpgradeTypes> upgradesPositions = new();
+    [NonSerialized] public Dictionary<Vector3, UpgradeTypes> upgradesPositions = new();
     [NonSerialized] public Dictionary<Vector3, SpriteRenderer> upgradesSprites = new();
-    [NonSerialized] public Dictionary<Vector3, ElShopSystem.ArtefactTypes> artefactsPositions = new();
+    [NonSerialized] public Dictionary<Vector3, ArtefactTypes> artefactsPositions = new();
     [NonSerialized] public Dictionary<Vector3, SpriteRenderer> artefactsSprites = new();
-    [NonSerialized] public List<ElShopSystem.ArtefactTypes> artefactsChosen = new(3);
+    [NonSerialized] public List<ArtefactTypes> artefactsChosen = new(3);
     [NonSerialized] public int itemsTakenInLevelCount;
+    
+    //Data for artefact types
+    [NonSerialized] public Dictionary<Vector3, Piece> lineOfSightForArtefact = new();
 
     public void ResetData()
     {
@@ -36,6 +45,7 @@ public class Shop_SO : ScriptableObject
         artefactsPositions.Clear();
         artefactsSprites.Clear();
         artefactsChosen.Clear();
+        lineOfSightForArtefact.Clear();
         itemsTakenInLevelCount = 0;
         Debug.Log("Shop_SO caches cleared");
     }

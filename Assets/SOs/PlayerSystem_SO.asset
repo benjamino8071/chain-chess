@@ -26,3 +26,5 @@ MonoBehaviour:
   firstMoveMadeWhileShowingMainMenu: 1
   moveMadeInNewRoom: 1
   startingPiece: 5
+  artefacts: 
+  lineOfSightsChosen: 

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu]
 public class PlayerSystem_SO : ScriptableObject
@@ -20,13 +22,19 @@ public class PlayerSystem_SO : ScriptableObject
     public bool firstMoveMadeWhileShowingMainMenu;
     public bool moveMadeInNewRoom;
     public Piece startingPiece = Piece.NotChosen;
-
+    public List<ArtefactTypes> artefacts = new();
+    
+    //Data for the artefact types
+    public List<Piece> lineOfSightsChosen = new();
+    
     public void ResetData()
     {
         levelNumberSaved = 0;
         roomNumberSaved = 0;
         xValueToStartOn = 5.5f;
         moveMadeInNewRoom = false;
+        artefacts.Clear();
+        lineOfSightsChosen.Clear();
         Debug.Log("PlayerSystem_SO cache reset");
     }
 }

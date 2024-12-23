@@ -8,7 +8,7 @@ public class Creator : MonoBehaviour
     public GridSystem_SO gridSystemSo;
     public Cinemachine_SO cinemachineSo;
     
-    protected List<Dependency> _dependencies = new();
+    protected LinkedList<Dependency> _dependencies = new();
 
     private void Awake()
     {

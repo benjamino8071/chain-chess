@@ -23,6 +23,7 @@ public class ElCreator : Creator
     public GameObject capturedPieceImagePrefab;
     public GameObject arrowPointingToNextPiecePrefab;
     public GameObject shopItemPrefab;
+    public GameObject enemyValidPositionsPrefab;
 
     [Header("GUITopBottom")] 
     public GameObject guiTop;
@@ -41,7 +42,7 @@ public class ElCreator : Creator
 
         if (enemySo.cachedSpawnPoints.Count == 0)
         { 
-            shopSo.shopRoomNumber = randomGenerator.Next(2, 8);
+            shopSo.shopRoomNumber = randomGenerator.Next(1, 1);
         }
         
         Camera.main.backgroundColor = Color.black;
@@ -85,20 +86,21 @@ public class ElCreator : Creator
 
     public override void CreateDependencies()
     {
-        _dependencies.Add(new ElAudioSystem());
-        _dependencies.Add(new ElTurnSystem());
-        _dependencies.Add(new ElChainUISystem());
-        _dependencies.Add(new ElCinemachineSystem());
-        _dependencies.Add(new ElDoorsSystem());
-        _dependencies.Add(new ElGridSystem());
-        _dependencies.Add(new ElEnemiesSystem());
-        _dependencies.Add(new ElPauseUISystem());
-        _dependencies.Add(new ElPlayerSystem());
-        _dependencies.Add(new ElGameOverUISystem());
-        _dependencies.Add(new ElScoreEntryUISystem());
-        _dependencies.Add(new ElTimerUISystem());
-        _dependencies.Add(new ElRoomNumberUISystem());
-        _dependencies.Add(new ElShopSystem());
+        _dependencies.AddLast(new ElAudioSystem());
+        _dependencies.AddLast(new ElTurnSystem());
+        _dependencies.AddLast(new ElChainUISystem());
+        _dependencies.AddLast(new ElCinemachineSystem());
+        _dependencies.AddLast(new ElDoorsSystem());
+        _dependencies.AddLast(new ElGridSystem());
+        _dependencies.AddLast(new ElEnemiesSystem());
+        _dependencies.AddLast(new ElPauseUISystem());
+        _dependencies.AddLast(new ElPlayerSystem());
+        _dependencies.AddLast(new ElGameOverUISystem());
+        _dependencies.AddLast(new ElScoreEntryUISystem());
+        _dependencies.AddLast(new ElTimerUISystem());
+        _dependencies.AddLast(new ElRoomNumberUISystem());
+        _dependencies.AddLast(new ElArtefactsSystem());
+        _dependencies.AddLast(new ElShopSystem());
     }
 
     public void ShowGUITop()

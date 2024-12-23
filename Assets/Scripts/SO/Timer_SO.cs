@@ -28,14 +28,30 @@ public class Timer_SO : ScriptableObject
         {Piece.King, 9}
     };
     
-    public Dictionary<Piece, float> promotionTimeRemove = new()
+    public Dictionary<Piece, float> timeCost = new()
     {
         {Piece.Bishop, 3},
         {Piece.Knight, 3},
         {Piece.Rook, 5},
         {Piece.Queen, 9},
     };
+    
+    public readonly Dictionary<UpgradeTypes, int> upgradesCost = new()
+    {
+        { UpgradeTypes.ReducePromotionCost, 1 },
+        { UpgradeTypes.IncreaseMultiplierAmount, 1},
+        { UpgradeTypes.IncreaseBaseAmountGained , 1},
+        { UpgradeTypes.ReduceRespawnCost, 1}
+    };
 
+    public readonly Dictionary<ArtefactTypes, int> artefactsCost = new()
+    {
+        { ArtefactTypes.EnemyLineOfSight, 1},
+        { ArtefactTypes.DestroyChainStayAlive, 1},
+        { ArtefactTypes.UseCapturedPieceStraightAway, 1},
+        { ArtefactTypes.CaptureKingClearRoom, 1}
+    };
+    
     public void ResetData()
     {
         currentTime = startingTime;
@@ -54,10 +70,10 @@ public class Timer_SO : ScriptableObject
         capturePieceTimeAdd[Piece.Queen] = 9;
         capturePieceTimeAdd[Piece.King] = 9;
 
-        promotionTimeRemove[Piece.Bishop] = 3;
-        promotionTimeRemove[Piece.Knight] = 3;
-        promotionTimeRemove[Piece.Rook] = 5;
-        promotionTimeRemove[Piece.Queen] = 9;
+        timeCost[Piece.Bishop] = 3;
+        timeCost[Piece.Knight] = 3;
+        timeCost[Piece.Rook] = 5;
+        timeCost[Piece.Queen] = 9;
         Debug.Log("Timer_SO cache reset");
     }
 }

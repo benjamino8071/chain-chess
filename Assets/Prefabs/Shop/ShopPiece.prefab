@@ -60,7 +60,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 101
+  m_SortingOrder: 102
   m_TargetDisplay: 0
 --- !u!114 &4841892626618178635
 MonoBehaviour:
@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 788289410393919588}
   m_Layer: 0
   m_Name: ShopPiece
-  m_TagString: Untagged
+  m_TagString: Piece
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -193,7 +193,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: 6402892968040458680, guid: 8ecce7d5b11afa54db3926fd98cf2949, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -201,7 +201,7 @@ SpriteRenderer:
   m_Size: {x: 0.53125, y: 0.71875}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &8803984206395890039
@@ -414,7 +414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 212506949255695782, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: m_SortingOrder
-      value: 100
+      value: 101
       objectReference: {fileID: 0}
     - target: {fileID: 212506949255695782, guid: fa8d00a30836965448ebdeeffdac87ed, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

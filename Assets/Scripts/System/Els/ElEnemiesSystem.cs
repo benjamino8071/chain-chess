@@ -9,10 +9,14 @@ public class ElEnemiesSystem : ElDependency
     private ElDoorsSystem _doorsSystem;
     private ElTurnSystem _turnSystem;
     private ElTimerUISystem _timerUISystem;
+    private ElAudioSystem _audioSystem;
+    private ElPlayerSystem _playerSystem;
     
     private List<ElEnemyController> _enemyControllers = new ();
 
     private List<Vector3> _positionsTakenByOtherEnemies = new();
+
+    private List<Transform> _validPositionsVisuals = new(64);
     
     public override void GameStart(ElCreator elCreator)
     {
@@ -33,6 +37,21 @@ public class ElEnemiesSystem : ElDependency
         if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
         {
             _timerUISystem = timerUISystem;
+        }
+        if (Creator.TryGetDependency(out ElAudioSystem audioSystem))
+        {
+            _audioSystem = audioSystem;
+        }
+        if (Creator.TryGetDependency(out ElPlayerSystem playerSystem))
+        {
+            _playerSystem = playerSystem;
+        }
+        
+        for (int i = 0; i < _validPositionsVisuals.Capacity; i++)
+        {
+            GameObject validPos =
+                Creator.InstantiateGameObject(Creator.enemyValidPositionsPrefab, Vector3.zero, Quaternion.identity);
+            _validPositionsVisuals.Add(validPos.transform);
         }
 
         if (Creator.enemySo.cachedSpawnPoints.Count == 0)
@@ -147,6 +166,15 @@ public class ElEnemiesSystem : ElDependency
         foreach (ElEnemyController enemyController in _enemyControllers)
         {
             enemyController.GameUpdate(dt);
+        }
+
+        foreach (Transform validPositionsVisual in _validPositionsVisuals)
+        {
+            validPositionsVisual.gameObject.SetActive(false);
+        }
+        if (Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.EnemyLineOfSight))
+        {
+            UpdateValidEnemyPositions(Creator.playerSystemSo.lineOfSightsChosen);
         }
     }
 
@@ -284,5 +312,111 @@ public class ElEnemiesSystem : ElDependency
         }
 
         return foundPlayer;
+    }
+
+    private void UpdateValidEnemyPositions(List<Piece> piece)
+    {
+        List<Vector3> validMoves = new();
+        
+        foreach (ElEnemyController enemyController in _enemyControllers)
+        {
+            if(enemyController.GetRoomNumber() != Creator.playerSystemSo.roomNumberSaved || !piece.Contains(enemyController.GetPiece()))
+                continue;
+
+            List<Vector3> pieceTypeMoves = new();
+            bool isDefiniteMoves = false;
+            switch (enemyController.GetPiece())
+            {
+                case Piece.Pawn:
+                    pieceTypeMoves = new()
+                    {
+                        new Vector3(-1, -1, 0),
+                        new Vector3(1, -1, 0)
+                    };
+                    
+                    isDefiniteMoves = true;
+                    break;
+                case Piece.Knight:
+                    pieceTypeMoves = new()
+                    {
+                        new Vector3(1, 2, 0),
+                        new Vector3(-1, 2, 0),
+                        new Vector3(1, -2, 0),
+                        new Vector3(-1, -2, 0),
+                        new Vector3(-2, 1, 0),
+                        new Vector3(-2, -1, 0),
+                        new Vector3(2, 1, 0),
+                        new Vector3(2, -1, 0)
+                    };
+                    isDefiniteMoves = true;
+                    break;
+                case Piece.Bishop:
+                    pieceTypeMoves = new()
+                    {
+                        new Vector3(1, 1, 0),
+                        new Vector3(-1, 1, 0),
+                        new Vector3(1, -1, 0),
+                        new Vector3(-1, -1, 0)
+                    };
+                    isDefiniteMoves = false;
+                    break;
+                case Piece.Rook:
+                    pieceTypeMoves = new()
+                    {
+                        new Vector3(-1, 0, 0),
+                        new Vector3(1, 0, 0),
+                        new Vector3(0, 1, 0),
+                        new Vector3(0, -1, 0)
+                    };
+                    isDefiniteMoves = false;
+                    break;
+                case Piece.Queen:
+                    pieceTypeMoves = new()
+                    {
+                        new Vector3(-1, 0, 0),
+                        new Vector3(1, 0, 0),
+                        new Vector3(0, 1, 0),
+                        new Vector3(0, -1, 0),
+                        new Vector3(1, 1, 0),
+                        new Vector3(-1, 1, 0),
+                        new Vector3(1, -1, 0),
+                        new Vector3(-1, -1, 0)
+                    };
+                    isDefiniteMoves = false;
+                    break;
+                case Piece.King:
+                    pieceTypeMoves = new()
+                    {
+                        new Vector3(-1, 0, 0),
+                        new Vector3(1, 0, 0),
+                        new Vector3(0, 1, 0),
+                        new Vector3(0, -1, 0),
+                        new Vector3(1, 1, 0),
+                        new Vector3(-1, 1, 0),
+                        new Vector3(1, -1, 0),
+                        new Vector3(-1, -1, 0)
+                    };
+                    isDefiniteMoves = true;
+                    break;
+            }
+
+            List<Vector3> possibleMoves = new();
+            if (isDefiniteMoves)
+            {
+                possibleMoves = enemyController.CheckPossibleDefinitePositions(pieceTypeMoves);
+                validMoves = validMoves.Concat(possibleMoves).ToList();
+            }
+            else
+            {
+                possibleMoves = enemyController.CheckPossibleIndefinitePositions(pieceTypeMoves);
+                validMoves = validMoves.Concat(possibleMoves).ToList();
+            }
+        }
+        
+        for (int i = 0; i < validMoves.Count; i++)
+        {
+            _validPositionsVisuals[i].position = validMoves[i];
+            _validPositionsVisuals[i].gameObject.SetActive(true);
+        }
     }
 }
