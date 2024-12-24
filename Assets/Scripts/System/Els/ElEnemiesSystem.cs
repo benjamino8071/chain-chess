@@ -1,11 +1,13 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
 
 public class ElEnemiesSystem : ElDependency
 {
-    private ElChainUISystem _capturedPiecesUISystem;
+    private ElChainUISystem _chainUISystem;
     private ElDoorsSystem _doorsSystem;
     private ElTurnSystem _turnSystem;
     private ElTimerUISystem _timerUISystem;
@@ -18,13 +20,15 @@ public class ElEnemiesSystem : ElDependency
 
     private List<Transform> _validPositionsVisuals = new(64);
     
+    private Queue<ElEnemyController> _moveInRoomQueue = new();
+    
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
         
         if (Creator.TryGetDependency(out ElChainUISystem capturedPiecesUISystem))
         {
-            _capturedPiecesUISystem = capturedPiecesUISystem;
+            _chainUISystem = capturedPiecesUISystem;
         }
         if (Creator.TryGetDependency(out ElDoorsSystem doorsSystem))
         {
@@ -244,22 +248,29 @@ public class ElEnemiesSystem : ElDependency
         return false;
     }
 
-    public void PieceCaptured(ElEnemyController enemyController, int roomNumber)
+    public void PieceCaptured(ElEnemyController enemyController, bool showInChainUI)
     {
-        _capturedPiecesUISystem.ShowNewPiece(enemyController.GetPiece());
+        if(showInChainUI)
+            _chainUISystem.ShowNewPiece(enemyController.GetPiece());
         
         enemyController.PieceCaptured();
         
         _enemyControllers.Remove(enemyController);
-
-        if (IsEnemiesInRoomCleared(roomNumber))
-        {
-            _timerUISystem.StopTimer();
-            _doorsSystem.SetRoomDoorsOpen(roomNumber);
-        }
     }
 
-    private Queue<ElEnemyController> _moveInRoomQueue = new();
+    public List<ElEnemyController> GetEnemiesInRoom(int roomNumber)
+    {
+        List<ElEnemyController> controllersInRoom = new();
+        foreach (ElEnemyController elEnemyController in _enemyControllers)
+        {
+            if (elEnemyController.GetRoomNumber() == roomNumber)
+            {
+                controllersInRoom.Add(elEnemyController);
+            }
+        }
+
+        return controllersInRoom;
+    }
     
     public void SetStateForAllEnemies(ElEnemyController.States state)
     {

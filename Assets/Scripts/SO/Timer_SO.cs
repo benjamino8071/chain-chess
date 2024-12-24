@@ -53,6 +53,8 @@ public class Timer_SO : ScriptableObject
     };
 
     public float sellArtefactDivider = 2;
+
+    public float destroyEnemyTimer = 0.25f;
     
     public void ResetData()
     {

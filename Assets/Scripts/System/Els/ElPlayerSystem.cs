@@ -59,6 +59,7 @@ public class ElPlayerSystem : ElDependency
         DoorWalk,
         FadeInAfterDoorWalk,
         Captured,
+        DestroyingAllEnemiesInRoom,
         TimerExpired,
         LevelComplete,
         EndGame
@@ -73,6 +74,8 @@ public class ElPlayerSystem : ElDependency
 
     private float _timeAtFadeIn;
     private float _fadeInAnimTimer;
+
+    private float _destroyEnemyTimer;
     
     public override void GameStart(ElCreator elCreator)
     {
@@ -189,7 +192,7 @@ public class ElPlayerSystem : ElDependency
         return 0.5f * Mathf.Sin(x - Mathf.PI / 2f) + 0.5f;
     }
     
-    public override void GameUpdate(float dt)
+    public async override void GameUpdate(float dt)
     {
         HideAllValidMoves();
         
@@ -197,6 +200,8 @@ public class ElPlayerSystem : ElDependency
         
         if(Creator.mainMenuSo.isOtherMainMenuCanvasShowing)
             return;
+        
+        Debug.Log("Player state: "+_state);
         
         switch (_state)
         {
@@ -312,17 +317,28 @@ public class ElPlayerSystem : ElDependency
                         //Add this player to the 'captured pieces' list
                         Piece enemyPiece = enemyController.GetPiece();
                         
-                        _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
-
+                        _enemiesSystem.PieceCaptured(enemyController, true);
+                        
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
-                        if (enemiesCleared)
-                        {
-                            _audioSystem.PlayRoomCompleteSfx();
-                        }
                         _timerUISystem.AddTimeFromMultiplier(Creator.timerSo.capturePieceTimeAdd[enemyPiece], !enemiesCleared);
                         _capturedPieces.AddLast(enemyPiece);
                         _movesInThisTurn.Enqueue(enemyPiece);
                         _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
+                        
+                        if (enemiesCleared)
+                        {
+                            _audioSystem.PlayRoomCompleteSfx();
+                            _timerUISystem.StopTimer();
+                            _doorsSystem.SetRoomDoorsOpen(GetRoomNumber());
+                        }
+                        else if (enemyPiece == Piece.King &&
+                                 Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.CaptureKingClearRoom))
+                        {
+                            _timerUISystem.StopTimer();
+                            _destroyEnemyTimer = Creator.timerSo.destroyEnemyTimer;
+                            SetState(States.DestroyingAllEnemiesInRoom);
+                            return;
+                        }
                     }
                     else
                     {
@@ -466,6 +482,47 @@ public class ElPlayerSystem : ElDependency
                 else
                 {
                     _fadeInAnimTimer += dt;
+                }
+                break;
+            case States.DestroyingAllEnemiesInRoom:
+                if (_destroyEnemyTimer > 0)
+                {
+                    _destroyEnemyTimer -= dt;
+                    if (_destroyEnemyTimer <= 0)
+                    {
+                        List<ElEnemyController> enemiesInRoom = _enemiesSystem.GetEnemiesInRoom(GetRoomNumber());
+                        Piece piece = enemiesInRoom[0].GetPiece();
+                        _enemiesSystem.PieceCaptured(enemiesInRoom[0],false);
+                        
+                        bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
+                        _timerUISystem.AddTimeRegular(Creator.timerSo.capturePieceTimeAdd[piece], !enemiesCleared);
+                            
+                        if (enemiesCleared)
+                        {
+                            Debug.Log("This message should appear after ALL enemies in room are destroyed");
+                            _audioSystem.PlayRoomCompleteSfx();
+                            _doorsSystem.SetRoomDoorsOpen(GetRoomNumber());
+                    
+                            _currentPiece = _currentPiece.Next;
+                    
+                            if (_movesInThisTurn.Count > 0)
+                            {
+                                //Allow player to make another move
+                                UpdateSprite(_movesInThisTurn.Peek());
+                                SetState(States.Idle);
+                                _chainUISystem.HighlightNextPiece();
+                            }
+                            else
+                            {
+                                SetState(States.WaitingForTurn);
+                                _turnInfoUISystem.SwitchTurn(ElTurnSystem.Turn.Enemy);
+                            }
+                        }
+                        else
+                        {
+                            _destroyEnemyTimer = Creator.timerSo.destroyEnemyTimer;
+                        }
+                    }
                 }
                 break;
             case States.Captured:
