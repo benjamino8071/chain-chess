@@ -62,7 +62,7 @@ public class ElAudioSystem : ElDependency
     /// Pitch must increase in value as pieces are captured consecutively
     /// </summary>
     /// <param name="pitch"></param>
-    public void PlayEnemyCapturedSfx(float pitch)
+    public void PlayTimeAddedSfx(float pitch)
     {
         _enemyCapturedAudio.pitch = pitch;
         _enemyCapturedAudio.Play();

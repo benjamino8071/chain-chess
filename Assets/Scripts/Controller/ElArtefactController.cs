@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class ElArtefactController : Controller
     private Button _guiButton;
     private Image _image;
     private Button _sellButton;
+    private TextMeshProUGUI _sellButtonText;
 
     private ArtefactTypes _type;
     private Piece _lineOfSightType = Piece.NotChosen;
@@ -38,6 +40,13 @@ public class ElArtefactController : Controller
                 _artefactsUISystem.HideAllSellButtons();
                 if (!sellButtonShowing)
                 {
+                    float amountToAdd = Creator.timerSo.artefactsCost[_type];
+                    if (_type == ArtefactTypes.EnemyLineOfSight)
+                    {
+                        amountToAdd *= Creator.timerSo.capturePieceTimeAdd[_lineOfSightType];
+                    }
+                    amountToAdd /= Creator.timerSo.sellArtefactDivider;
+                    _sellButtonText.text = $"Sell:\\n+{amountToAdd:0.##}s";
                     ShowSellButton();
                 }
             }
@@ -46,15 +55,19 @@ public class ElArtefactController : Controller
         _image = button.GetComponentInChildren<Image>();
 
         _sellButton = sellButton;
+
+        _sellButtonText = _sellButton.GetComponentInChildren<TextMeshProUGUI>();
         
         _sellButton.onClick.AddListener(() =>
         {
-            float amountToAdd = 0;
+            float amountToAdd = Creator.timerSo.artefactsCost[_type];
             if (_type == ArtefactTypes.EnemyLineOfSight)
             {
-                amountToAdd += Creator.timerSo.capturePieceTimeAdd[_lineOfSightType];
+                amountToAdd *= Creator.timerSo.capturePieceTimeAdd[_lineOfSightType];
             }
-            _timerUISystem.AddTimeRegular(amountToAdd);
+            amountToAdd /= Creator.timerSo.sellArtefactDivider;
+            
+            _timerUISystem.AddTimeRegular(amountToAdd, true);
             HideSellButton();
             SetNotInUse();
             

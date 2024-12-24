@@ -70,19 +70,26 @@ public class ElTimerUISystem : ElDependency
                 HideTimerChangeAmount();
             }
         }
+
         
         if (_playTimer && Creator.timerSo.currentTime > 0 && _playerSystem.GetState() != ElPlayerSystem.States.EndGame && Creator.playerSystemSo.roomNumberSaved != Creator.shopSo.shopRoomNumber && Creator.playerSystemSo.roomNumberSaved < 9)
         {
             Creator.timerSo.currentTime -= dt;
+        }
+        
+        if (Creator.timerSo.currentTime <= 0)
+        {
+            string timeText = "0.00s";
+            _pauseUISystem.Hide(false);
+            _artefactsUISystem.Hide();
+            _playerSystem.SetState(ElPlayerSystem.States.TimerExpired);
             
+            SetTimerText(timeText);
+        }
+        else
+        {
             string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
-            if (Creator.timerSo.currentTime <= 0)
-            {
-                timeText = "0.00s";
-                _pauseUISystem.Hide(false);
-                _artefactsUISystem.Hide();
-                _playerSystem.SetState(ElPlayerSystem.States.TimerExpired);
-            }
+            
             SetTimerText(timeText);
         }
     }
@@ -92,7 +99,7 @@ public class ElTimerUISystem : ElDependency
         _timeText.SetText(timeText);
     }
 
-    public void AddTimeRegular(float amountToAdd)
+    public void AddTimeRegular(float amountToAdd, bool playSfx)
     {
         Creator.timerSo.currentTime += amountToAdd;
         
@@ -110,6 +117,8 @@ public class ElTimerUISystem : ElDependency
         
         string amountAddText = $"+{_recentTimeChangeAmount:0.##}s";
         ShowTimerChangeAmount(amountAddText);
+        if(playSfx)
+            _audioSystem.PlayTimeAddedSfx(1);
     }
 
     public void AddTimeFromMultiplier(float pieceValue, bool playSfx)
@@ -142,7 +151,7 @@ public class ElTimerUISystem : ElDependency
             float amount = Mathf.Log(Creator.timerSo.timerMultiplier) / Mathf.Log(Creator.timerSo.timerMultiplierMultiplier) - 1;
         
             float pitch = Mathf.Clamp(0.9f + Mathf.RoundToInt(amount) / 50f, 0.9f, 2f);
-            _audioSystem.PlayEnemyCapturedSfx(pitch);
+            _audioSystem.PlayTimeAddedSfx(pitch);
         }
     }
 

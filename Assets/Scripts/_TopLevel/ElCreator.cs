@@ -47,7 +47,7 @@ public class ElCreator : Creator
 
         if (enemySo.cachedSpawnPoints.Count == 0)
         { 
-            shopSo.shopRoomNumber = randomGenerator.Next(2, 8);
+            shopSo.shopRoomNumber = randomGenerator.Next(1, 2);
         }
         
         Camera.main.backgroundColor = Color.black;
@@ -59,7 +59,6 @@ public class ElCreator : Creator
         else
         {
             SpriteRenderer[] spriteRenderers = fakeGrid.GetComponentsInChildren<SpriteRenderer>();
-            Debug.Log("Number of spriteRenderers found as children of fakeGrid: "+spriteRenderers.Length);
             if (spriteRenderers.Length == 2)
             {
                 fakeDoorOne = spriteRenderers[0];

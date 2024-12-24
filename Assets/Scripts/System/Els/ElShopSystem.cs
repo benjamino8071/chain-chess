@@ -158,6 +158,31 @@ public class ElShopSystem : ElDependency
                         };
                         int index = Random.Range(0, types.Count);
                         
+                        //Have to check for duplicates
+                        //If it is enemy line of sight, then we need to check the line of sight artefacts
+                        if (Creator.shopSo.artefactsPositions.ContainsValue(types[index]) || Creator.playerSystemSo.artefacts.Contains(types[index]))
+                        {
+                            List<ArtefactTypes> typesRemoved = types;
+                            typesRemoved.Remove(types[index]);
+                            int removedIndex = Random.Range(0, typesRemoved.Count);
+                            
+                            while(typesRemoved.Count > 0 && (Creator.shopSo.artefactsPositions.ContainsValue(typesRemoved[removedIndex]) || Creator.playerSystemSo.artefacts.Contains(typesRemoved[removedIndex])))
+                            {
+                                typesRemoved.Remove(typesRemoved[removedIndex]);
+                                removedIndex = Random.Range(0, typesRemoved.Count);
+                            }
+
+                            if (typesRemoved.Count == 0)
+                            {
+                                Debug.LogError("We should not get here!");
+                            }
+                            else
+                            {
+                                types = typesRemoved;
+                                index = removedIndex;
+                            }
+                        }
+                        
                         Creator.shopSo.artefactsPositions.Add(shopItem.transform.position, types[index]);
                         Creator.shopSo.artefactsSprites.Add(shopItem.transform.position, shopItemSprRend);
                         

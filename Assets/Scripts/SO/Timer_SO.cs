@@ -38,19 +38,21 @@ public class Timer_SO : ScriptableObject
     
     public readonly Dictionary<UpgradeTypes, int> upgradesCost = new()
     {
-        { UpgradeTypes.ReducePromotionCost, 1 },
-        { UpgradeTypes.IncreaseMultiplierAmount, 1},
-        { UpgradeTypes.IncreaseBaseAmountGained , 1},
-        { UpgradeTypes.ReduceRespawnCost, 1}
+        { UpgradeTypes.ReducePromotionCost, 30 },
+        { UpgradeTypes.IncreaseMultiplierAmount, 21 },
+        { UpgradeTypes.IncreaseBaseAmountGained , 18},
+        { UpgradeTypes.ReduceRespawnCost, 40}
     };
 
     public readonly Dictionary<ArtefactTypes, int> artefactsCost = new()
     {
-        { ArtefactTypes.EnemyLineOfSight, 1},
-        { ArtefactTypes.DestroyChainStayAlive, 1},
-        { ArtefactTypes.UseCapturedPieceStraightAway, 1},
-        { ArtefactTypes.CaptureKingClearRoom, 1}
+        { ArtefactTypes.EnemyLineOfSight, 6},
+        { ArtefactTypes.DestroyChainStayAlive, 30},
+        { ArtefactTypes.UseCapturedPieceStraightAway, 15},
+        { ArtefactTypes.CaptureKingClearRoom, 40}
     };
+
+    public float sellArtefactDivider = 2;
     
     public void ResetData()
     {
