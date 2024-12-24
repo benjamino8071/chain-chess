@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class ElArtefactController : Controller
 {
-    private ElArtefactsSystem _artefactsSystem;
+    private ElArtefactsUISystem _artefactsUISystem;
     private ElTimerUISystem _timerUISystem;
     
     private Button _guiButton;
@@ -18,9 +18,9 @@ public class ElArtefactController : Controller
     {
         base.GameStart(elCreator);
 
-        if (Creator.TryGetDependency(out ElArtefactsSystem artefactsSystem))
+        if (Creator.TryGetDependency(out ElArtefactsUISystem artefactsSystem))
         {
-            _artefactsSystem = artefactsSystem;
+            _artefactsUISystem = artefactsSystem;
         }
         if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
         {
@@ -35,7 +35,7 @@ public class ElArtefactController : Controller
             if (GetInUse())
             {
                 bool sellButtonShowing = _sellButton.gameObject.activeSelf;
-                _artefactsSystem.HideAllSellButtons();
+                _artefactsUISystem.HideAllSellButtons();
                 if (!sellButtonShowing)
                 {
                     ShowSellButton();

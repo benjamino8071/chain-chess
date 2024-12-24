@@ -8,6 +8,7 @@ public class ElTimerUISystem : ElDependency
     private ElPauseUISystem _pauseUISystem;
     private ElAudioSystem _audioSystem;
     private ElEnemiesSystem _enemiesSystem;
+    private ElArtefactsUISystem _artefactsUISystem;
     
     private TextMeshProUGUI _timeText;
     private TextMeshProUGUI _timerBonusText;
@@ -36,6 +37,10 @@ public class ElTimerUISystem : ElDependency
         if (Creator.TryGetDependency(out ElEnemiesSystem enemiesSystem))
         {
             _enemiesSystem = enemiesSystem;
+        }
+        if (Creator.TryGetDependency(out ElArtefactsUISystem artefactsUISystem))
+        {
+            _artefactsUISystem = artefactsUISystem;
         }
         
         _timeText = GameObject.FindWithTag("Timer").GetComponent<TextMeshProUGUI>();
@@ -75,6 +80,7 @@ public class ElTimerUISystem : ElDependency
             {
                 timeText = "0.00s";
                 _pauseUISystem.Hide(false);
+                _artefactsUISystem.Hide();
                 _playerSystem.SetState(ElPlayerSystem.States.TimerExpired);
             }
             SetTimerText(timeText);

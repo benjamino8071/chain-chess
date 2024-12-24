@@ -9,7 +9,7 @@ public class ElShopSystem : ElDependency
     private ElTimerUISystem _timerUISystem;
     private ElPauseUISystem _pauseUISystem;
     private ElAudioSystem _audioSystem;
-    private ElArtefactsSystem _artefactsSystem;
+    private ElArtefactsUISystem _artefactsUISystem;
     
     private Dictionary<Vector3, ShopPiece> _shopPiecesPositions = new();
     
@@ -29,9 +29,9 @@ public class ElShopSystem : ElDependency
         {
             _audioSystem = audioSystem;
         }
-        if (Creator.TryGetDependency(out ElArtefactsSystem artefactsSystem))
+        if (Creator.TryGetDependency(out ElArtefactsUISystem artefactsSystem))
         {
-            _artefactsSystem = artefactsSystem;
+            _artefactsUISystem = artefactsSystem;
         }
         
         GameObject shop = GameObject.FindWithTag("Shop");
@@ -276,7 +276,7 @@ public class ElShopSystem : ElDependency
                 {
                     piece = value;
                 }
-                if(!_artefactsSystem.TryAddArtefact(Creator.shopSo.artefactsPositions[pos], piece))
+                if(!_artefactsUISystem.TryAddArtefact(Creator.shopSo.artefactsPositions[pos], piece))
                 {
                     //TODO: ADD 'error' sfx
                     return;

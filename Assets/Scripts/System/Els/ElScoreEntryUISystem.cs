@@ -11,6 +11,7 @@ using UnityEngine.UI;
 public class ElScoreEntryUISystem : ElDependency
 {
     private ElPauseUISystem _pauseUISystem;
+    private ElArtefactsUISystem _artefactsUISystem;
     
     private Transform _scoreEntryUI;
 
@@ -25,6 +26,10 @@ public class ElScoreEntryUISystem : ElDependency
         if (Creator.TryGetDependency(out ElPauseUISystem pauseUISystem))
         {
             _pauseUISystem = pauseUISystem;
+        }
+        if (Creator.TryGetDependency(out ElArtefactsUISystem artefactsUISystem))
+        {
+            _artefactsUISystem = artefactsUISystem;
         }
 
         _scoreEntryUI = GameObject.FindWithTag("Entry").transform;
@@ -123,6 +128,7 @@ public class ElScoreEntryUISystem : ElDependency
     {
         _playerScore = playerScore;
         _pauseUISystem.Hide(false);
+        _artefactsUISystem.Hide();
         _scoreEntryUI.gameObject.SetActive(true);
     }
 

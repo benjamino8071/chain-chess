@@ -114,7 +114,7 @@ public class ElCreator : Creator
         _dependencies.AddLast(new ElScoreEntryUISystem());
         _dependencies.AddLast(new ElTimerUISystem());
         _dependencies.AddLast(new ElRoomNumberUISystem());
-        _dependencies.AddLast(new ElArtefactsSystem());
+        _dependencies.AddLast(new ElArtefactsUISystem());
         _dependencies.AddLast(new ElShopSystem());
     }
 

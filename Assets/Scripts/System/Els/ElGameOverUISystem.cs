@@ -7,6 +7,7 @@ public class ElGameOverUISystem : ElDependency
 {
     private ElPauseUISystem _pauseUISystem;
     private ElTimerUISystem _timerUISystem;
+    private ElArtefactsUISystem _artefactsUISystem;
     
     private Transform _gameOverUI;
 
@@ -25,6 +26,10 @@ public class ElGameOverUISystem : ElDependency
         if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
         {
             _timerUISystem = timerUISystem;
+        }
+        if (Creator.TryGetDependency(out ElArtefactsUISystem artefactsUISystem))
+        {
+            _artefactsUISystem = artefactsUISystem;
         }
 
         _gameOverUI = GameObject.FindWithTag("GameOver").transform;
@@ -69,6 +74,7 @@ public class ElGameOverUISystem : ElDependency
         _titleText.text = message;
         
         _pauseUISystem.Hide(false);
+        _artefactsUISystem.Hide();
         _timerUISystem.HideTimerChangeAmount();
         _gameOverUI.gameObject.SetActive(true);
     }

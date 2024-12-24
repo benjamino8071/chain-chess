@@ -2,17 +2,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ElArtefactsSystem : ElDependency
+public class ElArtefactsUISystem : ElDependency
 {
+    private ElPlayerSystem _playerSystem;
+    
+    private GameObject _artefactsParent;
+    
     private List<ElArtefactController> _artefactsControllers = new();
     
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
+        if (Creator.TryGetDependency(out ElPlayerSystem playerSystem))
+        {
+            _playerSystem = playerSystem;
+        }
         
-        GameObject artefactsParent = GameObject.FindWithTag("Artefacts");
+        _artefactsParent = GameObject.FindWithTag("Artefacts");
 
-        ArtefactsUIButtons artefactsUIButtons = artefactsParent.GetComponent<ArtefactsUIButtons>();
+        ArtefactsUIButtons artefactsUIButtons = _artefactsParent.GetComponent<ArtefactsUIButtons>();
 
         foreach ((Button, Button) button in artefactsUIButtons.GetButtonsAsList())
         {
@@ -33,6 +41,13 @@ public class ElArtefactsSystem : ElDependency
                 _artefactsControllers[i].SetInUse(Creator.playerSystemSo.artefacts[i], false);
             }
         }
+        
+        Hide();
+    }
+
+    public override void GameEarlyUpdate(float dt)
+    {
+        _artefactsParent.SetActive(_playerSystem.GetState() == ElPlayerSystem.States.Idle);
     }
 
     /// <summary>
@@ -62,5 +77,15 @@ public class ElArtefactsSystem : ElDependency
         {
             artefactsController.HideSellButton();
         }
+    }
+
+    public void Show()
+    {
+        _artefactsParent.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        _artefactsParent.SetActive(false);
     }
 }
