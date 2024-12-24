@@ -52,6 +52,7 @@ public class ElTurnSystem : ElDependency
                 _playerSystem.SetState(ElPlayerSystem.States.Idle);
                 break;
             case Turn.Enemy:
+                _timerUISystem.StopTimer();
                 _enemiesSystem.SetStateForAllEnemies(ElEnemyController.States.ChooseTile);
                 break;
         }

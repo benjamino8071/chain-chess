@@ -18,6 +18,8 @@ public class ElEnemiesSystem : ElDependency
 
     private List<Transform> _validPositionsVisuals = new(64);
     
+    private Dictionary<ElEnemyController, bool> _haveEnemyControllersFinishedMove = new();
+    
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
@@ -232,16 +234,26 @@ public class ElEnemiesSystem : ElDependency
         }
     }
 
-    private Dictionary<ElEnemyController, bool> _haveEnemyControllersFinishedMove = new();
-
+    private Queue<ElEnemyController> _moveInRoomQueue = new();
+    
     public void SetStateForAllEnemies(ElEnemyController.States state)
     {
         if (state == ElEnemyController.States.ChooseTile)
         {
             foreach (ElEnemyController enemyController in _enemyControllers)
             {
+                if (enemyController.GetRoomNumber() == _playerSystem.GetRoomNumber())
+                {
+                    _moveInRoomQueue.Enqueue(enemyController);
+                }
                 _haveEnemyControllersFinishedMove[enemyController] = false;
             }
+
+            if (_moveInRoomQueue.TryDequeue(out ElEnemyController firstEnemy))
+            {
+                firstEnemy.SetState(ElEnemyController.States.ChooseTile);
+            }
+            return;
         }
         
         foreach (ElEnemyController enemyController in _enemyControllers)
@@ -287,20 +299,15 @@ public class ElEnemiesSystem : ElDependency
         _haveEnemyControllersFinishedMove[enemyController] = true;
         
         bool allEnemiesMoved = true;
-        foreach (KeyValuePair<ElEnemyController, bool> hasFinishedMove in _haveEnemyControllersFinishedMove)
+        
+        if (_moveInRoomQueue.TryDequeue(out ElEnemyController nextEnemy))
         {
-            if(hasFinishedMove.Key.GetRoomNumber() != Creator.playerSystemSo.roomNumberSaved)
-                continue;
-                
-            if (!hasFinishedMove.Value)
-            {
-                allEnemiesMoved = false;
-                break;
-            }
+            nextEnemy.SetState(ElEnemyController.States.ChooseTile);
         }
-        if (allEnemiesMoved)
+        else
         {
             _turnSystem.SwitchTurn(ElTurnSystem.Turn.Player);
+            _timerUISystem.StartTimer();
         }
     }
     
@@ -430,5 +437,10 @@ public class ElEnemiesSystem : ElDependency
             _validPositionsVisuals[i].position = validMoves[i];
             _validPositionsVisuals[i].gameObject.SetActive(true);
         }
+    }
+
+    public void CreateMoveInRoomQueue()
+    {
+        
     }
 }

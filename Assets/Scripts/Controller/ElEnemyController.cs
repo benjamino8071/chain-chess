@@ -497,8 +497,9 @@ public class ElEnemyController : ElController
                         }
                         
                         SetState(States.WaitingForTurn);
+                        
+                        _enemiesSystem.EnemyControllerMoved(this);
                     }
-                    _enemiesSystem.EnemyControllerMoved(this);
                 }
                 break;
             case States.Captured:
