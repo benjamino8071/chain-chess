@@ -459,6 +459,7 @@ public class ElPlayerSystem : ElDependency
                     _movesInThisTurn.Clear();
                     _capturedPieces.Clear();
                     _capturedPieces.AddFirst(_currentRoomStartPiece);
+                    _audioSystem.PlayDoorClosedSfx();
                     _doorsSystem.SetRoomDoorsClosed(GetRoomNumber());
                     SetState(States.Idle);
                 }

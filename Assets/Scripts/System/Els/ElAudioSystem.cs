@@ -7,7 +7,6 @@ public class ElAudioSystem : ElDependency
     private AudioSource _capturedByEnemyAudio;
     private AudioSource _timeLostAudio;
     private AudioSource _levelUpAudio;
-    private AudioSource _doorOpenAudio;
     private AudioSource _doorClosedAudio;
     private AudioSource _roomCompleteAudio;
     
@@ -43,6 +42,10 @@ public class ElAudioSystem : ElDependency
             {
                 _roomCompleteAudio = audioSource;
             }
+            else if (audioSource.CompareTag("NextLevel"))
+            {
+                _doorClosedAudio = audioSource;
+            }
         }
     }
     
@@ -76,11 +79,6 @@ public class ElAudioSystem : ElDependency
     public void PlayerLevelUpSfx()
     {
         _levelUpAudio.Play();
-    }
-
-    public void PlayDoorOpenSfx()
-    {
-        _doorOpenAudio.Play();
     }
 
     public void PlayDoorClosedSfx()
