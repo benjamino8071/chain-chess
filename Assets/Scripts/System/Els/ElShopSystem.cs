@@ -349,6 +349,7 @@ public class ElShopSystem : ElDependency
                 Creator.shopSo.upgradesPositions.Remove(pos);
                 Creator.shopSo.itemsTakenInLevelCount++;
                 _pauseUISystem.UpdateTextInfo();
+                _pauseUISystem.ShowUpgradeNotificationImage();
                 return;
             }
         }

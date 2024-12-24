@@ -104,6 +104,22 @@ public class ElEnemiesSystem : ElDependency
                         {
                             selectedPiece.Remove(Piece.Queen);
                         }
+                        else
+                        {
+                            int numOfQueens = 0;
+                            foreach ((Piece piece, int roomNumber, ElEnemyController.PieceEffectType pieceEffectType) positionsValue in positions.Values)
+                            {
+                                if (positionsValue.roomNumber == roomNum && positionsValue.piece == Piece.Queen)
+                                {
+                                    numOfQueens++;
+                                }
+                            }
+
+                            if (numOfQueens >= 2)
+                            {
+                                selectedPiece.Remove(Piece.Queen);
+                            }
+                        }
 
                         if (roomNum < 7)
                         {
@@ -116,7 +132,6 @@ public class ElEnemiesSystem : ElDependency
                             {
                                 if (positionsValue.roomNumber == roomNum && positionsValue.piece == Piece.King)
                                 {
-                                    selectedPiece.Remove(Piece.King);
                                     kingInRoom = true;
                                     break;
                                 }
@@ -128,6 +143,10 @@ public class ElEnemiesSystem : ElDependency
                                 {
                                     Piece.King
                                 };
+                            }
+                            else
+                            {
+                                selectedPiece.Remove(Piece.King);
                             }
                         }
 

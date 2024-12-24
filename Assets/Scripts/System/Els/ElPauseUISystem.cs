@@ -9,6 +9,8 @@ public class ElPauseUISystem : ElDependency
     
     private Transform _pauseGUI;
 
+    private GameObject _upgradeNotificationImage;
+
     private Button _pauseButton;
 
     private PauseUITextInfo _pauseUITextInfo;
@@ -45,6 +47,17 @@ public class ElPauseUISystem : ElDependency
         }
         
         _pauseButton = GameObject.FindWithTag("PauseButton").GetComponent<Button>();
+
+        Image[] pauseButtonImages = _pauseButton.GetComponentsInChildren<Image>();
+        foreach (Image image in pauseButtonImages)
+        {
+            if (image.CompareTag("Notification"))
+            {
+                _upgradeNotificationImage = image.gameObject;
+            }
+        }
+        
+        
         _pauseButton.onClick.AddListener(() =>
         {
             if (!_pauseGUI.gameObject.activeSelf)
@@ -60,6 +73,7 @@ public class ElPauseUISystem : ElDependency
         });
         
         UpdateTextInfo();
+        HideUpgradeNotificationImage();
         Hide(false);
     }
 
@@ -72,6 +86,17 @@ public class ElPauseUISystem : ElDependency
     {
         _timerUISystem.StopTimer();
         _pauseGUI.gameObject.SetActive(true);
+        HideUpgradeNotificationImage();
+    }
+
+    public void ShowUpgradeNotificationImage()
+    {
+        _upgradeNotificationImage.SetActive(true);
+    }
+
+    public void HideUpgradeNotificationImage()
+    {
+        _upgradeNotificationImage.SetActive(false);
     }
 
     public void Hide(bool startTimer)

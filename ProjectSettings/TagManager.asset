@@ -64,6 +64,7 @@ TagManager:
   - MovesRemaining
   - Artefacts
   - Piece
+  - Notification
   layers:
   - Default
   - TransparentFX
