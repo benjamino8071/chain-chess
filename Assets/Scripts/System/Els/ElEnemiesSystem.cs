@@ -111,13 +111,23 @@ public class ElEnemiesSystem : ElDependency
                         }
                         else
                         {
+                            bool kingInRoom = false;
                             foreach ((Piece piece, int roomNumber, ElEnemyController.PieceEffectType pieceEffectType) positionsValue in positions.Values)
                             {
                                 if (positionsValue.roomNumber == roomNum && positionsValue.piece == Piece.King)
                                 {
                                     selectedPiece.Remove(Piece.King);
+                                    kingInRoom = true;
                                     break;
                                 }
+                            }
+                            if (!kingInRoom)
+                            {
+                                //MUST be a king in these rooms. If there isn't one then we force the king to appear
+                                selectedPiece = new()
+                                {
+                                    Piece.King
+                                };
                             }
                         }
 
