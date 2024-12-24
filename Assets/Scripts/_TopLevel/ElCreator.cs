@@ -14,6 +14,7 @@ public class ElCreator : Creator
     public MainMenu_SO mainMenuSo;
     public Scoreboard_SO scoreboardSo;
     public Shop_SO shopSo;
+    public Chain_SO chainSo;
     
     [Header("Prefabs")]
     public GameObject playerPrefab;

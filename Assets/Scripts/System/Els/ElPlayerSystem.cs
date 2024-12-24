@@ -33,7 +33,6 @@ public class ElPlayerSystem : ElDependency
     
     private LinkedList<Piece> _capturedPieces = new();
     private LinkedListNode<Piece> _currentPiece;
-    private Queue<Piece> _movesInThisTurn = new();
     
     private Transform _playerCharacter;
     
@@ -192,7 +191,7 @@ public class ElPlayerSystem : ElDependency
         return 0.5f * Mathf.Sin(x - Mathf.PI / 2f) + 0.5f;
     }
     
-    public async override void GameUpdate(float dt)
+    public override void GameUpdate(float dt)
     {
         HideAllValidMoves();
         
@@ -201,26 +200,24 @@ public class ElPlayerSystem : ElDependency
         if(Creator.mainMenuSo.isOtherMainMenuCanvasShowing)
             return;
         
-        Debug.Log("Player state: "+_state);
-        
         switch (_state)
         {
             case States.WaitingForTurn:
                 break;
             case States.Idle:
-                if(_movesInThisTurn.Count == 0) 
+                if(_currentPiece is null) 
                     break;
                 
-                if (_movesInThisTurn.Peek() == Piece.Pawn)
+                if (_currentPiece.Value == Piece.Pawn)
                 {
                     Vector3 posInFront = _playerCharacter.position + new Vector3(0, 1, 0);
                     
                     if(!_gridSystem.IsPositionValid(posInFront) || _gridSystem.TryGetSingleDoorPosition(posInFront, out SingleDoorPosition checkDoorOpen))
                     {
                         _promoUIController.Show();
-                        
-                        _movesInThisTurn.Dequeue();
-                        _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
+
+                        _currentPiece = _currentPiece.Next;
+                        _chainUISystem.UpdateMovesRemainingText(0);
                         SetState(States.PawnPromo);
                         break;
                     }
@@ -236,13 +233,12 @@ public class ElPlayerSystem : ElDependency
                         {
                             TriggerJumpAnimation();
 
-                            _movesInThisTurn.Dequeue();
-                            _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
+                            _chainUISystem.UpdateMovesRemainingText(0);
 
-                            if (_movesInThisTurn.Count > 0)
+                            if (_currentPiece is not null)
                             {
                                 //Allow player to make another move
-                                UpdateSprite(_movesInThisTurn.Peek());
+                                UpdateSprite(_currentPiece.Value);
                                 SetState(States.Idle);
                                 _chainUISystem.HighlightNextPiece();
                             }
@@ -310,7 +306,8 @@ public class ElPlayerSystem : ElDependency
                             break;
                         }
                     }
-                    _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
+                    
+                    _chainUISystem.UpdateMovesRemainingText(0);
                     if (_enemiesSystem.TryGetEnemyAtPosition(_playerCharacter.position,
                                  out ElEnemyController enemyController))
                     {
@@ -321,9 +318,17 @@ public class ElPlayerSystem : ElDependency
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
                         _timerUISystem.AddTimeFromMultiplier(Creator.timerSo.capturePieceTimeAdd[enemyPiece], !enemiesCleared);
-                        _capturedPieces.AddLast(enemyPiece);
-                        _movesInThisTurn.Enqueue(enemyPiece);
-                        _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
+                        if (_currentPiece.Next is not null && Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.UseCapturedPieceStraightAway))
+                        {
+                            //We add this piece to the position in the queue between the current piece, and the next piece.
+                            LinkedListNode<Piece> pieceNode = new LinkedListNode<Piece>(enemyPiece);
+                            _capturedPieces.AddAfter(_currentPiece, pieceNode);
+                        }
+                        else
+                        {
+                            _capturedPieces.AddLast(enemyPiece);
+                        }
+                        _chainUISystem.UpdateMovesRemainingText(0);
                         
                         if (enemiesCleared)
                         {
@@ -378,10 +383,10 @@ public class ElPlayerSystem : ElDependency
                     }
                     _currentPiece = _currentPiece.Next;
                     
-                    if (_movesInThisTurn.Count > 0)
+                    if (_currentPiece is not null)
                     {
                         //Allow player to make another move
-                        UpdateSprite(_movesInThisTurn.Peek());
+                        UpdateSprite(_currentPiece.Value);
                         SetState(States.Idle);
                         _chainUISystem.HighlightNextPiece();
                     }
@@ -417,10 +422,10 @@ public class ElPlayerSystem : ElDependency
                     
                     _currentPiece = _currentPiece.Next;
                     
-                    if (_movesInThisTurn.Count > 0)
+                    if (_currentPiece is not null)
                     {
                         //Allow player to make another move
-                        UpdateSprite(_movesInThisTurn.Peek());
+                        UpdateSprite(_currentPiece.Value);
                         SetState(States.Idle);
                         _chainUISystem.HighlightNextPiece();
                     }
@@ -472,7 +477,6 @@ public class ElPlayerSystem : ElDependency
                 if (_fadeInAnimTimer >= _timeAtFadeIn + 1)
                 {
                     //Chain resets when player goes into new room
-                    _movesInThisTurn.Clear();
                     _capturedPieces.Clear();
                     _capturedPieces.AddFirst(_currentRoomStartPiece);
                     _audioSystem.PlayDoorClosedSfx();
@@ -505,10 +509,10 @@ public class ElPlayerSystem : ElDependency
                     
                             _currentPiece = _currentPiece.Next;
                     
-                            if (_movesInThisTurn.Count > 0)
+                            if (_currentPiece is not null)
                             {
                                 //Allow player to make another move
-                                UpdateSprite(_movesInThisTurn.Peek());
+                                UpdateSprite(_currentPiece.Value);
                                 SetState(States.Idle);
                                 _chainUISystem.HighlightNextPiece();
                             }
@@ -666,8 +670,6 @@ public class ElPlayerSystem : ElDependency
             
             TriggerJumpAnimation();
             _audioSystem.PlayerPieceMoveSfx(1);
-            
-            _movesInThisTurn.Dequeue();
         }
     }
 
@@ -730,8 +732,6 @@ public class ElPlayerSystem : ElDependency
                 
                 TriggerJumpAnimation();
                 _audioSystem.PlayerPieceMoveSfx(1);
-
-                _movesInThisTurn.Dequeue();
                 
                 foundSpot = true;
                 break;
@@ -746,7 +746,7 @@ public class ElPlayerSystem : ElDependency
         Vector3 positionRequested = _gridSystem.GetHighlightPosition();
         
         //Depending on the piece, we allow the player an additional move (player will always start with a king move)
-        Piece piece = _movesInThisTurn.Peek();
+        Piece piece = _currentPiece.Value;
         
         switch (piece)
         {
@@ -896,9 +896,9 @@ public class ElPlayerSystem : ElDependency
 
     private void UpdateValidMoves()
     {
-        if(_state != States.Idle || _movesInThisTurn.Count == 0) return;
+        if(_state != States.Idle || _currentPiece is null) return;
         
-        Piece piece = _movesInThisTurn.Peek();
+        Piece piece = _currentPiece.Value;
         List<Vector3> validMoves = new();
         switch (piece)
         {
@@ -1068,15 +1068,12 @@ public class ElPlayerSystem : ElDependency
                 TriggerFadeOutAnimation();
                 break;
             case States.Idle:
-                if (_movesInThisTurn.Count == 0)
+                if (_currentPiece is null)
                 {
                     UpdateSprite(_currentRoomStartPiece);
+                    _currentPiece = _capturedPieces.First;
                     //Reset possible moves
-                    foreach (Piece capturedPiece in _capturedPieces)
-                    {
-                        _movesInThisTurn.Enqueue(capturedPiece);
-                    }
-                    _chainUISystem.UpdateMovesRemainingText(_movesInThisTurn.Count);
+                    _chainUISystem.UpdateMovesRemainingText(_capturedPieces.Count);
                     _currentPiece = _capturedPieces.First;
                     _chainUISystem.ResetPosition();
                 }

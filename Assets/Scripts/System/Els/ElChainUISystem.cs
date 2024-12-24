@@ -6,111 +6,108 @@ using UnityEngine.UI;
 public class ElChainUISystem : ElDependency
 {
     private Transform _chainParent;
+    private Transform _containerChild;
 
     private TextMeshProUGUI _movesRemainingText;
     
     private Vector3 _chainParentInitialPos;
     
-    private LinkedList<(Piece, RectTransform, Image)> _chainPiecesImages = new ();
-    private LinkedListNode<(Piece, RectTransform, Image)> _currentPiece;
+    private LinkedList<(Piece, Image)> _chainPiecesImages = new ();
+    private LinkedListNode<(Piece, Image)> _nextFreeImage;
     
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
         
         _chainParent = GameObject.FindWithTag("ChainParent").transform;
+        _containerChild = _chainParent.GetComponentInChildren<ContentSizeFitter>().transform;
 
+        Image[] chainPieceImages = _containerChild.GetComponentsInChildren<Image>();
+        foreach (Image chainPieceImage in chainPieceImages)
+        {
+            _chainPiecesImages.AddLast((Piece.NotChosen, chainPieceImage));
+            chainPieceImage.gameObject.SetActive(false);
+        }
+        _nextFreeImage = _chainPiecesImages.First;
+        
         GameObject movesRemainingText = GameObject.FindWithTag("MovesRemaining");
         _movesRemainingText = movesRemainingText.GetComponentInChildren<TextMeshProUGUI>();
         
-        _chainParentInitialPos = _chainParent.localPosition;
+        _chainParentInitialPos = _containerChild.localPosition;
         
         ResetPosition();
         
         ShowNewPiece(Creator.playerSystemSo.startingPiece, true);
+        ShowNewPiece(Piece.Bishop);
+        ShowNewPiece(Piece.Rook);
+        ShowNewPiece(Piece.King);
+        
+        PieceSandwiched(2, Piece.Pawn);
+        PieceSandwiched(2, Piece.Queen);
+        
+        ShowNewPiece(Piece.Pawn);
         
         UpdateMovesRemainingText(1);
     }
     
     public void ShowNewPiece(Piece piece, bool isFirstPiece = false)
     {
-        GameObject newPieceImage;
-        if (_chainPiecesImages.Count != 0)
-        {
-            RectTransform lastPieceTransform = _chainPiecesImages.Last.Value.Item2;
-
-            newPieceImage = Creator.InstantiateGameObjectWithParent(Creator.capturedPieceImagePrefab, _chainParent);
-
-            newPieceImage.transform.localPosition += lastPieceTransform.localPosition + new Vector3(250, 0, 0);
-        }
-        else
-        {
-            newPieceImage = Creator.InstantiateGameObjectWithParent(Creator.capturedPieceImagePrefab, _chainParent);
-        }
-
-        Image visual = newPieceImage.GetComponent<Image>();
-
-        visual.sprite = GetSprite(piece);
-        
         //For every other piece we first want to add an arrow indicating the order for the chain
         if (!isFirstPiece)
         {
-            Vector3 posBehindNewPieceImage = newPieceImage.transform.localPosition - new Vector3(125, 0, 0);
-
-            GameObject arrowPointingToNextPiece = Creator.InstantiateGameObjectWithParent(Creator.arrowPointingToNextPiecePrefab, _chainParent);
-
-            arrowPointingToNextPiece.transform.localPosition = posBehindNewPieceImage;
-
-            _chainPiecesImages.AddLast((Piece.NotChosen, arrowPointingToNextPiece.GetComponent<RectTransform>(), visual));
+            
+            _nextFreeImage.Value.Item2.sprite = Creator.chainSo.arrowPointingToNextPiece;
+            _nextFreeImage.Value.Item2.gameObject.SetActive(true);
+            _nextFreeImage.Value = (Piece.NotChosen, _nextFreeImage.Value.Item2);
+            
+            _nextFreeImage = _nextFreeImage.Next;
         }
         
-        _chainPiecesImages.AddLast((piece, newPieceImage.GetComponent<RectTransform>(), visual));
-        if (isFirstPiece)
-        {
-            _currentPiece = _chainPiecesImages.First;
-        }
+        _nextFreeImage.Value.Item2.sprite = GetSprite(piece);
+        _nextFreeImage.Value.Item2.gameObject.SetActive(true);
+        _nextFreeImage.Value = (piece, _nextFreeImage.Value.Item2);
+
+        _nextFreeImage = _nextFreeImage.Next;
     }
 
     public void ResetPosition()
     {
         _chainParent.localPosition = _chainParentInitialPos;
-        _currentPiece = _chainPiecesImages.First;
-        foreach ((Piece, RectTransform, Image) chainPiecesImage in _chainPiecesImages)
+        foreach ((Piece, Image) chainPiecesImage in _chainPiecesImages)
         {
-            chainPiecesImage.Item3.color = new Color(1,1,1, 1);
+            chainPiecesImage.Item2.color = new Color(1,1,1, 1);
         }
     }
 
     public void NewRoomClearChain()
     {
-        foreach ((Piece, RectTransform, Image) capturedPiecesImage in _chainPiecesImages)
+        foreach ((Piece, Image) capturedPiecesImage in _chainPiecesImages)
         {
             capturedPiecesImage.Item2.gameObject.SetActive(false);
         }
-        _chainPiecesImages.Clear();
-        _currentPiece = null;
+        _nextFreeImage = _chainPiecesImages.First;
         _movesRemainingText.text = "1";
     }
 
     public void HighlightNextPiece()
     {
         //Move _capturedPiecesParent along
-        _currentPiece.Value.Item3.color = new Color(0.75f,0.75f,0.75f,1);
-        _currentPiece = _currentPiece.Next.Next;
-        _chainParent.localPosition += new Vector3(-250, 0, 0);
+        //_nextFreeImage.Value.Item2.color = new Color(0.75f,0.75f,0.75f,1);
+        //_nextFreeImage = _nextFreeImage.Next.Next;
+        _chainParent.localPosition += new Vector3(-275, 0, 0);
     }
 
     public void PawnPromoted(int index, Piece promotedPiece)
     {
-        LinkedListNode<(Piece, RectTransform, Image)> temp = _chainPiecesImages.First;
+        LinkedListNode<(Piece, Image)> temp = _chainPiecesImages.First;
         int tempIndex = 0;
         while (temp != null)
         {
             if (index == tempIndex)
             {
-                (Piece, RectTransform, Image) value = temp.Value;
+                (Piece, Image) value = temp.Value;
                 value.Item1 = promotedPiece;
-                value.Item3.sprite = GetSprite(promotedPiece);
+                value.Item2.sprite = GetSprite(promotedPiece);
                 temp.Value = value;
                 break;
             }
@@ -118,6 +115,67 @@ public class ElChainUISystem : ElDependency
             tempIndex++;
             temp = temp.Next;
         }
+    }
+
+    public void PieceSandwiched(int index, Piece pieceToSandwich)
+    {
+        int tempIndex = 0;
+        int numOfImagesActive = GetNumOfImagesActive();
+
+        LinkedListNode<(Piece, Image)> temp = _chainPiecesImages.First;
+        
+        LinkedList<Piece> piecesInOrder = new();
+        
+        while (temp is not null && tempIndex <= numOfImagesActive)
+        {
+            if (index == tempIndex)
+            {
+                piecesInOrder.AddLast(pieceToSandwich);
+                piecesInOrder.AddLast(Piece.NotChosen);
+            }
+            else
+            {
+                piecesInOrder.AddLast(temp.Value.Item1);
+                temp = temp.Next;
+            }
+            
+            tempIndex++;
+        }
+        
+        //We have the order of pieces and arrows
+        //Now we go into _chainPiecesImages and adjust the sprites until we reach the last one in use
+        //This will be for an arrow
+        _nextFreeImage.Value.Item2.gameObject.SetActive(true);
+        //This will be for the last one in the chain
+        _nextFreeImage.Next.Value.Item2.gameObject.SetActive(true);
+        
+        tempIndex = 0;
+        numOfImagesActive = GetNumOfImagesActive();
+
+        LinkedListNode<Piece> piecesInOrderTemp = piecesInOrder.First;
+        temp = _chainPiecesImages.First;
+        
+        while (temp is not null && piecesInOrderTemp is not null && tempIndex <= numOfImagesActive)
+        {
+            temp.Value.Item2.sprite = GetSprite(piecesInOrderTemp.Value);
+            temp.Value = (piecesInOrderTemp.Value, temp.Value.Item2);
+            
+            piecesInOrderTemp = piecesInOrderTemp.Next;
+            temp = temp.Next;
+        }
+
+        _nextFreeImage = _nextFreeImage.Next.Next;
+    }
+
+    private int GetNumOfImagesActive()
+    {
+        int count = 0;
+        foreach ((Piece, Image) chainPiecesImage in _chainPiecesImages)
+        {
+            if (chainPiecesImage.Item2.gameObject.activeSelf)
+                count++;
+        }
+        return count;
     }
 
     private Sprite GetSprite(Piece piece)
@@ -136,6 +194,8 @@ public class ElChainUISystem : ElDependency
                 return Creator.playerSystemSo.queen;
             case Piece.King:
                 return Creator.playerSystemSo.king;
+            case Piece.NotChosen:
+                return Creator.chainSo.arrowPointingToNextPiece;
         }
         
         //Given the logic of the code we should never get here but have to add something
