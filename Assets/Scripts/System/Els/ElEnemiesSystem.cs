@@ -18,8 +18,6 @@ public class ElEnemiesSystem : ElDependency
 
     private List<Transform> _validPositionsVisuals = new(64);
     
-    private Dictionary<ElEnemyController, bool> _haveEnemyControllersFinishedMove = new();
-    
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
@@ -199,7 +197,6 @@ public class ElEnemiesSystem : ElDependency
             
             enemyController.SetEnemyInstance(cachedSpawn.Key, cachedSpawn.Value.Item1, cachedSpawn.Value.Item3, doors);
             _enemyControllers.Add(enemyController);
-            _haveEnemyControllersFinishedMove.Add(enemyController, false);
         }
 
     }
@@ -254,7 +251,6 @@ public class ElEnemiesSystem : ElDependency
         enemyController.PieceCaptured();
         
         _enemyControllers.Remove(enemyController);
-        _haveEnemyControllersFinishedMove.Remove(enemyController);
 
         if (IsEnemiesInRoomCleared(roomNumber))
         {
@@ -275,7 +271,6 @@ public class ElEnemiesSystem : ElDependency
                 {
                     _moveInRoomQueue.Enqueue(enemyController);
                 }
-                _haveEnemyControllersFinishedMove[enemyController] = false;
             }
 
             if (_moveInRoomQueue.TryDequeue(out ElEnemyController firstEnemy))
@@ -325,10 +320,6 @@ public class ElEnemiesSystem : ElDependency
 
     public void EnemyControllerMoved(ElEnemyController enemyController)
     {
-        _haveEnemyControllersFinishedMove[enemyController] = true;
-        
-        bool allEnemiesMoved = true;
-        
         if (_moveInRoomQueue.TryDequeue(out ElEnemyController nextEnemy))
         {
             nextEnemy.SetState(ElEnemyController.States.ChooseTile);
@@ -448,15 +439,14 @@ public class ElEnemiesSystem : ElDependency
                     break;
             }
 
-            List<Vector3> possibleMoves = new();
             if (isDefiniteMoves)
             {
-                possibleMoves = enemyController.CheckPossibleDefinitePositions(pieceTypeMoves);
+                List<Vector3> possibleMoves = enemyController.CheckPossibleDefinitePositions(pieceTypeMoves);
                 validMoves = validMoves.Concat(possibleMoves).ToList();
             }
             else
             {
-                possibleMoves = enemyController.CheckPossibleIndefinitePositions(pieceTypeMoves);
+                List<Vector3> possibleMoves = enemyController.CheckPossibleIndefinitePositions(pieceTypeMoves);
                 validMoves = validMoves.Concat(possibleMoves).ToList();
             }
         }
@@ -466,10 +456,5 @@ public class ElEnemiesSystem : ElDependency
             _validPositionsVisuals[i].position = validMoves[i];
             _validPositionsVisuals[i].gameObject.SetActive(true);
         }
-    }
-
-    public void CreateMoveInRoomQueue()
-    {
-        
     }
 }

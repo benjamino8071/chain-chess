@@ -158,9 +158,7 @@ public class ElShopSystem : ElDependency
                         };
                         int index = Random.Range(0, types.Count);
                         
-                        //Have to check for duplicates
-                        //If it is enemy line of sight, then we need to check the line of sight artefacts
-                        if (Creator.shopSo.artefactsPositions.ContainsValue(types[index]) || Creator.playerSystemSo.artefacts.Contains(types[index]))
+                        if (types[index] != ArtefactTypes.EnemyLineOfSight && (Creator.shopSo.artefactsPositions.ContainsValue(types[index]) || Creator.playerSystemSo.artefacts.Contains(types[index])))
                         {
                             List<ArtefactTypes> typesRemoved = types;
                             typesRemoved.Remove(types[index]);
@@ -206,6 +204,11 @@ public class ElShopSystem : ElDependency
                                     Piece.Queen,
                                     Piece.King
                                 };
+                                foreach (Piece losOwned in Creator.playerSystemSo.lineOfSightsChosen)
+                                {
+                                    pieceTypes.Remove(losOwned);
+                                }
+                                
                                 int pieceTypeIndex = Random.Range(0, pieceTypes.Count);
                                 Creator.shopSo.lineOfSightForArtefact.Add(shopItem.transform.position, pieceTypes[pieceTypeIndex]);
                                 switch (Creator.shopSo.lineOfSightForArtefact[shopItem.transform.position])

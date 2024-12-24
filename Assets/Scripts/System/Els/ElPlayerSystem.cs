@@ -523,17 +523,38 @@ public class ElPlayerSystem : ElDependency
         //Score examples:
         //Level 1 Room 7 = Score of 7
         //Level 2 Room 1 = Score of 9
-        double score = Creator.playerSystemSo.levelNumberSaved * 8 + Creator.playerSystemSo.roomNumberSaved + 1;
-        
-        LeaderboardScoresPage topScores = await LeaderboardsService.Instance.GetScoresAsync(Creator.scoreboardSo.ScoreboardID, new GetScoresOptions(){Offset = 0, Limit = 11});
-        //If there are less than 10 entries then we guarantee the player makes it onto the scoreboard
-        if (topScores.Results.Count < 10)
+
+        try
         {
-            try
+            double score = Creator.playerSystemSo.levelNumberSaved * 8 + Creator.playerSystemSo.roomNumberSaved + 1;
+            
+            LeaderboardScoresPage topScores = await LeaderboardsService.Instance.GetScoresAsync(Creator.scoreboardSo.ScoreboardID, new GetScoresOptions(){Offset = 0, Limit = 11});
+            //If there are less than 10 entries then we guarantee the player makes it onto the scoreboard
+            if (topScores.Results.Count < 10)
             {
-                LeaderboardEntry leaderboardEntry = await LeaderboardsService.Instance.GetPlayerScoreAsync(Creator.scoreboardSo.ScoreboardID);
-                //Only need the player to enter their score if it is better than their previous score
-                if (leaderboardEntry.Score < score)
+                try
+                {
+                    LeaderboardEntry leaderboardEntry = await LeaderboardsService.Instance.GetPlayerScoreAsync(Creator.scoreboardSo.ScoreboardID);
+                    //Only need the player to enter their score if it is better than their previous score
+                    if (leaderboardEntry.Score < score)
+                    {
+                        _scoreEntryUISystem.Show(score);
+                    }
+                    else
+                    {
+                        _gameOverUISystem.Show("Timer Expired", false);
+                    }
+                }
+                catch (Exception)
+                {
+                    _scoreEntryUISystem.Show(score);
+                }
+            }
+            else
+            {
+                LeaderboardEntry lowestEntry = topScores.Results[^1];
+        
+                if (lowestEntry.Score < score)
                 {
                     _scoreEntryUISystem.Show(score);
                 }
@@ -542,24 +563,12 @@ public class ElPlayerSystem : ElDependency
                     _gameOverUISystem.Show("Timer Expired", false);
                 }
             }
-            catch (Exception)
-            {
-                _scoreEntryUISystem.Show(score);
-            }
         }
-        else
+        catch (Exception)
         {
-            LeaderboardEntry lowestEntry = topScores.Results[^1];
-        
-            if (lowestEntry.Score < score)
-            {
-                _scoreEntryUISystem.Show(score);
-            }
-            else
-            {
-                _gameOverUISystem.Show("Timer Expired", false);
-            }
+            _gameOverUISystem.Show("Timer Expired", false);
         }
+        
     }
 
     private void CheckDefiniteMoves(Piece piece, List<Vector3> pieceMoves, Vector3 positionRequested)
