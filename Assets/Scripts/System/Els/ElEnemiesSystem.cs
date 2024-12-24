@@ -248,11 +248,8 @@ public class ElEnemiesSystem : ElDependency
         return false;
     }
 
-    public void PieceCaptured(ElEnemyController enemyController, bool showInChainUI)
+    public void PieceCaptured(ElEnemyController enemyController)
     {
-        if(showInChainUI)
-            _chainUISystem.ShowNewPiece(enemyController.GetPiece());
-        
         enemyController.PieceCaptured();
         
         _enemyControllers.Remove(enemyController);

@@ -216,7 +216,6 @@ public class ElPlayerSystem : ElDependency
                     {
                         _promoUIController.Show();
 
-                        _currentPiece = _currentPiece.Next;
                         _chainUISystem.UpdateMovesRemainingText(0);
                         SetState(States.PawnPromo);
                         break;
@@ -235,6 +234,8 @@ public class ElPlayerSystem : ElDependency
 
                             _chainUISystem.UpdateMovesRemainingText(0);
 
+                            _currentPiece = _currentPiece.Next;
+                            
                             if (_currentPiece is not null)
                             {
                                 //Allow player to make another move
@@ -314,7 +315,7 @@ public class ElPlayerSystem : ElDependency
                         //Add this player to the 'captured pieces' list
                         Piece enemyPiece = enemyController.GetPiece();
                         
-                        _enemiesSystem.PieceCaptured(enemyController, true);
+                        _enemiesSystem.PieceCaptured(enemyController);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
                         _timerUISystem.AddTimeFromMultiplier(Creator.timerSo.capturePieceTimeAdd[enemyPiece], !enemiesCleared);
@@ -323,10 +324,25 @@ public class ElPlayerSystem : ElDependency
                             //We add this piece to the position in the queue between the current piece, and the next piece.
                             LinkedListNode<Piece> pieceNode = new LinkedListNode<Piece>(enemyPiece);
                             _capturedPieces.AddAfter(_currentPiece, pieceNode);
+                            int index = 0;
+                            LinkedListNode<Piece> temp = _capturedPieces.First;
+                            while (temp != null)
+                            {
+                                index++;
+                                if(temp == _currentPiece)
+                                    break;
+
+                                temp = temp.Next;
+                            }
+
+                            index *= 2; //Have to double index for the chainUI as for every other index, there is an arrow sprite which we NEVER want to change
+                            
+                            _chainUISystem.PieceSandwiched(index, enemyPiece);
                         }
                         else
                         {
                             _capturedPieces.AddLast(enemyPiece);
+                            _chainUISystem.ShowNewPiece(enemyController.GetPiece());
                         }
                         _chainUISystem.UpdateMovesRemainingText(0);
                         
@@ -496,7 +512,7 @@ public class ElPlayerSystem : ElDependency
                     {
                         List<ElEnemyController> enemiesInRoom = _enemiesSystem.GetEnemiesInRoom(GetRoomNumber());
                         Piece piece = enemiesInRoom[0].GetPiece();
-                        _enemiesSystem.PieceCaptured(enemiesInRoom[0],false);
+                        _enemiesSystem.PieceCaptured(enemiesInRoom[0]);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
                         _timerUISystem.AddTimeRegular(Creator.timerSo.capturePieceTimeAdd[piece], !enemiesCleared);
