@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Authentication;
 using Unity.Services.Leaderboards;
+using Unity.Services.Leaderboards.Exceptions;
 using Unity.Services.Leaderboards.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -464,6 +465,7 @@ public class ElPlayerSystem : ElDependency
                     _chainUISystem.ResetPosition();
                     _chainUISystem.ShowNewPiece(_currentRoomStartPiece, true);
                     Creator.playerSystemSo.moveMadeInNewRoom = false;
+                    _currentPiece = null;
                     SetState(States.DoorWalk);
                 }
                 break;
@@ -602,36 +604,33 @@ public class ElPlayerSystem : ElDependency
         //Level 1 Room 7 = Score of 7
         //Level 2 Room 1 = Score of 9
 
+        double score = Creator.playerSystemSo.levelNumberSaved * 8 + Creator.playerSystemSo.roomNumberSaved + 1;
+        
         try
         {
-            double score = Creator.playerSystemSo.levelNumberSaved * 8 + Creator.playerSystemSo.roomNumberSaved + 1;
-            
-            LeaderboardScoresPage topScores = await LeaderboardsService.Instance.GetScoresAsync(Creator.scoreboardSo.ScoreboardID, new GetScoresOptions(){Offset = 0, Limit = 11});
+
+            LeaderboardScoresPage topScores =
+                await LeaderboardsService.Instance.GetScoresAsync(Creator.scoreboardSo.ScoreboardID,
+                    new GetScoresOptions() { Offset = 0, Limit = 11 });
             //If there are less than 10 entries then we guarantee the player makes it onto the scoreboard
             if (topScores.Results.Count < 10)
             {
-                try
-                {
-                    LeaderboardEntry leaderboardEntry = await LeaderboardsService.Instance.GetPlayerScoreAsync(Creator.scoreboardSo.ScoreboardID);
-                    //Only need the player to enter their score if it is better than their previous score
-                    if (leaderboardEntry.Score < score)
-                    {
-                        _scoreEntryUISystem.Show(score);
-                    }
-                    else
-                    {
-                        _gameOverUISystem.Show("Timer Expired", false);
-                    }
-                }
-                catch (Exception)
+                LeaderboardEntry leaderboardEntry =
+                    await LeaderboardsService.Instance.GetPlayerScoreAsync(Creator.scoreboardSo.ScoreboardID);
+                //Only need the player to enter their score if it is better than their previous score
+                if (leaderboardEntry.Score < score)
                 {
                     _scoreEntryUISystem.Show(score);
+                }
+                else
+                {
+                    _gameOverUISystem.Show("Timer Expired", false);
                 }
             }
             else
             {
                 LeaderboardEntry lowestEntry = topScores.Results[^1];
-        
+
                 if (lowestEntry.Score < score)
                 {
                     _scoreEntryUISystem.Show(score);
@@ -642,8 +641,29 @@ public class ElPlayerSystem : ElDependency
                 }
             }
         }
-        catch (Exception)
+        catch (LeaderboardsException e)
         {
+            if (e.Reason == LeaderboardsExceptionReason.EntryNotFound)
+            {
+                try
+                {
+                    await LeaderboardsService.Instance.AddPlayerScoreAsync(Creator.scoreboardSo.ScoreboardID, score - 1);
+                    CheckScore();
+                }
+                catch (Exception)
+                {
+                    _gameOverUISystem.Show("Timer Expired", false);
+                }
+            }
+            else
+            {
+                _gameOverUISystem.Show("Timer Expired", false);
+            }
+            Debug.Log("Reason: "+e.Reason);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("Error while checking final score: "+e);
             _gameOverUISystem.Show("Timer Expired", false);
         }
         
@@ -1086,11 +1106,10 @@ public class ElPlayerSystem : ElDependency
             case States.Idle:
                 if (_currentPiece is null)
                 {
-                    UpdateSprite(_currentRoomStartPiece);
                     _currentPiece = _capturedPieces.First;
+                    UpdateSprite(_currentPiece.Value);
                     //Reset possible moves
                     _chainUISystem.UpdateMovesRemainingText(_capturedPieces.Count);
-                    _currentPiece = _capturedPieces.First;
                     _chainUISystem.ResetPosition();
                 }
                 break;

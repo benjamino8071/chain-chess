@@ -70,6 +70,7 @@ public class ElGameOverUISystem : ElDependency
 
     public void Show(string message, bool showRestartRoom)
     {
+        Debug.Log("Showing game over screen");
         _restartRoomButton.gameObject.SetActive(showRestartRoom);
         _titleText.text = message;
         

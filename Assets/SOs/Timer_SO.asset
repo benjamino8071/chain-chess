@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff9b430cf0d68e649a1dd30eefe80598, type: 3}
   m_Name: Timer_SO
   m_EditorClassIdentifier: 
-  startingTime: 100
-  currentTime: 63.462936
+  startingTime: 10
+  currentTime: 10
   playerRespawnDivideCost: 2
   timerMultiplier: 1
   timerMultiplierMultiplier: 1.11

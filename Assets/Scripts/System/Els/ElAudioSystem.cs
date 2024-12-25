@@ -83,7 +83,8 @@ public class ElAudioSystem : ElDependency
 
     public void PlayDoorClosedSfx()
     {
-        _doorClosedAudio.Play();
+        //TODO: Find better audio for closing door
+        //_doorClosedAudio.Play();
     }
 
     public void PlayRoomCompleteSfx()

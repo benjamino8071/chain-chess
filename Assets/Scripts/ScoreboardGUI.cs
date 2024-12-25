@@ -67,7 +67,7 @@ public class ScoreboardGUI : MonoBehaviour
                 playerName = playerName.Substring(0, hashIndex);
             }
 
-            double roomsCleared = scores.Results[i].Score - 1;
+            double roomsCleared = scores.Results[i].Score;
             
             currentNameText.Value.text = $"{i+1}. {playerName} - {roomsCleared}";
             i++;

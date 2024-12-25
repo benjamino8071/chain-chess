@@ -13,10 +13,13 @@ public class ServicesSignIn : MonoBehaviour
     
     private async void Awake()
     {
-        if (UnityServices.Instance.State == ServicesInitializationState.Uninitialized)
+        try
         {
-            await UnityServices.InitializeAsync();
-        
+            if (UnityServices.Instance.State == ServicesInitializationState.Uninitialized)
+            {
+                await UnityServices.InitializeAsync();
+            }
+            
             if (!AuthenticationService.Instance.IsSignedIn)
             {
 
@@ -24,12 +27,14 @@ public class ServicesSignIn : MonoBehaviour
             }
             else
             {
+                onlineConnectionStatusText.text = "You are Online";
                 scoreboardGUI.ShowScoreboardButton();
             }
         }
-        else
+        catch (Exception e)
         {
-            scoreboardGUI.ShowScoreboardButton();
+            onlineConnectionStatusText.text = "You are Offline";
+            Debug.LogWarning("Could not connect to Authentication Service. Error: "+e);
         }
     }
     
@@ -44,8 +49,6 @@ public class ServicesSignIn : MonoBehaviour
             };
             AuthenticationService.Instance.SignInFailed += s =>
             {
-                // Take some action here...
-                //Player is in OFFLINE mode
                 onlineConnectionStatusText.text = "You are Offline";
             };
 
@@ -53,6 +56,7 @@ public class ServicesSignIn : MonoBehaviour
         }
         catch (Exception e)
         {
+            onlineConnectionStatusText.text = "You are Offline";
             Debug.LogWarning("Could not connect to Authentication Service. Error: "+e);
         }
 

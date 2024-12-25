@@ -184,6 +184,7 @@ public class ElChainUISystem : ElDependency
 
     public void UpdateMovesRemainingText(int movesRemaining)
     {
-        _movesRemainingText.text = movesRemaining.ToString();
+        //TODO: Get the 'moves remaining' text working again
+        _movesRemainingText.text = "";
     }
 }
