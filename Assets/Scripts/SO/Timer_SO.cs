@@ -47,7 +47,7 @@ public class Timer_SO : ScriptableObject
     public readonly Dictionary<ArtefactTypes, int> artefactsCost = new()
     {
         { ArtefactTypes.EnemyLineOfSight, 6},
-        { ArtefactTypes.DestroyChainStayAlive, 30},
+        { ArtefactTypes.ConCaptureAttackingEnemy, 30},
         { ArtefactTypes.UseCapturedPieceStraightAway, 15},
         { ArtefactTypes.CaptureKingClearRoom, 40}
     };

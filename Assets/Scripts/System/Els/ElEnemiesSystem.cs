@@ -207,7 +207,8 @@ public class ElEnemiesSystem : ElDependency
 
     public override void GameUpdate(float dt)
     {
-        foreach (ElEnemyController enemyController in _enemyControllers)
+        List<ElEnemyController> eneCons = _enemyControllers.ToList();
+        foreach (ElEnemyController enemyController in eneCons)
         {
             enemyController.GameUpdate(dt);
         }

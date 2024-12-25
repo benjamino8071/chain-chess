@@ -113,7 +113,7 @@ public class ElArtefactController : Controller
             case ArtefactTypes.UseCapturedPieceStraightAway:
                 _image.sprite = Creator.shopSo.useCapturedPieceStraightAwaySprite;
                 break;
-            case ArtefactTypes.DestroyChainStayAlive:
+            case ArtefactTypes.ConCaptureAttackingEnemy:
                 _image.sprite = Creator.shopSo.destroyChainStayAliveSprite;
                 break;
         }
@@ -148,5 +148,10 @@ public class ElArtefactController : Controller
     public void HideSellButton()
     {
         _sellButton.gameObject.SetActive(false);
+    }
+
+    public ArtefactTypes GetArtefactType()
+    {
+        return _type;
     }
 }

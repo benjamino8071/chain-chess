@@ -82,9 +82,9 @@ public class ElShopSystem : ElDependency
                                 shopItemSprRend.sprite = Creator.shopSo.captureKingClearRoomSprite;
                                 costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.CaptureKingClearRoom]:0.##}s";
                                 break;
-                            case ArtefactTypes.DestroyChainStayAlive:
+                            case ArtefactTypes.ConCaptureAttackingEnemy:
                                 shopItemSprRend.sprite = Creator.shopSo.destroyChainStayAliveSprite;
-                                costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.DestroyChainStayAlive]:0.##}s";
+                                costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.ConCaptureAttackingEnemy]:0.##}s";
                                 break;
                             case ArtefactTypes.EnemyLineOfSight:
                                 switch (Creator.shopSo.lineOfSightForArtefact[shopItem.transform.position])
@@ -112,7 +112,7 @@ public class ElShopSystem : ElDependency
                                 break;
                             case ArtefactTypes.UseCapturedPieceStraightAway:
                                 shopItemSprRend.sprite = Creator.shopSo.useCapturedPieceStraightAwaySprite;
-                                costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.DestroyChainStayAlive]:0.##}s";
+                                costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.ConCaptureAttackingEnemy]:0.##}s";
                                 break;
                         }
                         Creator.shopSo.artefactsSprites[shopItem.transform.position] = shopItemSprRend;
@@ -152,7 +152,7 @@ public class ElShopSystem : ElDependency
                         List<ArtefactTypes> types = new()
                         {
                             ArtefactTypes.EnemyLineOfSight,
-                            ArtefactTypes.DestroyChainStayAlive,
+                            ArtefactTypes.ConCaptureAttackingEnemy,
                             ArtefactTypes.UseCapturedPieceStraightAway,
                             ArtefactTypes.CaptureKingClearRoom
                         };
@@ -190,9 +190,9 @@ public class ElShopSystem : ElDependency
                                 shopItemSprRend.sprite = Creator.shopSo.captureKingClearRoomSprite;
                                 costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.CaptureKingClearRoom]:0.##}s";
                                 break;
-                            case ArtefactTypes.DestroyChainStayAlive:
+                            case ArtefactTypes.ConCaptureAttackingEnemy:
                                 shopItemSprRend.sprite = Creator.shopSo.destroyChainStayAliveSprite;
-                                costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.DestroyChainStayAlive]:0.##}s";
+                                costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.ConCaptureAttackingEnemy]:0.##}s";
                                 break;
                             case ArtefactTypes.EnemyLineOfSight:
                                 List<Piece> pieceTypes = new()
@@ -315,7 +315,7 @@ public class ElShopSystem : ElDependency
                 {
                     case ArtefactTypes.CaptureKingClearRoom:
                         break;
-                    case ArtefactTypes.DestroyChainStayAlive:
+                    case ArtefactTypes.ConCaptureAttackingEnemy:
                         break;
                     case ArtefactTypes.EnemyLineOfSight:
                         cost *= Creator.timerSo.capturePieceTimeAdd[piece];

@@ -71,6 +71,18 @@ public class ElArtefactsUISystem : ElDependency
         return false;
     }
 
+    public void RemoveArtefact(ArtefactTypes artefactType)
+    {
+        foreach (ElArtefactController artefactsController in _artefactsControllers)
+        {
+            if (artefactsController.GetArtefactType() == artefactType)
+            {
+                artefactsController.SetNotInUse();
+                break;
+            }
+        }
+    }
+
     public void HideAllSellButtons()
     {
         foreach (ElArtefactController artefactsController in _artefactsControllers)

@@ -12,6 +12,7 @@ public class ElEnemyController : ElController
     private ElDoorsSystem _doorsSystem;
     private ElTimerUISystem _timerUISystem;
     private ElAudioSystem _audioSystem;
+    private ElArtefactsUISystem _artefactsUISystem;
     
     private Transform _enemyInstance;
 
@@ -78,6 +79,10 @@ public class ElEnemyController : ElController
         if (elCreator.TryGetDependency(out ElAudioSystem audioSystem))
         {
             _audioSystem = audioSystem;
+        }
+        if (elCreator.TryGetDependency(out ElArtefactsUISystem artefactsUISystem))
+        {
+            _artefactsUISystem = artefactsUISystem;
         }
         
         SetState(States.WaitingForTurn);
@@ -398,9 +403,18 @@ public class ElEnemyController : ElController
                     
                     if (_enemyInstance.position == _playerSystem.GetPlayerPosition())
                     {
-                        _timerUISystem.StopTimer();
-                        _playerSystem.SetState(ElPlayerSystem.States.Captured);
-                        _enemiesSystem.SetStateForAllEnemies(States.Won);
+                        if (Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.ConCaptureAttackingEnemy))
+                        {
+                            _artefactsUISystem.RemoveArtefact(ArtefactTypes.ConCaptureAttackingEnemy);
+                            _enemiesSystem.EnemyControllerMoved(this);
+                            _playerSystem.EnemyCaptured(this);
+                        }
+                        else
+                        {
+                            _timerUISystem.StopTimer();
+                            _playerSystem.SetState(ElPlayerSystem.States.Captured);
+                            _enemiesSystem.SetStateForAllEnemies(States.Won);
+                        }
                     }
                     else
                     {
@@ -478,13 +492,11 @@ public class ElEnemyController : ElController
                             if (promoted)
                             {
                                 _currentPieceInChain.Value = _piece;
-                                Debug.Log("This player promoted! Updating piece in chain to "+_currentPieceInChain.Value);
                             }
                             
                             if (_currentPieceInChain.Next is not null)
                             {
                                 _currentPieceInChain = _currentPieceInChain.Next;
-                                Debug.Log("Moving again! Next piece will be "+_currentPieceInChain.Value);
                                 SetPiece(_currentPieceInChain.Value);
                                 SetState(States.ChooseTile);
                                 return;

@@ -1112,4 +1112,31 @@ public class ElPlayerSystem : ElDependency
     {
         return _roomNumber;
     }
+
+    public void EnemyCaptured(ElEnemyController enemyController)
+    {
+        //Add this player to the 'captured pieces' list
+        Piece enemyPiece = enemyController.GetPiece();
+        _enemiesSystem.PieceCaptured(enemyController);
+        
+        bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber()); 
+        _timerUISystem.AddTimeFromMultiplier(Creator.timerSo.capturePieceTimeAdd[enemyPiece], !enemiesCleared);
+        _capturedPieces.AddLast(enemyPiece);
+        _chainUISystem.ShowNewPiece(enemyController.GetPiece());
+        _chainUISystem.UpdateMovesRemainingText(0);
+                        
+        if (enemiesCleared)
+        {
+            _audioSystem.PlayRoomCompleteSfx();
+            _timerUISystem.StopTimer();
+            _doorsSystem.SetRoomDoorsOpen(GetRoomNumber());
+        }
+        else if (enemyPiece == Piece.King &&
+                 Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.CaptureKingClearRoom))
+        {
+            _timerUISystem.StopTimer();
+            _destroyEnemyTimer = Creator.timerSo.destroyEnemyTimer;
+            SetState(States.DestroyingAllEnemiesInRoom);
+        }
+    }
 }

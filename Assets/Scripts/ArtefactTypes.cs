@@ -2,7 +2,9 @@ public enum ArtefactTypes
 {
     None,
     EnemyLineOfSight,
-    DestroyChainStayAlive,
+    ConCaptureAttackingEnemy,
     UseCapturedPieceStraightAway,
     CaptureKingClearRoom
 }
+
+//'Con' indicates it is a consumable artefact.
