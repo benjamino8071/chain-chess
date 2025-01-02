@@ -29,6 +29,7 @@ public class ElPlayerSystem : ElDependency
     private ElScoreEntryUISystem _scoreEntryUISystem;
     private ElShopSystem _shopSystem;
     private ElDoorsSystem _doorsSystem;
+    private ElXPBarUISystem _xpBarUISystem;
 
     private ElPromoUIController _promoUIController;
     
@@ -125,10 +126,13 @@ public class ElPlayerSystem : ElDependency
         {
             _shopSystem = shopSystem;
         }
-
         if (Creator.TryGetDependency(out ElDoorsSystem doorsSystem))
         {
             _doorsSystem = doorsSystem;
+        }
+        if (Creator.TryGetDependency(out ElXPBarUISystem xpBarUISystem))
+        {
+            _xpBarUISystem = xpBarUISystem;
         }
         
         _currentRoomStartPiece = Creator.playerSystemSo.startingPiece;
@@ -320,6 +324,7 @@ public class ElPlayerSystem : ElDependency
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
                         _timerUISystem.AddTimeFromMultiplier(Creator.timerSo.capturePieceTimeAdd[enemyPiece], !enemiesCleared);
+                        _xpBarUISystem.IncreaseProgressBar(0.1f);
                         if (_currentPiece.Next is not null && Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.UseCapturedPieceStraightAway))
                         {
                             //We add this piece to the position in the queue between the current piece, and the next piece.
@@ -1140,6 +1145,7 @@ public class ElPlayerSystem : ElDependency
         
         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber()); 
         _timerUISystem.AddTimeFromMultiplier(Creator.timerSo.capturePieceTimeAdd[enemyPiece], !enemiesCleared);
+        _xpBarUISystem.IncreaseProgressBar(0.1f);
         _capturedPieces.AddLast(enemyPiece);
         _chainUISystem.ShowNewPiece(enemyController.GetPiece());
         _chainUISystem.UpdateMovesRemainingText(0);

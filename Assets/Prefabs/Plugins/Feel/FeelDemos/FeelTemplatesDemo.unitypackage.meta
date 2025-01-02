@@ -5,3 +5,10 @@ DefaultImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183370
+  packageName: Feel
+  packageVersion: 5.2
+  assetPath: Assets/Prefabs/Plugins/Feel/FeelDemos/FeelTemplatesDemo.unitypackage
+  uploadId: 718861

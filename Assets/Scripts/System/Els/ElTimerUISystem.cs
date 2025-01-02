@@ -1,4 +1,5 @@
 using System.Collections;
+using MoreMountains.Tools;
 using TMPro;
 using UnityEngine;
 
@@ -75,7 +76,7 @@ public class ElTimerUISystem : ElDependency
         bool endGame = false;
         if (_playTimer && Creator.timerSo.currentTime > 0 && _playerSystem.GetState() != ElPlayerSystem.States.EndGame && Creator.playerSystemSo.roomNumberSaved != Creator.shopSo.shopRoomNumber && Creator.playerSystemSo.roomNumberSaved < 9)
         {
-            Creator.timerSo.currentTime -= dt;
+            //Creator.timerSo.currentTime -= dt;
 
             if (Creator.timerSo.currentTime <= 0)
                 endGame = true;
