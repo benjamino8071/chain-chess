@@ -29,34 +29,25 @@ public class ElPauseUISystem : ElDependency
         {
             _timerUISystem = timerUISystem;
         }
-        
-        _pauseGUI = GameObject.FindWithTag("Pause").transform;
+
+        _pauseGUI = elCreator.GetFirstObjectWithName(AllTagNames.Pause);
         
         _pauseUITextInfo = _pauseGUI.GetComponentInChildren<PauseUITextInfo>();
 
-        Button[] buttons = _pauseGUI.GetComponentsInChildren<Button>();
-        foreach (Button button in buttons)
-        {
-            if (button.CompareTag("Exit"))
-            {
-                button.onClick.AddListener(() =>
-                {
-                    SceneManager.LoadScene("MainMenuScene");
-                });
-            }
-        }
-        
-        _pauseButton = GameObject.FindWithTag("PauseButton").GetComponent<Button>();
+        Transform exitButtonTf = elCreator.GetChildObjectByName(_pauseGUI.gameObject, AllTagNames.Exit);
 
-        Image[] pauseButtonImages = _pauseButton.GetComponentsInChildren<Image>();
-        foreach (Image image in pauseButtonImages)
+        Button exitButton = exitButtonTf.GetComponent<Button>();
+        exitButton.onClick.AddListener(() =>
         {
-            if (image.CompareTag("Notification"))
-            {
-                _upgradeNotificationImage = image.gameObject;
-            }
-        }
-        
+            SceneManager.LoadScene("MainMenuScene");
+        });
+
+        Transform pauseButton = elCreator.GetFirstObjectWithName(AllTagNames.PauseButton);
+        _pauseButton = pauseButton.GetComponent<Button>();
+
+        Transform upgradeNotificationImage =
+            elCreator.GetChildObjectByName(pauseButton.gameObject, AllTagNames.Notification);
+        _upgradeNotificationImage = upgradeNotificationImage.gameObject;
         
         _pauseButton.onClick.AddListener(() =>
         {

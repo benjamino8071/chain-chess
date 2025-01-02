@@ -67,7 +67,8 @@ public class ElArtefactController : Controller
             }
             amountToAdd /= Creator.timerSo.sellArtefactDivider;
             
-            _timerUISystem.AddTimeRegular(amountToAdd, true);
+            //TODO: Give the player XP when they sell their artefact
+            //_timerUISystem.AddTimeRegular(amountToAdd, true);
             HideSellButton();
             SetNotInUse();
             

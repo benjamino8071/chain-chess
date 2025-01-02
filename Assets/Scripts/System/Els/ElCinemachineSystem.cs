@@ -22,8 +22,8 @@ public class ElCinemachineSystem : ElDependency
         {
             _timerUISystem = timerUISystem;
         }
-        
-        GameObject cameraStateMachine = GameObject.FindWithTag("CameraStateMachine");
+
+        Transform cameraStateMachine = elCreator.GetFirstObjectWithName(AllTagNames.CameraStateMachine);
         CinemachineCamera[] cameras = cameraStateMachine.GetComponentsInChildren<CinemachineCamera>();
         _cameras = cameras.ToList();
 

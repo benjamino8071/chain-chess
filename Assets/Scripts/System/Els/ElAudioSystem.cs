@@ -18,33 +18,31 @@ public class ElAudioSystem : ElDependency
 
         foreach (AudioSource audioSource in audioSources)
         {
-            if (audioSource.CompareTag("Player"))
+            TagName tagName = audioSource.GetComponent<TagName>();
+
+            switch (tagName.tagName)
             {
-                _pieceMoveAudio = audioSource;
-            }
-            else if (audioSource.CompareTag("CapturedPiecesParent"))
-            {
-                _enemyCapturedAudio = audioSource;
-            }
-            else if (audioSource.CompareTag("Enemy"))
-            {
-                _capturedByEnemyAudio = audioSource;
-            }
-            else if (audioSource.CompareTag("Retry"))
-            {
-                _timeLostAudio = audioSource;
-            }
-            else if (audioSource.CompareTag("Up"))
-            {
-                _levelUpAudio = audioSource;
-            }
-            else if (audioSource.CompareTag("LevelComplete"))
-            {
-                _roomCompleteAudio = audioSource;
-            }
-            else if (audioSource.CompareTag("NextLevel"))
-            {
-                _doorClosedAudio = audioSource;
+                case AllTagNames.Moving:
+                    _pieceMoveAudio = audioSource;
+                    break;
+                case AllTagNames.CapturedPiecesParent:
+                    _enemyCapturedAudio = audioSource;
+                    break;
+                case AllTagNames.Enemy:
+                    _capturedByEnemyAudio = audioSource;
+                    break;
+                case AllTagNames.Retry:
+                    _timeLostAudio = audioSource;
+                    break;
+                case AllTagNames.Up:
+                    _levelUpAudio = audioSource;
+                    break;
+                case AllTagNames.LevelComplete:
+                    _roomCompleteAudio = audioSource;
+                    break;
+                case AllTagNames.NextLevel:
+                    _doorClosedAudio = audioSource;
+                    break;
             }
         }
     }

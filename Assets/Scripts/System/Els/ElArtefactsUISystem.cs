@@ -17,8 +17,8 @@ public class ElArtefactsUISystem : ElDependency
         {
             _playerSystem = playerSystem;
         }
-        
-        _artefactsParent = GameObject.FindWithTag("Artefacts");
+
+        _artefactsParent = elCreator.GetFirstObjectWithName(AllTagNames.Artefacts).gameObject;
 
         ArtefactsUIButtons artefactsUIButtons = _artefactsParent.GetComponent<ArtefactsUIButtons>();
 

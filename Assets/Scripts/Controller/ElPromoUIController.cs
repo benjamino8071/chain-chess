@@ -31,42 +31,34 @@ public class ElPromoUIController : ElController
         Button[] promoButtons = playerObject.GetComponentsInChildren<Button>();
         foreach (Button promoButton in promoButtons)
         {
-            if (promoButton.CompareTag("ChooseQueen"))
+            TagName tagName = promoButton.GetComponent<TagName>();
+
+            Piece piece;
+            switch (tagName.tagName)
             {
-                promoButton.onClick.AddListener(() =>
-                {
-                    SelectPromotion(Piece.Queen);
-                    _timerUISystem.RemoveTime(Creator.timerSo.timeCost[Piece.Queen], false);
-                });
-                _promoCostTexts.Add(Piece.Queen, promoButton.GetComponentInChildren<TMP_Text>());
+                case AllTagNames.ChooseQueen:
+                    piece = Piece.Queen;
+                    break;
+                case AllTagNames.ChooseRook:
+                    piece = Piece.Rook;
+                    break;
+                case AllTagNames.ChooseKnight:
+                    piece = Piece.Knight;
+                    break;
+                case AllTagNames.ChooseBishop:
+                    piece = Piece.Bishop;
+                    break;
+                default:
+                    Debug.LogError("Piece not set correctly!");
+                    return;
             }
-            else if (promoButton.CompareTag("ChooseRook"))
+            
+            promoButton.onClick.AddListener(() =>
             {
-                promoButton.onClick.AddListener(() =>
-                {
-                    SelectPromotion(Piece.Rook);
-                    _timerUISystem.RemoveTime(Creator.timerSo.timeCost[Piece.Rook], false);
-                });
-                _promoCostTexts.Add(Piece.Rook, promoButton.GetComponentInChildren<TMP_Text>());
-            }
-            else if (promoButton.CompareTag("ChooseKnight"))
-            {
-                promoButton.onClick.AddListener(() =>
-                {
-                    SelectPromotion(Piece.Knight);
-                    _timerUISystem.RemoveTime(Creator.timerSo.timeCost[Piece.Knight], false);
-                });
-                _promoCostTexts.Add(Piece.Knight, promoButton.GetComponentInChildren<TMP_Text>());
-            }
-            else if (promoButton.CompareTag("ChooseBishop"))
-            {
-                promoButton.onClick.AddListener(() =>
-                {
-                    SelectPromotion(Piece.Bishop);
-                    _timerUISystem.RemoveTime(Creator.timerSo.timeCost[Piece.Bishop], false);
-                });
-                _promoCostTexts.Add(Piece.Bishop, promoButton.GetComponentInChildren<TMP_Text>());
-            }
+                SelectPromotion(piece);
+                _timerUISystem.RemoveTime(Creator.timerSo.timeCost[Piece.Bishop], false);
+            });
+            _promoCostTexts.Add(piece, promoButton.GetComponentInChildren<TMP_Text>());
         }
         
         Hide(false);

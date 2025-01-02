@@ -18,8 +18,9 @@ public class ElChainUISystem : ElDependency
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
+
+        _chainParent = elCreator.GetFirstObjectWithName(AllTagNames.ChainParent);
         
-        _chainParent = GameObject.FindWithTag("ChainParent").transform;
         _containerChild = _chainParent.GetComponentInChildren<HorizontalLayoutGroup>().transform;
 
         Image[] chainPieceImages = _containerChild.GetComponentsInChildren<Image>();
@@ -29,8 +30,8 @@ public class ElChainUISystem : ElDependency
             chainPieceImage.gameObject.SetActive(false);
         }
         _nextFreeImage = _chainPiecesImages.First;
-        
-        GameObject movesRemainingText = GameObject.FindWithTag("MovesRemaining");
+
+        Transform movesRemainingText = elCreator.GetFirstObjectWithName(AllTagNames.MovesRemaining);
         _movesRemainingText = movesRemainingText.GetComponentInChildren<TextMeshProUGUI>();
         
         _chainParentInitialPos = _containerChild.localPosition;

@@ -26,16 +26,17 @@ public class ElGridSystem : ElDependency
             _enemiesSystem = enemiesSystem;
         }
         
-        foreach (GameObject doorPosition in GameObject.FindGameObjectsWithTag("DoorPosition"))
+        List<Transform> doorPositions = elCreator.GetObjectsByName(AllTagNames.DoorPosition);
+        foreach (Transform doorPosition in doorPositions)
         {
             SingleDoorPosition singleDoorPosition = doorPosition.GetComponent<SingleDoorPosition>();
             _singleDoorPositions.Add(doorPosition.transform.position, singleDoorPosition);
         }
-        
-        Transform tileParent = GameObject.FindWithTag("TileParent").transform;
+
+        Transform tileParent = elCreator.GetFirstObjectWithName(AllTagNames.TileParent);
         
         //Go through tilemap
-        GameObject tileMapTransform = GameObject.FindWithTag("Tilemap");
+        Transform tileMapTransform = elCreator.GetFirstObjectWithName(AllTagNames.TileMap);
         Tilemap tileMap = tileMapTransform.GetComponent<Tilemap>();
         List<Vector3> _tileMapLocations = new();
         for (int x = tileMap.cellBounds.xMin; x < tileMap.cellBounds.xMax; x++)

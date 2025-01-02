@@ -43,10 +43,15 @@ public class ElTimerUISystem : ElDependency
         {
             _artefactsUISystem = artefactsUISystem;
         }
+
+        Transform timeTextTf = elCreator.GetFirstObjectWithName(AllTagNames.Timer);
+        _timeText = timeTextTf.GetComponent<TextMeshProUGUI>();
         
-        _timeText = GameObject.FindWithTag("Timer").GetComponent<TextMeshProUGUI>();
-        _timerBonusText = GameObject.FindWithTag("TimerBonus").GetComponent<TextMeshProUGUI>();
-        _multiplierAmountText = GameObject.FindWithTag("MultiplierAmount").GetComponent<TextMeshProUGUI>();
+        Transform timerBonusText = elCreator.GetFirstObjectWithName(AllTagNames.TimerBonus);
+        _timerBonusText = timerBonusText.GetComponent<TextMeshProUGUI>();
+        
+        Transform mulAmountText = elCreator.GetFirstObjectWithName(AllTagNames.MultiplierAmount);
+        _multiplierAmountText = mulAmountText.GetComponent<TextMeshProUGUI>();
         
         string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
         SetTimerText(timeText);

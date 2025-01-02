@@ -72,9 +72,87 @@ public class Creator : MonoBehaviour
     {
         StartCoroutine(corout);
     }
-
+    
     public virtual void CreateDependencies()
     {
         
+    }
+    
+    public Transform GetFirstObjectWithName(AllTagNames gameObjectName)
+    {
+        Transform[] objects = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+        foreach (Transform obj in objects)
+        {
+            if (obj.TryGetComponent(out TagName objName))
+            {
+                if (objName.tagName == gameObjectName)
+                {
+                    return obj;
+                }
+            }
+        }
+
+        Debug.LogError("Could not find object");
+        return null;
+    }
+
+    public List<Transform> GetObjectsByName(AllTagNames gameObjectName)
+    {
+        List<Transform> objs = new();
+        
+        Transform[] objects = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+        foreach (Transform obj in objects)
+        {
+            if (obj.TryGetComponent(out TagName objName))
+            {
+                if (objName.tagName == gameObjectName)
+                {
+                    objs.Add(obj);
+                }
+            }
+        }
+        
+        return objs;
+    }
+
+    public List<Transform> GetChildObjectsByName(GameObject parent, AllTagNames gameObjectName)
+    {
+        List<Transform> objs = new();
+        
+        Transform[] objects = parent.GetComponentsInChildren<Transform>(true);
+
+        foreach (Transform obj in objects)
+        {
+            if (obj.TryGetComponent(out TagName objName))
+            {
+                if (objName.tagName == gameObjectName)
+                {
+                    objs.Add(obj);
+                }
+            }
+        }
+        
+        return objs;
+    }
+
+    public Transform GetChildObjectByName(GameObject parent, AllTagNames gameObjectName)
+    {
+        Transform[] objects = parent.GetComponentsInChildren<Transform>(true);
+
+        foreach (Transform obj in objects)
+        {
+            if (obj.TryGetComponent(out TagName objName))
+            {
+                if (objName.tagName == gameObjectName)
+                {
+                    return obj;
+                }
+            }
+        }
+
+        Debug.LogError("Could not find object");
+        return null;
     }
 }

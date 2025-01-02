@@ -137,8 +137,8 @@ public class ElPlayerSystem : ElDependency
         
         _currentRoomStartPiece = Creator.playerSystemSo.startingPiece;
         _roomNumber = Creator.playerSystemSo.roomNumberSaved;
-        
-        Transform playerSpawnPosition = GameObject.FindWithTag("PlayerSpawnPosition").transform;
+
+        Transform playerSpawnPosition = elCreator.GetFirstObjectWithName(AllTagNames.PlayerSpawnPosition);
         Vector3 spawnPos = playerSpawnPosition.position;
         if (Creator.playerSystemSo.levelNumberSaved > 0 || Creator.playerSystemSo.roomNumberSaved > 0)
         {
@@ -522,6 +522,7 @@ public class ElPlayerSystem : ElDependency
                         _enemiesSystem.PieceCaptured(enemiesInRoom[0]);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
+                        //TODO: Give player XP when they capture this enemy piece
                         _timerUISystem.AddTimeRegular(Creator.timerSo.capturePieceTimeAdd[piece], !enemiesCleared);
                             
                         if (enemiesCleared)

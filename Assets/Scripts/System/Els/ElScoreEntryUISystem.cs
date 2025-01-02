@@ -32,30 +32,18 @@ public class ElScoreEntryUISystem : ElDependency
             _artefactsUISystem = artefactsUISystem;
         }
 
-        _scoreEntryUI = GameObject.FindWithTag("Entry").transform;
+        _scoreEntryUI = elCreator.GetFirstObjectWithName(AllTagNames.Entry);
 
-        GameObject[] letterChoices = GameObject.FindGameObjectsWithTag("Choice");
+        Transform choiceOne = elCreator.GetChildObjectByName(_scoreEntryUI.gameObject, AllTagNames.ChoiceOne);
+        SortOutLetterChoice(1, choiceOne);
+        
+        Transform choiceTwo = elCreator.GetChildObjectByName(_scoreEntryUI.gameObject, AllTagNames.ChoiceTwo);
+        SortOutLetterChoice(2, choiceTwo);
+        
+        Transform choiceThree = elCreator.GetChildObjectByName(_scoreEntryUI.gameObject, AllTagNames.ChoiceThree);
+        SortOutLetterChoice(3, choiceThree);
 
-        foreach (GameObject letterChoice in letterChoices)
-        {
-            int letterChoiceNumber = 0;
-            if (letterChoice.name.Contains("1"))
-            {
-                letterChoiceNumber = 1;
-            }
-            else if (letterChoice.name.Contains("2"))
-            {
-                letterChoiceNumber = 2;
-            }
-            else if (letterChoice.name.Contains("3"))
-            {
-                letterChoiceNumber = 3;
-            }
-            
-            SortOutLetterChoice(letterChoiceNumber, letterChoice.transform);
-        }
-
-        GameObject submitButtonGo = GameObject.FindWithTag("Submit");
+        Transform submitButtonGo = elCreator.GetFirstObjectWithName(AllTagNames.Submit);
         Button submitButton = submitButtonGo.GetComponent<Button>();
         submitButton.onClick.AddListener(SubmitScore);
         
@@ -89,23 +77,14 @@ public class ElScoreEntryUISystem : ElDependency
 
     private void SortOutLetterChoice(int choiceNum, Transform letterChoice)
     {
-        Button upButton = null, downButton = null;
-        TextMeshProUGUI choiceText= null;
-        foreach (Transform choiceObj in letterChoice)
-        {
-            if (choiceObj.CompareTag("Up"))
-            {
-                upButton = choiceObj.GetComponent<Button>();
-            }
-            else if (choiceObj.CompareTag("Down"))
-            {
-                downButton = choiceObj.GetComponent<Button>();
-            }
-            else if (choiceObj.CompareTag("Output"))
-            {
-                choiceText = choiceObj.GetComponent<TextMeshProUGUI>();
-            }
-        }
+        Transform upButt = Creator.GetChildObjectByName(letterChoice.gameObject, AllTagNames.Up);
+        Button upButton = upButt.GetComponent<Button>();
+
+        Transform outputText = Creator.GetChildObjectByName(letterChoice.gameObject, AllTagNames.Output);
+        TextMeshProUGUI choiceText = outputText.GetComponent<TextMeshProUGUI>();
+        
+        Transform downButt = Creator.GetChildObjectByName(letterChoice.gameObject, AllTagNames.Down);
+        Button downButton = downButt.GetComponent<Button>();
 
         ElLetterChoiceController letterChoiceController = new ElLetterChoiceController();
         letterChoiceController.GameStart(Creator);

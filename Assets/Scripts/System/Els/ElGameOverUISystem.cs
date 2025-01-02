@@ -32,36 +32,32 @@ public class ElGameOverUISystem : ElDependency
             _artefactsUISystem = artefactsUISystem;
         }
 
-        _gameOverUI = GameObject.FindWithTag("GameOver").transform;
+        _gameOverUI = elCreator.GetFirstObjectWithName(AllTagNames.GameOver);
 
-        TextMeshProUGUI[] texts = _gameOverUI.GetComponentsInChildren<TextMeshProUGUI>();
-        foreach (TextMeshProUGUI text in texts)
-        {
-            if (text.CompareTag("PlayerCapturedText"))
-            {
-                _titleText = text;
-                break;
-            }
-        }
+        Transform titleText = elCreator.GetFirstObjectWithName(AllTagNames.PlayerCapturedText);
+        _titleText = titleText.GetComponent<TextMeshProUGUI>();
         
         Button[] buttons = _gameOverUI.GetComponentsInChildren<Button>();
         foreach (Button button in buttons)
         {
-            if (button.CompareTag("RestartRoom"))
+            TagName tagName = button.GetComponent<TagName>();
+            
+            switch (tagName.tagName)
             {
-                _restartRoomButton = button;
-                _restartRoomButton.onClick.AddListener(() =>
-                {
-                    Creator.timerSo.timePenaltyOnReload = Creator.timerSo.currentTime / Creator.timerSo.playerRespawnDivideCost;
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                });
-            }
-            else if (button.CompareTag("Exit"))
-            {
-                button.onClick.AddListener(() =>
-                {
-                    SceneManager.LoadScene("MainMenuScene");
-                });
+                case AllTagNames.RestartRoom:
+                    _restartRoomButton = button;
+                    _restartRoomButton.onClick.AddListener(() =>
+                    {
+                        Creator.timerSo.timePenaltyOnReload = Creator.timerSo.currentTime / Creator.timerSo.playerRespawnDivideCost;
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                    });
+                    break;
+                case AllTagNames.Exit:
+                    button.onClick.AddListener(() =>
+                    {
+                        SceneManager.LoadScene("MainMenuScene");
+                    });
+                    break;
             }
         }
 

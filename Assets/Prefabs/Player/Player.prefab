@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 4570905178060398925}
   - component: {fileID: 3994514199501210498}
   - component: {fileID: 6980252000246645161}
+  - component: {fileID: 7502514413770539099}
   m_Layer: 0
   m_Name: Bishop_Button
-  m_TagString: ChooseBishop
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,6 +123,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7502514413770539099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 69308236249550890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 5
 --- !u!1 &660929323323242502
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,9 +280,10 @@ GameObject:
   - component: {fileID: 333290947602248074}
   - component: {fileID: 6612845293044127275}
   - component: {fileID: 8256369686381762693}
+  - component: {fileID: 6711607309157764083}
   m_Layer: 0
   m_Name: Rook_Button
-  m_TagString: ChooseRook
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -376,6 +391,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6711607309157764083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772567478478978801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 10
 --- !u!1 &2664594574041527071
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,9 +1014,10 @@ GameObject:
   - component: {fileID: 1284297099595606645}
   - component: {fileID: 7152573111401907929}
   - component: {fileID: 5450142452415248108}
+  - component: {fileID: 3998122241037128592}
   m_Layer: 0
   m_Name: Queen_Button
-  m_TagString: ChooseQueen
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1096,6 +1125,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3998122241037128592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3940020123808902291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 9
 --- !u!1 &4287156792782263661
 GameObject:
   m_ObjectHideFlags: 0
@@ -1629,9 +1671,10 @@ GameObject:
   - component: {fileID: 3291522891492008103}
   - component: {fileID: 88699711061357382}
   - component: {fileID: 1307784515123008109}
+  - component: {fileID: 399345168634137857}
   m_Layer: 0
   m_Name: Knight_Button
-  m_TagString: ChooseKnight
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1739,3 +1782,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &399345168634137857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8435499188744950879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 7

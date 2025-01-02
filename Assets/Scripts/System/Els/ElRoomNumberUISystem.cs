@@ -9,7 +9,8 @@ public class ElRoomNumberUISystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        _roomNumberText = GameObject.FindWithTag("LevelText").GetComponent<TextMeshProUGUI>();
+        Transform roomNumberText = elCreator.GetFirstObjectWithName(AllTagNames.LevelText);
+        _roomNumberText = roomNumberText.GetComponent<TextMeshProUGUI>();
         
         UpdateRoomNumberText();
     }

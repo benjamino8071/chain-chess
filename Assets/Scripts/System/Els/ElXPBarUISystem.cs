@@ -18,7 +18,7 @@ public class ElXPBarUISystem : ElDependency
 
         //_upgradeGUISystem = creator.GetDependency<UpgradeGUISystem>();
 
-        GameObject guiButton = GameObject.FindWithTag("GUIBottom");
+        Transform guiButton = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
         _progressBar = guiButton.GetComponentInChildren<MMProgressBar>();
     }
 

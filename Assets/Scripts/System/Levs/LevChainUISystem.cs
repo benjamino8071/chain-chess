@@ -14,6 +14,7 @@ public class LevChainUISystem : LevDependency
     {
         base.GameStart(levCreator);
         
+        //TODO: Replace with new tag system
         _chainParent = GameObject.FindWithTag("ChainParent").transform;
 
         _chainParentInitialPos = _chainParent.localPosition;
