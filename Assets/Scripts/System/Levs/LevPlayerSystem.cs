@@ -63,42 +63,15 @@ public class LevPlayerSystem : LevDependency
     {
         base.GameStart(levCreator);
         
-        if (levCreator.TryGetDependency(out LevGridSystem levGridSystem))
-        {
-            _gridSystem = levGridSystem;
-        }
-        if (levCreator.TryGetDependency(out LevEnemiesSystem levEnemiesSystem))
-        {
-            _enemiesSystem = levEnemiesSystem;
-        }
-        if (levCreator.TryGetDependency(out LevCinemachineSystem levCinemachineSystem))
-        {
-            _cinemachineSystem = levCinemachineSystem;
-        }
-        if (levCreator.TryGetDependency(out LevChainUISystem levChainUISystem))
-        {
-            _chainUISystem = levChainUISystem;
-        }
-        if (levCreator.TryGetDependency(out LevLevelCompleteUISystem levLevelCompleteSystem))
-        {
-            _levelCompleteUISystem = levLevelCompleteSystem;
-        }
-        if (levCreator.TryGetDependency(out LevAudioSystem levAudioSystem))
-        {
-            _audioSystem = levAudioSystem;
-        }
-        if (levCreator.TryGetDependency(out LevDoorsSystem levDoorsSystem))
-        {
-            _doorsSystem = levDoorsSystem;
-        }
-        if (levCreator.TryGetDependency(out LevTurnSystem levTurnSystem))
-        {
-            _turnSystem = levTurnSystem;
-        }
-        if (levCreator.TryGetDependency(out LevGameOverUISystem gameOverUISystem))
-        {
-            _gameOverUISystem = gameOverUISystem;
-        }
+        _gridSystem = levCreator.GetDependency<LevGridSystem>();
+        _enemiesSystem = levCreator.GetDependency<LevEnemiesSystem>();
+        _cinemachineSystem = levCreator.GetDependency<LevCinemachineSystem>();
+        _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
+        _levelCompleteUISystem = levCreator.GetDependency<LevLevelCompleteUISystem>();
+        _audioSystem = levCreator.GetDependency<LevAudioSystem>();
+        _doorsSystem = levCreator.GetDependency<LevDoorsSystem>();
+        _turnSystem = levCreator.GetDependency<LevTurnSystem>();
+        _gameOverUISystem = levCreator.GetDependency<LevGameOverUISystem>();
         
         Transform playerSpawnPosition = GameObject.FindWithTag("PlayerSpawnPosition").transform;
         

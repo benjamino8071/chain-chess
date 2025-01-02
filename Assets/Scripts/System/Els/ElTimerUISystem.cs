@@ -23,26 +23,12 @@ public class ElTimerUISystem : ElDependency
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
-        if (Creator.TryGetDependency(out ElPlayerSystem playerSystem))
-        {
-            _playerSystem = playerSystem;
-        }
-        if (Creator.TryGetDependency(out ElPauseUISystem pauseUISystem))
-        {
-            _pauseUISystem = pauseUISystem;
-        }
-        if (Creator.TryGetDependency(out ElAudioSystem audioSystem))
-        {
-            _audioSystem = audioSystem;
-        }
-        if (Creator.TryGetDependency(out ElEnemiesSystem enemiesSystem))
-        {
-            _enemiesSystem = enemiesSystem;
-        }
-        if (Creator.TryGetDependency(out ElArtefactsUISystem artefactsUISystem))
-        {
-            _artefactsUISystem = artefactsUISystem;
-        }
+        
+        _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
+        _pauseUISystem = elCreator.GetDependency<ElPauseUISystem>();
+        _audioSystem = elCreator.GetDependency<ElAudioSystem>();
+        _enemiesSystem = elCreator.GetDependency<ElEnemiesSystem>();
+        _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
 
         Transform timeTextTf = elCreator.GetFirstObjectWithName(AllTagNames.Timer);
         _timeText = timeTextTf.GetComponent<TextMeshProUGUI>();

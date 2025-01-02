@@ -16,14 +16,8 @@ public class LevEnemiesSystem : LevDependency
     {
         base.GameStart(levCreator);
         
-        if (levCreator.TryGetDependency(out LevChainUISystem levChainUISystem))
-        {
-            _chainUISystem = levChainUISystem;
-        }
-        if (Creator.TryGetDependency(out LevDoorsSystem levDoorsSystem))
-        {
-            _doorsSystem = levDoorsSystem;
-        }
+        _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
+        _doorsSystem = levCreator.GetDependency<LevDoorsSystem>();
 
         foreach (GameObject enemySpawnPosition in GameObject.FindGameObjectsWithTag("EnemySpawnPosition"))
         {

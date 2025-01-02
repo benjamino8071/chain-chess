@@ -23,14 +23,8 @@ public class ElScoreEntryUISystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        if (Creator.TryGetDependency(out ElPauseUISystem pauseUISystem))
-        {
-            _pauseUISystem = pauseUISystem;
-        }
-        if (Creator.TryGetDependency(out ElArtefactsUISystem artefactsUISystem))
-        {
-            _artefactsUISystem = artefactsUISystem;
-        }
+        _pauseUISystem = elCreator.GetDependency<ElPauseUISystem>();
+        _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
 
         _scoreEntryUI = elCreator.GetFirstObjectWithName(AllTagNames.Entry);
 

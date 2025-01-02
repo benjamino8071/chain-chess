@@ -26,30 +26,12 @@ public class ElEnemiesSystem : ElDependency
     {
         base.GameStart(elCreator);
         
-        if (Creator.TryGetDependency(out ElChainUISystem capturedPiecesUISystem))
-        {
-            _chainUISystem = capturedPiecesUISystem;
-        }
-        if (Creator.TryGetDependency(out ElDoorsSystem doorsSystem))
-        {
-            _doorsSystem = doorsSystem;
-        }
-        if (Creator.TryGetDependency(out ElTurnSystem turnSystem))
-        {
-            _turnSystem = turnSystem;
-        }
-        if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
-        {
-            _timerUISystem = timerUISystem;
-        }
-        if (Creator.TryGetDependency(out ElAudioSystem audioSystem))
-        {
-            _audioSystem = audioSystem;
-        }
-        if (Creator.TryGetDependency(out ElPlayerSystem playerSystem))
-        {
-            _playerSystem = playerSystem;
-        }
+        _chainUISystem = elCreator.GetDependency<ElChainUISystem>();
+        _doorsSystem = elCreator.GetDependency<ElDoorsSystem>();
+        _turnSystem = elCreator.GetDependency<ElTurnSystem>();
+        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
+        _audioSystem = elCreator.GetDependency<ElAudioSystem>();
+        _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
         
         for (int i = 0; i < _validPositionsVisuals.Capacity; i++)
         {

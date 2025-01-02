@@ -32,8 +32,6 @@ public class ElXPBarUISystem : ElDependency
         
         _amount = Mathf.Clamp01(_amount + amount);
         
-        Debug.Log("AMOUNT INCREASE: "+amount);
-        
         _progressBar.UpdateBar01(_amount);
 
         if (_amount >= 1)

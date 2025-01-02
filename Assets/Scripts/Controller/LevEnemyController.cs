@@ -41,26 +41,11 @@ public class LevEnemyController : LevController
     {
         base.GameStart(levCreator);
 
-        if (levCreator.TryGetDependency(out LevGridSystem levGridSystem))
-        {
-            _gridSystem = levGridSystem;
-        }
-        if (levCreator.TryGetDependency(out LevPlayerSystem levPlayerSystem))
-        {
-            _playerSystem = levPlayerSystem;
-        }
-        if (levCreator.TryGetDependency(out LevEnemiesSystem levEnemiesSystem))
-        {
-            _enemiesSystem = levEnemiesSystem;
-        }
-        if (levCreator.TryGetDependency(out LevDoorsSystem levDoorsSystem))
-        {
-            _doorsSystem = levDoorsSystem;
-        }
-        if (levCreator.TryGetDependency(out LevTurnSystem levTurnSystem))
-        {
-            _turnSystem = levTurnSystem;
-        }
+        _gridSystem = levCreator.GetDependency<LevGridSystem>();
+        _playerSystem = levCreator.GetDependency<LevPlayerSystem>();
+        _enemiesSystem = levCreator.GetDependency<LevEnemiesSystem>();
+        _doorsSystem = levCreator.GetDependency<LevDoorsSystem>();
+        _turnSystem = levCreator.GetDependency<LevTurnSystem>();
         
         SetState(States.WaitingForTurn);
     }

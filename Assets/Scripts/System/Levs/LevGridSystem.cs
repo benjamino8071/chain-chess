@@ -16,10 +16,7 @@ public class LevGridSystem : LevDependency
     {
         base.GameStart(levCreator);
 
-        if (levCreator.TryGetDependency(out LevDoorsSystem levDoorsSystem))
-        {
-            _levDoorsSystem = levDoorsSystem;
-        }
+        _levDoorsSystem = levCreator.GetDependency<LevDoorsSystem>();
         
         GameObject[] tilesAlreadyPlaced = GameObject.FindGameObjectsWithTag("Tile");
         foreach (GameObject tileChild in tilesAlreadyPlaced)

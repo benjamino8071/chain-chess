@@ -20,14 +20,8 @@ public class ElArtefactController : Controller
     {
         base.GameStart(elCreator);
 
-        if (Creator.TryGetDependency(out ElArtefactsUISystem artefactsSystem))
-        {
-            _artefactsUISystem = artefactsSystem;
-        }
-        if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
-        {
-            _timerUISystem = timerUISystem;
-        }
+        _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
+        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
     }
 
     public void SetButtonInstance(Button button, Button sellButton)

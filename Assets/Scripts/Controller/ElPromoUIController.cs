@@ -18,10 +18,7 @@ public class ElPromoUIController : ElController
     {
         base.GameStart(elCreator);
         
-        if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
-        {
-            _timerUISystem = timerUISystem;
-        }
+        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
     }
 
     public void Initialise(Transform playerObject)

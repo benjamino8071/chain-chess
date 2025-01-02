@@ -15,15 +15,8 @@ public class LevTurnSystem : LevDependency
     {
         base.GameStart(levCreator);
 
-        if (Creator.TryGetDependency(out LevPlayerSystem levPlayerSystem))
-        {
-            _playerSystem = levPlayerSystem;
-        }
-
-        if (Creator.TryGetDependency(out LevEnemiesSystem levEnemiesSystem))
-        {
-            _enemiesSystem = levEnemiesSystem;
-        }
+        _playerSystem = levCreator.GetDependency<LevPlayerSystem>();
+        _enemiesSystem = levCreator.GetDependency<LevEnemiesSystem>();
     }
 
     public void SwitchTurn(Turn nextTurn)

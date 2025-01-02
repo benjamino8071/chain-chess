@@ -13,10 +13,8 @@ public class ElArtefactsUISystem : ElDependency
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
-        if (Creator.TryGetDependency(out ElPlayerSystem playerSystem))
-        {
-            _playerSystem = playerSystem;
-        }
+        
+        _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
 
         _artefactsParent = elCreator.GetFirstObjectWithName(AllTagNames.Artefacts).gameObject;
 

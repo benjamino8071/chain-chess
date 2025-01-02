@@ -82,58 +82,19 @@ public class ElPlayerSystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        if (Creator.TryGetDependency(out ElGridSystem gridSystem))
-        {
-            _gridSystem = gridSystem;
-        }
-        if (Creator.TryGetDependency(out ElEnemiesSystem enemiesSystem))
-        {
-            _enemiesSystem = enemiesSystem;
-        }
-        if (Creator.TryGetDependency(out ElCinemachineSystem cinemachineSystem))
-        {
-            _cinemachineSystem = cinemachineSystem;
-        }
-        if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
-        {
-            _timerUISystem = timerUISystem;
-        }
-        if (Creator.TryGetDependency(out ElChainUISystem chainUISystem))
-        {
-            _chainUISystem = chainUISystem;
-        }
-        if (Creator.TryGetDependency(out ElAudioSystem audioSystem))
-        {
-            _audioSystem = audioSystem;
-        }
-        if (Creator.TryGetDependency(out ElGameOverUISystem gameOverUISystem))
-        {
-            _gameOverUISystem = gameOverUISystem;
-        }
-        if (Creator.TryGetDependency(out ElTurnSystem turnSystem))
-        {
-            _turnInfoUISystem = turnSystem;
-        }
-        if (Creator.TryGetDependency(out ElRoomNumberUISystem roomNumberUISystem))
-        {
-            _roomNumberUISystem = roomNumberUISystem;
-        }
-        if (Creator.TryGetDependency(out ElScoreEntryUISystem scoreEntryUISystem))
-        {
-            _scoreEntryUISystem = scoreEntryUISystem;
-        }
-        if (Creator.TryGetDependency(out ElShopSystem shopSystem))
-        {
-            _shopSystem = shopSystem;
-        }
-        if (Creator.TryGetDependency(out ElDoorsSystem doorsSystem))
-        {
-            _doorsSystem = doorsSystem;
-        }
-        if (Creator.TryGetDependency(out ElXPBarUISystem xpBarUISystem))
-        {
-            _xpBarUISystem = xpBarUISystem;
-        }
+        _gridSystem = elCreator.GetDependency<ElGridSystem>();
+        _enemiesSystem = elCreator.GetDependency<ElEnemiesSystem>();
+        _cinemachineSystem = elCreator.GetDependency<ElCinemachineSystem>();
+        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
+        _chainUISystem = elCreator.GetDependency<ElChainUISystem>();
+        _audioSystem = elCreator.GetDependency<ElAudioSystem>();
+        _gameOverUISystem = elCreator.GetDependency<ElGameOverUISystem>();
+        _turnInfoUISystem = elCreator.GetDependency<ElTurnSystem>();
+        _roomNumberUISystem = elCreator.GetDependency<ElRoomNumberUISystem>();
+        _scoreEntryUISystem = elCreator.GetDependency<ElScoreEntryUISystem>();
+        _shopSystem = elCreator.GetDependency<ElShopSystem>();
+        _doorsSystem = elCreator.GetDependency<ElDoorsSystem>();
+        _xpBarUISystem = elCreator.GetDependency<ElXPBarUISystem>();
         
         _currentRoomStartPiece = Creator.playerSystemSo.startingPiece;
         _roomNumber = Creator.playerSystemSo.roomNumberSaved;

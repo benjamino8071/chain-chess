@@ -21,10 +21,7 @@ public class ElGridSystem : ElDependency
     {
         base.GameStart(elCreator);
         
-        if (Creator.TryGetDependency(out ElEnemiesSystem enemiesSystem))
-        {
-            _enemiesSystem = enemiesSystem;
-        }
+        _enemiesSystem = elCreator.GetDependency<ElEnemiesSystem>();
         
         List<Transform> doorPositions = elCreator.GetObjectsByName(AllTagNames.DoorPosition);
         foreach (Transform doorPosition in doorPositions)

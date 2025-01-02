@@ -17,18 +17,9 @@ public class ElTurnSystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        if (Creator.TryGetDependency(out ElPlayerSystem playerSystem))
-        {
-            _playerSystem = playerSystem;
-        }
-        if (Creator.TryGetDependency(out ElEnemiesSystem enemiesSystem))
-        {
-            _enemiesSystem = enemiesSystem;
-        }
-        if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
-        {
-            _timerUISystem = timerUISystem;
-        }
+        _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
+        _enemiesSystem = elCreator.GetDependency<ElEnemiesSystem>();
+        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
     }
 
     public void SwitchTurn(Turn nextTurn)

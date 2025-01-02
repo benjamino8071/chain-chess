@@ -20,15 +20,9 @@ public class ElPauseUISystem : ElDependency
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
-
-        if (elCreator.TryGetDependency(out ElPlayerSystem playerSystem))
-        {
-            _playerSystem = playerSystem;
-        }
-        if (elCreator.TryGetDependency(out ElTimerUISystem timerUISystem))
-        {
-            _timerUISystem = timerUISystem;
-        }
+        
+        _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
+        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
 
         _pauseGUI = elCreator.GetFirstObjectWithName(AllTagNames.Pause);
         

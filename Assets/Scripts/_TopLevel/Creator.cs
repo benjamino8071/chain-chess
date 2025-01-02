@@ -52,20 +52,19 @@ public class Creator : MonoBehaviour
     {
         return Instantiate(newObject, parent);
     }
-
-    public bool TryGetDependency<T>(out T dependency) where T : Dependency
+    
+    public T GetDependency<T>() where T : Dependency
     {
         foreach (Dependency dependent  in _dependencies)
         {
             if (dependent is T)
             {
-                dependency = (T) dependent;
-                return true;
+                return (T) dependent;
             }
         }
 
-        dependency = default;
-        return false;
+        Debug.LogError("Could not find dependency");
+        return default;
     }
 
     public void StartACoRoutine(IEnumerator corout)

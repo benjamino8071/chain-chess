@@ -17,23 +17,11 @@ public class ElShopSystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        if (Creator.TryGetDependency(out ElTimerUISystem timerUISystem))
-        {
-            _timerUISystem = timerUISystem;
-        }
-        if (Creator.TryGetDependency(out ElPauseUISystem pauseUISystem))
-        {
-            _pauseUISystem = pauseUISystem;
-        }
-        if (Creator.TryGetDependency(out ElAudioSystem audioSystem))
-        {
-            _audioSystem = audioSystem;
-        }
-        if (Creator.TryGetDependency(out ElArtefactsUISystem artefactsSystem))
-        {
-            _artefactsUISystem = artefactsSystem;
-        }
-
+        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
+        _pauseUISystem = elCreator.GetDependency<ElPauseUISystem>();
+        _audioSystem = elCreator.GetDependency<ElAudioSystem>();
+        _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
+        
         Transform shop = elCreator.GetFirstObjectWithName(AllTagNames.Shop);
 
         shop.position += new Vector3(0, 11f * Creator.shopSo.shopRoomNumber, 0);

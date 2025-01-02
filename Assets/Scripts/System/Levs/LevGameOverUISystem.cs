@@ -13,10 +13,7 @@ public class LevGameOverUISystem : LevDependency
     {
         base.GameStart(levCreator);
 
-        if (Creator.TryGetDependency(out LevPauseUISystem pauseUISystem))
-        {
-            _pauseUISystem = pauseUISystem;
-        }
+        _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
 
         _gameOverUI = GameObject.FindWithTag("GameOver").transform;
         

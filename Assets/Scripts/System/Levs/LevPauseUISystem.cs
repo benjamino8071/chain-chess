@@ -16,10 +16,7 @@ public class LevPauseUISystem : LevDependency
     {
         base.GameStart(levCreator);
 
-        if (levCreator.TryGetDependency(out LevPlayerSystem levPlayerSystem))
-        {
-            _playerSystem = levPlayerSystem;
-        }
+        _playerSystem = levCreator.GetDependency<LevPlayerSystem>();
         
         _pauseGUI = GameObject.FindWithTag("Pause").transform;
         
