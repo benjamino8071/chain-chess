@@ -1,92 +1,63 @@
+using MoreMountains.Tools;
 using UnityEngine;
 
 public class ElAudioSystem : ElDependency
 {
-    private AudioSource _pieceMoveAudio;
-    private AudioSource _enemyCapturedAudio;
-    private AudioSource _capturedByEnemyAudio;
-    private AudioSource _timeLostAudio;
-    private AudioSource _levelUpAudio;
-    private AudioSource _doorClosedAudio;
-    private AudioSource _roomCompleteAudio;
+    private Transform _camera;
     
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
-
-        AudioSource[] audioSources = Camera.main.GetComponentsInChildren<AudioSource>();
-
-        foreach (AudioSource audioSource in audioSources)
-        {
-            TagName tagName = audioSource.GetComponent<TagName>();
-
-            switch (tagName.tagName)
-            {
-                case AllTagNames.Moving:
-                    _pieceMoveAudio = audioSource;
-                    break;
-                case AllTagNames.CapturedPiecesParent:
-                    _enemyCapturedAudio = audioSource;
-                    break;
-                case AllTagNames.Enemy:
-                    _capturedByEnemyAudio = audioSource;
-                    break;
-                case AllTagNames.Retry:
-                    _timeLostAudio = audioSource;
-                    break;
-                case AllTagNames.Up:
-                    _levelUpAudio = audioSource;
-                    break;
-                case AllTagNames.LevelComplete:
-                    _roomCompleteAudio = audioSource;
-                    break;
-                case AllTagNames.NextLevel:
-                    _doorClosedAudio = audioSource;
-                    break;
-            }
-        }
+        
+        _camera = Camera.main.transform;
     }
     
-    public void PlayerPieceMoveSfx(float pitch)
+    public void PlayerPieceMoveSfx(float thePitch)
     {
-        _pieceMoveAudio.pitch = pitch;
-        _pieceMoveAudio.Play();
+        PlaySfx(Creator.audioClipsSo.pieceMoved, _camera.position, thePitch);
     }
     
-    public void PlayTimeLostSfx(float pitch)
+    public void PlayTimeLostSfx(float thePitch)
     {
-        _timeLostAudio.pitch = pitch;
-        _timeLostAudio.Play();
+        PlaySfx(Creator.audioClipsSo.timeLost, _camera.position, thePitch);
     }
 
     /// <summary>
     /// Pitch must increase in value as pieces are captured consecutively
     /// </summary>
-    /// <param name="pitch"></param>
-    public void PlayTimeAddedSfx(float pitch)
+    /// <param name="thePitch"></param>
+    public void PlayTimeAddedSfx(float thePitch)
     {
-        _enemyCapturedAudio.pitch = pitch;
-        _enemyCapturedAudio.Play();
+        PlaySfx(Creator.audioClipsSo.enemyCaptured, _camera.position, thePitch);
     }
 
     public void PlayCapturedByEnemySfx()
     {
-        _capturedByEnemyAudio.Play();
+        PlaySfx(Creator.audioClipsSo.capturedByEnemy, _camera.position);
     }
 
     public void PlayerLevelUpSfx()
     {
-        _levelUpAudio.Play();
+        PlaySfx(Creator.audioClipsSo.levelUp, _camera.position);
     }
 
     public void PlayDoorClosedSfx()
     {
         //TODO: Find better audio for closing door
-        //_doorClosedAudio.Play();
     }
 
     public void PlayRoomCompleteSfx()
     {
-        _roomCompleteAudio.Play();
+        PlaySfx(Creator.audioClipsSo.roomComplete, _camera.position);
+    }
+
+    private void PlayMusic(AudioClip clip, Vector3 position, float thePitch = 1)
+    {
+        MMSoundManagerSoundPlayEvent.Trigger(clip, MMSoundManager.MMSoundManagerTracks.Music, _camera.position, pitch:thePitch);
+    }
+    
+    private void PlaySfx(AudioClip clip, Vector3 position, float thePitch = 1)
+    {
+        MMSoundManagerSoundPlayEvent.Trigger(clip, MMSoundManager.MMSoundManagerTracks.Sfx, _camera.position, pitch:thePitch);
     }
 }

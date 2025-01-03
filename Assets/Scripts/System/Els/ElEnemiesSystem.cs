@@ -318,7 +318,7 @@ public class ElEnemiesSystem : ElDependency
         else
         {
             _turnSystem.SwitchTurn(ElTurnSystem.Turn.Player);
-            _timerUISystem.StartTimer();
+            //_timerUISystem.StartTimer();
         }
     }
     

@@ -66,11 +66,11 @@ public class ElShopSystem : ElDependency
                     {
                         case ArtefactTypes.CaptureKingClearRoom:
                             shopItemSprRend.sprite = Creator.shopSo.captureKingClearRoomSprite;
-                            costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.CaptureKingClearRoom]:0.##}s";
+                            costTextAsString = $"-{1:0.##}xp";
                             break;
                         case ArtefactTypes.ConCaptureAttackingEnemy:
                             shopItemSprRend.sprite = Creator.shopSo.destroyChainStayAliveSprite;
-                            costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.ConCaptureAttackingEnemy]:0.##}s";
+                            costTextAsString = $"-{1:0.##}xp";
                             break;
                         case ArtefactTypes.EnemyLineOfSight:
                             switch (Creator.shopSo.lineOfSightForArtefact[shopItem.transform.position])
@@ -94,11 +94,11 @@ public class ElShopSystem : ElDependency
                                     shopItemSprRend.sprite = Creator.shopSo.kingLosSprite;
                                     break;
                             }
-                            costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.EnemyLineOfSight] * Creator.timerSo.capturePieceTimeAdd[Creator.shopSo.lineOfSightForArtefact[shopItem.transform.position]]:0.##}s";
+                            costTextAsString = $"-{1 * 1:0.##}xp";
                             break;
                         case ArtefactTypes.UseCapturedPieceStraightAway:
                             shopItemSprRend.sprite = Creator.shopSo.useCapturedPieceStraightAwaySprite;
-                            costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.ConCaptureAttackingEnemy]:0.##}s";
+                            costTextAsString = $"-{1:0.##}xp";
                             break;
                     }
                     Creator.shopSo.artefactsSprites[shopItem.transform.position] = shopItemSprRend;
@@ -120,7 +120,7 @@ public class ElShopSystem : ElDependency
                             shopItemSprRend.sprite = Creator.shopSo.reduceRespawnCostSprite;
                             break;
                     }
-                    costTextAsString = $"-{Creator.timerSo.upgradesCost[Creator.shopSo.upgradesPositions[shopItem.transform.position]]:0.##}s";
+                    costTextAsString = $"-{1:0.##}xp";
 
                     Creator.shopSo.upgradesSprites[shopItem.transform.position] = shopItemSprRend;
                 }
@@ -174,11 +174,11 @@ public class ElShopSystem : ElDependency
                     {
                         case ArtefactTypes.CaptureKingClearRoom:
                             shopItemSprRend.sprite = Creator.shopSo.captureKingClearRoomSprite;
-                            costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.CaptureKingClearRoom]:0.##}s";
+                            costTextAsString = $"-{1:0.##}xp";
                             break;
                         case ArtefactTypes.ConCaptureAttackingEnemy:
                             shopItemSprRend.sprite = Creator.shopSo.destroyChainStayAliveSprite;
-                            costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.ConCaptureAttackingEnemy]:0.##}s";
+                            costTextAsString = $"-{1:0.##}xp";
                             break;
                         case ArtefactTypes.EnemyLineOfSight:
                             List<Piece> pieceTypes = new()
@@ -218,11 +218,11 @@ public class ElShopSystem : ElDependency
                                     shopItemSprRend.sprite = Creator.shopSo.kingLosSprite;
                                     break;
                             }
-                            costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.EnemyLineOfSight] * Creator.timerSo.capturePieceTimeAdd[Creator.shopSo.lineOfSightForArtefact[shopItem.transform.position]]:0.##}s";
+                            costTextAsString = $"-{1 * 1:0.##}xp";
                             break;
                         case ArtefactTypes.UseCapturedPieceStraightAway:
                             shopItemSprRend.sprite = Creator.shopSo.useCapturedPieceStraightAwaySprite;
-                            costTextAsString = $"-{Creator.timerSo.artefactsCost[ArtefactTypes.UseCapturedPieceStraightAway]:0.##}s";
+                            costTextAsString = $"-{1:0.##}xp";
                             break;
                     }
                 }
@@ -255,7 +255,7 @@ public class ElShopSystem : ElDependency
                             shopItemSprRend.sprite = Creator.shopSo.reduceRespawnCostSprite;
                             break;
                     }
-                    costTextAsString = $"-{Creator.timerSo.upgradesCost[types[index]]:0.##}s";
+                    costTextAsString = $"-{1:0.##}xp";
                 }
             }
 
@@ -295,7 +295,6 @@ public class ElShopSystem : ElDependency
                     return;
                 }
                 _audioSystem.PlayerLevelUpSfx();
-                float cost = Creator.timerSo.artefactsCost[Creator.shopSo.artefactsPositions[pos]];
                 switch (Creator.shopSo.artefactsPositions[pos])
                 {
                     case ArtefactTypes.CaptureKingClearRoom:
@@ -303,13 +302,11 @@ public class ElShopSystem : ElDependency
                     case ArtefactTypes.ConCaptureAttackingEnemy:
                         break;
                     case ArtefactTypes.EnemyLineOfSight:
-                        cost *= Creator.timerSo.capturePieceTimeAdd[piece];
                         Creator.playerSystemSo.lineOfSightsChosen.Add(piece);
                         break;
                     case ArtefactTypes.UseCapturedPieceStraightAway:
                         break;
                 }
-                _timerUISystem.RemoveTime(cost, false);
                 
                 Creator.shopSo.artefactsSprites[pos].gameObject.SetActive(false);
                 Creator.shopSo.artefactsPositions.Remove(pos);
@@ -330,33 +327,14 @@ public class ElShopSystem : ElDependency
                 switch (Creator.shopSo.upgradesPositions[pos])
                 {
                     case UpgradeTypes.IncreaseMultiplierAmount:
-                        Creator.timerSo.timerMultiplierMultiplier += 0.11f;
                         break;
                     case UpgradeTypes.IncreaseBaseAmountGained:
-                        List<Piece> enemyPieces = Creator.timerSo.capturePieceTimeAdd.Keys.ToList();
-                        foreach (Piece piece in enemyPieces)
-                        {
-                            Creator.timerSo.capturePieceTimeAdd[piece] += 1;
-                        }
                         break;
                     case UpgradeTypes.ReducePromotionCost:
-                        List<Piece> promoPieces = Creator.timerSo.timeCost.Keys.ToList();
-                        foreach (Piece piece in promoPieces)
-                        {
-                            Creator.timerSo.timeCost[piece] -= 1;
-                            if (Creator.timerSo.timeCost[piece] <= 0)
-                            {
-                                Creator.timerSo.timeCost[piece] = 0;
-                            }
-                        }
                         break;
                     case UpgradeTypes.ReduceRespawnCost:
-                        Creator.timerSo.playerRespawnDivideCost += 1;
                         break;
                 }
-                
-                int cost = Creator.timerSo.upgradesCost[Creator.shopSo.upgradesPositions[pos]];
-                _timerUISystem.RemoveTime(cost, false);
                 
                 Creator.shopSo.upgradesSprites[pos].gameObject.SetActive(false);
                 Creator.shopSo.upgradesPositions.Remove(pos);

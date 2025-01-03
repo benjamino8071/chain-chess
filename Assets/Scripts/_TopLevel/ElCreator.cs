@@ -10,11 +10,11 @@ public class ElCreator : Creator
     public Input_SO inputSo;
     public PlayerSystem_SO playerSystemSo;
     public Enemy_SO enemySo;
-    public Timer_SO timerSo;
     public MainMenu_SO mainMenuSo;
     public Scoreboard_SO scoreboardSo;
     public Shop_SO shopSo;
     public Chain_SO chainSo;
+    public AudioClips_SO audioClipsSo;
     
     [Header("Prefabs")]
     public GameObject playerPrefab;

@@ -39,7 +39,6 @@ public class ElGameOverUISystem : ElDependency
                     _restartRoomButton = button;
                     _restartRoomButton.onClick.AddListener(() =>
                     {
-                        Creator.timerSo.timePenaltyOnReload = Creator.timerSo.currentTime / Creator.timerSo.playerRespawnDivideCost;
                         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                     });
                     break;
@@ -63,7 +62,7 @@ public class ElGameOverUISystem : ElDependency
         
         _pauseUISystem.Hide(false);
         _artefactsUISystem.Hide();
-        _timerUISystem.HideTimerChangeAmount();
+        //_timerUISystem.HideTimerChangeAmount();
         _gameOverUI.gameObject.SetActive(true);
     }
 

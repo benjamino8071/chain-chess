@@ -20,7 +20,7 @@ public class ElTimerUISystem : ElDependency
     private float _showTimeChangeAmountTimer;
     private float _recentTimeChangeAmount;
     
-    public override void GameStart(ElCreator elCreator)
+    /*public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
         
@@ -40,14 +40,14 @@ public class ElTimerUISystem : ElDependency
         _multiplierAmountText = mulAmountText.GetComponent<TextMeshProUGUI>();
         
         string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
-        SetTimerText(timeText);
+        //SetTimerText(timeText);
         
         _multiplierAmountText.text = $"<wave a={0.01f}>Multiplier: 1x</wave>";
-        ResetTimerChangedAmount(true);
+        //ResetTimerChangedAmount(true);
 
         if (Creator.timerSo.timePenaltyOnReload > 0)
         {
-            RemoveTime(Creator.timerSo.timePenaltyOnReload);
+            //RemoveTime(Creator.timerSo.timePenaltyOnReload);
             Creator.timerSo.timePenaltyOnReload = 0;
         }
     }
@@ -59,7 +59,7 @@ public class ElTimerUISystem : ElDependency
             _showTimeChangeAmountTimer -= dt;
             if (_showTimeChangeAmountTimer <= 0)
             {
-                HideTimerChangeAmount();
+                //HideTimerChangeAmount();
             }
         }
 
@@ -80,17 +80,17 @@ public class ElTimerUISystem : ElDependency
             _artefactsUISystem.Hide();
             _playerSystem.SetState(ElPlayerSystem.States.TimerExpired);
             
-            SetTimerText(timeText);
+            //SetTimerText(timeText);
         }
         else
         {
             string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
             
-            SetTimerText(timeText);
+            //SetTimerText(timeText);
         }
-    }
+    }*/
 
-    private void SetTimerText(string timeText)
+    /*private void SetTimerText(string timeText)
     {
         _timeText.SetText(timeText);
     }
@@ -100,7 +100,7 @@ public class ElTimerUISystem : ElDependency
         Creator.timerSo.currentTime += amountToAdd;
         
         string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
-        SetTimerText(timeText);
+        //SetTimerText(timeText);
 
         if (_recentTimeChangeAmount >= 0)
         {
@@ -112,7 +112,7 @@ public class ElTimerUISystem : ElDependency
         }
         
         string amountAddText = $"+{_recentTimeChangeAmount:0.##}s";
-        ShowTimerChangeAmount(amountAddText);
+        //ShowTimerChangeAmount(amountAddText);
         if(playSfx)
             _audioSystem.PlayTimeAddedSfx(1);
     }
@@ -123,7 +123,7 @@ public class ElTimerUISystem : ElDependency
         Creator.timerSo.currentTime += amountToAdd;
         
         string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
-        SetTimerText(timeText);
+        //SetTimerText(timeText);
 
         if (_recentTimeChangeAmount >= 0)
         {
@@ -135,7 +135,7 @@ public class ElTimerUISystem : ElDependency
         }
         
         string amountAddText = $"+{_recentTimeChangeAmount:0.##}s";
-        ShowTimerChangeAmount(amountAddText);
+        //ShowTimerChangeAmount(amountAddText);
         
         Creator.timerSo.timerMultiplier *= Creator.timerSo.timerMultiplierMultiplier;
         
@@ -156,7 +156,7 @@ public class ElTimerUISystem : ElDependency
         Creator.timerSo.currentTime -= amount;
         
         string timeText = Creator.timerSo.currentTime.ToString("F2")+"s";
-        SetTimerText(timeText);
+        //SetTimerText(timeText);
 
         if (_recentTimeChangeAmount >= 0)
         {
@@ -168,7 +168,7 @@ public class ElTimerUISystem : ElDependency
         }
         
         string amountRemoveText = $"{_recentTimeChangeAmount:0.##}s";
-        ShowTimerChangeAmount(amountRemoveText, true);
+        //ShowTimerChangeAmount(amountRemoveText, true);
 
         float pitch = Random.Range(0.9f, 1.1f);
         if(playSfx)
@@ -210,7 +210,7 @@ public class ElTimerUISystem : ElDependency
 
         if (hide)
         {
-            HideTimerChangeAmount();
+            //HideTimerChangeAmount();
         }
-    }
+    }*/
 }

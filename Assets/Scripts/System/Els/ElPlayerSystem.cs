@@ -136,7 +136,7 @@ public class ElPlayerSystem : ElDependency
         
         Creator.playerSystemSo.moveMadeInNewRoom = false;
 
-        if (Creator.playerSystemSo.levelNumberSaved > 0 && Creator.playerSystemSo.roomNumberSaved == 0 && Creator.timerSo.timePenaltyOnReload == 0)
+        if (Creator.playerSystemSo.levelNumberSaved > 0 && Creator.playerSystemSo.roomNumberSaved == 0)
         {
             UpdateSprite(_currentRoomStartPiece);
             TriggerFadeInAnimation();
@@ -251,8 +251,8 @@ public class ElPlayerSystem : ElDependency
                     {
                         if (singleDoorPosition.isDoorOpen)
                         {
-                            _timerUISystem.ResetTimerChangedAmount(true);
-                            _timerUISystem.StopTimer();
+                            //_timerUISystem.ResetTimerChangedAmount(true);
+                            //_timerUISystem.StopTimer();
                             Creator.playerSystemSo.xValueToStartOn = singleDoorPosition.transform.position.x;
                             Creator.playerSystemSo.startingPiece = _currentPiece.Value;
                             if (singleDoorPosition.isFinalDoor)
@@ -284,7 +284,6 @@ public class ElPlayerSystem : ElDependency
                         _enemiesSystem.PieceCaptured(enemyController);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
-                        _timerUISystem.AddTimeFromMultiplier(Creator.timerSo.capturePieceTimeAdd[enemyPiece], !enemiesCleared);
                         _xpBarUISystem.IncreaseProgressBar(0.1f);
                         if (_currentPiece.Next is not null && Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.UseCapturedPieceStraightAway))
                         {
@@ -316,14 +315,14 @@ public class ElPlayerSystem : ElDependency
                         if (enemiesCleared)
                         {
                             _audioSystem.PlayRoomCompleteSfx();
-                            _timerUISystem.StopTimer();
+                            //_timerUISystem.StopTimer();
                             _doorsSystem.SetRoomDoorsOpen(GetRoomNumber());
                         }
                         else if (enemyPiece == Piece.King &&
                                  Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.CaptureKingClearRoom))
                         {
-                            _timerUISystem.StopTimer();
-                            _destroyEnemyTimer = Creator.timerSo.destroyEnemyTimer;
+                            //_timerUISystem.StopTimer();
+                            _destroyEnemyTimer = 0.19f;
                             SetState(States.DestroyingAllEnemiesInRoom);
                             return;
                         }
@@ -331,7 +330,7 @@ public class ElPlayerSystem : ElDependency
                     else
                     {
                         //Player has not captured an enemy so we must reset the multiplier
-                        _timerUISystem.ResetTimerChangedAmount(false);
+                        //_timerUISystem.ResetTimerChangedAmount(false);
                     }
                     
                     //IF the player is a pawn, we want to check what's directly in front of the player.
@@ -483,8 +482,7 @@ public class ElPlayerSystem : ElDependency
                         _enemiesSystem.PieceCaptured(enemiesInRoom[0]);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
-                        //TODO: Give player XP when they capture this enemy piece
-                        _timerUISystem.AddTimeRegular(Creator.timerSo.capturePieceTimeAdd[piece], !enemiesCleared);
+                        _xpBarUISystem.IncreaseProgressBar(0.1f);
                             
                         if (enemiesCleared)
                         {
@@ -509,7 +507,7 @@ public class ElPlayerSystem : ElDependency
                         }
                         else
                         {
-                            _destroyEnemyTimer = Creator.timerSo.destroyEnemyTimer;
+                            _destroyEnemyTimer = 0.19f;
                         }
                     }
                 }
@@ -518,7 +516,7 @@ public class ElPlayerSystem : ElDependency
                 //Wait 1 second before we show the game over screen
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
-                    _timerUISystem.ResetTimerChangedAmount(false);
+                    //_timerUISystem.ResetTimerChangedAmount(false);
                     SetState(States.EndGame);
                     _gameOverUISystem.Show("Captured", true);
                 }
@@ -527,7 +525,7 @@ public class ElPlayerSystem : ElDependency
                 //Wait 1 second before we show the game over screen
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
-                    _timerUISystem.ResetTimerChangedAmount(false);
+                    //_timerUISystem.ResetTimerChangedAmount(false);
                     if (AuthenticationService.Instance is not null)
                     {
                         if (AuthenticationService.Instance.IsSignedIn)
@@ -667,7 +665,7 @@ public class ElPlayerSystem : ElDependency
             
             _jumpPosition = positionRequested;
             _moveSpeed = Creator.playerSystemSo.moveSpeed;
-            _timerUISystem.StartTimer();
+            //_timerUISystem.StartTimer();
             Creator.playerSystemSo.moveMadeInNewRoom = true;
             SetState(States.Moving);
             
@@ -729,7 +727,7 @@ public class ElPlayerSystem : ElDependency
                 
                 _jumpPosition = positionRequested;
                 _moveSpeed = Creator.playerSystemSo.moveSpeed;
-                _timerUISystem.StartTimer();
+                //_timerUISystem.StartTimer();
                 Creator.playerSystemSo.moveMadeInNewRoom = true;
                 SetState(States.Moving);
                 
@@ -1106,7 +1104,6 @@ public class ElPlayerSystem : ElDependency
         _enemiesSystem.PieceCaptured(enemyController);
         
         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber()); 
-        _timerUISystem.AddTimeFromMultiplier(Creator.timerSo.capturePieceTimeAdd[enemyPiece], !enemiesCleared);
         _xpBarUISystem.IncreaseProgressBar(0.1f);
         _capturedPieces.AddLast(enemyPiece);
         _chainUISystem.ShowNewPiece(enemyController.GetPiece());
@@ -1115,14 +1112,14 @@ public class ElPlayerSystem : ElDependency
         if (enemiesCleared)
         {
             _audioSystem.PlayRoomCompleteSfx();
-            _timerUISystem.StopTimer();
+            //_timerUISystem.StopTimer();
             _doorsSystem.SetRoomDoorsOpen(GetRoomNumber());
         }
         else if (enemyPiece == Piece.King &&
                  Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.CaptureKingClearRoom))
         {
-            _timerUISystem.StopTimer();
-            _destroyEnemyTimer = Creator.timerSo.destroyEnemyTimer;
+            //_timerUISystem.StopTimer();
+            _destroyEnemyTimer = 0.19f;
             SetState(States.DestroyingAllEnemiesInRoom);
         }
     }

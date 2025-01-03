@@ -390,7 +390,7 @@ public class ElEnemyController : ElController
                         }
                         else
                         {
-                            _timerUISystem.StopTimer();
+                            //_timerUISystem.StopTimer();
                             _playerSystem.SetState(ElPlayerSystem.States.Captured);
                             _enemiesSystem.SetStateForAllEnemies(States.Won);
                         }

@@ -53,7 +53,7 @@ public class ElPromoUIController : ElController
             promoButton.onClick.AddListener(() =>
             {
                 SelectPromotion(piece);
-                _timerUISystem.RemoveTime(Creator.timerSo.timeCost[Piece.Bishop], false);
+                //_timerUISystem.RemoveTime(Creator.timerSo.timeCost[Piece.Bishop], false);
             });
             _promoCostTexts.Add(piece, promoButton.GetComponentInChildren<TMP_Text>());
         }
@@ -68,15 +68,15 @@ public class ElPromoUIController : ElController
 
     public void Show()
     {
-        _timerUISystem.StopTimer();
+        //_timerUISystem.StopTimer();
         _chosenPiece = Piece.NotChosen;
 
-        List<Piece> keys = Creator.timerSo.timeCost.Keys.ToList();
-        foreach (Piece piece in keys)
-        {
-            float timeToRemove = Creator.timerSo.timeCost[piece];
-            _promoCostTexts[piece].text = $"-{timeToRemove:0.#}s";
-        }
+        // List<Piece> keys = Creator.timerSo.timeCost.Keys.ToList();
+        // foreach (Piece piece in keys)
+        // {
+        //     float timeToRemove = Creator.timerSo.timeCost[piece];
+        //     _promoCostTexts[piece].text = $"-{timeToRemove:0.#}s";
+        // }
         
         _promoCanvas.gameObject.SetActive(true);
     }
@@ -86,8 +86,8 @@ public class ElPromoUIController : ElController
         _promoCanvas.gameObject.SetActive(false);
         _chosenPiece = Piece.NotChosen;
         
-        if(startTimer)
-            _timerUISystem.StartTimer();
+        // if(startTimer)
+        //     _timerUISystem.StartTimer();
     }
 
     public bool IsPromoChosen()

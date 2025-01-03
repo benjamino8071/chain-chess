@@ -39,11 +39,11 @@ public class ElTurnSystem : ElDependency
         {
             case Turn.Player:
                 _enemiesSystem.ClearPositionsTakenByOtherEnemiesForThisTurn();
-                _timerUISystem.ResetTimerChangedAmount(false);
+                //_timerUISystem.ResetTimerChangedAmount(false);
                 _playerSystem.SetState(ElPlayerSystem.States.Idle);
                 break;
             case Turn.Enemy:
-                _timerUISystem.StopTimer();
+                //_timerUISystem.StopTimer();
                 _enemiesSystem.SetStateForAllEnemies(ElEnemyController.States.ChooseTile);
                 break;
         }

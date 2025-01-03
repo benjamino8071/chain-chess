@@ -34,13 +34,6 @@ public class ElArtefactController : Controller
                 _artefactsUISystem.HideAllSellButtons();
                 if (!sellButtonShowing)
                 {
-                    float amountToAdd = Creator.timerSo.artefactsCost[_type];
-                    if (_type == ArtefactTypes.EnemyLineOfSight)
-                    {
-                        amountToAdd *= Creator.timerSo.capturePieceTimeAdd[_lineOfSightType];
-                    }
-                    amountToAdd /= Creator.timerSo.sellArtefactDivider;
-                    _sellButtonText.text = $"Sell:\\n+{amountToAdd:0.##}s";
                     ShowSellButton();
                 }
             }
@@ -54,15 +47,6 @@ public class ElArtefactController : Controller
         
         _sellButton.onClick.AddListener(() =>
         {
-            float amountToAdd = Creator.timerSo.artefactsCost[_type];
-            if (_type == ArtefactTypes.EnemyLineOfSight)
-            {
-                amountToAdd *= Creator.timerSo.capturePieceTimeAdd[_lineOfSightType];
-            }
-            amountToAdd /= Creator.timerSo.sellArtefactDivider;
-            
-            //TODO: Give the player XP when they sell their artefact
-            //_timerUISystem.AddTimeRegular(amountToAdd, true);
             HideSellButton();
             SetNotInUse();
             

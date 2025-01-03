@@ -58,7 +58,6 @@ public class ElScoreEntryUISystem : ElDependency
             Creator.enemySo.ResetData();
             Creator.playerSystemSo.levelNumberSaved = 0;
             Creator.playerSystemSo.roomNumberSaved = 0;
-            Creator.timerSo.currentTime = Creator.timerSo.startingTime;
                     
             SceneManager.LoadScene("MainMenuScene");
         }

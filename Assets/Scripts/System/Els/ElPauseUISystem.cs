@@ -69,7 +69,7 @@ public class ElPauseUISystem : ElDependency
 
     public void Show()
     {
-        _timerUISystem.StopTimer();
+        //_timerUISystem.StopTimer();
         _pauseGUI.gameObject.SetActive(true);
         HideUpgradeNotificationImage();
     }
@@ -87,23 +87,21 @@ public class ElPauseUISystem : ElDependency
     public void Hide(bool startTimer)
     {
         _pauseGUI.gameObject.SetActive(false);
-        if(startTimer && Creator.playerSystemSo.moveMadeInNewRoom)
-            _timerUISystem.StartTimer();
+        // if(startTimer && Creator.playerSystemSo.moveMadeInNewRoom)
+        //     _timerUISystem.StartTimer();
     }
     
     public void UpdateTextInfo()
     {
-        _pauseUITextInfo.pawnCapValueText.text = $"Pawn: +{Creator.timerSo.capturePieceTimeAdd[Piece.Pawn]:0.##}s";
-        _pauseUITextInfo.knightCapValueText.text = $"Knight: +{Creator.timerSo.capturePieceTimeAdd[Piece.Knight]:0.##}s";
-        _pauseUITextInfo.bishopCapValueText.text = $"Bishop: +{Creator.timerSo.capturePieceTimeAdd[Piece.Bishop]:0.##}s";
-        _pauseUITextInfo.rookCapValueText.text = $"Rook: +{Creator.timerSo.capturePieceTimeAdd[Piece.Rook]:0.##}s";
-        _pauseUITextInfo.queenCapValueText.text = $"Queen: +{Creator.timerSo.capturePieceTimeAdd[Piece.Queen]:0.##}s";
-        _pauseUITextInfo.kingCapValueText.text = $"King: +{Creator.timerSo.capturePieceTimeAdd[Piece.King]:0.##}s";
+        _pauseUITextInfo.pawnCapValueText.text = $"Pawn: +{1:0.##}xp";
+        _pauseUITextInfo.knightCapValueText.text = $"Knight: +{1:0.##}xp";
+        _pauseUITextInfo.bishopCapValueText.text = $"Bishop: +{1:0.##}xp";
+        _pauseUITextInfo.rookCapValueText.text = $"Rook: +{1:0.##}xp";
+        _pauseUITextInfo.queenCapValueText.text = $"Queen: +{1:0.##}xp";
+        _pauseUITextInfo.kingCapValueText.text = $"King: +{1:0.##}xp";
         
-        float mulMulPer = (Creator.timerSo.timerMultiplierMultiplier * 100) - 100;
-        _pauseUITextInfo.pieceCapMulMulText.text = $"Consecutive Capture Multiplier Increase: \u2191{(int)mulMulPer}%";
+        _pauseUITextInfo.pieceCapMulMulText.text = $"Consecutive Capture Multiplier Increase: \u2191{(int)1}%";
 
-        float restartRoomPenaltyPer = (1 / Creator.timerSo.playerRespawnDivideCost) * 100;
-        _pauseUITextInfo.restartRoomTimePenalty.text = $"Restart Room Time Penalty: -{(int)restartRoomPenaltyPer}%";
+        _pauseUITextInfo.restartRoomTimePenalty.text = $"Restart Room Penalty: -{(int)1}%";
     }
 }
