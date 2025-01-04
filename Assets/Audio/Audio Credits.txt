@@ -1,0 +1,16 @@
+chessPieceMove:
+
+knock.wav by UberBosser -- https://freesound.org/s/421585/ -- License: Creative Commons 0
+
+
+game_over:
+
+game fail by Leszek_Szary -- https://freesound.org/s/146731/ -- License: Creative Commons 0
+
+
+level_up:
+
+LevelUp.wav by Kenneth_Cooney -- https://freesound.org/s/609335/ -- License: Creative Commons 0
+
+
+lose_sfx

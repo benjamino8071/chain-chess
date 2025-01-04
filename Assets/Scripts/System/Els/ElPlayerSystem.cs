@@ -284,7 +284,7 @@ public class ElPlayerSystem : ElDependency
                         _enemiesSystem.PieceCaptured(enemyController);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
-                        _xpBarUISystem.IncreaseProgressBar(0.1f);
+                        _xpBarUISystem.IncreaseProgressBar(0.1f, !enemiesCleared);
                         if (_currentPiece.Next is not null && Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.UseCapturedPieceStraightAway))
                         {
                             //We add this piece to the position in the queue between the current piece, and the next piece.
@@ -330,7 +330,7 @@ public class ElPlayerSystem : ElDependency
                     else
                     {
                         //Player has not captured an enemy so we must reset the multiplier
-                        //_timerUISystem.ResetTimerChangedAmount(false);
+                        _xpBarUISystem.ResetMultiplier();
                     }
                     
                     //IF the player is a pawn, we want to check what's directly in front of the player.
@@ -482,7 +482,7 @@ public class ElPlayerSystem : ElDependency
                         _enemiesSystem.PieceCaptured(enemiesInRoom[0]);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
-                        _xpBarUISystem.IncreaseProgressBar(0.1f);
+                        _xpBarUISystem.IncreaseProgressBar(0.1f, !enemiesCleared);
                             
                         if (enemiesCleared)
                         {
@@ -516,7 +516,7 @@ public class ElPlayerSystem : ElDependency
                 //Wait 1 second before we show the game over screen
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
-                    //_timerUISystem.ResetTimerChangedAmount(false);
+                    _xpBarUISystem.ResetMultiplier();
                     SetState(States.EndGame);
                     _gameOverUISystem.Show("Captured", true);
                 }
@@ -525,7 +525,7 @@ public class ElPlayerSystem : ElDependency
                 //Wait 1 second before we show the game over screen
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
-                    //_timerUISystem.ResetTimerChangedAmount(false);
+                    _xpBarUISystem.ResetMultiplier();
                     if (AuthenticationService.Instance is not null)
                     {
                         if (AuthenticationService.Instance.IsSignedIn)
@@ -1104,7 +1104,7 @@ public class ElPlayerSystem : ElDependency
         _enemiesSystem.PieceCaptured(enemyController);
         
         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber()); 
-        _xpBarUISystem.IncreaseProgressBar(0.1f);
+        _xpBarUISystem.IncreaseProgressBar(0.1f, !enemiesCleared);
         _capturedPieces.AddLast(enemyPiece);
         _chainUISystem.ShowNewPiece(enemyController.GetPiece());
         _chainUISystem.UpdateMovesRemainingText(0);

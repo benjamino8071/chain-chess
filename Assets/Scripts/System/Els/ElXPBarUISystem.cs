@@ -14,6 +14,8 @@ public class ElXPBarUISystem : ElDependency
     private TextMeshProUGUI _multiplierAmountText;
 
     private float _amount;
+
+    private float _multiplier;
     
     public override void GameStart(ElCreator creator)
     {
@@ -30,16 +32,17 @@ public class ElXPBarUISystem : ElDependency
             creator.GetChildObjectByName(guiBottom.gameObject, AllTagNames.MultiplierAmount);
         _multiplierAmountText = multiplierAmountText.GetComponent<TextMeshProUGUI>();
         
-        ResetMultiplierText();
+        ResetMultiplier();
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="amount">MUST BE BETWEEN 0 AND 1</param>
-    public void IncreaseProgressBar(float amount)
+    /// <param name="playSfx"></param>
+    public void IncreaseProgressBar(float amount, bool playSfx)
     {
-        amount *= 1;
+        amount *= _multiplier;
 
         _amount = Mathf.Clamp01(_amount + amount);
 
@@ -51,13 +54,18 @@ public class ElXPBarUISystem : ElDependency
             ResetBar();
         }
 
-        float waveAmp = Mathf.Clamp(0.01f * 1, 0.01f, 0.1f);
-        _multiplierAmountText.text = $"<wave a={waveAmp}>Multiplier: {1:0.##}x</wave>";
-
-        float numOfConsecCaps = 0.1f; //TODO: Set this to the number of pieces captured in one turn
-
-        float pitch = Mathf.Clamp(0.9f + Mathf.RoundToInt(numOfConsecCaps) / 50f, 0.9f, 2f);
-        _audioSystem.PlayTimeAddedSfx(pitch);
+        if (playSfx)
+        {
+            float numOfCaps = Mathf.Log(_multiplier, 2);
+            Debug.Log("Num of caps: "+numOfCaps);
+            
+            float pitch = Mathf.Clamp(0.9f + numOfCaps / 50, 0.9f, 2f);
+            _audioSystem.PlayTimeAddedSfx(pitch);
+        }
+        
+        _multiplier *= 2;
+        float waveAmp = Mathf.Clamp(0.01f * _multiplier, 0.01f, 0.1f);
+        _multiplierAmountText.text = $"<wave a={waveAmp}>Multiplier: {_multiplier:0.##}x</wave>";
     }
 
     /// <summary>
@@ -77,8 +85,9 @@ public class ElXPBarUISystem : ElDependency
         _progressBar.SetBar01(0);
     }
     
-    private void ResetMultiplierText()
+    public void ResetMultiplier()
     {
+        _multiplier = 1;
         _multiplierAmountText.text = $"<wave a={0.01f}>Multiplier: 1x</wave>";
     }
 }
