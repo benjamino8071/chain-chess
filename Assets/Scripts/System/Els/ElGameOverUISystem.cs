@@ -8,6 +8,7 @@ public class ElGameOverUISystem : ElDependency
     private ElPauseUISystem _pauseUISystem;
     private ElTimerUISystem _timerUISystem;
     private ElArtefactsUISystem _artefactsUISystem;
+    private ElLivesUISystem _livesUISystem;
     
     private Transform _gameOverUI;
 
@@ -22,6 +23,7 @@ public class ElGameOverUISystem : ElDependency
         _pauseUISystem = elCreator.GetDependency<ElPauseUISystem>();
         _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
         _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
+        _livesUISystem = elCreator.GetDependency<ElLivesUISystem>();
 
         _gameOverUI = elCreator.GetFirstObjectWithName(AllTagNames.GameOver);
 
@@ -63,6 +65,8 @@ public class ElGameOverUISystem : ElDependency
         _pauseUISystem.Hide(false);
         _artefactsUISystem.Hide();
         //_timerUISystem.HideTimerChangeAmount();
+        _livesUISystem.LoseLife();
+        
         _gameOverUI.gameObject.SetActive(true);
     }
 

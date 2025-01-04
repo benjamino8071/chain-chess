@@ -3511,6 +3511,7 @@ MonoBehaviour:
   timerSo: {fileID: 11400000, guid: 2a7b208174d6c084199f27f9e732286d, type: 2}
   enemySo: {fileID: 11400000, guid: f2bc2f0c9938dec42a80867cd663f34b, type: 2}
   shopSo: {fileID: 11400000, guid: c6ed2724eb231ca4c976d72ed68465c7, type: 2}
+  livesSo: {fileID: 11400000, guid: 4e7ea8907137d2d47af34bbb79156593, type: 2}
   resetCachedDataOnStart: 1
 --- !u!4 &1368535756
 Transform:

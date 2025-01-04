@@ -64,5 +64,6 @@ public enum AllTagNames
     Moving,
     ChoiceOne,
     ChoiceTwo,
-    ChoiceThree
+    ChoiceThree,
+    Lives
 }
