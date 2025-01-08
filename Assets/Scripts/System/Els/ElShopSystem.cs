@@ -16,7 +16,7 @@ public class ElShopSystem : ElDependency
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
-
+        
         _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
         _pauseUISystem = elCreator.GetDependency<ElPauseUISystem>();
         _audioSystem = elCreator.GetDependency<ElAudioSystem>();
@@ -24,6 +24,12 @@ public class ElShopSystem : ElDependency
         
         Transform shop = elCreator.GetFirstObjectWithName(AllTagNames.Shop);
 
+        if (!elCreator.shopSo.useShop)
+        {
+            shop.gameObject.SetActive(false);
+            return;
+        }
+        
         shop.position += new Vector3(0, 11f * Creator.shopSo.shopRoomNumber, 0);
 
         List<Transform> shopPieces = elCreator.GetChildObjectsByName(shop.gameObject, AllTagNames.Piece);
@@ -280,6 +286,9 @@ public class ElShopSystem : ElDependency
 
     public void TryGetArtefactAtPosition(Vector3 playerPosition)
     {
+        if(!Creator.shopSo.useShop)
+            return;
+        
         foreach (Vector3 pos in Creator.shopSo.artefactsPositions.Keys)
         {
             if ((int)pos.x == (int)playerPosition.x && (int)pos.y == (int)playerPosition.y)
@@ -319,6 +328,9 @@ public class ElShopSystem : ElDependency
 
     public void TryGetUpgradeAtPosition(Vector3 playerPosition)
     {
+        if(!Creator.shopSo.useShop)
+            return;
+        
         foreach (Vector3 pos in Creator.shopSo.upgradesPositions.Keys)
         {
             if ((int)pos.x == (int)playerPosition.x && (int)pos.y == (int)playerPosition.y)

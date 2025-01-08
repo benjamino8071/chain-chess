@@ -45,7 +45,7 @@ public class ElEnemiesSystem : ElDependency
             int numOfEnemies = -1;
             for (int roomNum = 0; roomNum < 9; roomNum++)
             {
-                if (roomNum == Creator.shopSo.shopRoomNumber)
+                if (roomNum == Creator.shopSo.shopRoomNumber && Creator.shopSo.useShop)
                     continue;
                 numOfEnemies++;
                 Dictionary<Vector3, (Piece, int, ElEnemyController.PieceEffectType)> positions = new();

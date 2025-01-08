@@ -6,6 +6,8 @@ using UnityEngine;
 [CreateAssetMenu]
 public class Shop_SO : ScriptableObject
 {
+    public bool useShop;
+    
     public int shopRoomNumber;
     
     //Upgrade sprites
