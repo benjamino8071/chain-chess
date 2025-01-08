@@ -16,6 +16,7 @@ public class ElCreator : Creator
     public Chain_SO chainSo;
     public AudioClips_SO audioClipsSo;
     public Lives_SO livesSo;
+    public XPBar_SO xpBarSo;
     
     [Header("Prefabs")]
     public GameObject playerPrefab;

@@ -12,10 +12,15 @@ public class ElXPBarUISystem : ElDependency
     private MMProgressBar _progressBar;
 
     private TextMeshProUGUI _multiplierAmountText;
-
+    private TextMeshProUGUI _levelNumberText;
+    private TextMeshProUGUI _xpEarntInLevelText;
+    
     private float _amount;
+    private float _amountRequiredToUpgrade = 10;
 
     private float _multiplier;
+
+    private int _levelNumber = 1;
     
     public override void GameStart(ElCreator creator)
     {
@@ -31,33 +36,44 @@ public class ElXPBarUISystem : ElDependency
         Transform multiplierAmountText =
             creator.GetChildObjectByName(guiBottom.gameObject, AllTagNames.MultiplierAmount);
         _multiplierAmountText = multiplierAmountText.GetComponent<TextMeshProUGUI>();
+
+        Transform levelNumberText = creator.GetChildObjectByName(guiBottom.gameObject, AllTagNames.LevelNumber);
+        _levelNumberText = levelNumberText.GetComponent<TextMeshProUGUI>();
+        
+        Transform xpEarntInLevelText = creator.GetChildObjectByName(guiBottom.gameObject, AllTagNames.XpPoints);
+        _xpEarntInLevelText = xpEarntInLevelText.GetComponent<TextMeshProUGUI>();
+
+        _levelNumberText.text = $"Level {_levelNumber}";
+        _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
         
         ResetMultiplier();
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="amount">MUST BE BETWEEN 0 AND 1</param>
-    /// <param name="playSfx"></param>
-    public void IncreaseProgressBar(float amount, bool playSfx)
+    
+    public void IncreaseProgressBar(float amount, bool playSfx, Vector3 playerPos, MMF_Player floatingTextPlayer)
     {
         amount *= _multiplier;
 
-        _amount = Mathf.Clamp01(_amount + amount);
-
-        _progressBar.UpdateBar01(_amount);
-
-        if (_amount >= 1)
+        floatingTextPlayer.PlayFeedbacks(playerPos, amount);
+        
+        _amount += amount;
+        
+        _progressBar.UpdateBar(_amount, 0, _amountRequiredToUpgrade);
+        
+        if (_amount >= _amountRequiredToUpgrade)
         {
-            //_upgradeGUISystem.Show();
-            ResetBar();
+            _amount = _amountRequiredToUpgrade;
+            _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
+            
+            LevelUpgrade();
+        }
+        else
+        {
+            _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
         }
 
         if (playSfx)
         {
             float numOfCaps = Mathf.Log(_multiplier, 2);
-            Debug.Log("Num of caps: "+numOfCaps);
             
             float pitch = Mathf.Clamp(0.9f + numOfCaps / 50, 0.9f, 2f);
             _audioSystem.PlayTimeAddedSfx(pitch);
@@ -76,18 +92,30 @@ public class ElXPBarUISystem : ElDependency
     {
         _amount = Mathf.Clamp01(_amount - amount);
         
-        _progressBar.UpdateBar01(_amount);
+        _progressBar.UpdateBar(_amount, 0, _amountRequiredToUpgrade);
     }
 
     public void ResetBar()
     {
         _amount = 0;
-        _progressBar.SetBar01(0);
+        _xpEarntInLevelText.text = $"XP: 0/{_amountRequiredToUpgrade:0}";
+        
+        _progressBar.SetBar(0, 0, _amountRequiredToUpgrade);
     }
     
     public void ResetMultiplier()
     {
         _multiplier = 1;
         _multiplierAmountText.text = $"<wave a={0.01f}>Multiplier: 1x</wave>";
+    }
+
+    public void LevelUpgrade()
+    {
+        _levelNumber++;
+        _amountRequiredToUpgrade *= 2;
+
+        _levelNumberText.text = $"Level {_levelNumber}";
+        
+        ResetBar();
     }
 }

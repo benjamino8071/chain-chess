@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MoreMountains.Feedbacks;
 using TMPro;
 using Unity.Services.Authentication;
 using Unity.Services.Leaderboards;
@@ -44,6 +45,7 @@ public class ElPlayerSystem : ElDependency
 
     private Animator _playerAnimator;
     private SpriteRenderer _playerSprite;
+    private MMF_Player _pieceCapturedPlayer;
     
     private float _moveSpeed;
     private float _sinTime;
@@ -113,6 +115,8 @@ public class ElPlayerSystem : ElDependency
         _promoUIController.Initialise(_playerCharacter);
         
         _playerAnimator = _playerCharacter.GetComponentInChildren<Animator>();
+
+        _pieceCapturedPlayer = _playerCharacter.GetComponentInChildren<MMF_Player>();
         
         _jumpPosition = _playerCharacter.position;
 
@@ -284,7 +288,7 @@ public class ElPlayerSystem : ElDependency
                         _enemiesSystem.PieceCaptured(enemyController);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
-                        _xpBarUISystem.IncreaseProgressBar(0.1f, !enemiesCleared);
+                        _xpBarUISystem.IncreaseProgressBar(Creator.xpBarSo.capturePieceValue[enemyPiece], !enemiesCleared, _playerCharacter.position, _pieceCapturedPlayer);
                         if (_currentPiece.Next is not null && Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.UseCapturedPieceStraightAway))
                         {
                             //We add this piece to the position in the queue between the current piece, and the next piece.
@@ -482,7 +486,7 @@ public class ElPlayerSystem : ElDependency
                         _enemiesSystem.PieceCaptured(enemiesInRoom[0]);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
-                        _xpBarUISystem.IncreaseProgressBar(0.1f, !enemiesCleared);
+                        _xpBarUISystem.IncreaseProgressBar(Creator.xpBarSo.capturePieceValue[piece], !enemiesCleared, _playerCharacter.position, _pieceCapturedPlayer);
                             
                         if (enemiesCleared)
                         {
@@ -1104,7 +1108,7 @@ public class ElPlayerSystem : ElDependency
         _enemiesSystem.PieceCaptured(enemyController);
         
         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber()); 
-        _xpBarUISystem.IncreaseProgressBar(0.1f, !enemiesCleared);
+        _xpBarUISystem.IncreaseProgressBar(Creator.xpBarSo.capturePieceValue[enemyPiece], !enemiesCleared, _playerCharacter.position, _pieceCapturedPlayer);
         _capturedPieces.AddLast(enemyPiece);
         _chainUISystem.ShowNewPiece(enemyController.GetPiece());
         _chainUISystem.UpdateMovesRemainingText(0);

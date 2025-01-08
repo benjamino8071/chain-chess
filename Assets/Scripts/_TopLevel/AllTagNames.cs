@@ -65,5 +65,8 @@ public enum AllTagNames
     ChoiceOne,
     ChoiceTwo,
     ChoiceThree,
-    Lives
+    Lives,
+    LevelNumber,
+    XpPoints,
+    MmfPlayer
 }

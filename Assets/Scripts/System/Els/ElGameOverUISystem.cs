@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class ElGameOverUISystem : ElDependency
 {
     private ElPauseUISystem _pauseUISystem;
-    private ElTimerUISystem _timerUISystem;
     private ElArtefactsUISystem _artefactsUISystem;
     private ElLivesUISystem _livesUISystem;
     
@@ -21,7 +20,6 @@ public class ElGameOverUISystem : ElDependency
         base.GameStart(elCreator);
 
         _pauseUISystem = elCreator.GetDependency<ElPauseUISystem>();
-        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
         _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
         _livesUISystem = elCreator.GetDependency<ElLivesUISystem>();
 
@@ -58,14 +56,12 @@ public class ElGameOverUISystem : ElDependency
 
     public void Show(string message, bool showRestartRoom)
     {
-        Debug.Log("Showing game over screen");
-        _restartRoomButton.gameObject.SetActive(showRestartRoom);
         _titleText.text = message;
-        
+        _livesUISystem.LoseLife();
+
         _pauseUISystem.Hide(false);
         _artefactsUISystem.Hide();
-        //_timerUISystem.HideTimerChangeAmount();
-        _livesUISystem.LoseLife();
+        _restartRoomButton.gameObject.SetActive(showRestartRoom && Creator.livesSo.livesRemaining > 0);
         
         _gameOverUI.gameObject.SetActive(true);
     }
