@@ -6,19 +6,21 @@ using UnityEngine.UI;
 
 public class ElPromoUIController : ElController
 {
-    private ElTimerUISystem _timerUISystem;
+    private ElXPBarUISystem _xpBarUISystem;
+    private ElPlayerSystem _playerSystem;
     
     private Transform _promoCanvas;
 
     private Piece _chosenPiece;
 
-    private Dictionary<Piece, TMP_Text> _promoCostTexts = new();
+    private Dictionary<Piece, TMP_Text> _promoXpGainTexts = new();
     
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
-        
-        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
+
+        _xpBarUISystem = elCreator.GetDependency<ElXPBarUISystem>();
+        _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
     }
 
     public void Initialise(Transform playerObject)
@@ -53,12 +55,13 @@ public class ElPromoUIController : ElController
             promoButton.onClick.AddListener(() =>
             {
                 SelectPromotion(piece);
-                //_timerUISystem.RemoveTime(Creator.timerSo.timeCost[Piece.Bishop], false);
+                float xpGain = Creator.xpBarSo.promotionXPGain[piece];
+                _xpBarUISystem.IncreaseProgressBar(xpGain, false);
             });
-            _promoCostTexts.Add(piece, promoButton.GetComponentInChildren<TMP_Text>());
+            _promoXpGainTexts.Add(piece, promoButton.GetComponentInChildren<TMP_Text>());
         }
-        
-        Hide(false);
+
+        Hide();
     }
 
     private void SelectPromotion(Piece piece)
@@ -68,26 +71,17 @@ public class ElPromoUIController : ElController
 
     public void Show()
     {
-        //_timerUISystem.StopTimer();
         _chosenPiece = Piece.NotChosen;
-
-        // List<Piece> keys = Creator.timerSo.timeCost.Keys.ToList();
-        // foreach (Piece piece in keys)
-        // {
-        //     float timeToRemove = Creator.timerSo.timeCost[piece];
-        //     _promoCostTexts[piece].text = $"-{timeToRemove:0.#}s";
-        // }
+        
+        SetPromoXpGainText();
         
         _promoCanvas.gameObject.SetActive(true);
     }
 
-    public void Hide(bool startTimer)
+    public void Hide()
     {
         _promoCanvas.gameObject.SetActive(false);
         _chosenPiece = Piece.NotChosen;
-        
-        // if(startTimer)
-        //     _timerUISystem.StartTimer();
     }
 
     public bool IsPromoChosen()
@@ -98,5 +92,15 @@ public class ElPromoUIController : ElController
     public Piece PieceChosen()
     {
         return _chosenPiece;
+    }
+
+    public void SetPromoXpGainText()
+    {
+        List<Piece> promoPieces = Creator.xpBarSo.promotionXPGain.Keys.ToList();
+        foreach (Piece promoPiece in promoPieces)
+        {
+            float xpGain = Creator.xpBarSo.promotionXPGain[promoPiece];
+            _promoXpGainTexts[promoPiece].text = $"+{xpGain:0}xp";
+        }
     }
 }

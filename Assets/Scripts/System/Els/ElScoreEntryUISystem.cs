@@ -99,7 +99,7 @@ public class ElScoreEntryUISystem : ElDependency
     public void Show(double playerScore)
     {
         _playerScore = playerScore;
-        _pauseUISystem.Hide(false);
+        _pauseUISystem.Hide();
         _artefactsUISystem.Hide();
         _scoreEntryUI.gameObject.SetActive(true);
     }

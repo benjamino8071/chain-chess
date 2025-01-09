@@ -39,7 +39,7 @@ public class ElChainUISystem : ElDependency
         ResetPosition();
         
         ShowNewPiece(Creator.playerSystemSo.startingPiece, true);
-        
+
         UpdateMovesRemainingText(1);
     }
     
@@ -78,7 +78,6 @@ public class ElChainUISystem : ElDependency
             capturedPiecesImage.Item2.gameObject.SetActive(false);
         }
         _nextFreeImage = _chainPiecesImages.First;
-        _movesRemainingText.text = "1";
     }
 
     public void HighlightNextPiece()

@@ -7,12 +7,14 @@ public class Creator : MonoBehaviour
 {
     public GridSystem_SO gridSystemSo;
     public Cinemachine_SO cinemachineSo;
+
+    public int frameRate = 120;
     
     protected LinkedList<Dependency> _dependencies = new();
 
     private void Awake()
     {
-        Application.targetFrameRate = 120;
+        Application.targetFrameRate = frameRate;
         
         CreateDependencies();
     }

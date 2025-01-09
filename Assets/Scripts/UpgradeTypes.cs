@@ -1,8 +1,8 @@
 public enum UpgradeTypes
 {
     None,
-    ReducePromotionCost,
-    IncreaseMultiplierAmount,
+    IncreasePromotionXPGain,
+    IncreaseBaseMultiplierAmount,
     IncreaseBaseAmountGained,
     ReduceRespawnCost
 }

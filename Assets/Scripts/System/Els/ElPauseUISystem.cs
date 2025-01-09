@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class ElPauseUISystem : ElDependency
 {
     private ElPlayerSystem _playerSystem;
-    private ElTimerUISystem _timerUISystem;
     
     private Transform _pauseGUI;
 
@@ -22,7 +21,6 @@ public class ElPauseUISystem : ElDependency
         base.GameStart(elCreator);
         
         _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
-        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
 
         _pauseGUI = elCreator.GetFirstObjectWithName(AllTagNames.Pause);
         
@@ -52,14 +50,15 @@ public class ElPauseUISystem : ElDependency
             }
             else
             {
-                Hide(true);
+                Hide();
                 _playerSystem.SetState(ElPlayerSystem.States.Idle);
             }
         });
         
-        UpdateTextInfo();
+        UpdateCaptureBonusText();
+        UpdateBaseMultiplierText();
         HideUpgradeNotificationImage();
-        Hide(false);
+        Hide();
     }
 
     public override void GameEarlyUpdate(float dt)
@@ -69,7 +68,6 @@ public class ElPauseUISystem : ElDependency
 
     public void Show()
     {
-        //_timerUISystem.StopTimer();
         _pauseGUI.gameObject.SetActive(true);
         HideUpgradeNotificationImage();
     }
@@ -84,24 +82,45 @@ public class ElPauseUISystem : ElDependency
         _upgradeNotificationImage.SetActive(false);
     }
 
-    public void Hide(bool startTimer)
+    public void Hide()
     {
         _pauseGUI.gameObject.SetActive(false);
-        // if(startTimer && Creator.playerSystemSo.moveMadeInNewRoom)
-        //     _timerUISystem.StartTimer();
     }
     
-    public void UpdateTextInfo()
+    public void UpdateCaptureBonusText()
     {
-        _pauseUITextInfo.pawnCapValueText.text = $"Pawn: +{1:0.##}xp";
-        _pauseUITextInfo.knightCapValueText.text = $"Knight: +{1:0.##}xp";
-        _pauseUITextInfo.bishopCapValueText.text = $"Bishop: +{1:0.##}xp";
-        _pauseUITextInfo.rookCapValueText.text = $"Rook: +{1:0.##}xp";
-        _pauseUITextInfo.queenCapValueText.text = $"Queen: +{1:0.##}xp";
-        _pauseUITextInfo.kingCapValueText.text = $"King: +{1:0.##}xp";
-        
-        _pauseUITextInfo.pieceCapMulMulText.text = $"Consecutive Capture Multiplier Increase: \u2191{(int)1}%";
+        bool hasUpgraded = Creator.xpBarSo.capturePieceXPGain[Piece.Pawn] > 1;
 
-        _pauseUITextInfo.restartRoomTimePenalty.text = $"Restart Room Penalty: -{(int)1}%";
+        if (hasUpgraded)
+        {
+            _pauseUITextInfo.pawnCapValueText.text = $"Pawn: +1 (+{Creator.xpBarSo.capturePieceXPGain[Piece.Pawn] - 1:0.##})xp";
+            _pauseUITextInfo.knightCapValueText.text = $"Knight: +3 (+{Creator.xpBarSo.capturePieceXPGain[Piece.Knight] - 3:0.##})xp";
+            _pauseUITextInfo.bishopCapValueText.text = $"Bishop: +3 (+{Creator.xpBarSo.capturePieceXPGain[Piece.Bishop] - 3:0.##})xp";
+            _pauseUITextInfo.rookCapValueText.text = $"Rook: +5 (+{Creator.xpBarSo.capturePieceXPGain[Piece.Rook] - 5:0.##})xp";
+            _pauseUITextInfo.queenCapValueText.text = $"Queen: +9 (+{Creator.xpBarSo.capturePieceXPGain[Piece.Queen] - 9:0.##})xp";
+            _pauseUITextInfo.kingCapValueText.text = $"King: +9 (+{Creator.xpBarSo.capturePieceXPGain[Piece.King] - 9:0.##})xp";
+        }
+        else
+        {
+            _pauseUITextInfo.pawnCapValueText.text = $"Pawn: +{Creator.xpBarSo.capturePieceXPGain[Piece.Pawn]:0.##}xp";
+            _pauseUITextInfo.knightCapValueText.text = $"Knight: +{Creator.xpBarSo.capturePieceXPGain[Piece.Knight]:0.##}xp";
+            _pauseUITextInfo.bishopCapValueText.text = $"Bishop: +{Creator.xpBarSo.capturePieceXPGain[Piece.Bishop]:0.##}xp";
+            _pauseUITextInfo.rookCapValueText.text = $"Rook: +{Creator.xpBarSo.capturePieceXPGain[Piece.Rook]:0.##}xp";
+            _pauseUITextInfo.queenCapValueText.text = $"Queen: +{Creator.xpBarSo.capturePieceXPGain[Piece.Queen]:0.##}xp";
+            _pauseUITextInfo.kingCapValueText.text = $"King: +{Creator.xpBarSo.capturePieceXPGain[Piece.King]:0.##}xp";
+        }
+    }
+
+    public void UpdateBaseMultiplierText()
+    {
+        if (Creator.xpBarSo.baseMultiplier > 1)
+        {
+            _pauseUITextInfo.baseMultiplierValueText.text = $"Base Multiplier: ({Creator.xpBarSo.baseMultiplier:0.##}) \u00d7 1\u00d7";
+        }
+        else
+        {
+            _pauseUITextInfo.baseMultiplierValueText.text = $"Base Multiplier: 1\u00d7";
+        }
+        
     }
 }

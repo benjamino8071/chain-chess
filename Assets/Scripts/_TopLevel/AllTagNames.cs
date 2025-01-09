@@ -68,5 +68,9 @@ public enum AllTagNames
     Lives,
     LevelNumber,
     XpPoints,
-    MmfPlayer
+    MmfPlayer,
+    Upgrade,
+    UpgradeButton,
+    Text,
+    Image
 }

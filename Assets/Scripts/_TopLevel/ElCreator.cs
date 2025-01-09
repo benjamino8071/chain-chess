@@ -110,6 +110,7 @@ public class ElCreator : Creator
         _dependencies.AddLast(new ElDoorsSystem());
         _dependencies.AddLast(new ElGridSystem());
         _dependencies.AddLast(new ElEnemiesSystem());
+        _dependencies.AddLast(new ElUpgradeUISystem());
         _dependencies.AddLast(new ElPauseUISystem());
         _dependencies.AddLast(new ElPlayerSystem());
         _dependencies.AddLast(new ElXPBarUISystem());

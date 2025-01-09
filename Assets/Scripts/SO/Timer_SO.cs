@@ -38,8 +38,8 @@ public class Timer_SO : ScriptableObject
     
     public readonly Dictionary<UpgradeTypes, int> upgradesCost = new()
     {
-        { UpgradeTypes.ReducePromotionCost, 30 },
-        { UpgradeTypes.IncreaseMultiplierAmount, 21 },
+        { UpgradeTypes.IncreasePromotionXPGain, 30 },
+        { UpgradeTypes.IncreaseBaseMultiplierAmount, 21 },
         { UpgradeTypes.IncreaseBaseAmountGained , 18},
         { UpgradeTypes.ReduceRespawnCost, 40}
     };

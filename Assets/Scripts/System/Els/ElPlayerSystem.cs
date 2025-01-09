@@ -31,6 +31,7 @@ public class ElPlayerSystem : ElDependency
     private ElShopSystem _shopSystem;
     private ElDoorsSystem _doorsSystem;
     private ElXPBarUISystem _xpBarUISystem;
+    private ElUpgradeUISystem _upgradeUISystem;
 
     private ElPromoUIController _promoUIController;
     
@@ -97,6 +98,7 @@ public class ElPlayerSystem : ElDependency
         _shopSystem = elCreator.GetDependency<ElShopSystem>();
         _doorsSystem = elCreator.GetDependency<ElDoorsSystem>();
         _xpBarUISystem = elCreator.GetDependency<ElXPBarUISystem>();
+        _upgradeUISystem = elCreator.GetDependency<ElUpgradeUISystem>();
         
         _currentRoomStartPiece = Creator.playerSystemSo.startingPiece;
         _roomNumber = Creator.playerSystemSo.roomNumberSaved;
@@ -164,6 +166,9 @@ public class ElPlayerSystem : ElDependency
     public override void GameUpdate(float dt)
     {
         HideAllValidMoves();
+        
+        if(_upgradeUISystem.ChoosingUpgrade())
+            return;
         
         UpdateValidMoves();
         
@@ -288,7 +293,7 @@ public class ElPlayerSystem : ElDependency
                         _enemiesSystem.PieceCaptured(enemyController);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
-                        _xpBarUISystem.IncreaseProgressBar(Creator.xpBarSo.capturePieceValue[enemyPiece], !enemiesCleared, _playerCharacter.position, _pieceCapturedPlayer);
+                        _xpBarUISystem.IncreaseProgressBar(Creator.xpBarSo.capturePieceXPGain[enemyPiece], !enemiesCleared);
                         if (_currentPiece.Next is not null && Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.UseCapturedPieceStraightAway))
                         {
                             //We add this piece to the position in the queue between the current piece, and the next piece.
@@ -404,7 +409,7 @@ public class ElPlayerSystem : ElDependency
                     index *= 2; //Have to double index for the chainUI as for every other index, there is an arrow sprite which we NEVER want to change
                     _chainUISystem.PawnPromoted(index, pieceChosen);
                     
-                    _promoUIController.Hide(true);
+                    _promoUIController.Hide();
                     
                     _currentPiece = _currentPiece.Next;
                     
@@ -434,6 +439,7 @@ public class ElPlayerSystem : ElDependency
                     _chainUISystem.ResetPosition();
                     _chainUISystem.ShowNewPiece(_currentRoomStartPiece, true);
                     Creator.playerSystemSo.moveMadeInNewRoom = false;
+                    Creator.xpBarSo.levelNumberOnRoomEnter = Creator.xpBarSo.levelNumber;
                     _currentPiece = null;
                     SetState(States.DoorWalk);
                 }
@@ -486,7 +492,7 @@ public class ElPlayerSystem : ElDependency
                         _enemiesSystem.PieceCaptured(enemiesInRoom[0]);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
-                        _xpBarUISystem.IncreaseProgressBar(Creator.xpBarSo.capturePieceValue[piece], !enemiesCleared, _playerCharacter.position, _pieceCapturedPlayer);
+                        _xpBarUISystem.IncreaseProgressBar(Creator.xpBarSo.capturePieceXPGain[piece], !enemiesCleared);
                             
                         if (enemiesCleared)
                         {
@@ -1060,6 +1066,11 @@ public class ElPlayerSystem : ElDependency
     {
         _playerAnimator.SetTrigger("FadeIn");
     }
+
+    public void PlayFloatingTextPlayer(float intensity)
+    {
+        _pieceCapturedPlayer.PlayFeedbacks(_playerCharacter.position, intensity);
+    }
     
     public void SetState(States state)
     {
@@ -1086,6 +1097,11 @@ public class ElPlayerSystem : ElDependency
         _state = state;
     }
 
+    public void SetPromoXpGainText()
+    {
+        _promoUIController.SetPromoXpGainText();
+    }
+
     public States GetState()
     {
         return _state;
@@ -1108,7 +1124,7 @@ public class ElPlayerSystem : ElDependency
         _enemiesSystem.PieceCaptured(enemyController);
         
         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber()); 
-        _xpBarUISystem.IncreaseProgressBar(Creator.xpBarSo.capturePieceValue[enemyPiece], !enemiesCleared, _playerCharacter.position, _pieceCapturedPlayer);
+        _xpBarUISystem.IncreaseProgressBar(Creator.xpBarSo.capturePieceXPGain[enemyPiece], !enemiesCleared);
         _capturedPieces.AddLast(enemyPiece);
         _chainUISystem.ShowNewPiece(enemyController.GetPiece());
         _chainUISystem.UpdateMovesRemainingText(0);

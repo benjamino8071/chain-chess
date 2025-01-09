@@ -113,13 +113,13 @@ public class ElShopSystem : ElDependency
                 {
                     switch (Creator.shopSo.upgradesPositions[shopItem.transform.position])
                     {
-                        case UpgradeTypes.IncreaseMultiplierAmount:
+                        case UpgradeTypes.IncreaseBaseMultiplierAmount:
                             shopItemSprRend.sprite = Creator.shopSo.increaseMultiplierAmountSprite;
                             break;
                         case UpgradeTypes.IncreaseBaseAmountGained:
                             shopItemSprRend.sprite = Creator.shopSo.increaseBaseAmountGainedSprite;
                             break;
-                        case UpgradeTypes.ReducePromotionCost:
+                        case UpgradeTypes.IncreasePromotionXPGain:
                             shopItemSprRend.sprite = Creator.shopSo.reducePromotionCostSprite;
                             break;
                         case UpgradeTypes.ReduceRespawnCost:
@@ -236,8 +236,8 @@ public class ElShopSystem : ElDependency
                 {
                     List<UpgradeTypes> types = new()
                     {
-                        UpgradeTypes.ReducePromotionCost,
-                        UpgradeTypes.IncreaseMultiplierAmount,
+                        UpgradeTypes.IncreasePromotionXPGain,
+                        UpgradeTypes.IncreaseBaseMultiplierAmount,
                         UpgradeTypes.IncreaseBaseAmountGained,
                         UpgradeTypes.ReduceRespawnCost
                     };
@@ -248,13 +248,13 @@ public class ElShopSystem : ElDependency
                             
                     switch (types[index])
                     {
-                        case UpgradeTypes.IncreaseMultiplierAmount:
+                        case UpgradeTypes.IncreaseBaseMultiplierAmount:
                             shopItemSprRend.sprite = Creator.shopSo.increaseMultiplierAmountSprite;
                             break;
                         case UpgradeTypes.IncreaseBaseAmountGained:
                             shopItemSprRend.sprite = Creator.shopSo.increaseBaseAmountGainedSprite;
                             break;
-                        case UpgradeTypes.ReducePromotionCost:
+                        case UpgradeTypes.IncreasePromotionXPGain:
                             shopItemSprRend.sprite = Creator.shopSo.reducePromotionCostSprite;
                             break;
                         case UpgradeTypes.ReduceRespawnCost:
@@ -320,7 +320,7 @@ public class ElShopSystem : ElDependency
                 Creator.shopSo.artefactsSprites[pos].gameObject.SetActive(false);
                 Creator.shopSo.artefactsPositions.Remove(pos);
                 Creator.shopSo.itemsTakenInLevelCount++;
-                _pauseUISystem.UpdateTextInfo();
+                _pauseUISystem.UpdateCaptureBonusText();
                 return;
             }
         }
@@ -338,11 +338,11 @@ public class ElShopSystem : ElDependency
                 _audioSystem.PlayerLevelUpSfx();
                 switch (Creator.shopSo.upgradesPositions[pos])
                 {
-                    case UpgradeTypes.IncreaseMultiplierAmount:
+                    case UpgradeTypes.IncreaseBaseMultiplierAmount:
                         break;
                     case UpgradeTypes.IncreaseBaseAmountGained:
                         break;
-                    case UpgradeTypes.ReducePromotionCost:
+                    case UpgradeTypes.IncreasePromotionXPGain:
                         break;
                     case UpgradeTypes.ReduceRespawnCost:
                         break;
@@ -351,7 +351,7 @@ public class ElShopSystem : ElDependency
                 Creator.shopSo.upgradesSprites[pos].gameObject.SetActive(false);
                 Creator.shopSo.upgradesPositions.Remove(pos);
                 Creator.shopSo.itemsTakenInLevelCount++;
-                _pauseUISystem.UpdateTextInfo();
+                _pauseUISystem.UpdateCaptureBonusText();
                 _pauseUISystem.ShowUpgradeNotificationImage();
                 return;
             }

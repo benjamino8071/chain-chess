@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class ElXPBarUISystem : ElDependency
 {
-    //private UpgradeGUISystem _upgradeGUISystem;
+    private ElPlayerSystem _playerSystem;
+    private ElUpgradeUISystem _upgradeUISystem;
     private ElAudioSystem _audioSystem;
     
     private MMProgressBar _progressBar;
@@ -19,17 +20,15 @@ public class ElXPBarUISystem : ElDependency
     private float _amountRequiredToUpgrade = 10;
 
     private float _multiplier;
-
-    private int _levelNumber = 1;
     
     public override void GameStart(ElCreator creator)
     {
         base.GameStart(creator);
-        
+
+        _upgradeUISystem = creator.GetDependency<ElUpgradeUISystem>();
         _audioSystem = creator.GetDependency<ElAudioSystem>();
-
-        //_upgradeGUISystem = creator.GetDependency<UpgradeGUISystem>();
-
+        _playerSystem = creator.GetDependency<ElPlayerSystem>();
+        
         Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
         _progressBar = guiBottom.GetComponentInChildren<MMProgressBar>();
 
@@ -43,17 +42,21 @@ public class ElXPBarUISystem : ElDependency
         Transform xpEarntInLevelText = creator.GetChildObjectByName(guiBottom.gameObject, AllTagNames.XpPoints);
         _xpEarntInLevelText = xpEarntInLevelText.GetComponent<TextMeshProUGUI>();
 
-        _levelNumberText.text = $"Level {_levelNumber}";
+        Creator.xpBarSo.levelNumber = Creator.xpBarSo.levelNumberOnRoomEnter;
+        
+        _amountRequiredToUpgrade *= Creator.xpBarSo.levelNumber;
+        
+        _levelNumberText.text = $"Level {creator.xpBarSo.levelNumber}";
         _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
         
         ResetMultiplier();
     }
     
-    public void IncreaseProgressBar(float amount, bool playSfx, Vector3 playerPos, MMF_Player floatingTextPlayer)
+    public void IncreaseProgressBar(float amount, bool playSfx)
     {
         amount *= _multiplier;
 
-        floatingTextPlayer.PlayFeedbacks(playerPos, amount);
+        _playerSystem.PlayFloatingTextPlayer(amount);
         
         _amount += amount;
         
@@ -61,10 +64,12 @@ public class ElXPBarUISystem : ElDependency
         
         if (_amount >= _amountRequiredToUpgrade)
         {
-            _amount = _amountRequiredToUpgrade;
+            float amountLeftOver = _amount - _amountRequiredToUpgrade;
+            
             _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
             
             LevelUpgrade();
+            ResetBar(amountLeftOver);
         }
         else
         {
@@ -95,27 +100,27 @@ public class ElXPBarUISystem : ElDependency
         _progressBar.UpdateBar(_amount, 0, _amountRequiredToUpgrade);
     }
 
-    public void ResetBar()
+    public void ResetBar(float amountToAddOnReset)
     {
-        _amount = 0;
-        _xpEarntInLevelText.text = $"XP: 0/{_amountRequiredToUpgrade:0}";
+        _amount = amountToAddOnReset;
+        _xpEarntInLevelText.text = $"XP: {amountToAddOnReset:0}/{_amountRequiredToUpgrade:0}";
         
-        _progressBar.SetBar(0, 0, _amountRequiredToUpgrade);
+        _progressBar.SetBar(amountToAddOnReset, 0, _amountRequiredToUpgrade);
     }
     
     public void ResetMultiplier()
     {
-        _multiplier = 1;
-        _multiplierAmountText.text = $"<wave a={0.01f}>Multiplier: 1x</wave>";
+        _multiplier = Creator.xpBarSo.baseMultiplier;
+        _multiplierAmountText.text = $"<wave a={0.01f}>Multiplier: {_multiplier:0.##}\u00d7</wave>";
     }
 
     public void LevelUpgrade()
     {
-        _levelNumber++;
+        Creator.xpBarSo.levelNumber++;
         _amountRequiredToUpgrade *= 2;
 
-        _levelNumberText.text = $"Level {_levelNumber}";
+        _levelNumberText.text = $"Level {Creator.xpBarSo.levelNumber}";
         
-        ResetBar();
+        _upgradeUISystem.Show();
     }
 }
