@@ -90,6 +90,11 @@ public class ElCreator : Creator
     private void OnDestroy()
     {
         SceneManager.sceneUnloaded -= SceneManager_SceneUnloaded;
+        foreach (Dependency dependency in _dependencies)
+        {
+            ElDependency elDependency = (ElDependency)dependency;
+            elDependency.GameEnd();
+        }
     }
 
     private void SceneManager_SceneUnloaded(Scene sceneUnloaded)

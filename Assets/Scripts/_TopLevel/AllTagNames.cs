@@ -72,5 +72,9 @@ public enum AllTagNames
     Upgrade,
     UpgradeButton,
     Text,
-    Image
+    Image,
+    GUILeft,
+    GUIRight,
+    MmfUpgradeButtonPlayer,
+    MmfUpgradeSelectedPlayer,
 }

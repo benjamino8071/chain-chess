@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ElCinemachineSystem : ElDependency
 {
     private ElTimerUISystem _timerUISystem;
+
+    private Transform _cameraStateMachine;
     
     private Animator _animator;
 
@@ -20,8 +23,11 @@ public class ElCinemachineSystem : ElDependency
 
         _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
 
-        Transform cameraStateMachine = elCreator.GetFirstObjectWithName(AllTagNames.CameraStateMachine);
-        CinemachineCamera[] cameras = cameraStateMachine.GetComponentsInChildren<CinemachineCamera>();
+        _cameraStateMachine = elCreator.GetFirstObjectWithName(AllTagNames.CameraStateMachine);
+
+        _cameraOriginalPos = _cameraStateMachine.position;
+        
+        CinemachineCamera[] cameras = _cameraStateMachine.GetComponentsInChildren<CinemachineCamera>();
         _cameras = cameras.ToList();
 
         _previousOrientation = Screen.orientation;
@@ -38,9 +44,41 @@ public class ElCinemachineSystem : ElDependency
             }
         }
         
-        _animator = cameraStateMachine.GetComponent<Animator>();
+        _animator = _cameraStateMachine.GetComponent<Animator>();
         
         Creator.StartACoRoutine(SetFirstState());
+        
+        Creator.inputSo.dragCameraInput.action.performed += DragCameraInput_Performed;
+        Creator.inputSo.dragCameraInput.action.canceled += DragCameraInput_Canceled;
+    }
+
+    public override void GameEnd()
+    {
+        Creator.inputSo.dragCameraInput.action.performed -= DragCameraInput_Performed;
+        Creator.inputSo.dragCameraInput.action.canceled -= DragCameraInput_Canceled;
+    }
+
+    private Vector3 _cameraOriginalPos;
+    private Vector3 _cameraLastPos;
+    
+    private bool _isDraggingCamera;
+
+    private float _mousePosYLastFrame;
+
+    private float _hasntMovedCameraTimer;
+    private float _hasntMovedCameraMaxTime = 2f;
+    
+    private void DragCameraInput_Performed(InputAction.CallbackContext obj)
+    {
+        _mousePosYLastFrame = Input.mousePosition.y;
+        _isDraggingCamera = true;
+    }
+    
+    private void DragCameraInput_Canceled(InputAction.CallbackContext obj)
+    {
+        _cameraLastPos = _cameraStateMachine.position;
+        _hasntMovedCameraTimer = _hasntMovedCameraMaxTime;
+        _isDraggingCamera = false;
     }
 
     public override void GameUpdate(float dt)
@@ -63,6 +101,35 @@ public class ElCinemachineSystem : ElDependency
                     camera.Lens.FieldOfView = Creator.cinemachineSo.desktopVerticalFOV;
                 }
                 _previousOrientation = ScreenOrientation.LandscapeLeft;
+            }
+        }
+
+        if (_isDraggingCamera)
+        {
+            float mousePosYCurrFrame = Input.mousePosition.y;
+            float yValueChange = mousePosYCurrFrame - _mousePosYLastFrame;
+            
+            _cameraStateMachine.position += new Vector3(_cameraStateMachine.position.x, -yValueChange * 0.05f,
+                _cameraStateMachine.position.z);
+
+            _mousePosYLastFrame = mousePosYCurrFrame;
+        }
+        else if (_hasntMovedCameraTimer > 0)
+        {
+            _hasntMovedCameraTimer -= dt;
+
+            if (_hasntMovedCameraTimer <= _hasntMovedCameraMaxTime / 2)
+            {
+                //After half the time required we lerp back
+                
+                _cameraStateMachine.position = Vector3.Lerp(_cameraOriginalPos, _cameraLastPos,
+                    _hasntMovedCameraTimer / (_hasntMovedCameraMaxTime / 2));
+                
+                if (_hasntMovedCameraTimer <= 0)
+                {
+                    //Snap camera back to original pos
+                    _cameraStateMachine.position = _cameraOriginalPos;
+                }
             }
         }
     }

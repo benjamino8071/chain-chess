@@ -3,6 +3,7 @@ using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ElXPBarUISystem : ElDependency
 {
@@ -12,9 +13,13 @@ public class ElXPBarUISystem : ElDependency
     
     private MMProgressBar _progressBar;
 
+    private MMF_Player _upgradeButtonPressedPlayer;
+
     private TextMeshProUGUI _multiplierAmountText;
     private TextMeshProUGUI _levelNumberText;
     private TextMeshProUGUI _xpEarntInLevelText;
+
+    private Button _upgradeButton;
     
     private float _amount;
     private float _amountRequiredToUpgrade = 10;
@@ -29,17 +34,31 @@ public class ElXPBarUISystem : ElDependency
         _audioSystem = creator.GetDependency<ElAudioSystem>();
         _playerSystem = creator.GetDependency<ElPlayerSystem>();
         
-        Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
-        _progressBar = guiBottom.GetComponentInChildren<MMProgressBar>();
+        Transform guiRight = creator.GetFirstObjectWithName(AllTagNames.GUIRight);
+        _progressBar = guiRight.GetComponentInChildren<MMProgressBar>();
 
+        Transform upgradeButton = creator.GetChildObjectByName(guiRight.gameObject, AllTagNames.UpgradeButton);
+        _upgradeButton = upgradeButton.GetComponent<Button>();
+        _upgradeButton.onClick.AddListener(() =>
+        {
+            _upgradeButtonPressedPlayer.PlayFeedbacks();
+            HideUpgradeButton();
+            ShowLevelUpgrade();
+        });
+        HideUpgradeButton();
+
+        Transform upgradeButtonPressedPlayer =
+            creator.GetChildObjectByName(guiRight.gameObject, AllTagNames.MmfUpgradeButtonPlayer);
+        _upgradeButtonPressedPlayer = upgradeButtonPressedPlayer.GetComponent<MMF_Player>();
+        
         Transform multiplierAmountText =
-            creator.GetChildObjectByName(guiBottom.gameObject, AllTagNames.MultiplierAmount);
+            creator.GetChildObjectByName(guiRight.gameObject, AllTagNames.MultiplierAmount);
         _multiplierAmountText = multiplierAmountText.GetComponent<TextMeshProUGUI>();
 
-        Transform levelNumberText = creator.GetChildObjectByName(guiBottom.gameObject, AllTagNames.LevelNumber);
+        Transform levelNumberText = creator.GetChildObjectByName(guiRight.gameObject, AllTagNames.LevelNumber);
         _levelNumberText = levelNumberText.GetComponent<TextMeshProUGUI>();
         
-        Transform xpEarntInLevelText = creator.GetChildObjectByName(guiBottom.gameObject, AllTagNames.XpPoints);
+        Transform xpEarntInLevelText = creator.GetChildObjectByName(guiRight.gameObject, AllTagNames.XpPoints);
         _xpEarntInLevelText = xpEarntInLevelText.GetComponent<TextMeshProUGUI>();
 
         Creator.xpBarSo.levelNumber = Creator.xpBarSo.levelNumberOnRoomEnter;
@@ -51,7 +70,12 @@ public class ElXPBarUISystem : ElDependency
         
         ResetMultiplier();
     }
-    
+
+    public override void GameEarlyUpdate(float dt)
+    {
+        _upgradeButton.gameObject.SetActive(_playerSystem.GetState() == ElPlayerSystem.States.Idle && _amount >= _amountRequiredToUpgrade);
+    }
+
     public void IncreaseProgressBar(float amount, bool playSfx)
     {
         amount *= _multiplier;
@@ -62,18 +86,11 @@ public class ElXPBarUISystem : ElDependency
         
         _progressBar.UpdateBar(_amount, 0, _amountRequiredToUpgrade);
         
+        _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
+        
         if (_amount >= _amountRequiredToUpgrade)
         {
-            float amountLeftOver = _amount - _amountRequiredToUpgrade;
-            
-            _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
-            
-            LevelUpgrade();
-            ResetBar(amountLeftOver);
-        }
-        else
-        {
-            _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
+            ShowUpgradeButton();
         }
 
         if (playSfx)
@@ -86,41 +103,49 @@ public class ElXPBarUISystem : ElDependency
         
         _multiplier *= 2;
         float waveAmp = Mathf.Clamp(0.01f * _multiplier, 0.01f, 0.1f);
-        _multiplierAmountText.text = $"<wave a={waveAmp}>Multiplier: {_multiplier:0.##}x</wave>";
+        _multiplierAmountText.text = $"<wave a={waveAmp}>{_multiplier:0.##}\u00d7</wave>";
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="amount">MUST BE BETWEEN 0 AND 1</param>
-    public void DecreaseProgressBar(float amount)
+    
+    public void SetBar(float amount)
     {
-        _amount = Mathf.Clamp01(_amount - amount);
+        _amount = amount;
         
         _progressBar.UpdateBar(_amount, 0, _amountRequiredToUpgrade);
-    }
-
-    public void ResetBar(float amountToAddOnReset)
-    {
-        _amount = amountToAddOnReset;
-        _xpEarntInLevelText.text = $"XP: {amountToAddOnReset:0}/{_amountRequiredToUpgrade:0}";
         
-        _progressBar.SetBar(amountToAddOnReset, 0, _amountRequiredToUpgrade);
+        _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
+
+        if (_amount >= _amountRequiredToUpgrade)
+        {
+            ShowUpgradeButton();
+        }
     }
     
     public void ResetMultiplier()
     {
         _multiplier = Creator.xpBarSo.baseMultiplier;
-        _multiplierAmountText.text = $"<wave a={0.01f}>Multiplier: {_multiplier:0.##}\u00d7</wave>";
+        _multiplierAmountText.text = $"<wave a={0.01f}>{_multiplier:0.##}\u00d7</wave>";
     }
 
-    public void LevelUpgrade()
+    public void ShowUpgradeButton()
     {
-        Creator.xpBarSo.levelNumber++;
-        _amountRequiredToUpgrade *= 2;
+        _upgradeButton.gameObject.SetActive(true);
+    }
 
+    public void HideUpgradeButton()
+    {
+        _upgradeButton.gameObject.SetActive(false);
+    }
+
+    public void ShowLevelUpgrade()
+    {
+        _upgradeUISystem.Show();
+        float amountLeftOver = _amount - _amountRequiredToUpgrade;
+        
+        _amountRequiredToUpgrade *= 2;
+        
+        Creator.xpBarSo.levelNumber++;
         _levelNumberText.text = $"Level {Creator.xpBarSo.levelNumber}";
         
-        _upgradeUISystem.Show();
+        SetBar(amountLeftOver);
     }
 }

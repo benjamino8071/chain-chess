@@ -5,4 +5,6 @@ using UnityEngine.InputSystem;
 public class Input_SO : ScriptableObject
 {
     public InputActionReference _leftMouseButton;
+
+    public InputActionReference dragCameraInput;
 }

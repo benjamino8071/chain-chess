@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using MoreMountains.Feedbacks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,8 @@ public class ElUpgradeUISystem : ElDependency
     private ElPauseUISystem _pauseUISystem;
     
     private Transform _upgradeUI;
+    
+    private MMF_Player _upgradeSelectedPlayer;
 
     private Button _upgradeOneButton;
     private Image _upgradeOneImage;
@@ -55,6 +58,12 @@ public class ElUpgradeUISystem : ElDependency
         _pauseUISystem = elCreator.GetDependency<ElPauseUISystem>();
         
         _upgradeUI = elCreator.GetFirstObjectWithName(AllTagNames.Upgrade);
+        
+        Transform guiRight = elCreator.GetFirstObjectWithName(AllTagNames.GUIRight);
+        
+        Transform upgradeSelectedPlayer =
+            elCreator.GetChildObjectByName(guiRight.gameObject, AllTagNames.MmfUpgradeSelectedPlayer);
+        _upgradeSelectedPlayer = upgradeSelectedPlayer.GetComponent<MMF_Player>();
 
         List<Transform> upgradeButtons = elCreator.GetChildObjectsByName(_upgradeUI.gameObject, AllTagNames.UpgradeButton);
 
@@ -143,6 +152,7 @@ public class ElUpgradeUISystem : ElDependency
                 _pauseUISystem.ShowUpgradeNotificationImage();
                 break;
         }
+        _upgradeSelectedPlayer.PlayFeedbacks();
     }
 
     public void Show()

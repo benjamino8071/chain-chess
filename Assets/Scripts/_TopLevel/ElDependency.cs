@@ -6,4 +6,9 @@ public class ElDependency : Dependency
     {
         Creator = elCreator;
     }
+
+    public virtual void GameEnd()
+    {
+        
+    }
 }

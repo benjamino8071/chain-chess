@@ -27,7 +27,7 @@
                     "name": "Attack",
                     "type": "Button",
                     "id": "6c2ab1b8-8984-453a-af3d-a3c78ae1679a",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -90,6 +90,15 @@
                     "name": "MouseLeft",
                     "type": "Button",
                     "id": "178f3f18-fe92-41e7-8408-7d36bc7aaba3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DragCamera",
+                    "type": "Button",
+                    "id": "2dd6ef36-d75f-4f30-8351-16002daa571f",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -501,6 +510,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "MouseLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "da73ee26-46f5-49b2-b344-1932157b88a8",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Hold(duration=0.4)",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "DragCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
