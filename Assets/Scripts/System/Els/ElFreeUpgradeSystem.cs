@@ -60,9 +60,22 @@ public class ElFreeUpgradeSystem : ElDependency
                 SwapPositions();
         });
         _swapPositionsButton = swapPosButton.transform;
+        
+        _freeItemOne.gameObject.SetActive(false);
+        _freeItemTwo.gameObject.SetActive(false);
+        _swapPositionsButton.gameObject.SetActive(false);
+        _chooseText.gameObject.SetActive(false);
+    }
 
+    public void SetFreeRoom()
+    {
+        _freeItemOne.gameObject.SetActive(true);
+        _freeItemTwo.gameObject.SetActive(true);
+        _swapPositionsButton.gameObject.SetActive(true);
+        _chooseText.gameObject.SetActive(true);
+        
         List<ArtefactTypes> artefactTypes = _artefactTypes.ToList();
-        foreach (ArtefactTypes artefactType in elCreator.upgradeSo.artefactsChosen)
+        foreach (ArtefactTypes artefactType in Creator.upgradeSo.artefactsChosen)
         {
             artefactTypes.Remove(artefactType);
         }
@@ -74,7 +87,7 @@ public class ElFreeUpgradeSystem : ElDependency
         {
             List<Piece> pieces = _pieces.ToList();
 
-            foreach (Piece piece in elCreator.upgradeSo.lineOfSightsChosen)
+            foreach (Piece piece in Creator.upgradeSo.lineOfSightsChosen)
             {
                 pieces.Remove(piece);
             }
@@ -86,40 +99,40 @@ public class ElFreeUpgradeSystem : ElDependency
         switch (_artefactChosen)
         {
             case ArtefactTypes.CaptureKingClearRoom:
-                _freeItemOne.sprite = elCreator.upgradeSo.captureKingClearRoomSprite;
+                _freeItemOne.sprite = Creator.upgradeSo.captureKingClearRoomSprite;
                 break;
             case ArtefactTypes.ConCaptureAttackingEnemy:
-                _freeItemOne.sprite = elCreator.upgradeSo.destroyChainStayAliveSprite;
+                _freeItemOne.sprite = Creator.upgradeSo.destroyChainStayAliveSprite;
                 break;
             case ArtefactTypes.EnemyLineOfSight:
                 switch (_losPieceChosen)
                 {
                     case Piece.Bishop:
-                        _freeItemOne.sprite = elCreator.upgradeSo.bishopLosSprite;
+                        _freeItemOne.sprite = Creator.upgradeSo.bishopLosSprite;
                         break;
                     case Piece.King:
-                        _freeItemOne.sprite = elCreator.upgradeSo.kingLosSprite;
+                        _freeItemOne.sprite = Creator.upgradeSo.kingLosSprite;
                         break;
                     case Piece.Knight:
-                        _freeItemOne.sprite = elCreator.upgradeSo.knightLosSprite;
+                        _freeItemOne.sprite = Creator.upgradeSo.knightLosSprite;
                         break;
                     case Piece.Pawn:
-                        _freeItemOne.sprite = elCreator.upgradeSo.pawnLosSprite;
+                        _freeItemOne.sprite = Creator.upgradeSo.pawnLosSprite;
                         break;
                     case Piece.Queen:
-                        _freeItemOne.sprite = elCreator.upgradeSo.queenLosSprite;
+                        _freeItemOne.sprite = Creator.upgradeSo.queenLosSprite;
                         break;
                     case Piece.Rook:
-                        _freeItemOne.sprite = elCreator.upgradeSo.rookLosSprite;
+                        _freeItemOne.sprite = Creator.upgradeSo.rookLosSprite;
                         break;
                 }
                 break;
             case ArtefactTypes.UseCapturedPieceStraightAway:
-                _freeItemOne.sprite = elCreator.upgradeSo.useCapturedPieceStraightAwaySprite;
+                _freeItemOne.sprite = Creator.upgradeSo.useCapturedPieceStraightAwaySprite;
                 break;
         }
 
-        _freeItemTwo.sprite = elCreator.upgradeSo.xpLevelUpgradeSprite;
+        _freeItemTwo.sprite = Creator.upgradeSo.xpLevelUpgradeSprite;
     }
 
     public bool TryGetFreeItem(Vector3 position)

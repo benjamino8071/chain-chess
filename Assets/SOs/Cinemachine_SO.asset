@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71af9e18d54da73429b6b02d796f8413, type: 3}
   m_Name: Cinemachine_SO
   m_EditorClassIdentifier: 
-  mobileVerticalFOV: 95
+  mobileVerticalFOV: 110
   desktopVerticalFOV: 78

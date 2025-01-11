@@ -263,12 +263,12 @@ public class ElPlayerSystem : ElDependency
                     {
                         if (singleDoorPosition.isDoorOpen)
                         {
-                            //_timerUISystem.ResetTimerChangedAmount(true);
-                            //_timerUISystem.StopTimer();
                             Creator.playerSystemSo.xValueToStartOn = singleDoorPosition.transform.position.x;
                             Creator.playerSystemSo.startingPiece = _currentPiece.Value;
                             if (singleDoorPosition.isFinalDoor)
                             {
+                                _xpBarUISystem.SaveXpAmount();
+                                _xpBarUISystem.SaveLevelNumber();
                                 TriggerFadeOutAnimation();
                                 SetState(States.LevelComplete);
                             }
@@ -327,13 +327,11 @@ public class ElPlayerSystem : ElDependency
                         if (enemiesCleared)
                         {
                             _audioSystem.PlayRoomCompleteSfx();
-                            //_timerUISystem.StopTimer();
                             _doorsSystem.SetRoomDoorsOpen(GetRoomNumber());
                         }
                         else if (enemyPiece == Piece.King &&
                                  Creator.upgradeSo.artefactsChosen.Contains(ArtefactTypes.CaptureKingClearRoom))
                         {
-                            //_timerUISystem.StopTimer();
                             _destroyEnemyTimer = 0.19f;
                             SetState(States.DestroyingAllEnemiesInRoom);
                             return;
@@ -447,8 +445,12 @@ public class ElPlayerSystem : ElDependency
                     _chainUISystem.ResetPosition();
                     _chainUISystem.ShowNewPiece(_currentRoomStartPiece, true);
                     Creator.playerSystemSo.moveMadeInNewRoom = false;
-                    Creator.upgradeSo.levelNumberOnRoomEnter = Creator.upgradeSo.levelNumber;
+                    _xpBarUISystem.SaveLevelNumber();
                     _currentPiece = null;
+                    if (Creator.playerSystemSo.roomNumberSaved == 9)
+                    {
+                        _freeUpgradeSystem.SetFreeRoom();
+                    }
                     SetState(States.DoorWalk);
                 }
                 break;

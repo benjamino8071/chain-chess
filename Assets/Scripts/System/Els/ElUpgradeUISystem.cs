@@ -258,8 +258,6 @@ public class ElUpgradeUISystem : ElDependency
                 true,
                 false,
                 false,
-                false,
-                false,
                 false
             };
 

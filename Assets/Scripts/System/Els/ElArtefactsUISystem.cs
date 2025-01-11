@@ -27,12 +27,14 @@ public class ElArtefactsUISystem : ElDependency
             artefactController.SetButtonInstance(button.Item1, button.Item2);
             _artefactsControllers.Add(artefactController);
         }
-        
+
+        int lineOfSightIndex = 0;
         for (int i = 0; i < Creator.upgradeSo.artefactsChosen.Count; i++)
         {
-            if (i < Creator.upgradeSo.lineOfSightsChosen.Count)
+            if (Creator.upgradeSo.artefactsChosen[i] == ArtefactTypes.EnemyLineOfSight)
             {
-                _artefactsControllers[i].SetInUse(Creator.upgradeSo.artefactsChosen[i], false, Creator.upgradeSo.lineOfSightsChosen[i]);
+                _artefactsControllers[i].SetInUse(Creator.upgradeSo.artefactsChosen[i], false, Creator.upgradeSo.lineOfSightsChosen[lineOfSightIndex]);
+                lineOfSightIndex++;
             }
             else
             {

@@ -47,7 +47,7 @@ public class ElDoorsSystem : ElDependency
                 _roomDoors.Add(singleDoorPosition.roomNumber, newDoorNumbers);
             }
 
-            if (singleDoorPosition.roomNumber == Creator.shopSo.shopRoomNumber && singleDoorPosition.doorNumber == 1 && Creator.playerSystemSo.roomNumberSaved <= Creator.shopSo.shopRoomNumber)
+            if (Creator.shopSo.useShop && singleDoorPosition.roomNumber == Creator.shopSo.shopRoomNumber && singleDoorPosition.doorNumber == 1 && Creator.playerSystemSo.roomNumberSaved <= Creator.shopSo.shopRoomNumber)
             {
                 singleDoorPosition.SetDoorToOpen();
             }

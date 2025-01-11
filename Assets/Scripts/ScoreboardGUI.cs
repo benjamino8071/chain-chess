@@ -69,12 +69,15 @@ public class ScoreboardGUI : MonoBehaviour
 
             double roomsCleared = scores.Results[i].Score;
 
-            string metadata = scores.Results[i].Metadata;
-
-            metadata = metadata.Trim('{').Trim('}');
-            metadata = metadata.Split(':')[1];
+            string seedUsed = "";
+            if (!string.IsNullOrEmpty(scores.Results[i].Metadata))
+            {
+                string metadata = scores.Results[i].Metadata;
+                
+                seedUsed = "\\n(seed: "+metadata.Trim('{').Trim('}').Split(':')[1]+")";
+            }
             
-            currentNameText.Value.text = $"{i+1}. {playerName} - {roomsCleared}\\n(seed: "+metadata+")";
+            currentNameText.Value.text = $"{i+1}. {playerName} - {roomsCleared}"+seedUsed;
             i++;
             if (i >= _nameTexts.Count)
                 break;

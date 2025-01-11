@@ -25,6 +25,8 @@ public class ElXPBarUISystem : ElDependency
     private float _amountRequiredToUpgrade = 10;
 
     private float _multiplier;
+
+    private float _consecCaptureAmount;
     
     public override void GameStart(ElCreator creator)
     {
@@ -67,6 +69,12 @@ public class ElXPBarUISystem : ElDependency
         {
             _amountRequiredToUpgrade *= 2;
         }
+
+        if (Creator.upgradeSo.xpAmountOnNextLevelEnter > 0)
+        {
+            SetBar(Creator.upgradeSo.xpAmountOnNextLevelEnter);
+            Creator.upgradeSo.xpAmountOnNextLevelEnter = 0;
+        }
         
         _levelNumberText.text = $"Level {creator.upgradeSo.levelNumber}";
         _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
@@ -98,11 +106,12 @@ public class ElXPBarUISystem : ElDependency
 
         if (playSfx)
         {
-            float numOfCaps = Mathf.Log(_multiplier, 2);
+            //float numOfCaps = Mathf.Log(_multiplier, 2);
             
-            float pitch = Mathf.Clamp(0.9f + numOfCaps / 50, 0.9f, 2f);
+            float pitch = Mathf.Clamp(0.9f + _consecCaptureAmount / 50, 0.9f, 2f);
             _audioSystem.PlayTimeAddedSfx(pitch);
         }
+        _consecCaptureAmount++;
         
         _multiplier *= 2;
         float waveAmp = Mathf.Clamp(0.01f * _multiplier, 0.01f, 0.1f);
@@ -141,6 +150,7 @@ public class ElXPBarUISystem : ElDependency
     
     public void ResetMultiplier()
     {
+        _consecCaptureAmount = 0;
         _multiplier = Creator.upgradeSo.baseMultiplier;
         _multiplierAmountText.text = $"<wave a={0.01f}>{_multiplier:0.##}\u00d7</wave>";
     }
@@ -175,5 +185,15 @@ public class ElXPBarUISystem : ElDependency
         SetBar(_amount + _amountRequiredToUpgrade);
         
         _audioSystem.PlayTimeAddedSfx(0.9f);
+    }
+
+    public void SaveXpAmount()
+    {
+        Creator.upgradeSo.xpAmountOnNextLevelEnter = _amount;
+    }
+
+    public void SaveLevelNumber()
+    {
+        Creator.upgradeSo.levelNumberOnRoomEnter = Creator.upgradeSo.levelNumber;
     }
 }

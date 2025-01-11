@@ -61,6 +61,8 @@ public class XPBar_SO : ScriptableObject
         { ArtefactTypes.UseCapturedPieceStraightAway, 50 }
     };
 
+    public float xpAmountOnNextLevelEnter;
+    
     public int levelNumberOnRoomEnter = 1;
     public int levelNumber = 1;
 
@@ -92,6 +94,7 @@ public class XPBar_SO : ScriptableObject
             { Piece.Queen, 1 },
         };
 
+        xpAmountOnNextLevelEnter = 0;
         levelNumberOnRoomEnter = 1;
         levelNumber = 1;
         baseMultiplier = 1;

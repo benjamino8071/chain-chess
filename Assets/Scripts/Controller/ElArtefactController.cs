@@ -116,6 +116,7 @@ public class ElArtefactController : Controller
                 _image.sprite = Creator.shopSo.destroyChainStayAliveSprite;
                 break;
         }
+        _image.color = new Color(1, 1, 1, 1);
 
         if (addToPlayerArtefactsList)
         {
@@ -146,6 +147,7 @@ public class ElArtefactController : Controller
                 Creator.upgradeSo.lineOfSightsChosen.Remove(_lineOfSightType);
                 break;
         }
+        _image.color = new Color(1, 1, 1, 0.003f);
         _image.sprite = default;
         _type = ArtefactTypes.None;
     }
