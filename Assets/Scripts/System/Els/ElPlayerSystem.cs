@@ -32,6 +32,7 @@ public class ElPlayerSystem : ElDependency
     private ElDoorsSystem _doorsSystem;
     private ElXPBarUISystem _xpBarUISystem;
     private ElUpgradeUISystem _upgradeUISystem;
+    private ElFreeUpgradeSystem _freeUpgradeSystem;
 
     private ElPromoUIController _promoUIController;
     
@@ -99,6 +100,7 @@ public class ElPlayerSystem : ElDependency
         _doorsSystem = elCreator.GetDependency<ElDoorsSystem>();
         _xpBarUISystem = elCreator.GetDependency<ElXPBarUISystem>();
         _upgradeUISystem = elCreator.GetDependency<ElUpgradeUISystem>();
+        _freeUpgradeSystem = elCreator.GetDependency<ElFreeUpgradeSystem>();
         
         _currentRoomStartPiece = Creator.playerSystemSo.startingPiece;
         _roomNumber = Creator.playerSystemSo.roomNumberSaved;
@@ -293,8 +295,8 @@ public class ElPlayerSystem : ElDependency
                         _enemiesSystem.PieceCaptured(enemyController);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
-                        _xpBarUISystem.IncreaseProgressBar(Creator.xpBarSo.capturePieceXPGain[enemyPiece], !enemiesCleared);
-                        if (_currentPiece.Next is not null && Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.UseCapturedPieceStraightAway))
+                        _xpBarUISystem.IncreaseProgressBar(Creator.upgradeSo.capturePieceXPGain[enemyPiece], !enemiesCleared);
+                        if (_currentPiece.Next is not null && Creator.upgradeSo.artefactsChosen.Contains(ArtefactTypes.UseCapturedPieceStraightAway))
                         {
                             //We add this piece to the position in the queue between the current piece, and the next piece.
                             LinkedListNode<Piece> pieceNode = new LinkedListNode<Piece>(enemyPiece);
@@ -328,7 +330,7 @@ public class ElPlayerSystem : ElDependency
                             _doorsSystem.SetRoomDoorsOpen(GetRoomNumber());
                         }
                         else if (enemyPiece == Piece.King &&
-                                 Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.CaptureKingClearRoom))
+                                 Creator.upgradeSo.artefactsChosen.Contains(ArtefactTypes.CaptureKingClearRoom))
                         {
                             //_timerUISystem.StopTimer();
                             _destroyEnemyTimer = 0.19f;
@@ -340,6 +342,11 @@ public class ElPlayerSystem : ElDependency
                     {
                         //Player has not captured an enemy so we must reset the multiplier
                         _xpBarUISystem.ResetMultiplier();
+                    }
+
+                    if (Creator.playerSystemSo.roomNumberSaved == 9)
+                    {
+                        _freeUpgradeSystem.TryGetFreeItem(_playerCharacter.position);
                     }
                     
                     //IF the player is a pawn, we want to check what's directly in front of the player.
@@ -439,7 +446,7 @@ public class ElPlayerSystem : ElDependency
                     _chainUISystem.ResetPosition();
                     _chainUISystem.ShowNewPiece(_currentRoomStartPiece, true);
                     Creator.playerSystemSo.moveMadeInNewRoom = false;
-                    Creator.xpBarSo.levelNumberOnRoomEnter = Creator.xpBarSo.levelNumber;
+                    Creator.upgradeSo.levelNumberOnRoomEnter = Creator.upgradeSo.levelNumber;
                     _currentPiece = null;
                     SetState(States.DoorWalk);
                 }
@@ -492,7 +499,7 @@ public class ElPlayerSystem : ElDependency
                         _enemiesSystem.PieceCaptured(enemiesInRoom[0]);
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
-                        _xpBarUISystem.IncreaseProgressBar(Creator.xpBarSo.capturePieceXPGain[piece], !enemiesCleared);
+                        _xpBarUISystem.IncreaseProgressBar(Creator.upgradeSo.capturePieceXPGain[piece], !enemiesCleared);
                             
                         if (enemiesCleared)
                         {
@@ -1124,7 +1131,7 @@ public class ElPlayerSystem : ElDependency
         _enemiesSystem.PieceCaptured(enemyController);
         
         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber()); 
-        _xpBarUISystem.IncreaseProgressBar(Creator.xpBarSo.capturePieceXPGain[enemyPiece], !enemiesCleared);
+        _xpBarUISystem.IncreaseProgressBar(Creator.upgradeSo.capturePieceXPGain[enemyPiece], !enemiesCleared);
         _capturedPieces.AddLast(enemyPiece);
         _chainUISystem.ShowNewPiece(enemyController.GetPiece());
         _chainUISystem.UpdateMovesRemainingText(0);

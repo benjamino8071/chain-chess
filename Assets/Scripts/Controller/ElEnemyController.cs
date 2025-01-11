@@ -382,7 +382,7 @@ public class ElEnemyController : ElController
                     
                     if (_enemyInstance.position == _playerSystem.GetPlayerPosition())
                     {
-                        if (Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.ConCaptureAttackingEnemy))
+                        if (Creator.upgradeSo.artefactsChosen.Contains(ArtefactTypes.ConCaptureAttackingEnemy))
                         {
                             _artefactsUISystem.RemoveArtefact(ArtefactTypes.ConCaptureAttackingEnemy);
                             _enemiesSystem.EnemyControllerMoved(this);

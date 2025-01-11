@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de1d74753643bc5499ea888639d80ba2, type: 3}
-  m_Name: XPBar_SO
+  m_Name: Upgrade_SO
   m_EditorClassIdentifier: 
-  reducePromotionCostSprite: {fileID: 6424842848367893256, guid: d2a2c321028ce0442a87d9808b5e613d, type: 3}
+  increasePromoXpGainSprite: {fileID: 6424842848367893256, guid: d2a2c321028ce0442a87d9808b5e613d, type: 3}
   increaseMultiplierAmountSprite: {fileID: 3026273529860960903, guid: cfa17967c07ecca4daa967d452445426, type: 3}
   increaseBaseAmountGainedSprite: {fileID: -7387059594490099694, guid: 05e561ce5f3da984e9fb14227f17a862, type: 3}
   reduceRespawnCostSprite: {fileID: -2033404433328999258, guid: 37fd2d72edb751942b13c5f44357aede, type: 3}
@@ -25,5 +25,10 @@ MonoBehaviour:
   destroyChainStayAliveSprite: {fileID: -2903616533297177565, guid: 4891deec8018b60458fffefccfe688b6, type: 3}
   useCapturedPieceStraightAwaySprite: {fileID: 5902707818331360989, guid: c89a3d3679bba024aa6702a3d56c8eb3, type: 3}
   captureKingClearRoomSprite: {fileID: 8529362930489972796, guid: f56c34d55c6f1c84fb519f8fe72c04b6, type: 3}
-  levelNumber: 2
+  xpLevelUpgradeSprite: {fileID: 4520720125832518851, guid: e28de5b6aa779674d8a29fc6677e6fed, type: 3}
+  levelNumberOnRoomEnter: 5
+  levelNumber: 5
   baseMultiplier: 1
+  artefactsChosen: 0300000001000000
+  lineOfSightsChosen: 05000000
+  guaranteeArtefactInUpgrade: 1

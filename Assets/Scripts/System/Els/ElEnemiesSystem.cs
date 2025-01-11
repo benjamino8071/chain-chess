@@ -199,9 +199,9 @@ public class ElEnemiesSystem : ElDependency
         {
             validPositionsVisual.gameObject.SetActive(false);
         }
-        if (Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.EnemyLineOfSight))
+        if (Creator.upgradeSo.artefactsChosen.Contains(ArtefactTypes.EnemyLineOfSight))
         {
-            UpdateValidEnemyPositions(Creator.playerSystemSo.lineOfSightsChosen);
+            UpdateValidEnemyPositions(Creator.upgradeSo.lineOfSightsChosen);
         }
     }
 

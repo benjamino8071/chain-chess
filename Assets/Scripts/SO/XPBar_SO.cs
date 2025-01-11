@@ -22,6 +22,8 @@ public class XPBar_SO : ScriptableObject
     public Sprite destroyChainStayAliveSprite;
     public Sprite useCapturedPieceStraightAwaySprite;
     public Sprite captureKingClearRoomSprite;
+
+    public Sprite xpLevelUpgradeSprite;
     
     public Dictionary<Piece, float> capturePieceXPGain = new()
     {
@@ -45,6 +47,12 @@ public class XPBar_SO : ScriptableObject
     public int levelNumber = 1;
 
     public float baseMultiplier = 1;
+
+    public List<ArtefactTypes> artefactsChosen = new();
+    
+    public List<Piece> lineOfSightsChosen = new();
+
+    public bool guaranteeArtefactInUpgrade;
     
     public void ResetData()
     {
@@ -69,5 +77,9 @@ public class XPBar_SO : ScriptableObject
         levelNumberOnRoomEnter = 1;
         levelNumber = 1;
         baseMultiplier = 1;
+        
+        artefactsChosen.Clear();
+        
+        lineOfSightsChosen.Clear();
     }
 }

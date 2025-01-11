@@ -20,11 +20,11 @@ MonoBehaviour:
   bishop: {fileID: 1379780806020190625, guid: 52cb59fd2104be047a124a1eecc764cf, type: 3}
   queen: {fileID: 7519753400087680208, guid: 35daaf531971a974a977c7dfde67d248, type: 3}
   king: {fileID: -4821530343430527414, guid: 6ab63fb05b0cd654399b0b52e0e15650, type: 3}
-  levelNumberSaved: 0
-  xValueToStartOn: 5.5
-  roomNumberSaved: 0
-  firstMoveMadeWhileShowingMainMenu: 0
+  levelNumberSaved: 1
+  xValueToStartOn: 6.5
+  roomNumberSaved: 4
+  firstMoveMadeWhileShowingMainMenu: 1
   moveMadeInNewRoom: 0
-  startingPiece: 5
+  startingPiece: 2
   artefacts: 
   lineOfSightsChosen: 

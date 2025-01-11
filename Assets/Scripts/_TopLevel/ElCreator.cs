@@ -16,7 +16,7 @@ public class ElCreator : Creator
     public Chain_SO chainSo;
     public AudioClips_SO audioClipsSo;
     public Lives_SO livesSo;
-    public XPBar_SO xpBarSo;
+    public XPBar_SO upgradeSo;
     
     [Header("Prefabs")]
     public GameObject playerPrefab;
@@ -126,6 +126,7 @@ public class ElCreator : Creator
         _dependencies.AddLast(new ElRoomNumberUISystem());
         _dependencies.AddLast(new ElArtefactsUISystem());
         _dependencies.AddLast(new ElShopSystem());
+        _dependencies.AddLast(new ElFreeUpgradeSystem());
     }
 
     public void ShowGUITop()

@@ -96,18 +96,25 @@ public class ElArtefactController : Controller
                 _image.sprite = Creator.shopSo.destroyChainStayAliveSprite;
                 break;
         }
-        if(addToPlayerArtefactsList)
-            Creator.playerSystemSo.artefacts.Add(type);
+
+        if (addToPlayerArtefactsList)
+        {
+            Creator.upgradeSo.artefactsChosen.Add(type);
+            if (lineOfSight != Piece.NotChosen)
+            {
+                Creator.upgradeSo.lineOfSightsChosen.Add(lineOfSight);
+            }
+        }
         _type = type;
     }
 
     public void SetNotInUse()
     {
-        Creator.playerSystemSo.artefacts.Remove(_type);
+        Creator.upgradeSo.artefactsChosen.Remove(_type);
         switch (_type)
         {
             case ArtefactTypes.EnemyLineOfSight:
-                Creator.playerSystemSo.lineOfSightsChosen.Remove(_lineOfSightType);
+                Creator.upgradeSo.lineOfSightsChosen.Remove(_lineOfSightType);
                 break;
         }
         _image.sprite = default;

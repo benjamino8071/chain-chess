@@ -77,4 +77,7 @@ public enum AllTagNames
     GUIRight,
     MmfUpgradeButtonPlayer,
     MmfUpgradeSelectedPlayer,
+    FreeItems,
+    FreeItemLeft,
+    FreeItemRight,
 }

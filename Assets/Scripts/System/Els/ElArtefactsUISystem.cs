@@ -28,15 +28,15 @@ public class ElArtefactsUISystem : ElDependency
             _artefactsControllers.Add(artefactController);
         }
         
-        for (int i = 0; i < Creator.playerSystemSo.artefacts.Count; i++)
+        for (int i = 0; i < Creator.upgradeSo.artefactsChosen.Count; i++)
         {
-            if (i < Creator.playerSystemSo.lineOfSightsChosen.Count)
+            if (i < Creator.upgradeSo.lineOfSightsChosen.Count)
             {
-                _artefactsControllers[i].SetInUse(Creator.playerSystemSo.artefacts[i], false, Creator.playerSystemSo.lineOfSightsChosen[i]);
+                _artefactsControllers[i].SetInUse(Creator.upgradeSo.artefactsChosen[i], false, Creator.upgradeSo.lineOfSightsChosen[i]);
             }
             else
             {
-                _artefactsControllers[i].SetInUse(Creator.playerSystemSo.artefacts[i], false);
+                _artefactsControllers[i].SetInUse(Creator.upgradeSo.artefactsChosen[i], false);
             }
         }
         

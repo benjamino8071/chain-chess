@@ -55,7 +55,7 @@ public class ElPromoUIController : ElController
             promoButton.onClick.AddListener(() =>
             {
                 SelectPromotion(piece);
-                float xpGain = Creator.xpBarSo.promotionXPGain[piece];
+                float xpGain = Creator.upgradeSo.promotionXPGain[piece];
                 _xpBarUISystem.IncreaseProgressBar(xpGain, false);
             });
             _promoXpGainTexts.Add(piece, promoButton.GetComponentInChildren<TMP_Text>());
@@ -96,10 +96,10 @@ public class ElPromoUIController : ElController
 
     public void SetPromoXpGainText()
     {
-        List<Piece> promoPieces = Creator.xpBarSo.promotionXPGain.Keys.ToList();
+        List<Piece> promoPieces = Creator.upgradeSo.promotionXPGain.Keys.ToList();
         foreach (Piece promoPiece in promoPieces)
         {
-            float xpGain = Creator.xpBarSo.promotionXPGain[promoPiece];
+            float xpGain = Creator.upgradeSo.promotionXPGain[promoPiece];
             _promoXpGainTexts[promoPiece].text = $"+{xpGain:0}xp";
         }
     }

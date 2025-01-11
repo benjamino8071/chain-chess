@@ -61,11 +61,14 @@ public class ElXPBarUISystem : ElDependency
         Transform xpEarntInLevelText = creator.GetChildObjectByName(guiRight.gameObject, AllTagNames.XpPoints);
         _xpEarntInLevelText = xpEarntInLevelText.GetComponent<TextMeshProUGUI>();
 
-        Creator.xpBarSo.levelNumber = Creator.xpBarSo.levelNumberOnRoomEnter;
+        Creator.upgradeSo.levelNumber = Creator.upgradeSo.levelNumberOnRoomEnter;
+
+        for (int i = 1; i < Creator.upgradeSo.levelNumber; i++)
+        {
+            _amountRequiredToUpgrade *= 2;
+        }
         
-        _amountRequiredToUpgrade *= Creator.xpBarSo.levelNumber;
-        
-        _levelNumberText.text = $"Level {creator.xpBarSo.levelNumber}";
+        _levelNumberText.text = $"Level {creator.upgradeSo.levelNumber}";
         _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
         
         ResetMultiplier();
@@ -122,7 +125,7 @@ public class ElXPBarUISystem : ElDependency
     
     public void ResetMultiplier()
     {
-        _multiplier = Creator.xpBarSo.baseMultiplier;
+        _multiplier = Creator.upgradeSo.baseMultiplier;
         _multiplierAmountText.text = $"<wave a={0.01f}>{_multiplier:0.##}\u00d7</wave>";
     }
 
@@ -143,9 +146,18 @@ public class ElXPBarUISystem : ElDependency
         
         _amountRequiredToUpgrade *= 2;
         
-        Creator.xpBarSo.levelNumber++;
-        _levelNumberText.text = $"Level {Creator.xpBarSo.levelNumber}";
+        Creator.upgradeSo.levelNumber++;
+        _levelNumberText.text = $"Level {Creator.upgradeSo.levelNumber}";
         
         SetBar(amountLeftOver);
+    }
+
+    public void UpgradeByFullLevel()
+    {
+        //We get the amount needed to upgrade.
+        //Then we give the player ALL of that to their amount
+        SetBar(_amount + _amountRequiredToUpgrade);
+        
+        _audioSystem.PlayTimeAddedSfx(0.9f);
     }
 }
