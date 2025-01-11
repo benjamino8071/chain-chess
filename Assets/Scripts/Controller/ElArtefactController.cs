@@ -7,6 +7,8 @@ public class ElArtefactController : Controller
 {
     private ElArtefactsUISystem _artefactsUISystem;
     private ElTimerUISystem _timerUISystem;
+    private ElXPBarUISystem _xpBarUISystem;
+    private ElPlayerSystem _playerSystem;
     
     private Button _guiButton;
     private Image _image;
@@ -22,6 +24,16 @@ public class ElArtefactController : Controller
 
         _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
         _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
+        _xpBarUISystem = elCreator.GetDependency<ElXPBarUISystem>();
+        _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
+    }
+
+    public override void GameEarlyUpdate(float dt)
+    {
+        if (_sellButtonText.gameObject.activeSelf && _playerSystem.GetState() != ElPlayerSystem.States.Idle)
+        {
+            HideSellButton();
+        }
     }
 
     public void SetButtonInstance(Button button, Button sellButton)
@@ -48,8 +60,16 @@ public class ElArtefactController : Controller
         _sellButton.onClick.AddListener(() =>
         {
             HideSellButton();
-            SetNotInUse();
+            //TODO: Give the player xp for selling the artefact
+
+            float xpGain = Creator.upgradeSo.sellArtefactXpGain[_type];
+            if (_type == ArtefactTypes.EnemyLineOfSight)
+            {
+                xpGain *= Creator.upgradeSo.pieceValues[_lineOfSightType];
+            }
+            _xpBarUISystem.IncreaseProgressBarNoMultiplier(xpGain);
             
+            SetNotInUse();
         });
         HideSellButton();
         
@@ -106,6 +126,15 @@ public class ElArtefactController : Controller
             }
         }
         _type = type;
+        
+        float xpGain = Creator.upgradeSo.sellArtefactXpGain[_type];
+
+        if (_type == ArtefactTypes.EnemyLineOfSight)
+        {
+            xpGain *= Creator.upgradeSo.pieceValues[_lineOfSightType];
+        }
+
+        _sellButtonText.text = $"Sell: {xpGain:0}xp";
     }
 
     public void SetNotInUse()
@@ -128,7 +157,7 @@ public class ElArtefactController : Controller
 
     public void ShowSellButton()
     {
-        _sellButton.gameObject.SetActive(true);
+        _sellButton.gameObject.SetActive(_playerSystem.GetState() == ElPlayerSystem.States.Idle);
     }
 
     public void HideSellButton()

@@ -39,13 +39,15 @@ public class ElArtefactsUISystem : ElDependency
                 _artefactsControllers[i].SetInUse(Creator.upgradeSo.artefactsChosen[i], false);
             }
         }
-        
-        Hide();
     }
 
     public override void GameEarlyUpdate(float dt)
     {
-        _artefactsParent.SetActive(_playerSystem.GetState() == ElPlayerSystem.States.Idle);
+        //_artefactsParent.SetActive(_playerSystem.GetState() == ElPlayerSystem.States.Idle);
+        foreach (ElArtefactController elArtefactController in _artefactsControllers)
+        {
+            elArtefactController.GameEarlyUpdate(dt);
+        }
     }
 
     /// <summary>

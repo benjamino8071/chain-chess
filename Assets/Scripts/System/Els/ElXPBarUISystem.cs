@@ -108,6 +108,22 @@ public class ElXPBarUISystem : ElDependency
         float waveAmp = Mathf.Clamp(0.01f * _multiplier, 0.01f, 0.1f);
         _multiplierAmountText.text = $"<wave a={waveAmp}>{_multiplier:0.##}\u00d7</wave>";
     }
+
+    public void IncreaseProgressBarNoMultiplier(float amount)
+    {
+        _amount += amount;
+        
+        _progressBar.UpdateBar(_amount, 0, _amountRequiredToUpgrade);
+        
+        _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
+        
+        if (_amount >= _amountRequiredToUpgrade)
+        {
+            ShowUpgradeButton();
+        }
+        
+        _audioSystem.PlayTimeAddedSfx(0.9f);
+    }
     
     public void SetBar(float amount)
     {

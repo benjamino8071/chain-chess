@@ -24,6 +24,16 @@ public class XPBar_SO : ScriptableObject
     public Sprite captureKingClearRoomSprite;
 
     public Sprite xpLevelUpgradeSprite;
+
+    public Dictionary<Piece, float> pieceValues = new()
+    {
+        { Piece.Pawn, 1 },
+        { Piece.Bishop, 3 },
+        { Piece.Knight, 3 },
+        { Piece.Rook, 5 },
+        { Piece.Queen, 9 },
+        { Piece.King, 9 }
+    };
     
     public Dictionary<Piece, float> capturePieceXPGain = new()
     {
@@ -41,6 +51,14 @@ public class XPBar_SO : ScriptableObject
         {Piece.Knight, 5},
         {Piece.Rook, 3},
         {Piece.Queen, 1},
+    };
+
+    public Dictionary<ArtefactTypes, float> sellArtefactXpGain = new()
+    {
+        { ArtefactTypes.CaptureKingClearRoom, 50 },
+        { ArtefactTypes.ConCaptureAttackingEnemy, 50 },
+        { ArtefactTypes.EnemyLineOfSight, 10 }, //We multiply by the value of the piece type
+        { ArtefactTypes.UseCapturedPieceStraightAway, 50 }
     };
 
     public int levelNumberOnRoomEnter = 1;
