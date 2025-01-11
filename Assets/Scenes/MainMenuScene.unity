@@ -3513,6 +3513,7 @@ MonoBehaviour:
   shopSo: {fileID: 11400000, guid: c6ed2724eb231ca4c976d72ed68465c7, type: 2}
   livesSo: {fileID: 11400000, guid: 4e7ea8907137d2d47af34bbb79156593, type: 2}
   xpBarSo: {fileID: 11400000, guid: 6673b54cf0d58d242a4e2a3ccdf688f3, type: 2}
+  gridSystemSo: {fileID: 11400000, guid: b1b948b72a163f44dabc05d553b8ae0b, type: 2}
   resetCachedDataOnStart: 1
 --- !u!4 &1368535756
 Transform:

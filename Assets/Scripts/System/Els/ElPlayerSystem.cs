@@ -33,6 +33,7 @@ public class ElPlayerSystem : ElDependency
     private ElXPBarUISystem _xpBarUISystem;
     private ElUpgradeUISystem _upgradeUISystem;
     private ElFreeUpgradeSystem _freeUpgradeSystem;
+    private ElLivesUISystem _livesUISystem;
 
     private ElPromoUIController _promoUIController;
     
@@ -65,7 +66,6 @@ public class ElPlayerSystem : ElDependency
         FadeInAfterDoorWalk,
         Captured,
         DestroyingAllEnemiesInRoom,
-        TimerExpired,
         LevelComplete,
         EndGame
     }
@@ -101,6 +101,7 @@ public class ElPlayerSystem : ElDependency
         _xpBarUISystem = elCreator.GetDependency<ElXPBarUISystem>();
         _upgradeUISystem = elCreator.GetDependency<ElUpgradeUISystem>();
         _freeUpgradeSystem = elCreator.GetDependency<ElFreeUpgradeSystem>();
+        _livesUISystem = elCreator.GetDependency<ElLivesUISystem>();
         
         _currentRoomStartPiece = Creator.playerSystemSo.startingPiece;
         _roomNumber = Creator.playerSystemSo.roomNumberSaved;
@@ -534,29 +535,30 @@ public class ElPlayerSystem : ElDependency
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
                     _xpBarUISystem.ResetMultiplier();
-                    SetState(States.EndGame);
-                    _gameOverUISystem.Show("Captured", true);
-                }
-                break;
-            case States.TimerExpired:
-                //Wait 1 second before we show the game over screen
-                if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
-                {
-                    _xpBarUISystem.ResetMultiplier();
-                    if (AuthenticationService.Instance is not null)
+                    //SetState(States.EndGame);
+                    _livesUISystem.LoseLife();
+
+                    if (_livesUISystem.IsDead())
                     {
-                        if (AuthenticationService.Instance.IsSignedIn)
+                        if (AuthenticationService.Instance is not null)
                         {
-                            CheckScore();
+                            if (AuthenticationService.Instance.IsSignedIn)
+                            {
+                                CheckScore();
+                            }
+                            else
+                            {
+                                _gameOverUISystem.Show("Captured", false);
+                            }
                         }
                         else
                         {
-                            _gameOverUISystem.Show("Timer Expired", false);
+                            _gameOverUISystem.Show("Captured", false);
                         }
                     }
                     else
                     {
-                        _gameOverUISystem.Show("Timer Expired", false);
+                        _gameOverUISystem.Show("Captured", true);
                     }
                     SetState(States.EndGame);
                 }
@@ -1085,9 +1087,6 @@ public class ElPlayerSystem : ElDependency
         {
             case States.Captured:
                 _audioSystem.PlayCapturedByEnemySfx();
-                TriggerFadeOutAnimation();
-                break;
-            case States.TimerExpired:
                 TriggerFadeOutAnimation();
                 break;
             case States.Idle:

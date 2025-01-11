@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -52,7 +53,9 @@ public class ScoreboardGUI : MonoBehaviour
         Offset = 0;
         Limit = _nameTexts.Count;
         var scoresResponse =
-            await LeaderboardsService.Instance.GetScoresAsync(scoreboardSo.ScoreboardID, new GetScoresOptions{Offset = Offset, Limit = Limit});
+            await LeaderboardsService.Instance.GetScoresAsync(
+                scoreboardSo.ScoreboardID, 
+                new GetScoresOptions{Offset = Offset, Limit = Limit, IncludeMetadata = true});
         
         LeaderboardScoresPage scores = scoresResponse;
         LinkedListNode<TextMeshProUGUI> currentNameText = _nameTexts.First;
@@ -68,8 +71,15 @@ public class ScoreboardGUI : MonoBehaviour
             }
 
             double roomsCleared = scores.Results[i].Score;
+
+            string metadata = scores.Results[i].Metadata;
+
+            metadata = metadata.Trim('{').Trim('}');
+            metadata = metadata.Split(':')[1];
             
-            currentNameText.Value.text = $"{i+1}. {playerName} - {roomsCleared}";
+            Debug.Log("METADATA: "+metadata);
+            
+            currentNameText.Value.text = $"{i+1}. {playerName} - {roomsCleared}\\n(seed: "+metadata+")";
             i++;
             if (i >= _nameTexts.Count)
                 break;

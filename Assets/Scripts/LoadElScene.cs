@@ -13,6 +13,7 @@ public class LoadElScene : MonoBehaviour
     public Shop_SO shopSo;
     public Lives_SO livesSo;
     public XPBar_SO xpBarSo;
+    public GridSystem_SO gridSystemSo;
     
     public bool resetCachedDataOnStart;
     
@@ -32,6 +33,7 @@ public class LoadElScene : MonoBehaviour
             shopSo.ResetData();
             livesSo.ResetData();
             xpBarSo.ResetData();
+            gridSystemSo.seed = -1;
         }
         
         SceneManager.sceneLoaded += SceneManagerOnsceneLoaded;

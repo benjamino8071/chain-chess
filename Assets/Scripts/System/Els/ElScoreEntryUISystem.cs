@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using TMPro;
 using Unity.Services.Authentication;
 using Unity.Services.Leaderboards;
@@ -51,9 +50,13 @@ public class ElScoreEntryUISystem : ElDependency
             string name = _letterOne.LetterChosen() + _letterTwo.LetterChosen().ToString() + _letterThree.LetterChosen();
         
             await AuthenticationService.Instance.UpdatePlayerNameAsync(name);
-        
-            var scoreResponse = await LeaderboardsService.Instance.AddPlayerScoreAsync(Creator.scoreboardSo.ScoreboardID, _playerScore);
-            Debug.Log(JsonConvert.SerializeObject(scoreResponse));
+            
+            await LeaderboardsService.Instance
+                .AddPlayerScoreAsync(
+                    Creator.scoreboardSo.ScoreboardID,
+                    _playerScore,
+                    new AddPlayerScoreOptions{Metadata = new Dictionary<string, string>{ {"team", Creator.gridSystemSo.seed.ToString()}}}
+                    );
             
             Creator.enemySo.ResetData();
             Creator.playerSystemSo.levelNumberSaved = 0;

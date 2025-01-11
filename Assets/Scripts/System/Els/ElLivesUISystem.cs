@@ -46,4 +46,9 @@ public class ElLivesUISystem : ElDependency
 
         _currentLife = _currentLife.Next;
     }
+
+    public bool IsDead()
+    {
+        return _currentLife is null;
+    }
 }

@@ -57,8 +57,7 @@ public class ElGameOverUISystem : ElDependency
     public void Show(string message, bool showRestartRoom)
     {
         _titleText.text = message;
-        _livesUISystem.LoseLife();
-
+        
         _pauseUISystem.Hide();
         _artefactsUISystem.Hide();
         _restartRoomButton.gameObject.SetActive(showRestartRoom && Creator.livesSo.livesRemaining > 0);

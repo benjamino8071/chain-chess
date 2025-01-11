@@ -44,10 +44,14 @@ public class ElCreator : Creator
     private void Start()
     {
         SceneManager.sceneUnloaded += SceneManager_SceneUnloaded;
-        
-        randomGenerator = new System.Random(DateTime.Now.Millisecond);
-        Random.InitState(DateTime.Now.Millisecond);
 
+        if (gridSystemSo.seed == -1)
+        {
+            gridSystemSo.seed = DateTime.Now.Millisecond+(DateTime.Now.Day*DateTime.Now.Year);
+            randomGenerator = new System.Random(gridSystemSo.seed);
+            Random.InitState(gridSystemSo.seed);
+        }
+        
         if (enemySo.cachedSpawnPoints.Count == 0)
         { 
             shopSo.shopRoomNumber = randomGenerator.Next(2, 8);
