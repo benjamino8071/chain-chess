@@ -26,9 +26,9 @@ MonoBehaviour:
   useCapturedPieceStraightAwaySprite: {fileID: 5902707818331360989, guid: c89a3d3679bba024aa6702a3d56c8eb3, type: 3}
   captureKingClearRoomSprite: {fileID: 8529362930489972796, guid: f56c34d55c6f1c84fb519f8fe72c04b6, type: 3}
   xpLevelUpgradeSprite: {fileID: 4520720125832518851, guid: e28de5b6aa779674d8a29fc6677e6fed, type: 3}
-  levelNumberOnRoomEnter: 5
-  levelNumber: 5
+  levelNumberOnRoomEnter: 6
+  levelNumber: 6
   baseMultiplier: 1
-  artefactsChosen: 0300000001000000
+  artefactsChosen: 010000000300000004000000
   lineOfSightsChosen: 05000000
-  guaranteeArtefactInUpgrade: 1
+  guaranteeArtefactInUpgrade: 0
