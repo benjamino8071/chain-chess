@@ -1,5 +1,8 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class LoadElScene : MonoBehaviour
 {
@@ -7,6 +10,8 @@ public class LoadElScene : MonoBehaviour
 
     public GameObject loadingScreen;
 
+    public TextMeshProUGUI seedText;
+    
     public PlayerSystem_SO playerSystemSo;
     public Timer_SO timerSo;
     public Enemy_SO enemySo;
@@ -33,8 +38,18 @@ public class LoadElScene : MonoBehaviour
             shopSo.ResetData();
             livesSo.ResetData();
             xpBarSo.ResetData();
-            gridSystemSo.seed = -1;
+
+            if (!gridSystemSo.useSeedInputOnNextLoad)
+            {
+                gridSystemSo.seed = DateTime.Now.Millisecond+(DateTime.Now.Day*DateTime.Now.Year);
+            }
+            else
+            {
+                gridSystemSo.useSeedInputOnNextLoad = false;
+            }
         }
+
+        seedText.text = "Seed: " + gridSystemSo.seed;
         
         SceneManager.sceneLoaded += SceneManagerOnsceneLoaded;
         SceneManager.sceneUnloaded += SceneManagerOnsceneUnloaded;

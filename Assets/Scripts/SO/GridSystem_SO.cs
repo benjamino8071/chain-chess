@@ -8,4 +8,5 @@ public class GridSystem_SO : ScriptableObject
     public int width, height;
 
     public int seed;
+    public bool useSeedInputOnNextLoad;
 }

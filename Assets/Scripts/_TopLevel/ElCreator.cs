@@ -44,13 +44,9 @@ public class ElCreator : Creator
     private void Start()
     {
         SceneManager.sceneUnloaded += SceneManager_SceneUnloaded;
-
-        if (gridSystemSo.seed == -1)
-        {
-            gridSystemSo.seed = DateTime.Now.Millisecond+(DateTime.Now.Day*DateTime.Now.Year);
-            randomGenerator = new System.Random(gridSystemSo.seed);
-            Random.InitState(gridSystemSo.seed);
-        }
+        
+        Random.InitState(gridSystemSo.seed);
+        randomGenerator = new System.Random(gridSystemSo.seed);
         
         if (enemySo.cachedSpawnPoints.Count == 0)
         { 

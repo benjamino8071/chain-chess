@@ -20,11 +20,8 @@ public class ScoreboardGUI : MonoBehaviour
     
     private LinkedList<TextMeshProUGUI> _nameTexts = new();
     
-    string VersionId { get; set; }
     int Offset { get; set; }
     int Limit { get; set; }
-    int RangeLimit { get; set; }
-    List<string> FriendIds { get; set; }
 
     private void Awake()
     {
@@ -77,8 +74,6 @@ public class ScoreboardGUI : MonoBehaviour
             metadata = metadata.Trim('{').Trim('}');
             metadata = metadata.Split(':')[1];
             
-            Debug.Log("METADATA: "+metadata);
-            
             currentNameText.Value.text = $"{i+1}. {playerName} - {roomsCleared}\\n(seed: "+metadata+")";
             i++;
             if (i >= _nameTexts.Count)
@@ -88,21 +83,7 @@ public class ScoreboardGUI : MonoBehaviour
         
         Debug.Log(JsonConvert.SerializeObject(scoresResponse));
     }
-
-    public async void GetPlayerScore()
-    {
-        var scoreResponse = 
-            await LeaderboardsService.Instance.GetPlayerScoreAsync(scoreboardSo.ScoreboardID);
-        Debug.Log(JsonConvert.SerializeObject(scoreResponse));
-    }
-
-    public async void GetVersionScores()
-    {
-        var versionScoresResponse =
-            await LeaderboardsService.Instance.GetVersionScoresAsync(scoreboardSo.ScoreboardID, VersionId);
-    Debug.Log(JsonConvert.SerializeObject(versionScoresResponse));
-    }
-
+    
     public void Show()
     {
         mainMenuSo.isOtherMainMenuCanvasShowing = true;
