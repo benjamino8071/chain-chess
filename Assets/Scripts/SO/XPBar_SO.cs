@@ -73,6 +73,8 @@ public class XPBar_SO : ScriptableObject
     public List<Piece> lineOfSightsChosen = new();
 
     public bool guaranteeArtefactInUpgrade;
+
+    public bool useUpgradeSystem;
     
     public void ResetData()
     {

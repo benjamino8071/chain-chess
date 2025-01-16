@@ -192,10 +192,59 @@ public class ElPlayerSystem : ElDependency
                     
                     if(!_gridSystem.IsPositionValid(posInFront) || _gridSystem.TryGetSingleDoorPosition(posInFront, out SingleDoorPosition checkDoorOpen))
                     {
-                        _promoUIController.Show();
-
                         _chainUISystem.UpdateMovesRemainingText(0);
-                        SetState(States.PawnPromo);
+
+                        if (Creator.playerSystemSo.allowPlayerToChoosePromotion)
+                        {
+                            _promoUIController.Show();
+                            SetState(States.PawnPromo);
+                        }
+                        else
+                        {
+                            List<Piece> promoPieces = new()
+                            {
+                                Piece.Bishop,
+                                Piece.Knight,
+                                Piece.Rook,
+                                Piece.Queen
+                            };
+                            int promoChosenIndex = Random.Range(0, promoPieces.Count);
+                            Piece pieceChosen = promoPieces[promoChosenIndex];
+
+                            _currentPiece.Value = pieceChosen;
+                            
+                            int index = 0;
+                            LinkedListNode<Piece> temp = _capturedPieces.First;
+                            while (temp != null)
+                            {
+                                if(temp == _currentPiece)
+                                    break;
+
+                                index++;
+                                temp = temp.Next;
+                            }
+
+                            index *= 2; //Have to double index for the chainUI as for every other index, there is an arrow sprite which we NEVER want to change
+                            _chainUISystem.PawnPromoted(index, pieceChosen);
+                            
+                            _currentPiece = _currentPiece.Next;
+                            
+                            if (_currentPiece is not null)
+                            {
+                                Debug.Log("HELLO WORLD");
+                                //Allow player to make another move
+                                UpdateSprite(_currentPiece.Value);
+                                SetState(States.Idle);
+                                _chainUISystem.HighlightNextPiece();
+                            }
+                            else
+                            {
+                                Debug.Log("GOODBYE WORLD");
+                                UpdateSprite(pieceChosen);
+                                SetState(States.WaitingForTurn);
+                                _turnInfoUISystem.SwitchTurn(ElTurnSystem.Turn.Enemy);
+                            }
+                        }
                         break;
                     }
                     
@@ -328,6 +377,29 @@ public class ElPlayerSystem : ElDependency
                         {
                             _audioSystem.PlayRoomCompleteSfx();
                             _doorsSystem.SetRoomDoorsOpen(GetRoomNumber());
+                            if (!Creator.playerSystemSo.keepChainWhenRoomCleared)
+                            {
+                                _currentRoomStartPiece = _currentPiece.Value;
+                                if (_currentRoomStartPiece == Piece.Pawn)
+                                {
+                                    List<Piece> promoPieces = new()
+                                    {
+                                        Piece.Bishop,
+                                        Piece.Queen,
+                                        Piece.Rook,
+                                        Piece.Knight
+                                    };
+                                    int promoPieceChosenIndex = Random.Range(0, promoPieces.Count);
+                                    _currentRoomStartPiece = promoPieces[promoPieceChosenIndex];
+                                }
+                                Debug.Log("FINAL PIECE USED: "+_currentRoomStartPiece);
+                                _chainUISystem.NewRoomClearChain();
+                                _chainUISystem.ResetPosition();
+                                _chainUISystem.ShowNewPiece(_currentRoomStartPiece, true);
+                                _capturedPieces.Clear();
+                                _capturedPieces.AddFirst(_currentRoomStartPiece);
+                                return;
+                            }
                         }
                         else if (enemyPiece == Piece.King &&
                                  Creator.upgradeSo.artefactsChosen.Contains(ArtefactTypes.CaptureKingClearRoom))
@@ -356,8 +428,57 @@ public class ElPlayerSystem : ElDependency
                         if (!_gridSystem.IsPositionValid(posInFront) ||
                             _gridSystem.TryGetSingleDoorPosition(posInFront, out SingleDoorPosition foo))
                         {
-                            _promoUIController.Show();
-                            SetState(States.PawnPromo);
+                            if (Creator.playerSystemSo.allowPlayerToChoosePromotion)
+                            {
+                                _promoUIController.Show();
+                                SetState(States.PawnPromo);
+                            }
+                            else
+                            {
+                                List<Piece> promoPieces = new()
+                                {
+                                    Piece.Bishop,
+                                    Piece.Knight,
+                                    Piece.Rook,
+                                    Piece.Queen
+                                };
+                                int promoChosenIndex = Random.Range(0, promoPieces.Count);
+                                Piece pieceChosen = promoPieces[promoChosenIndex];
+
+                                _currentPiece.Value = pieceChosen;
+                                
+                                int index = 0;
+                                LinkedListNode<Piece> temp = _capturedPieces.First;
+                                while (temp != null)
+                                {
+                                    if(temp == _currentPiece)
+                                        break;
+
+                                    index++;
+                                    temp = temp.Next;
+                                }
+
+                                index *= 2; //Have to double index for the chainUI as for every other index, there is an arrow sprite which we NEVER want to change
+                                _chainUISystem.PawnPromoted(index, pieceChosen);
+                                
+                                _currentPiece = _currentPiece.Next;
+                                
+                                if (_currentPiece is not null)
+                                {
+                                    Debug.Log("HELLO WORLD");
+                                    //Allow player to make another move
+                                    UpdateSprite(_currentPiece.Value);
+                                    SetState(States.Idle);
+                                    _chainUISystem.HighlightNextPiece();
+                                }
+                                else
+                                {
+                                    Debug.Log("GOODBYE WORLD");
+                                    UpdateSprite(pieceChosen);
+                                    SetState(States.WaitingForTurn);
+                                    _turnInfoUISystem.SwitchTurn(ElTurnSystem.Turn.Enemy);
+                                }
+                            }
                             break;
                         }
                     }

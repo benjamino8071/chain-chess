@@ -80,15 +80,23 @@ public class ElXPBarUISystem : ElDependency
         _xpEarntInLevelText.text = $"XP: {_amount:0}/{_amountRequiredToUpgrade:0}";
         
         ResetMultiplier();
+
+        if (!Creator.upgradeSo.useUpgradeSystem)
+        {
+            guiRight.gameObject.SetActive(false);
+        }
     }
 
     public override void GameEarlyUpdate(float dt)
     {
         _upgradeButton.gameObject.SetActive(_playerSystem.GetState() == ElPlayerSystem.States.Idle && _amount >= _amountRequiredToUpgrade);
     }
-
+    
     public void IncreaseProgressBar(float amount, bool playSfx)
     {
+        if(!Creator.upgradeSo.useUpgradeSystem)
+            return;
+        
         amount *= _multiplier;
 
         _playerSystem.PlayFloatingTextPlayer(amount);
@@ -120,6 +128,9 @@ public class ElXPBarUISystem : ElDependency
 
     public void IncreaseProgressBarNoMultiplier(float amount)
     {
+        if(!Creator.upgradeSo.useUpgradeSystem)
+            return;
+        
         _amount += amount;
         
         _progressBar.UpdateBar(_amount, 0, _amountRequiredToUpgrade);
@@ -136,6 +147,9 @@ public class ElXPBarUISystem : ElDependency
     
     public void SetBar(float amount)
     {
+        if(!Creator.upgradeSo.useUpgradeSystem)
+            return;
+        
         _amount = amount;
         
         _progressBar.UpdateBar(_amount, 0, _amountRequiredToUpgrade);
@@ -150,6 +164,9 @@ public class ElXPBarUISystem : ElDependency
     
     public void ResetMultiplier()
     {
+        if(!Creator.upgradeSo.useUpgradeSystem)
+            return;
+        
         _consecCaptureAmount = 0;
         _multiplier = Creator.upgradeSo.baseMultiplier;
         _multiplierAmountText.text = $"<wave a={0.01f}>{_multiplier:0.##}\u00d7</wave>";
@@ -157,16 +174,25 @@ public class ElXPBarUISystem : ElDependency
 
     public void ShowUpgradeButton()
     {
+        if(!Creator.upgradeSo.useUpgradeSystem)
+            return;
+        
         _upgradeButton.gameObject.SetActive(true);
     }
 
     public void HideUpgradeButton()
     {
+        if(!Creator.upgradeSo.useUpgradeSystem)
+            return;
+        
         _upgradeButton.gameObject.SetActive(false);
     }
 
     public void ShowLevelUpgrade()
     {
+        if(!Creator.upgradeSo.useUpgradeSystem)
+            return;
+        
         _upgradeUISystem.Show();
         float amountLeftOver = _amount - _amountRequiredToUpgrade;
         
@@ -180,6 +206,9 @@ public class ElXPBarUISystem : ElDependency
 
     public void UpgradeByFullLevel()
     {
+        if(!Creator.upgradeSo.useUpgradeSystem)
+            return;
+        
         //We get the amount needed to upgrade.
         //Then we give the player ALL of that to their amount
         SetBar(_amount + _amountRequiredToUpgrade);
@@ -189,11 +218,17 @@ public class ElXPBarUISystem : ElDependency
 
     public void SaveXpAmount()
     {
+        if(!Creator.upgradeSo.useUpgradeSystem)
+            return;
+        
         Creator.upgradeSo.xpAmountOnNextLevelEnter = _amount;
     }
 
     public void SaveLevelNumber()
     {
+        if(!Creator.upgradeSo.useUpgradeSystem)
+            return;
+        
         Creator.upgradeSo.levelNumberOnRoomEnter = Creator.upgradeSo.levelNumber;
     }
 }

@@ -26,6 +26,9 @@ public class PlayerSystem_SO : ScriptableObject
     
     //Data for the artefact types
     public List<Piece> lineOfSightsChosen = new();
+
+    public bool allowPlayerToChoosePromotion;
+    public bool keepChainWhenRoomCleared;
     
     public void ResetData()
     {

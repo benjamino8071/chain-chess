@@ -1,17 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using NUnit.Framework;
 using UnityEngine;
 
 public class ElEnemiesSystem : ElDependency
 {
-    private ElChainUISystem _chainUISystem;
     private ElDoorsSystem _doorsSystem;
     private ElTurnSystem _turnSystem;
-    private ElTimerUISystem _timerUISystem;
-    private ElAudioSystem _audioSystem;
     private ElPlayerSystem _playerSystem;
     
     private List<ElEnemyController> _enemyControllers = new ();
@@ -26,11 +20,8 @@ public class ElEnemiesSystem : ElDependency
     {
         base.GameStart(elCreator);
         
-        _chainUISystem = elCreator.GetDependency<ElChainUISystem>();
         _doorsSystem = elCreator.GetDependency<ElDoorsSystem>();
         _turnSystem = elCreator.GetDependency<ElTurnSystem>();
-        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
-        _audioSystem = elCreator.GetDependency<ElAudioSystem>();
         _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
         
         for (int i = 0; i < _validPositionsVisuals.Capacity; i++)
