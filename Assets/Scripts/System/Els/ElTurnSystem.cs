@@ -4,7 +4,6 @@ public class ElTurnSystem : ElDependency
 {
     private ElPlayerSystem _playerSystem;
     private ElEnemiesSystem _enemiesSystem;
-    private ElTimerUISystem _timerUISystem;
     
     public enum Turn
     {
@@ -13,13 +12,17 @@ public class ElTurnSystem : ElDependency
     }
     private Turn _currentTurn;
 
+    private int _playerTurnsRemaining;
+    private int _maxPlayerTurns = 6;
+
     public override void GameStart(ElCreator elCreator)
     {
         base.GameStart(elCreator);
 
         _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
         _enemiesSystem = elCreator.GetDependency<ElEnemiesSystem>();
-        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
+        
+        ResetPlayerTurnsAmount();
     }
 
     public void SwitchTurn(Turn nextTurn)
@@ -39,12 +42,21 @@ public class ElTurnSystem : ElDependency
         {
             case Turn.Player:
                 _enemiesSystem.ClearPositionsTakenByOtherEnemiesForThisTurn();
-                //_timerUISystem.ResetTimerChangedAmount(false);
                 _playerSystem.SetState(ElPlayerSystem.States.Idle);
                 break;
             case Turn.Enemy:
-                //_timerUISystem.StopTimer();
-                _enemiesSystem.SetStateForAllEnemies(ElEnemyController.States.ChooseTile);
+                _playerTurnsRemaining--;
+                Debug.Log("TURNS REMAINING: "+_playerTurnsRemaining);
+                
+                if (_playerTurnsRemaining <= 0)
+                {
+                    _playerSystem.SetState(ElPlayerSystem.States.Captured);
+
+                }
+                else
+                {
+                    _enemiesSystem.SetStateForAllEnemies(ElEnemyController.States.ChooseTile);
+                }
                 break;
         }
         _currentTurn = nextTurn;
@@ -53,5 +65,10 @@ public class ElTurnSystem : ElDependency
     public Turn GetTurn()
     {
         return _currentTurn;
+    }
+
+    public void ResetPlayerTurnsAmount()
+    {
+        _playerTurnsRemaining = _maxPlayerTurns;
     }
 }

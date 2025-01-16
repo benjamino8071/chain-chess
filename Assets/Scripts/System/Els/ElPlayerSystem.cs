@@ -451,6 +451,7 @@ public class ElPlayerSystem : ElDependency
                     {
                         _freeUpgradeSystem.SetFreeRoom();
                     }
+                    _turnInfoUISystem.ResetPlayerTurnsAmount();
                     SetState(States.DoorWalk);
                 }
                 break;

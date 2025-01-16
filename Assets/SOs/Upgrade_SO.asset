@@ -32,4 +32,4 @@ MonoBehaviour:
   baseMultiplier: 1
   artefactsChosen: 
   lineOfSightsChosen: 
-  guaranteeArtefactInUpgrade: 1
+  guaranteeArtefactInUpgrade: 0

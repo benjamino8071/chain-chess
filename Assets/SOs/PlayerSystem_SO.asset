@@ -22,8 +22,8 @@ MonoBehaviour:
   king: {fileID: -4821530343430527414, guid: 6ab63fb05b0cd654399b0b52e0e15650, type: 3}
   levelNumberSaved: 0
   xValueToStartOn: 5.5
-  roomNumberSaved: 0
-  firstMoveMadeWhileShowingMainMenu: 0
+  roomNumberSaved: 9
+  firstMoveMadeWhileShowingMainMenu: 1
   moveMadeInNewRoom: 0
   startingPiece: 5
   artefacts: 
