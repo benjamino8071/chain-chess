@@ -231,7 +231,6 @@ public class ElPlayerSystem : ElDependency
                             
                             if (_currentPiece is not null)
                             {
-                                Debug.Log("HELLO WORLD");
                                 //Allow player to make another move
                                 UpdateSprite(_currentPiece.Value);
                                 SetState(States.Idle);
@@ -239,7 +238,6 @@ public class ElPlayerSystem : ElDependency
                             }
                             else
                             {
-                                Debug.Log("GOODBYE WORLD");
                                 UpdateSprite(pieceChosen);
                                 SetState(States.WaitingForTurn);
                                 _turnInfoUISystem.SwitchTurn(ElTurnSystem.Turn.Enemy);
@@ -379,25 +377,9 @@ public class ElPlayerSystem : ElDependency
                             _doorsSystem.SetRoomDoorsOpen(GetRoomNumber());
                             if (!Creator.playerSystemSo.keepChainWhenRoomCleared)
                             {
-                                _currentRoomStartPiece = _currentPiece.Value;
-                                if (_currentRoomStartPiece == Piece.Pawn)
-                                {
-                                    List<Piece> promoPieces = new()
-                                    {
-                                        Piece.Bishop,
-                                        Piece.Queen,
-                                        Piece.Rook,
-                                        Piece.Knight
-                                    };
-                                    int promoPieceChosenIndex = Random.Range(0, promoPieces.Count);
-                                    _currentRoomStartPiece = promoPieces[promoPieceChosenIndex];
-                                }
-                                Debug.Log("FINAL PIECE USED: "+_currentRoomStartPiece);
-                                _chainUISystem.NewRoomClearChain();
-                                _chainUISystem.ResetPosition();
-                                _chainUISystem.ShowNewPiece(_currentRoomStartPiece, true);
-                                _capturedPieces.Clear();
-                                _capturedPieces.AddFirst(_currentRoomStartPiece);
+                                _currentRoomStartPiece = enemyPiece;
+                                
+                                RoomCleared();
                                 return;
                             }
                         }
@@ -465,7 +447,6 @@ public class ElPlayerSystem : ElDependency
                                 
                                 if (_currentPiece is not null)
                                 {
-                                    Debug.Log("HELLO WORLD");
                                     //Allow player to make another move
                                     UpdateSprite(_currentPiece.Value);
                                     SetState(States.Idle);
@@ -473,7 +454,6 @@ public class ElPlayerSystem : ElDependency
                                 }
                                 else
                                 {
-                                    Debug.Log("GOODBYE WORLD");
                                     UpdateSprite(pieceChosen);
                                     SetState(States.WaitingForTurn);
                                     _turnInfoUISystem.SwitchTurn(ElTurnSystem.Turn.Enemy);
@@ -1272,5 +1252,63 @@ public class ElPlayerSystem : ElDependency
             _destroyEnemyTimer = 0.19f;
             SetState(States.DestroyingAllEnemiesInRoom);
         }
+    }
+
+    private bool _isInvincible;
+    private static readonly int IsSuper = Animator.StringToHash("is_super");
+
+    public void SetInvincible(bool isSuper)
+    {
+        if (_playerSprite)
+        {
+            if (isSuper)
+            {
+                _playerSprite.material = Creator.playerSystemSo.superInvincibleEffectMaterial;
+            }
+            else
+            {
+                _playerSprite.material = Creator.playerSystemSo.invincibleEffectMaterial;
+            }
+        }
+        if(_playerAnimator)
+            _playerAnimator.SetBool(IsSuper, isSuper);
+        _isInvincible = true;
+    }
+
+    public void SetNotInvincible()
+    {
+        if (_playerSprite)
+        {
+            _playerSprite.material = Creator.playerSystemSo.noEffectMaterial;
+        }
+        if(_playerAnimator)
+            _playerAnimator.SetBool(IsSuper, false);
+        _isInvincible = false;
+    }
+
+    public bool IsInvincible()
+    {
+        return _isInvincible;
+    }
+
+    public void RoomCleared()
+    {
+        if (_currentRoomStartPiece == Piece.Pawn)
+        {
+            List<Piece> promoPieces = new()
+            {
+                Piece.Bishop,
+                Piece.Queen,
+                Piece.Rook,
+                Piece.Knight
+            };
+            int promoPieceChosenIndex = Random.Range(0, promoPieces.Count);
+            _currentRoomStartPiece = promoPieces[promoPieceChosenIndex];
+        }
+        _chainUISystem.NewRoomClearChain();
+        _chainUISystem.ResetPosition();
+        _chainUISystem.ShowNewPiece(_currentRoomStartPiece, true);
+        _capturedPieces.Clear();
+        _capturedPieces.AddFirst(_currentRoomStartPiece);
     }
 }

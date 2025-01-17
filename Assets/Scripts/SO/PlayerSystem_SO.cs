@@ -15,6 +15,10 @@ public class PlayerSystem_SO : ScriptableObject
     public Sprite queen;
     public Sprite king;
 
+    public Material noEffectMaterial;
+    public Material invincibleEffectMaterial;
+    public Material superInvincibleEffectMaterial;
+    
     //The room number is saved after a player enters a room and can move around
     public int levelNumberSaved;
     public float xValueToStartOn;

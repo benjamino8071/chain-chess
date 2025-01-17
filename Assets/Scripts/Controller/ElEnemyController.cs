@@ -10,9 +10,10 @@ public class ElEnemyController : ElController
     private ElPlayerSystem _playerSystem;
     private ElEnemiesSystem _enemiesSystem;
     private ElDoorsSystem _doorsSystem;
-    private ElTimerUISystem _timerUISystem;
     private ElAudioSystem _audioSystem;
     private ElArtefactsUISystem _artefactsUISystem;
+    private ElTurnSystem _turnSystem;
+    private ElLivesUISystem _livesUISystem;
     
     private Transform _enemyInstance;
 
@@ -60,9 +61,10 @@ public class ElEnemyController : ElController
         _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
         _enemiesSystem = elCreator.GetDependency<ElEnemiesSystem>();
         _doorsSystem = elCreator.GetDependency<ElDoorsSystem>();
-        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
         _audioSystem = elCreator.GetDependency<ElAudioSystem>();
         _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
+        _turnSystem = elCreator.GetDependency<ElTurnSystem>();
+        _livesUISystem = elCreator.GetDependency<ElLivesUISystem>();
         
         SetState(States.WaitingForTurn);
     }
@@ -382,17 +384,49 @@ public class ElEnemyController : ElController
                     
                     if (_enemyInstance.position == _playerSystem.GetPlayerPosition())
                     {
-                        if (Creator.upgradeSo.artefactsChosen.Contains(ArtefactTypes.ConCaptureAttackingEnemy))
+                        if (_playerSystem.IsInvincible())
+                        {
+                            _enemiesSystem.EnemyControllerMoved();
+                            _enemiesSystem.PieceCaptured(this);
+                            if (_enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber()))
+                            {
+                                _audioSystem.PlayRoomCompleteSfx();
+                                _doorsSystem.SetRoomDoorsOpen(GetRoomNumber());
+                                _playerSystem.RoomCleared();
+                            }
+
+                            if (_turnSystem.HasPlayerHadTwoTurns())
+                            {
+                                _playerSystem.SetNotInvincible();
+                            }
+                        }
+                        else if (Creator.upgradeSo.artefactsChosen.Contains(ArtefactTypes.ConCaptureAttackingEnemy))
                         {
                             _artefactsUISystem.RemoveArtefact(ArtefactTypes.ConCaptureAttackingEnemy);
-                            _enemiesSystem.EnemyControllerMoved(this);
+                            _enemiesSystem.EnemyControllerMoved();
                             _playerSystem.EnemyCaptured(this);
                         }
                         else
                         {
-                            //_timerUISystem.StopTimer();
-                            _playerSystem.SetState(ElPlayerSystem.States.Captured);
-                            _enemiesSystem.SetStateForAllEnemies(States.Won);
+                            //If we have at least 1 life left, then we take away a life, and destroy this enemy
+                            if (_livesUISystem.HasLife())
+                            {
+                                _livesUISystem.LoseLife();
+                                
+                                _enemiesSystem.EnemyControllerMoved();
+                                _enemiesSystem.PieceCaptured(this);
+                                if (_enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber()))
+                                {
+                                    _audioSystem.PlayRoomCompleteSfx();
+                                    _doorsSystem.SetRoomDoorsOpen(GetRoomNumber());
+                                    _playerSystem.RoomCleared();
+                                }
+                            }
+                            else
+                            {
+                                _playerSystem.SetState(ElPlayerSystem.States.Captured);
+                                _enemiesSystem.SetStateForAllEnemies(States.Won);
+                            }
                         }
                     }
                     else
@@ -489,7 +523,7 @@ public class ElEnemyController : ElController
                         
                         SetState(States.WaitingForTurn);
                         
-                        _enemiesSystem.EnemyControllerMoved(this);
+                        _enemiesSystem.EnemyControllerMoved();
                     }
                 }
                 break;

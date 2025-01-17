@@ -109,7 +109,6 @@ public class ElCreator : Creator
     public override void CreateDependencies()
     {
         _dependencies.AddLast(new ElAudioSystem());
-        _dependencies.AddLast(new ElTurnSystem());
         _dependencies.AddLast(new ElChainUISystem());
         _dependencies.AddLast(new ElCinemachineSystem());
         _dependencies.AddLast(new ElDoorsSystem());
@@ -127,6 +126,7 @@ public class ElCreator : Creator
         _dependencies.AddLast(new ElArtefactsUISystem());
         _dependencies.AddLast(new ElShopSystem());
         _dependencies.AddLast(new ElFreeUpgradeSystem());
+        _dependencies.AddLast(new ElTurnSystem());
     }
 
     public void ShowGUITop()

@@ -300,7 +300,7 @@ public class ElEnemiesSystem : ElDependency
         _positionsTakenByOtherEnemies.Clear();
     }
 
-    public void EnemyControllerMoved(ElEnemyController enemyController)
+    public void EnemyControllerMoved()
     {
         if (_moveInRoomQueue.TryDequeue(out ElEnemyController nextEnemy))
         {
@@ -309,7 +309,6 @@ public class ElEnemiesSystem : ElDependency
         else
         {
             _turnSystem.SwitchTurn(ElTurnSystem.Turn.Player);
-            //_timerUISystem.StartTimer();
         }
     }
     

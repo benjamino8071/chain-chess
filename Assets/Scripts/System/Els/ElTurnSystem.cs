@@ -1,9 +1,9 @@
-using UnityEngine;
 
 public class ElTurnSystem : ElDependency
 {
     private ElPlayerSystem _playerSystem;
     private ElEnemiesSystem _enemiesSystem;
+    private ElLivesUISystem _livesUISystem;
     
     public enum Turn
     {
@@ -13,7 +13,6 @@ public class ElTurnSystem : ElDependency
     private Turn _currentTurn;
 
     private int _playerTurnsRemaining;
-    private int _maxPlayerTurns = 6;
 
     public override void GameStart(ElCreator elCreator)
     {
@@ -21,6 +20,7 @@ public class ElTurnSystem : ElDependency
 
         _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
         _enemiesSystem = elCreator.GetDependency<ElEnemiesSystem>();
+        _livesUISystem = elCreator.GetDependency<ElLivesUISystem>();
         
         ResetPlayerTurnsAmount();
     }
@@ -35,18 +35,23 @@ public class ElTurnSystem : ElDependency
         int roomNumber = _playerSystem.GetRoomNumber();
         if (_enemiesSystem.IsEnemiesInRoomCleared(roomNumber))
         {
+            _playerSystem.SetNotInvincible();
             nextTurn = Turn.Player;
         }
 
         switch (nextTurn)
         {
             case Turn.Player:
+                if (HasPlayerHadOneTurn())
+                {
+                    _playerSystem.SetNotInvincible();
+                    _livesUISystem.HideInvincibleLife();
+                }
                 _enemiesSystem.ClearPositionsTakenByOtherEnemiesForThisTurn();
                 _playerSystem.SetState(ElPlayerSystem.States.Idle);
                 break;
             case Turn.Enemy:
-                _playerTurnsRemaining--;
-                Debug.Log("TURNS REMAINING: "+_playerTurnsRemaining);
+                _playerTurnsRemaining++;
                 
                 if (_playerTurnsRemaining <= 0)
                 {
@@ -69,6 +74,18 @@ public class ElTurnSystem : ElDependency
 
     public void ResetPlayerTurnsAmount()
     {
-        _playerTurnsRemaining = _maxPlayerTurns;
+        _playerTurnsRemaining = 0;
+        _playerSystem.SetInvincible(true);
+        _livesUISystem.ShowInvincibleLife(true);
+    }
+
+    public bool HasPlayerHadOneTurn()
+    {
+        return _playerTurnsRemaining == 1;
+    }
+
+    public bool HasPlayerHadTwoTurns()
+    {
+        return _playerTurnsRemaining == 2;
     }
 }
