@@ -408,8 +408,9 @@ public class ElEnemyController : ElController
                         }
                         else
                         {
-                            //If we have at least 1 life left, then we take away a life, and destroy this enemy
-                            if (_livesUISystem.HasLife())
+                            //If we have more than 1 life left, then we take away a life, and destroy this enemy
+                            //If we are at 1 life, and then lose that life, it is GAME OVER
+                            if (_livesUISystem.HasMoreThanOneLife())
                             {
                                 _livesUISystem.LoseLife();
                                 
@@ -424,6 +425,8 @@ public class ElEnemyController : ElController
                             }
                             else
                             {
+                                _livesUISystem.LoseLife();
+                                
                                 //*******ENEMY HAS CAPTURED PLAYER********
                                 //Set all the game data
                                 Creator.gameDataSo.roomsEntered = Creator.playerSystemSo.levelNumberSaved * 10 +

@@ -66,6 +66,11 @@ public class ElLivesUISystem : ElDependency
         return _currentLife is not null;
     }
 
+    public bool HasMoreThanOneLife()
+    {
+        return _currentLife.Next is not null;
+    }
+
     public void ShowInvincibleLife(bool isSuperInvincible)
     {
         _invincibleLifeImage.enabled = true;

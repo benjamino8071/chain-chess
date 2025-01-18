@@ -50,6 +50,7 @@ public class ElGameOverUISystem : ElDependency
         _playerDataTexts.chainCompletesText.text = $"{Creator.gameDataSo.chainCompletes}";
         _playerDataTexts.seedUsedText.text = $"{Creator.gameDataSo.seedUsed}";
         _playerDataTexts.mostUsedPieceText.text = $"{Creator.gameDataSo.GetMostUsedPiece()}";
+        _playerDataTexts.capturedByText.text = $"{Creator.gameDataSo.capturedByPiece}";
     }
 
     public void Hide()
