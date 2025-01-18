@@ -159,7 +159,7 @@ public class ElArtefactController : Controller
 
     public void ShowSellButton()
     {
-        _sellButton.gameObject.SetActive(_playerSystem.GetState() == ElPlayerSystem.States.Idle);
+        //_sellButton.gameObject.SetActive(_playerSystem.GetState() == ElPlayerSystem.States.Idle);
     }
 
     public void HideSellButton()
