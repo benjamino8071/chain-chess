@@ -424,6 +424,17 @@ public class ElEnemyController : ElController
                             }
                             else
                             {
+                                //*******ENEMY HAS CAPTURED PLAYER********
+                                //Set all the game data
+                                Creator.gameDataSo.roomsEntered = Creator.playerSystemSo.levelNumberSaved * 10 +
+                                                                  Creator.playerSystemSo.roomNumberSaved + 1;
+                                //piecesCaptured is managed throughout run
+                                //bestTurn is managed throughout run
+                                //chainCompletes is managed throughout run
+                                //most used piece is managed throughout run
+                                Creator.gameDataSo.seedUsed = Creator.gridSystemSo.seed;
+                                Creator.gameDataSo.capturedByPiece = _piece;
+                                
                                 _playerSystem.SetState(ElPlayerSystem.States.Captured);
                                 _enemiesSystem.SetStateForAllEnemies(States.Won);
                             }

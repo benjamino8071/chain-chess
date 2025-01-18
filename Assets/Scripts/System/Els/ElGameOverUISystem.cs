@@ -11,8 +11,8 @@ public class ElGameOverUISystem : ElDependency
     private Transform _gameOverUI;
 
     private Button _exitButton;
-
-    private TextMeshProUGUI _titleText;
+    
+    private PlayerDataTexts _playerDataTexts;
     
     public override void GameStart(ElCreator elCreator)
     {
@@ -23,8 +23,7 @@ public class ElGameOverUISystem : ElDependency
 
         _gameOverUI = elCreator.GetFirstObjectWithName(AllTagNames.GameOver);
 
-        Transform titleText = elCreator.GetFirstObjectWithName(AllTagNames.PlayerCapturedText);
-        _titleText = titleText.GetComponent<TextMeshProUGUI>();
+        _playerDataTexts = _gameOverUI.GetComponent<PlayerDataTexts>();
 
         Transform exitButtonTf = elCreator.GetChildObjectByName(_gameOverUI.gameObject, AllTagNames.Exit);
 
@@ -36,14 +35,21 @@ public class ElGameOverUISystem : ElDependency
         Hide();
     }
 
-    public void Show(string message)
+    public void Show()
     {
-        _titleText.text = message;
-        
         _runInfoUISystem.Hide();
         _artefactsUISystem.Hide();
         
         _gameOverUI.gameObject.SetActive(true);
+
+        _playerDataTexts.roomsEnteredText.text = $"{Creator.gameDataSo.roomsEntered}";
+        _playerDataTexts.piecesCapturedText.text = $"{Creator.gameDataSo.piecesCaptured}";
+        string hasSatEnd = Creator.gameDataSo.bestTurn == 1 ? "" : "s";
+        _playerDataTexts.bestTurnText.text = $"{Creator.gameDataSo.bestTurn} piece{hasSatEnd}";
+        _playerDataTexts.chainCompletesText.text = $"{Creator.gameDataSo.chainCompletes}";
+        _playerDataTexts.seedUsedText.text = $"{Creator.gameDataSo.seedUsed}";
+        _playerDataTexts.mostUsedPieceText.text = $"{Creator.gameDataSo.GetMostUsedPiece()}";
+        _playerDataTexts.capturedByText.text = $"{Creator.gameDataSo.capturedByPiece}";
     }
 
     public void Hide()

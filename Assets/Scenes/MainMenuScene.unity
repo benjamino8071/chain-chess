@@ -7020,10 +7020,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1049441288}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 186.521, y: 162.9}
-  m_SizeDelta: {x: 305.04, y: 127}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -350, y: -196.1}
+  m_SizeDelta: {x: 305.04004, y: 127}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1226778784
 MonoBehaviour:
@@ -7254,7 +7254,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9072887715208983578, guid: eff612408094dfd438f7462c55564517, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -51.99994
+      value: -52
       objectReference: {fileID: 0}
     - target: {fileID: 9072887715208983578, guid: eff612408094dfd438f7462c55564517, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -7967,6 +7967,7 @@ MonoBehaviour:
   livesSo: {fileID: 11400000, guid: 4e7ea8907137d2d47af34bbb79156593, type: 2}
   xpBarSo: {fileID: 11400000, guid: 6673b54cf0d58d242a4e2a3ccdf688f3, type: 2}
   gridSystemSo: {fileID: 11400000, guid: b1b948b72a163f44dabc05d553b8ae0b, type: 2}
+  gameDataSo: {fileID: 11400000, guid: b81a35f5ff0716542acfcacdae98c9b6, type: 2}
   resetCachedDataOnStart: 1
 --- !u!4 &1368535756
 Transform:

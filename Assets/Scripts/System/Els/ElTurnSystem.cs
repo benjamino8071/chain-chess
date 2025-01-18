@@ -12,7 +12,7 @@ public class ElTurnSystem : ElDependency
     }
     private Turn _currentTurn;
 
-    private int _playerTurnsRemaining;
+    private int _playerTurnsInRoomCount;
 
     public override void GameStart(ElCreator elCreator)
     {
@@ -35,6 +35,10 @@ public class ElTurnSystem : ElDependency
         int roomNumber = _playerSystem.GetRoomNumber();
         if (_enemiesSystem.IsEnemiesInRoomCleared(roomNumber))
         {
+            if (_playerTurnsInRoomCount == 0)
+            {
+                Creator.gameDataSo.chainCompletes++;
+            }
             _playerSystem.SetNotInvincible();
             nextTurn = Turn.Player;
         }
@@ -51,9 +55,9 @@ public class ElTurnSystem : ElDependency
                 _playerSystem.SetState(ElPlayerSystem.States.Idle);
                 break;
             case Turn.Enemy:
-                _playerTurnsRemaining++;
+                _playerTurnsInRoomCount++;
                 
-                if (_playerTurnsRemaining <= 0)
+                if (_playerTurnsInRoomCount <= 0)
                 {
                     _playerSystem.SetState(ElPlayerSystem.States.Captured);
 
@@ -74,7 +78,7 @@ public class ElTurnSystem : ElDependency
 
     public void ResetPlayerTurnsAmount()
     {
-        _playerTurnsRemaining = 0;
+        _playerTurnsInRoomCount = 0;
         if (Creator.playerSystemSo.roomNumberSaved < 9)
         {
             _playerSystem.SetInvincible(true);
@@ -84,11 +88,11 @@ public class ElTurnSystem : ElDependency
 
     public bool HasPlayerHadOneTurn()
     {
-        return _playerTurnsRemaining == 1;
+        return _playerTurnsInRoomCount >= 1;
     }
 
     public bool HasPlayerHadTwoTurns()
     {
-        return _playerTurnsRemaining == 2;
+        return _playerTurnsInRoomCount >= 2;
     }
 }

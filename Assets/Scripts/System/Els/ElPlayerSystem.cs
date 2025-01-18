@@ -55,6 +55,8 @@ public class ElPlayerSystem : ElDependency
 
     private int _roomNumber;
 
+    private int _consecutiveCaptureAmount;
+
     public enum States
     {
         WaitingForTurn,
@@ -323,7 +325,7 @@ public class ElPlayerSystem : ElDependency
                     _playerCharacter.position = new Vector3(((int)_playerCharacter.position.x) + 0.5f, ((int)_playerCharacter.position.y) + 0.5f, 0);
                     _sinTime = 0;
                     
-                    //If Capture enemies exist, then we need to check the position the player has moved to is safe. If not, then it's game over for the player!
+                    //If Capture enemy type exists in room, then we need to check the position the player has moved to is safe. If not, then it's game over for the player!
                     if (_enemiesSystem.CheckIfEnemiesCanCapture())
                     {
                         //Game over!!!
@@ -366,6 +368,9 @@ public class ElPlayerSystem : ElDependency
                         Piece enemyPiece = enemyController.GetPiece();
                         
                         _enemiesSystem.PieceCaptured(enemyController);
+
+                        Creator.gameDataSo.piecesCaptured++;
+                        _consecutiveCaptureAmount++;
                         
                         bool enemiesCleared = _enemiesSystem.IsEnemiesInRoomCleared(GetRoomNumber());
                         _xpBarUISystem.IncreaseProgressBar(Creator.upgradeSo.capturePieceXPGain[enemyPiece], !enemiesCleared);
@@ -420,6 +425,12 @@ public class ElPlayerSystem : ElDependency
                     {
                         //Player has not captured an enemy so we must reset the multiplier
                         _xpBarUISystem.ResetMultiplier();
+
+                        if (_consecutiveCaptureAmount > Creator.gameDataSo.bestTurn)
+                        {
+                            Creator.gameDataSo.bestTurn = _consecutiveCaptureAmount;
+                        }
+                        _consecutiveCaptureAmount = 0;
                     }
 
                     if (Creator.playerSystemSo.roomNumberSaved == 9)
@@ -573,7 +584,7 @@ public class ElPlayerSystem : ElDependency
                     Creator.playerSystemSo.moveMadeInNewRoom = false;
                     _xpBarUISystem.SaveLevelNumber();
                     _currentPiece = null;
-                    if (Creator.playerSystemSo.roomNumberSaved == 9)
+                    if (Creator.playerSystemSo.levelNumberSaved != Creator.gameDataSo.finalLevel && Creator.playerSystemSo.roomNumberSaved == 9)
                     {
                         _freeUpgradeSystem.SetFreeRoom();
                         _chainUISystem.Hide();
@@ -681,22 +692,22 @@ public class ElPlayerSystem : ElDependency
                                 }
                                 else
                                 {
-                                    _gameOverUISystem.Show("Captured");
+                                    _gameOverUISystem.Show();
                                 }
                             }
                             else
                             {
-                                _gameOverUISystem.Show("Captured");
+                                _gameOverUISystem.Show();
                             }
                         }
                         else
                         {
-                            _gameOverUISystem.Show("Captured");
+                            _gameOverUISystem.Show();
                         }
                     }
                     else
                     {
-                        _gameOverUISystem.Show("Captured");
+                        _gameOverUISystem.Show();
                     }
                     SetState(States.EndGame);
                 }
@@ -746,7 +757,7 @@ public class ElPlayerSystem : ElDependency
                 }
                 else
                 {
-                    _gameOverUISystem.Show("Timer Expired");
+                    _gameOverUISystem.Show();
                 }
             }
             else
@@ -759,7 +770,7 @@ public class ElPlayerSystem : ElDependency
                 }
                 else
                 {
-                    _gameOverUISystem.Show("Timer Expired");
+                    _gameOverUISystem.Show();
                 }
             }
         }
@@ -774,19 +785,19 @@ public class ElPlayerSystem : ElDependency
                 }
                 catch (Exception)
                 {
-                    _gameOverUISystem.Show("Timer Expired");
+                    _gameOverUISystem.Show();
                 }
             }
             else
             {
-                _gameOverUISystem.Show("Timer Expired");
+                _gameOverUISystem.Show();
             }
             Debug.Log("Reason: "+e.Reason);
         }
         catch (Exception e)
         {
             Debug.LogWarning("Error while checking final score: "+e);
-            _gameOverUISystem.Show("Timer Expired");
+            _gameOverUISystem.Show();
         }
         
     }
@@ -795,6 +806,8 @@ public class ElPlayerSystem : ElDependency
     {
         _moveSpeed = Creator.playerSystemSo.moveSpeed;
         Creator.playerSystemSo.moveMadeInNewRoom = true;
+        Creator.gameDataSo.IncrementPieceUsed(_currentPiece.Value);
+        
         SetState(States.Moving);
             
         TriggerJumpAnimation();

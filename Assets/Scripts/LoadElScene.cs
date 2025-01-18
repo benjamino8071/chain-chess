@@ -26,6 +26,7 @@ public class LoadElScene : MonoBehaviour
     public Lives_SO livesSo;
     public XPBar_SO xpBarSo;
     public GridSystem_SO gridSystemSo;
+    public GameData_SO gameDataSo;
     
     public bool resetCachedDataOnStart;
     private static readonly int Play = Animator.StringToHash("play");
@@ -48,6 +49,7 @@ public class LoadElScene : MonoBehaviour
             shopSo.ResetData();
             livesSo.ResetData();
             xpBarSo.ResetData();
+            gameDataSo.ResetData();
 
             if (!gridSystemSo.useSeedInputOnNextLoad)
             {
