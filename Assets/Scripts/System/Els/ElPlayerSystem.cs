@@ -172,10 +172,10 @@ public class ElPlayerSystem : ElDependency
         if(_upgradeUISystem.ChoosingUpgrade())
             return;
         
-        UpdateValidMoves();
-        
         if(Creator.mainMenuSo.isOtherMainMenuCanvasShowing)
             return;
+        
+        UpdateValidMoves();
         
         switch (_state)
         {
