@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ElChainUISystem : ElDependency
 {
+    private Transform _guiTopChain;
+    
     private Transform _chainParent;
     private Transform _containerChild;
 
@@ -19,7 +21,9 @@ public class ElChainUISystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        _chainParent = elCreator.GetFirstObjectWithName(AllTagNames.ChainParent);
+        _guiTopChain = elCreator.GetFirstObjectWithName(AllTagNames.GUITopChain);
+        
+        _chainParent = elCreator.GetChildObjectByName(_guiTopChain.gameObject, AllTagNames.ChainParent);
         
         _containerChild = _chainParent.GetComponentInChildren<HorizontalLayoutGroup>().transform;
 
@@ -186,5 +190,10 @@ public class ElChainUISystem : ElDependency
     {
         //TODO: Get the 'moves remaining' text working again
         _movesRemainingText.text = "";
+    }
+
+    public void Hide()
+    {
+        _guiTopChain.gameObject.SetActive(false);
     }
 }

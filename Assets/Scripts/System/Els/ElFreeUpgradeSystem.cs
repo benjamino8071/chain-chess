@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Michsky.MUIP;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,12 +8,13 @@ public class ElFreeUpgradeSystem : ElDependency
 {
     private ElXPBarUISystem _xpBarUISystem;
     private ElArtefactsUISystem _artefactsUISystem;
+
+    private Transform _guiPosChange;
     
     private SpriteRenderer _freeItemOne;
     private SpriteRenderer _freeItemTwo;
-
+    
     private Transform _chooseText;
-    private Transform _swapPositionsButton;
 
     private List<ArtefactTypes> _artefactTypes = new()
     {
@@ -31,8 +33,8 @@ public class ElFreeUpgradeSystem : ElDependency
         Piece.Queen,
         Piece.Rook
     };
-
-    private ArtefactTypes _artefactChosen;
+    
+    private List<ArtefactTypes> _artefactsChosen = new();
     private Piece _losPieceChosen;
     
     public override void GameStart(ElCreator elCreator)
@@ -42,6 +44,17 @@ public class ElFreeUpgradeSystem : ElDependency
         _xpBarUISystem = elCreator.GetDependency<ElXPBarUISystem>();
         _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
 
+        _guiPosChange = elCreator.GetFirstObjectWithName(AllTagNames.GUITopFreeRoomPosChange);
+
+        Transform posChangeButtonTf =
+            elCreator.GetChildObjectByName(_guiPosChange.gameObject, AllTagNames.PosChangeButton);
+        ButtonManager posChangeButton = posChangeButtonTf.GetComponent<ButtonManager>();
+        posChangeButton.onClick.AddListener(() =>
+        {
+            if(_freeItemOne.gameObject.activeSelf && _freeItemTwo.gameObject.activeSelf)
+                SwapPositions();
+        });
+        
         Transform freeItems = elCreator.GetFirstObjectWithName(AllTagNames.FreeItems);
 
         Transform freeItemLeft = elCreator.GetChildObjectByName(freeItems.gameObject, AllTagNames.FreeItemLeft);
@@ -53,98 +66,105 @@ public class ElFreeUpgradeSystem : ElDependency
         Transform chooseText = elCreator.GetChildObjectByName(freeItems.gameObject, AllTagNames.Text);
         _chooseText = chooseText;
         
-        Button swapPosButton = freeItems.GetComponentInChildren<Button>();
-        swapPosButton.onClick.AddListener(() =>
-        {
-            if(_freeItemOne.gameObject.activeSelf && _freeItemTwo.gameObject.activeSelf)
-                SwapPositions();
-        });
-        _swapPositionsButton = swapPosButton.transform;
-        
         _freeItemOne.gameObject.SetActive(false);
         _freeItemTwo.gameObject.SetActive(false);
-        _swapPositionsButton.gameObject.SetActive(false);
         _chooseText.gameObject.SetActive(false);
+        
+        HideGuiPosChange();
     }
 
     public void SetFreeRoom()
     {
         _freeItemOne.gameObject.SetActive(true);
         _freeItemTwo.gameObject.SetActive(true);
-        _swapPositionsButton.gameObject.SetActive(true);
         _chooseText.gameObject.SetActive(true);
-        
-        List<ArtefactTypes> artefactTypes = _artefactTypes.ToList();
-        foreach (ArtefactTypes artefactType in Creator.upgradeSo.artefactsChosen)
-        {
-            artefactTypes.Remove(artefactType);
-        }
-        
-        int chosenArtefactIndex = Random.Range(0, artefactTypes.Count);
-        _artefactChosen = artefactTypes[chosenArtefactIndex];
 
-        if (_artefactChosen == ArtefactTypes.EnemyLineOfSight)
+        List<SpriteRenderer> freeItemSprites = new()
         {
-            List<Piece> pieces = _pieces.ToList();
+            _freeItemOne,
+            _freeItemTwo
+        };
 
-            foreach (Piece piece in Creator.upgradeSo.lineOfSightsChosen)
+        foreach (SpriteRenderer freeItemSprite in freeItemSprites)
+        {
+            List<ArtefactTypes> artefactTypes = _artefactTypes.ToList();
+            
+            //This for loop should technically only iterate once
+            foreach (ArtefactTypes artefactTypeInFreeRoom in _artefactsChosen)
             {
-                pieces.Remove(piece);
+                artefactTypes.Remove(artefactTypeInFreeRoom);
             }
             
-            int chosenLosIndex = Random.Range(0, pieces.Count);
-            _losPieceChosen = pieces[chosenLosIndex];
-        }
-        
-        switch (_artefactChosen)
-        {
-            case ArtefactTypes.CaptureKingClearRoom:
-                _freeItemOne.sprite = Creator.upgradeSo.captureKingClearRoomSprite;
-                break;
-            case ArtefactTypes.ConCaptureAttackingEnemy:
-                _freeItemOne.sprite = Creator.upgradeSo.destroyChainStayAliveSprite;
-                break;
-            case ArtefactTypes.EnemyLineOfSight:
-                switch (_losPieceChosen)
-                {
-                    case Piece.Bishop:
-                        _freeItemOne.sprite = Creator.upgradeSo.bishopLosSprite;
-                        break;
-                    case Piece.King:
-                        _freeItemOne.sprite = Creator.upgradeSo.kingLosSprite;
-                        break;
-                    case Piece.Knight:
-                        _freeItemOne.sprite = Creator.upgradeSo.knightLosSprite;
-                        break;
-                    case Piece.Pawn:
-                        _freeItemOne.sprite = Creator.upgradeSo.pawnLosSprite;
-                        break;
-                    case Piece.Queen:
-                        _freeItemOne.sprite = Creator.upgradeSo.queenLosSprite;
-                        break;
-                    case Piece.Rook:
-                        _freeItemOne.sprite = Creator.upgradeSo.rookLosSprite;
-                        break;
-                }
-                break;
-            case ArtefactTypes.UseCapturedPieceStraightAway:
-                _freeItemOne.sprite = Creator.upgradeSo.useCapturedPieceStraightAwaySprite;
-                break;
-        }
+            foreach (ArtefactTypes artefactType in Creator.upgradeSo.artefactsChosen)
+            {
+                artefactTypes.Remove(artefactType);
+            }
+            
+            int chosenArtefactIndex = Random.Range(0, artefactTypes.Count);
+            ArtefactTypes artefactChosen = artefactTypes[chosenArtefactIndex];
 
-        _freeItemTwo.sprite = Creator.upgradeSo.xpLevelUpgradeSprite;
+            if (artefactChosen == ArtefactTypes.EnemyLineOfSight)
+            {
+                List<Piece> pieces = _pieces.ToList();
+
+                foreach (Piece piece in Creator.upgradeSo.lineOfSightsChosen)
+                {
+                    pieces.Remove(piece);
+                }
+                
+                int chosenLosIndex = Random.Range(0, pieces.Count);
+                _losPieceChosen = pieces[chosenLosIndex];
+            }
+            
+            switch (artefactChosen)
+            {
+                case ArtefactTypes.CaptureKingClearRoom:
+                    freeItemSprite.sprite = Creator.upgradeSo.captureKingClearRoomSprite;
+                    break;
+                case ArtefactTypes.ConCaptureAttackingEnemy:
+                    freeItemSprite.sprite = Creator.upgradeSo.destroyChainStayAliveSprite;
+                    break;
+                case ArtefactTypes.EnemyLineOfSight:
+                    switch (_losPieceChosen)
+                    {
+                        case Piece.Bishop:
+                            freeItemSprite.sprite = Creator.upgradeSo.bishopLosSprite;
+                            break;
+                        case Piece.King:
+                            freeItemSprite.sprite = Creator.upgradeSo.kingLosSprite;
+                            break;
+                        case Piece.Knight:
+                            freeItemSprite.sprite = Creator.upgradeSo.knightLosSprite;
+                            break;
+                        case Piece.Pawn:
+                            freeItemSprite.sprite = Creator.upgradeSo.pawnLosSprite;
+                            break;
+                        case Piece.Queen:
+                            freeItemSprite.sprite = Creator.upgradeSo.queenLosSprite;
+                            break;
+                        case Piece.Rook:
+                            freeItemSprite.sprite = Creator.upgradeSo.rookLosSprite;
+                            break;
+                    }
+                    break;
+                case ArtefactTypes.UseCapturedPieceStraightAway:
+                    freeItemSprite.sprite = Creator.upgradeSo.useCapturedPieceStraightAwaySprite;
+                    break;
+            }
+            
+            _artefactsChosen.Add(artefactChosen);
+        }
     }
 
     public bool TryGetFreeItem(Vector3 position)
     {
         if (position == _freeItemOne.transform.position)
         {
-            if (_artefactsUISystem.TryAddArtefact(_artefactChosen, _losPieceChosen))
+            if (_artefactsUISystem.TryAddArtefact(_artefactsChosen[0], _losPieceChosen))
             {
                 _freeItemOne.gameObject.SetActive(false);
                 _freeItemTwo.gameObject.SetActive(false);
                 _chooseText.gameObject.SetActive(false);
-                _swapPositionsButton.gameObject.SetActive(false);
                 return true;
             }
             else
@@ -152,23 +172,35 @@ public class ElFreeUpgradeSystem : ElDependency
                 //ERROR EFFECT FOR HAVING 3 ARTEFACTS IN POSSESSION
             }
         }
-        
-        if (position == _freeItemTwo.transform.position)
+        else if (position == _freeItemTwo.transform.position)
         {
-            //XP LEVEL UPGRADE
-            _xpBarUISystem.UpgradeByFullLevel();
-            
-            _freeItemOne.gameObject.SetActive(false);
-            _freeItemTwo.gameObject.SetActive(false);
-            _chooseText.gameObject.SetActive(false);
-            _swapPositionsButton.gameObject.SetActive(false);
-            return true;
+            if (_artefactsUISystem.TryAddArtefact(_artefactsChosen[1], _losPieceChosen))
+            {
+                _freeItemOne.gameObject.SetActive(false);
+                _freeItemTwo.gameObject.SetActive(false);
+                _chooseText.gameObject.SetActive(false);
+                return true;
+            }
+            else
+            {
+                //ERROR EFFECT FOR HAVING 3 ARTEFACTS IN POSSESSION
+            }
         }
         return false;
     }
 
-    public void SwapPositions()
+    private void SwapPositions()
     {
         (_freeItemTwo.transform.position, _freeItemOne.transform.position) = (_freeItemOne.transform.position, _freeItemTwo.transform.position);
+    }
+
+    public void ShowGuiPosChange()
+    {
+        _guiPosChange.gameObject.SetActive(true);
+    }
+
+    public void HideGuiPosChange()
+    {
+        _guiPosChange.gameObject.SetActive(false);
     }
 }

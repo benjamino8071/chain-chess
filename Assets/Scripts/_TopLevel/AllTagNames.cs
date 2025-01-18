@@ -44,7 +44,7 @@ public enum AllTagNames
     RestartLevel,
     RestartRoom,
     PlayerCapturedText,
-    GUITop,
+    GUITopChain,
     GUIBottom,
     Name,
     Entry,
@@ -84,4 +84,6 @@ public enum AllTagNames
     SettingsButton,
     DoubleTapSwitch,
     AudioSwitch,
+    GUITopFreeRoomPosChange,
+    PosChangeButton,
 }

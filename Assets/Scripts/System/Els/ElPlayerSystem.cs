@@ -576,6 +576,8 @@ public class ElPlayerSystem : ElDependency
                     if (Creator.playerSystemSo.roomNumberSaved == 9)
                     {
                         _freeUpgradeSystem.SetFreeRoom();
+                        _chainUISystem.Hide();
+                        _freeUpgradeSystem.ShowGuiPosChange();
                     }
                     _turnInfoUISystem.ResetPlayerTurnsAmount();
                     SetState(States.DoorWalk);
@@ -1279,13 +1281,11 @@ public class ElPlayerSystem : ElDependency
         if (enemiesCleared)
         {
             _audioSystem.PlayRoomCompleteSfx();
-            //_timerUISystem.StopTimer();
             _doorsSystem.SetRoomDoorsOpen(GetRoomNumber());
         }
         else if (enemyPiece == Piece.King &&
                  Creator.playerSystemSo.artefacts.Contains(ArtefactTypes.CaptureKingClearRoom))
         {
-            //_timerUISystem.StopTimer();
             _destroyEnemyTimer = 0.19f;
             SetState(States.DestroyingAllEnemiesInRoom);
         }

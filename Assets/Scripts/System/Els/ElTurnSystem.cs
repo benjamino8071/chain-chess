@@ -75,8 +75,11 @@ public class ElTurnSystem : ElDependency
     public void ResetPlayerTurnsAmount()
     {
         _playerTurnsRemaining = 0;
-        _playerSystem.SetInvincible(true);
-        _livesUISystem.ShowInvincibleLife(true);
+        if (Creator.playerSystemSo.roomNumberSaved < 9)
+        {
+            _playerSystem.SetInvincible(true);
+            _livesUISystem.ShowInvincibleLife(true);
+        }
     }
 
     public bool HasPlayerHadOneTurn()
