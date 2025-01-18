@@ -6,7 +6,7 @@ using UnityEngine;
 public class ElTimerUISystem : ElDependency
 {
     private ElPlayerSystem _playerSystem;
-    private ElPauseUISystem _pauseUISystem;
+    private ElRunInfoUISystem _runInfoUISystem;
     private ElAudioSystem _audioSystem;
     private ElEnemiesSystem _enemiesSystem;
     private ElArtefactsUISystem _artefactsUISystem;

@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class ElShopSystem : ElDependency
 {
     private ElTimerUISystem _timerUISystem;
-    private ElPauseUISystem _pauseUISystem;
+    private ElRunInfoUISystem _runInfoUISystem;
     private ElAudioSystem _audioSystem;
     private ElArtefactsUISystem _artefactsUISystem;
     
@@ -18,7 +18,7 @@ public class ElShopSystem : ElDependency
         base.GameStart(elCreator);
         
         _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
-        _pauseUISystem = elCreator.GetDependency<ElPauseUISystem>();
+        _runInfoUISystem = elCreator.GetDependency<ElRunInfoUISystem>();
         _audioSystem = elCreator.GetDependency<ElAudioSystem>();
         _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
         
@@ -320,7 +320,7 @@ public class ElShopSystem : ElDependency
                 Creator.shopSo.artefactsSprites[pos].gameObject.SetActive(false);
                 Creator.shopSo.artefactsPositions.Remove(pos);
                 Creator.shopSo.itemsTakenInLevelCount++;
-                _pauseUISystem.UpdateCaptureBonusText();
+                _runInfoUISystem.UpdateCaptureBonusText();
                 return;
             }
         }
@@ -351,8 +351,8 @@ public class ElShopSystem : ElDependency
                 Creator.shopSo.upgradesSprites[pos].gameObject.SetActive(false);
                 Creator.shopSo.upgradesPositions.Remove(pos);
                 Creator.shopSo.itemsTakenInLevelCount++;
-                _pauseUISystem.UpdateCaptureBonusText();
-                _pauseUISystem.ShowUpgradeNotificationImage();
+                _runInfoUISystem.UpdateCaptureBonusText();
+                _runInfoUISystem.ShowUpgradeNotificationImage();
                 return;
             }
         }

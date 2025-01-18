@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class ElScoreEntryUISystem : ElDependency
 {
-    private ElPauseUISystem _pauseUISystem;
+    private ElRunInfoUISystem _runInfoUISystem;
     private ElArtefactsUISystem _artefactsUISystem;
     
     private Transform _scoreEntryUI;
@@ -22,7 +22,7 @@ public class ElScoreEntryUISystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        _pauseUISystem = elCreator.GetDependency<ElPauseUISystem>();
+        _runInfoUISystem = elCreator.GetDependency<ElRunInfoUISystem>();
         _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
 
         _scoreEntryUI = elCreator.GetFirstObjectWithName(AllTagNames.Entry);
@@ -102,7 +102,7 @@ public class ElScoreEntryUISystem : ElDependency
     public void Show(double playerScore)
     {
         _playerScore = playerScore;
-        _pauseUISystem.Hide();
+        _runInfoUISystem.Hide();
         _artefactsUISystem.Hide();
         _scoreEntryUI.gameObject.SetActive(true);
     }

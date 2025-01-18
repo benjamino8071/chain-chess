@@ -2,11 +2,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
-using TMPro;
 using UnityEngine.EventSystems;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
+using TMPro;
 
 namespace Michsky.MUIP
 {
@@ -90,14 +90,24 @@ namespace Michsky.MUIP
         Button targetButton;
         bool isPointerOn;
         bool waitingForDoubleClickInput;
+        const int navHelper = 1; 
 
 #if UNITY_EDITOR
         public bool isPreset;
         public int latestTabIndex = 0;
 #endif
 
-        public enum AnimationSolution { Custom, ScriptBased }
-        public enum RippleUpdateMode { Normal, UnscaledTime }
+        public enum AnimationSolution 
+        { 
+            Custom, 
+            ScriptBased 
+        }
+
+        public enum RippleUpdateMode 
+        { 
+            Normal, 
+            UnscaledTime
+        }
 
         [System.Serializable] public class Padding 
         {
@@ -109,13 +119,13 @@ namespace Michsky.MUIP
 
         void OnEnable()
         {
-            if (isInitialized == false) { Initialize(); }
+            if (!isInitialized) { Initialize(); }
             UpdateUI();
         }
 
         void OnDisable()
         {
-            if (isInteractable == false)
+            if (!isInteractable)
                 return;
 
             if (disabledCG != null) { disabledCG.alpha = 0; }
@@ -128,12 +138,7 @@ namespace Michsky.MUIP
 #if UNITY_EDITOR
             if (!Application.isPlaying) { return; }
 #endif
-            if (animationSolution == AnimationSolution.ScriptBased)
-            {
-                Animator tempAnimator = GetComponent<Animator>();
-                if (tempAnimator != null) { Destroy(tempAnimator); }
-            }
-
+            if (animationSolution == AnimationSolution.ScriptBased && TryGetComponent<Animator>(out var tempAnimator)) { Destroy(tempAnimator); }
             if (gameObject.GetComponent<Image>() == null)
             {
                 Image raycastImg = gameObject.AddComponent<Image>();
@@ -146,10 +151,10 @@ namespace Michsky.MUIP
             if (highlightCG == null) { highlightCG = new GameObject().AddComponent<CanvasGroup>(); highlightCG.gameObject.AddComponent<RectTransform>(); highlightCG.transform.SetParent(transform); highlightCG.gameObject.name = "Highlight"; }
             if (disabledCG == null) { disabledCG = new GameObject().AddComponent<CanvasGroup>(); disabledCG.gameObject.AddComponent<RectTransform>(); disabledCG.transform.SetParent(transform); disabledCG.gameObject.name = "Disabled"; }
 
-            if (useRipple == true && rippleParent != null) { rippleParent.SetActive(false); }
-            else if (useRipple == false && rippleParent != null) { Destroy(rippleParent); }
+            if (useRipple && rippleParent != null) { rippleParent.SetActive(false); }
+            else if (!useRipple && rippleParent != null) { Destroy(rippleParent); }
 
-            if (gameObject.activeInHierarchy) { StartCoroutine("LayoutFix"); }
+            if (gameObject.activeInHierarchy) { StartCoroutine(nameof(LayoutFix)); }
             if (targetButton == null)
             {
                 if (gameObject.GetComponent<Button>() == null) { targetButton = gameObject.AddComponent<Button>(); }
@@ -161,7 +166,7 @@ namespace Michsky.MUIP
                 customNav.mode = Navigation.Mode.None;
                 targetButton.navigation = customNav;
             }
-            if (useUINavigation == true) { AddUINavigation(); }
+            if (useUINavigation) { AddUINavigation(); }
 
             isInitialized = true;
         }
@@ -197,46 +202,45 @@ namespace Michsky.MUIP
             if (normalLayout != null) { normalLayout.padding = new RectOffset(padding.left, padding.right, padding.top, padding.bottom); normalLayout.spacing = spacing; }
             if (highlightedLayout != null) { highlightedLayout.padding = new RectOffset(padding.left, padding.right, padding.top, padding.bottom); highlightedLayout.spacing = spacing; }
 
-            if (normalCG != null && isInteractable == true) { normalCG.alpha = 1; }
-            if (disabledCG != null && isInteractable == false) { disabledCG.alpha = 1; }
+            if (normalCG != null && isInteractable) { normalCG.alpha = 1; }
+            if (disabledCG != null && !isInteractable) { disabledCG.alpha = 1; }
             if (highlightCG != null) { highlightCG.alpha = 0; }
 
-            if (useCustomContent == false)
+            if (!useCustomContent)
             {
-                // Set Text
-                if (enableText == true)
+
+                if (enableText)
                 {
                     if (normalText != null)
                     {
                         normalText.gameObject.SetActive(true);
                         normalText.text = buttonText;
-                        if (useCustomTextSize == false) { normalText.fontSize = textSize; }
+                        if (!useCustomTextSize) { normalText.fontSize = textSize; }
                     }
 
                     if (highlightedText != null)
                     {
                         highlightedText.gameObject.SetActive(true);
                         highlightedText.text = buttonText;
-                        if (useCustomTextSize == false) { highlightedText.fontSize = textSize; }
+                        if (!useCustomTextSize) { highlightedText.fontSize = textSize; }
                     }
 
                     if (disabledText != null)
                     {
                         disabledText.gameObject.SetActive(true);
                         disabledText.text = buttonText;
-                        if (useCustomTextSize == false) { disabledText.fontSize = textSize; }
+                        if (!useCustomTextSize) { disabledText.fontSize = textSize; }
                     }
                 }
 
-                else if (enableText == false)
+                else if (!enableText)
                 {
                     if (normalText != null) { normalText.gameObject.SetActive(false); }
                     if (highlightedText != null) { highlightedText.gameObject.SetActive(false); }
                     if (disabledText != null) { disabledText.gameObject.SetActive(false); }
                 }
 
-                // Set Icon
-                if (enableIcon == true)
+                if (enableIcon)
                 {
                     Vector3 tempScale = new Vector3(iconScale, iconScale, iconScale);
                     if (normalImage != null) { normalImage.transform.parent.gameObject.SetActive(true); normalImage.sprite = buttonIcon; normalImage.transform.localScale = tempScale; }
@@ -253,7 +257,7 @@ namespace Michsky.MUIP
             }
 
 #if UNITY_EDITOR
-            if (Application.isPlaying == false && autoFitContent == true)
+            if (!Application.isPlaying && autoFitContent)
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
                 if (disabledCG != null) { LayoutRebuilder.ForceRebuildLayoutImmediate(disabledCG.GetComponent<RectTransform>()); }
@@ -262,11 +266,11 @@ namespace Michsky.MUIP
             }
 #endif
 
-            if (Application.isPlaying == false || gameObject.activeInHierarchy == false) { return; }
-            if (isInteractable == false) { StartCoroutine("SetDisabled"); }
-            else if (isInteractable == true && disabledCG.alpha == 1) { StartCoroutine("SetNormal"); }
+            if (!Application.isPlaying || !gameObject.activeInHierarchy) { return; }
+            if (!isInteractable) { StartCoroutine(nameof(SetDisabled)); }
+            else if (isInteractable && disabledCG.alpha == 1) { StartCoroutine(nameof(SetNormal)); }
 
-            StartCoroutine("LayoutFix");
+            StartCoroutine(nameof(LayoutFix));
         }
 
         public void SetText(string text) { buttonText = text; UpdateUI(); }
@@ -276,9 +280,9 @@ namespace Michsky.MUIP
         { 
             isInteractable = value;
 
-            if (gameObject.activeInHierarchy == false) { return; }
-            if (isInteractable == false) { StartCoroutine("SetDisabled"); }
-            else if (isInteractable == true && disabledCG.alpha == 1) { StartCoroutine("SetNormal"); }
+            if (!gameObject.activeInHierarchy) { return; }
+            if (!isInteractable) { StartCoroutine(nameof(SetDisabled)); }
+            else if (isInteractable && disabledCG.alpha == 1) { StartCoroutine(nameof(SetNormal)); }
         }
 
         public void AddUINavigation()
@@ -287,11 +291,13 @@ namespace Michsky.MUIP
                 return;
 
             targetButton.transition = Selectable.Transition.None;
-            Navigation customNav = new Navigation();
-            customNav.mode = navigationMode;
+            Navigation customNav = new Navigation
+            {
+                mode = navigationMode
+            };
 
             if (navigationMode == Navigation.Mode.Vertical || navigationMode == Navigation.Mode.Horizontal) { customNav.wrapAround = wrapAround; }
-            else if (navigationMode == Navigation.Mode.Explicit) { StartCoroutine("InitUINavigation", customNav); return; }
+            else if (navigationMode == Navigation.Mode.Explicit) { StartCoroutine(nameof(InitUINavigation), customNav); return; }
 
             targetButton.navigation = customNav;
         }
@@ -327,14 +333,14 @@ namespace Michsky.MUIP
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (isInteractable == false || eventData.button != PointerEventData.InputButton.Left) { return; }
-            if (enableButtonSounds == true && useClickSound == true && soundSource != null) { soundSource.PlayOneShot(clickSound); }
+            if (!isInteractable || eventData.button != PointerEventData.InputButton.Left) { return; }
+            if (enableButtonSounds && useClickSound == true && soundSource != null) { soundSource.PlayOneShot(clickSound); }
 
             // Invoke click actions
             onClick.Invoke();
 
             // Check for double click
-            if (checkForDoubleClick == false || gameObject.activeInHierarchy == false) { return; }
+            if (checkForDoubleClick == false || !gameObject.activeInHierarchy) { return; }
             if (waitingForDoubleClickInput == true)
             {
                 onDoubleClick.Invoke();
@@ -350,12 +356,12 @@ namespace Michsky.MUIP
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (isInteractable == false) { return; }
+            if (!isInteractable) { return; }
 #if UNITY_IOS || UNITY_ANDROID
-            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine("SetHighlight"); }
-            if (useRipple == true)
+            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine(nameof(SetHighlight)); }
+            if (useRipple)
 #else
-            if (useRipple == true && isPointerOn == true)
+            if (useRipple && isPointerOn)
 #endif
 #if ENABLE_LEGACY_INPUT_MANAGER
                 if (targetCanvas != null && (targetCanvas.renderMode == RenderMode.ScreenSpaceCamera || targetCanvas.renderMode == RenderMode.WorldSpace)) { CreateRipple(targetCanvas.worldCamera.ScreenToWorldPoint(Input.mousePosition)); }
@@ -373,15 +379,16 @@ namespace Michsky.MUIP
         public void OnPointerUp(PointerEventData eventData)
         {
 #if UNITY_IOS || UNITY_ANDROID
-            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine("SetNormal"); }
+            if (!isInteractable) { return; }
+            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine(nameof(SetNormal)); }
 #endif
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (isInteractable == false) { return; }
-            if (enableButtonSounds == true && useHoverSound == true && soundSource != null) { soundSource.PlayOneShot(hoverSound); }
-            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine("SetHighlight"); }
+            if (!isInteractable) { return; }
+            if (enableButtonSounds && useHoverSound && soundSource != null) { soundSource.PlayOneShot(hoverSound); }
+            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine(nameof(SetHighlight)); }
          
             isPointerOn = true;
             onHover.Invoke();
@@ -389,8 +396,8 @@ namespace Michsky.MUIP
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (isInteractable == false) { return; }
-            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine("SetNormal"); }
+            if (!isInteractable) { return; }
+            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine(nameof(SetNormal)); }
 
             isPointerOn = false;
             onLeave.Invoke();
@@ -398,22 +405,22 @@ namespace Michsky.MUIP
 
         public void OnSelect(BaseEventData eventData)
         {
-            if (isInteractable == false) { return; }
-            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine("SetHighlight"); }
-            if (useUINavigation == true) { onHover.Invoke(); }
+            if (!isInteractable) { return; }
+            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine(nameof(SetHighlight)); }
+            if (useUINavigation) { onHover.Invoke(); }
         }
 
         public void OnDeselect(BaseEventData eventData)
         {
-            if (isInteractable == false) { return; }
-            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine("SetNormal"); }
-            if (useUINavigation == true) { onLeave.Invoke(); }
+            if (!isInteractable) { return; }
+            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine(nameof(SetNormal)); }
+            if (useUINavigation) { onLeave.Invoke(); }
         }
 
         public void OnSubmit(BaseEventData eventData)
         {
-            if (isInteractable == false) { return; }
-            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine("SetNormal"); }
+            if (!isInteractable) { return; }
+            if (animationSolution == AnimationSolution.ScriptBased) { StartCoroutine(nameof(SetNormal)); }
 
             onClick.Invoke();
         }
@@ -431,8 +438,8 @@ namespace Michsky.MUIP
 
         IEnumerator SetNormal()
         {
-            StopCoroutine("SetHighlight");
-            StopCoroutine("SetDisabled");
+            StopCoroutine(nameof(SetHighlight));
+            StopCoroutine(nameof(SetDisabled));
 
             while (normalCG.alpha < 0.99f)
             {
@@ -449,8 +456,8 @@ namespace Michsky.MUIP
 
         IEnumerator SetHighlight()
         {
-            StopCoroutine("SetNormal");
-            StopCoroutine("SetDisabled");
+            StopCoroutine(nameof(SetNormal));
+            StopCoroutine(nameof(SetDisabled));
 
             while (highlightCG.alpha < 0.99f)
             {
@@ -467,8 +474,8 @@ namespace Michsky.MUIP
 
         IEnumerator SetDisabled()
         {
-            StopCoroutine("SetNormal");
-            StopCoroutine("SetHighlight");
+            StopCoroutine(nameof(SetNormal));
+            StopCoroutine(nameof(SetHighlight));
 
             while (disabledCG.alpha < 0.99f)
             {
@@ -491,11 +498,13 @@ namespace Michsky.MUIP
 
         IEnumerator InitUINavigation(Navigation nav)
         {
-            yield return new WaitForSecondsRealtime(1);
+            yield return new WaitForSecondsRealtime(navHelper);
+
             if (selectOnUp != null) { nav.selectOnUp = selectOnUp.GetComponent<Selectable>(); }
             if (selectOnDown != null) { nav.selectOnDown = selectOnDown.GetComponent<Selectable>(); }
             if (selectOnLeft != null) { nav.selectOnLeft = selectOnLeft.GetComponent<Selectable>(); }
             if (selectOnRight != null) { nav.selectOnRight = selectOnRight.GetComponent<Selectable>(); }
+            
             targetButton.navigation = nav;
         }
     }

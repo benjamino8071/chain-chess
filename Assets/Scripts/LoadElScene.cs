@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class LoadElScene : MonoBehaviour
@@ -11,6 +13,11 @@ public class LoadElScene : MonoBehaviour
     public GameObject loadingScreen;
 
     public TextMeshProUGUI seedText;
+
+    public Animator topTweenOutAnim;
+    public Animator bottomTweenOutAnim;
+
+    public List<GameObject> mainMenuButtons;
     
     public PlayerSystem_SO playerSystemSo;
     public Timer_SO timerSo;
@@ -21,7 +28,10 @@ public class LoadElScene : MonoBehaviour
     public GridSystem_SO gridSystemSo;
     
     public bool resetCachedDataOnStart;
-    
+    private static readonly int Play = Animator.StringToHash("play");
+
+    private float unloadSceneTimer;
+
     private void Start()
     {
         playerSystemSo.firstMoveMadeWhileShowingMainMenu = false;
@@ -55,6 +65,29 @@ public class LoadElScene : MonoBehaviour
         SceneManager.sceneUnloaded += SceneManagerOnsceneUnloaded;
         
         SceneManager.LoadSceneAsync("EndlessScene", LoadSceneMode.Additive);
+    }
+
+    private void Update()
+    {
+        if (unloadSceneTimer > 0)
+        {
+            unloadSceneTimer += Time.deltaTime;
+            //Animations take one second to complete
+            if (unloadSceneTimer >= 1)
+            {
+                SceneManager.UnloadSceneAsync("MainMenuScene");
+            }
+        }
+        else if (playerSystemSo.firstMoveMadeWhileShowingMainMenu)
+        {
+            topTweenOutAnim.SetTrigger(Play);
+            bottomTweenOutAnim.SetTrigger(Play);
+            unloadSceneTimer += Time.deltaTime;
+            foreach (GameObject button in mainMenuButtons)
+            {
+                button.SetActive(false);
+            }
+        }
     }
 
     private void OnDestroy()

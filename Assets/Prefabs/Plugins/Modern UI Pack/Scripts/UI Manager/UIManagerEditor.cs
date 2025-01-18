@@ -10,7 +10,7 @@ namespace Michsky.MUIP
     public class UIManagerEditor : Editor
     {
         GUISkin customSkin;
-        protected static string buildID = "B16-20231120";
+        protected static string buildID = "B16-20241031";
         protected static float foldoutItemSpace = 2;
         protected static float foldoutTopSpace = 5;
         protected static float foldoutBottomSpace = 2;
@@ -540,18 +540,10 @@ namespace Michsky.MUIP
             MUIPEditorHandler.DrawHeader(customSkin, "Support Header", 14);
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Need help? Contact me via:", customSkin.FindStyle("Text"));
+            GUILayout.Label("Need help?", customSkin.FindStyle("Text"));
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
-
-            if (GUILayout.Button("Discord", customSkin.button)) { Discord(); }
-            if (GUILayout.Button("Twitter", customSkin.button)) { Twitter(); }
-
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
-
-            if (GUILayout.Button("E-mail", customSkin.button)) { Email(); }
-
+            if (GUILayout.Button("Contact for support", customSkin.button)) { Email(); }
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
             GUILayout.Space(6);
@@ -564,9 +556,7 @@ namespace Michsky.MUIP
             #endregion
         }
 
-        void Discord() { Application.OpenURL("https://discord.gg/VXpHyUt"); }
         void Email() { Application.OpenURL("https://www.michsky.com/contact/"); }
-        void Twitter() { Application.OpenURL("https://www.twitter.com/michskyHQ"); }
 
         void ResetToDefaults()
         {

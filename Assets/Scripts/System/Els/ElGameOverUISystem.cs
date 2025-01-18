@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ElGameOverUISystem : ElDependency
 {
-    private ElPauseUISystem _pauseUISystem;
+    private ElRunInfoUISystem _runInfoUISystem;
     private ElArtefactsUISystem _artefactsUISystem;
     private ElLivesUISystem _livesUISystem;
     
@@ -19,7 +19,7 @@ public class ElGameOverUISystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        _pauseUISystem = elCreator.GetDependency<ElPauseUISystem>();
+        _runInfoUISystem = elCreator.GetDependency<ElRunInfoUISystem>();
         _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
         _livesUISystem = elCreator.GetDependency<ElLivesUISystem>();
 
@@ -58,7 +58,7 @@ public class ElGameOverUISystem : ElDependency
     {
         _titleText.text = message;
         
-        _pauseUISystem.Hide();
+        _runInfoUISystem.Hide();
         _artefactsUISystem.Hide();
         _restartRoomButton.gameObject.SetActive(showRestartRoom && Creator.livesSo.livesRemaining > 0);
         

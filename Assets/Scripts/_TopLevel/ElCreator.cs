@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class ElCreator : Creator
@@ -17,6 +15,7 @@ public class ElCreator : Creator
     public AudioClips_SO audioClipsSo;
     public Lives_SO livesSo;
     public XPBar_SO upgradeSo;
+    public GameData_SO gameDataSo;
     
     [Header("Prefabs")]
     public GameObject playerPrefab;
@@ -115,7 +114,8 @@ public class ElCreator : Creator
         _dependencies.AddLast(new ElGridSystem());
         _dependencies.AddLast(new ElEnemiesSystem());
         _dependencies.AddLast(new ElUpgradeUISystem());
-        _dependencies.AddLast(new ElPauseUISystem());
+        _dependencies.AddLast(new ElRunInfoUISystem());
+        _dependencies.AddLast(new ElSettingsUISystem());
         _dependencies.AddLast(new ElPlayerSystem());
         _dependencies.AddLast(new ElXPBarUISystem());
         _dependencies.AddLast(new ElGameOverUISystem());

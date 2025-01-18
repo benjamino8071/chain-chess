@@ -80,4 +80,6 @@ public enum AllTagNames
     FreeItems,
     FreeItemLeft,
     FreeItemRight,
+    Settings,
+    SettingsButton,
 }

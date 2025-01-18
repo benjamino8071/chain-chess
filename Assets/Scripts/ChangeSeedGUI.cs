@@ -55,11 +55,18 @@ public class ChangeSeedGUI : MonoBehaviour
     
     public void Show()
     {
-        _currentInput = "";
-        UpdateText(". . .");
-        mainMenuSo.isOtherMainMenuCanvasShowing = true;
-        canvasToShowOnGoBack.gameObject.SetActive(false);
-        changeSeedCanvas.gameObject.SetActive(true);
+        if (changeSeedCanvas.gameObject.activeSelf)
+        {
+            Hide();
+        }
+        else
+        {
+            _currentInput = "";
+            UpdateText(". . . . . .");
+            mainMenuSo.isOtherMainMenuCanvasShowing = true;
+            //canvasToShowOnGoBack.gameObject.SetActive(false);
+            changeSeedCanvas.gameObject.SetActive(true);
+        }
     }
 
     public void Hide()

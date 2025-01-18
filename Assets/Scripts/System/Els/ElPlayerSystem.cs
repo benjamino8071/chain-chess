@@ -21,7 +21,6 @@ public class ElPlayerSystem : ElDependency
     private ElGridSystem _gridSystem;
     private ElEnemiesSystem _enemiesSystem;
     private ElCinemachineSystem _cinemachineSystem;
-    private ElTimerUISystem _timerUISystem;
     private ElChainUISystem _chainUISystem;
     private ElAudioSystem _audioSystem;
     private ElGameOverUISystem _gameOverUISystem;
@@ -89,7 +88,6 @@ public class ElPlayerSystem : ElDependency
         _gridSystem = elCreator.GetDependency<ElGridSystem>();
         _enemiesSystem = elCreator.GetDependency<ElEnemiesSystem>();
         _cinemachineSystem = elCreator.GetDependency<ElCinemachineSystem>();
-        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
         _chainUISystem = elCreator.GetDependency<ElChainUISystem>();
         _audioSystem = elCreator.GetDependency<ElAudioSystem>();
         _gameOverUISystem = elCreator.GetDependency<ElGameOverUISystem>();
@@ -788,14 +786,11 @@ public class ElPlayerSystem : ElDependency
             
             if (!Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu)
             {
-                if(SceneManager.sceneCount > 1)
-                    SceneManager.UnloadSceneAsync("MainMenuScene");
                 Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu = true;
             }
             
             _jumpPosition = positionRequested;
             _moveSpeed = Creator.playerSystemSo.moveSpeed;
-            //_timerUISystem.StartTimer();
             Creator.playerSystemSo.moveMadeInNewRoom = true;
             SetState(States.Moving);
             
@@ -850,14 +845,11 @@ public class ElPlayerSystem : ElDependency
                     
                 if (!Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu)
                 {
-                    if(SceneManager.sceneCount > 1)
-                        SceneManager.UnloadSceneAsync("MainMenuScene");
                     Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu = true;
                 }
                 
                 _jumpPosition = positionRequested;
                 _moveSpeed = Creator.playerSystemSo.moveSpeed;
-                //_timerUISystem.StartTimer();
                 Creator.playerSystemSo.moveMadeInNewRoom = true;
                 SetState(States.Moving);
                 

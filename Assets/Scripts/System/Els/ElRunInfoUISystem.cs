@@ -1,16 +1,19 @@
+using Michsky.MUIP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class ElPauseUISystem : ElDependency
+public class ElRunInfoUISystem : ElDependency
 {
     private ElPlayerSystem _playerSystem;
     
-    private Transform _pauseGUI;
+    private Transform _runInfoGUI;
 
     private GameObject _upgradeNotificationImage;
 
-    private Button _pauseButton;
+    private ButtonManager _backButton;
+    
+    private ButtonManager _runInfoButton;
 
     private PauseUITextInfo _pauseUITextInfo;
 
@@ -22,28 +25,29 @@ public class ElPauseUISystem : ElDependency
         
         _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
 
-        _pauseGUI = elCreator.GetFirstObjectWithName(AllTagNames.Pause);
+        _runInfoGUI = elCreator.GetFirstObjectWithName(AllTagNames.Pause);
         
-        _pauseUITextInfo = _pauseGUI.GetComponentInChildren<PauseUITextInfo>();
+        _pauseUITextInfo = _runInfoGUI.GetComponentInChildren<PauseUITextInfo>();
 
-        Transform exitButtonTf = elCreator.GetChildObjectByName(_pauseGUI.gameObject, AllTagNames.Exit);
-
-        Button exitButton = exitButtonTf.GetComponent<Button>();
-        exitButton.onClick.AddListener(() =>
+        Transform exitButtonTf = elCreator.GetChildObjectByName(_runInfoGUI.gameObject, AllTagNames.Exit);
+        
+        _backButton = exitButtonTf.GetComponent<ButtonManager>();
+        _backButton.onClick.AddListener(() =>
         {
-            SceneManager.LoadScene("MainMenuScene");
+            Hide();
+            _playerSystem.SetState(ElPlayerSystem.States.Idle);
         });
 
-        Transform pauseButton = elCreator.GetFirstObjectWithName(AllTagNames.PauseButton);
-        _pauseButton = pauseButton.GetComponent<Button>();
+        Transform runInfoButton = elCreator.GetFirstObjectWithName(AllTagNames.PauseButton);
+        _runInfoButton = runInfoButton.GetComponent<ButtonManager>();
 
         Transform upgradeNotificationImage =
-            elCreator.GetChildObjectByName(pauseButton.gameObject, AllTagNames.Notification);
+            elCreator.GetChildObjectByName(runInfoButton.gameObject, AllTagNames.Notification);
         _upgradeNotificationImage = upgradeNotificationImage.gameObject;
         
-        _pauseButton.onClick.AddListener(() =>
+        _runInfoButton.onClick.AddListener(() =>
         {
-            if (!_pauseGUI.gameObject.activeSelf)
+            if (!_runInfoGUI.gameObject.activeSelf)
             {
                 Show();
                 _playerSystem.SetState(ElPlayerSystem.States.WaitingForTurn);
@@ -63,12 +67,12 @@ public class ElPauseUISystem : ElDependency
 
     public override void GameEarlyUpdate(float dt)
     {
-        _pauseButton.gameObject.SetActive(_pauseGUI.gameObject.activeSelf || _playerSystem.GetState() == ElPlayerSystem.States.Idle);
+        _runInfoButton.gameObject.SetActive(_runInfoGUI.gameObject.activeSelf || _playerSystem.GetState() == ElPlayerSystem.States.Idle);
     }
 
     public void Show()
     {
-        _pauseGUI.gameObject.SetActive(true);
+        _runInfoGUI.gameObject.SetActive(true);
         HideUpgradeNotificationImage();
     }
 
@@ -84,7 +88,7 @@ public class ElPauseUISystem : ElDependency
 
     public void Hide()
     {
-        _pauseGUI.gameObject.SetActive(false);
+        _runInfoGUI.gameObject.SetActive(false);
     }
     
     public void UpdateCaptureBonusText()

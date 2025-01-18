@@ -9,7 +9,7 @@ public class ElUpgradeUISystem : ElDependency
 {
     private ElXPBarUISystem _xpBarUISystem;
     private ElPlayerSystem _playerSystem;
-    private ElPauseUISystem _pauseUISystem;
+    private ElRunInfoUISystem _runInfoUISystem;
     private ElArtefactsUISystem _artefactsUISystem;
     
     private Transform _upgradeUI;
@@ -69,7 +69,7 @@ public class ElUpgradeUISystem : ElDependency
         base.GameStart(elCreator);
 
         _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
-        _pauseUISystem = elCreator.GetDependency<ElPauseUISystem>();
+        _runInfoUISystem = elCreator.GetDependency<ElRunInfoUISystem>();
         _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
         
         _upgradeUI = elCreator.GetFirstObjectWithName(AllTagNames.Upgrade);
@@ -219,8 +219,8 @@ public class ElUpgradeUISystem : ElDependency
         {
             case UpgradeTypes.IncreaseBaseMultiplierAmount:
                 Creator.upgradeSo.baseMultiplier += 1;
-                _pauseUISystem.UpdateBaseMultiplierText();
-                _pauseUISystem.ShowUpgradeNotificationImage();
+                _runInfoUISystem.UpdateBaseMultiplierText();
+                _runInfoUISystem.ShowUpgradeNotificationImage();
                 break;
             case UpgradeTypes.IncreasePromotionXPGain:
                 List<Piece> promoPieces = Creator.upgradeSo.promotionXPGain.Keys.ToList();
@@ -236,8 +236,8 @@ public class ElUpgradeUISystem : ElDependency
                 {
                     Creator.upgradeSo.capturePieceXPGain[piece] += 1;
                 }
-                _pauseUISystem.UpdateCaptureBonusText();
-                _pauseUISystem.ShowUpgradeNotificationImage();
+                _runInfoUISystem.UpdateCaptureBonusText();
+                _runInfoUISystem.ShowUpgradeNotificationImage();
                 break;
         }
         _upgradeSelectedPlayer.PlayFeedbacks();
