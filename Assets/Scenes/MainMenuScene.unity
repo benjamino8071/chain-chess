@@ -6139,6 +6139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreboardGUI: {fileID: 1368535758}
   onlineConnectionStatusText: {fileID: 1438767279}
+  scoreboardSo: {fileID: 11400000, guid: 2ded709ebd9b23e47a7d83fa125b879f, type: 2}
 --- !u!114 &1368535760
 MonoBehaviour:
   m_ObjectHideFlags: 0

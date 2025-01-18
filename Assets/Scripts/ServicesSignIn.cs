@@ -10,31 +10,36 @@ public class ServicesSignIn : MonoBehaviour
     public ScoreboardGUI scoreboardGUI;
 
     public TextMeshProUGUI onlineConnectionStatusText;
+
+    public Scoreboard_SO scoreboardSo;
     
     private async void Awake()
     {
-        try
+        if (scoreboardSo.useScoreboard)
         {
-            if (UnityServices.Instance.State == ServicesInitializationState.Uninitialized)
+            try
             {
-                await UnityServices.InitializeAsync();
-            }
+                if (UnityServices.Instance.State == ServicesInitializationState.Uninitialized)
+                {
+                    await UnityServices.InitializeAsync();
+                }
             
-            if (!AuthenticationService.Instance.IsSignedIn)
-            {
+                if (!AuthenticationService.Instance.IsSignedIn)
+                {
 
-                await SignInAnonymously();
+                    await SignInAnonymously();
+                }
+                else
+                {
+                    onlineConnectionStatusText.text = "You are Online";
+                    scoreboardGUI.ShowScoreboardButton();
+                }
             }
-            else
+            catch (Exception e)
             {
-                onlineConnectionStatusText.text = "You are Online";
-                scoreboardGUI.ShowScoreboardButton();
+                onlineConnectionStatusText.text = "You are Offline";
+                Debug.LogWarning("Could not connect to Authentication Service. Error: "+e);
             }
-        }
-        catch (Exception e)
-        {
-            onlineConnectionStatusText.text = "You are Offline";
-            Debug.LogWarning("Could not connect to Authentication Service. Error: "+e);
         }
     }
     

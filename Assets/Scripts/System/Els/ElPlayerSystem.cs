@@ -644,11 +644,18 @@ public class ElPlayerSystem : ElDependency
 
                     if (_livesUISystem.IsDead())
                     {
-                        if (AuthenticationService.Instance is not null)
+                        if (Creator.scoreboardSo.useScoreboard)
                         {
-                            if (AuthenticationService.Instance.IsSignedIn)
+                            if (AuthenticationService.Instance is not null)
                             {
-                                CheckScore();
+                                if (AuthenticationService.Instance.IsSignedIn)
+                                {
+                                    CheckScore();
+                                }
+                                else
+                                {
+                                    _gameOverUISystem.Show("Captured", false);
+                                }
                             }
                             else
                             {
