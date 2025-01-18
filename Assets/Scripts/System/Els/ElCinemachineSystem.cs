@@ -104,7 +104,7 @@ public class ElCinemachineSystem : ElDependency
             }
         }
 
-        if (_isDraggingCamera && _playerSystem.GetState() == ElPlayerSystem.States.Idle)
+        if (_isDraggingCamera && _playerSystem.GetState() == ElPlayerSystem.States.Idle && Creator.cinemachineSo.enableCameraDrag)
         {
             float mousePosYCurrFrame = Input.mousePosition.y;
             float yValueChange = mousePosYCurrFrame - _mousePosYLastFrame;

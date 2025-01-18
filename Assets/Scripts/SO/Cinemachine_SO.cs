@@ -5,4 +5,6 @@ public class Cinemachine_SO : ScriptableObject
 {
     public float mobileVerticalFOV;
     public float desktopVerticalFOV;
+
+    public bool enableCameraDrag;
 }

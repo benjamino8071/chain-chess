@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52fff6460f67b5f4580b392e60ee022a, type: 3}
   m_Name: GameData_SO
   m_EditorClassIdentifier: 
-  numOfRoomsToBeat: 40
+  numOfRoomsToBeat: 20
+  finalLevel: 1
+  roomsEntered: 0
+  piecesCaptured: 0
+  bestTurn: 0
+  chainCompletes: 0
+  seedUsed: 0
+  capturedByPiece: 2

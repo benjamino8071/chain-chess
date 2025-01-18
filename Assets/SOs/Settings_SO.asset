@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9293f41daf5771740a576d95e8399663, type: 3}
   m_Name: Settings_SO
   m_EditorClassIdentifier: 
-  doubleTap: 1
+  doubleTap: 0
   sound: 1
