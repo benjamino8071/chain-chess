@@ -12,8 +12,13 @@ public class ElSettingsUISystem : ElDependency
 
     private ButtonManager _newRunButton;
 
+    private SwitchManager _doubleTapSwitch;
+    private SwitchManager _audioSwitch;
+
     public override void GameStart(ElCreator elCreator)
     {
+        base.GameStart(elCreator);
+        
         _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
         
         _settingsGUI = elCreator.GetFirstObjectWithName(AllTagNames.Settings);
@@ -28,6 +33,10 @@ public class ElSettingsUISystem : ElDependency
             {
                 Show();
                 _playerSystem.SetState(ElPlayerSystem.States.WaitingForTurn);
+                if (elCreator.settingsSo.doubleTap)
+                {
+                    _playerSystem.UnSetPositionRequested();
+                }
             }
             else
             {
@@ -50,6 +59,41 @@ public class ElSettingsUISystem : ElDependency
                 _newRunButton.SetText("Confirm");
             }
         });
+
+        Transform doubleTapSwitchTf =
+            elCreator.GetChildObjectByName(_settingsGUI.gameObject, AllTagNames.DoubleTapSwitch);
+
+        _doubleTapSwitch = doubleTapSwitchTf.GetComponent<SwitchManager>();
+        _doubleTapSwitch.onValueChanged.AddListener((isOn) =>
+        {
+            elCreator.settingsSo.doubleTap = isOn;
+        });
+
+        if (elCreator.settingsSo.doubleTap)
+        {
+            _doubleTapSwitch.SetOn();
+        }
+        else
+        {
+            _doubleTapSwitch.SetOff();
+        }
+        
+        Transform audioSwitchTf = elCreator.GetChildObjectByName(_settingsGUI.gameObject, AllTagNames.AudioSwitch);
+
+        _audioSwitch = audioSwitchTf.GetComponent<SwitchManager>();
+        _audioSwitch.onValueChanged.AddListener((isOn) =>
+        { 
+            elCreator.settingsSo.sound = isOn;
+        });
+        
+        if (elCreator.settingsSo.sound)
+        {
+            _audioSwitch.SetOn();
+        }
+        else
+        {
+            _audioSwitch.SetOff();
+        }
         
         Hide();
     }

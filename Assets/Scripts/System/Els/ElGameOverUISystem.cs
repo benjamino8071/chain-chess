@@ -7,13 +7,12 @@ public class ElGameOverUISystem : ElDependency
 {
     private ElRunInfoUISystem _runInfoUISystem;
     private ElArtefactsUISystem _artefactsUISystem;
-    private ElLivesUISystem _livesUISystem;
     
     private Transform _gameOverUI;
 
-    private TextMeshProUGUI _titleText;
+    private Button _exitButton;
 
-    private Button _restartRoomButton;
+    private TextMeshProUGUI _titleText;
     
     public override void GameStart(ElCreator elCreator)
     {
@@ -21,46 +20,28 @@ public class ElGameOverUISystem : ElDependency
 
         _runInfoUISystem = elCreator.GetDependency<ElRunInfoUISystem>();
         _artefactsUISystem = elCreator.GetDependency<ElArtefactsUISystem>();
-        _livesUISystem = elCreator.GetDependency<ElLivesUISystem>();
 
         _gameOverUI = elCreator.GetFirstObjectWithName(AllTagNames.GameOver);
 
         Transform titleText = elCreator.GetFirstObjectWithName(AllTagNames.PlayerCapturedText);
         _titleText = titleText.GetComponent<TextMeshProUGUI>();
-        
-        Button[] buttons = _gameOverUI.GetComponentsInChildren<Button>();
-        foreach (Button button in buttons)
-        {
-            TagName tagName = button.GetComponent<TagName>();
-            
-            switch (tagName.tagName)
-            {
-                case AllTagNames.RestartRoom:
-                    _restartRoomButton = button;
-                    _restartRoomButton.onClick.AddListener(() =>
-                    {
-                        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                    });
-                    break;
-                case AllTagNames.Exit:
-                    button.onClick.AddListener(() =>
-                    {
-                        SceneManager.LoadScene("MainMenuScene");
-                    });
-                    break;
-            }
-        }
 
+        Transform exitButtonTf = elCreator.GetChildObjectByName(_gameOverUI.gameObject, AllTagNames.Exit);
+
+        _exitButton = exitButtonTf.GetComponent<Button>();
+        _exitButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene("MainMenuScene");
+        });
         Hide();
     }
 
-    public void Show(string message, bool showRestartRoom)
+    public void Show(string message)
     {
         _titleText.text = message;
         
         _runInfoUISystem.Hide();
         _artefactsUISystem.Hide();
-        _restartRoomButton.gameObject.SetActive(showRestartRoom && Creator.livesSo.livesRemaining > 0);
         
         _gameOverUI.gameObject.SetActive(true);
     }

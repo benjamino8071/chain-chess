@@ -7,8 +7,8 @@ using UnityEngine.InputSystem;
 
 public class ElCinemachineSystem : ElDependency
 {
-    private ElTimerUISystem _timerUISystem;
-
+    private ElPlayerSystem _playerSystem;
+    
     private Transform _cameraStateMachine;
     
     private Animator _animator;
@@ -21,7 +21,7 @@ public class ElCinemachineSystem : ElDependency
     {
         base.GameStart(elCreator);
 
-        _timerUISystem = elCreator.GetDependency<ElTimerUISystem>();
+        _playerSystem = elCreator.GetDependency<ElPlayerSystem>();
 
         _cameraStateMachine = elCreator.GetFirstObjectWithName(AllTagNames.CameraStateMachine);
 
@@ -104,7 +104,7 @@ public class ElCinemachineSystem : ElDependency
             }
         }
 
-        if (_isDraggingCamera)
+        if (_isDraggingCamera && _playerSystem.GetState() == ElPlayerSystem.States.Idle)
         {
             float mousePosYCurrFrame = Input.mousePosition.y;
             float yValueChange = mousePosYCurrFrame - _mousePosYLastFrame;

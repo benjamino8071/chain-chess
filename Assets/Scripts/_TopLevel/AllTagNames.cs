@@ -82,4 +82,6 @@ public enum AllTagNames
     FreeItemRight,
     Settings,
     SettingsButton,
+    DoubleTapSwitch,
+    AudioSwitch,
 }

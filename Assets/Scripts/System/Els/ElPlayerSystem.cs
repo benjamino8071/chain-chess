@@ -44,6 +44,7 @@ public class ElPlayerSystem : ElDependency
     private List<Transform> _validPositionsVisuals = new(64);
     
     private Vector3 _jumpPosition;
+    private Vector3 _positionRequested = Vector3.zero;
 
     private Animator _playerAnimator;
     private SpriteRenderer _playerSprite;
@@ -278,7 +279,33 @@ public class ElPlayerSystem : ElDependency
                 
                 if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
                 {
-                    UpdatePlayerPosition();
+                    if (Creator.settingsSo.doubleTap)
+                    {
+                        if (_positionRequested == Vector3.zero)
+                        {
+                            SetPositionRequested();
+                        }
+                        else if(_positionRequested == _gridSystem.GetHighlightPosition())
+                        {
+                            _jumpPosition = _positionRequested;
+                            MovePlayer();
+                            UnSetPositionRequested();
+                        }
+                        else
+                        {
+                            UnSetPositionRequested();
+                        }
+                    }
+                    else
+                    {
+                        SetPositionRequested();
+                        if (_positionRequested != Vector3.zero)
+                        {
+                            _jumpPosition = _positionRequested;
+                            MovePlayer();
+                            UnSetPositionRequested();
+                        }
+                    }
                 }
                 break;
             case States.Moving:
@@ -652,22 +679,22 @@ public class ElPlayerSystem : ElDependency
                                 }
                                 else
                                 {
-                                    _gameOverUISystem.Show("Captured", false);
+                                    _gameOverUISystem.Show("Captured");
                                 }
                             }
                             else
                             {
-                                _gameOverUISystem.Show("Captured", false);
+                                _gameOverUISystem.Show("Captured");
                             }
                         }
                         else
                         {
-                            _gameOverUISystem.Show("Captured", false);
+                            _gameOverUISystem.Show("Captured");
                         }
                     }
                     else
                     {
-                        _gameOverUISystem.Show("Captured", true);
+                        _gameOverUISystem.Show("Captured");
                     }
                     SetState(States.EndGame);
                 }
@@ -717,7 +744,7 @@ public class ElPlayerSystem : ElDependency
                 }
                 else
                 {
-                    _gameOverUISystem.Show("Timer Expired", false);
+                    _gameOverUISystem.Show("Timer Expired");
                 }
             }
             else
@@ -730,7 +757,7 @@ public class ElPlayerSystem : ElDependency
                 }
                 else
                 {
-                    _gameOverUISystem.Show("Timer Expired", false);
+                    _gameOverUISystem.Show("Timer Expired");
                 }
             }
         }
@@ -745,21 +772,31 @@ public class ElPlayerSystem : ElDependency
                 }
                 catch (Exception)
                 {
-                    _gameOverUISystem.Show("Timer Expired", false);
+                    _gameOverUISystem.Show("Timer Expired");
                 }
             }
             else
             {
-                _gameOverUISystem.Show("Timer Expired", false);
+                _gameOverUISystem.Show("Timer Expired");
             }
             Debug.Log("Reason: "+e.Reason);
         }
         catch (Exception e)
         {
             Debug.LogWarning("Error while checking final score: "+e);
-            _gameOverUISystem.Show("Timer Expired", false);
+            _gameOverUISystem.Show("Timer Expired");
         }
         
+    }
+
+    private void MovePlayer()
+    {
+        _moveSpeed = Creator.playerSystemSo.moveSpeed;
+        Creator.playerSystemSo.moveMadeInNewRoom = true;
+        SetState(States.Moving);
+            
+        TriggerJumpAnimation();
+        _audioSystem.PlayerPieceMoveSfx(1);
     }
 
     private void CheckDefiniteMoves(Piece piece, List<Vector3> pieceMoves, Vector3 positionRequested)
@@ -789,13 +826,8 @@ public class ElPlayerSystem : ElDependency
                 Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu = true;
             }
             
-            _jumpPosition = positionRequested;
-            _moveSpeed = Creator.playerSystemSo.moveSpeed;
-            Creator.playerSystemSo.moveMadeInNewRoom = true;
-            SetState(States.Moving);
-            
-            TriggerJumpAnimation();
-            _audioSystem.PlayerPieceMoveSfx(1);
+            _positionRequested = positionRequested;
+            break;
         }
     }
 
@@ -848,13 +880,7 @@ public class ElPlayerSystem : ElDependency
                     Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu = true;
                 }
                 
-                _jumpPosition = positionRequested;
-                _moveSpeed = Creator.playerSystemSo.moveSpeed;
-                Creator.playerSystemSo.moveMadeInNewRoom = true;
-                SetState(States.Moving);
-                
-                TriggerJumpAnimation();
-                _audioSystem.PlayerPieceMoveSfx(1);
+                _positionRequested = positionRequested;
                 
                 foundSpot = true;
                 break;
@@ -864,7 +890,7 @@ public class ElPlayerSystem : ElDependency
         }
     }
     
-    private void UpdatePlayerPosition()
+    private void SetPositionRequested()
     {
         Vector3 positionRequested = _gridSystem.GetHighlightPosition();
         
@@ -968,6 +994,11 @@ public class ElPlayerSystem : ElDependency
         }
     }
     
+    public void UnSetPositionRequested()
+    {
+        _positionRequested = Vector3.zero;
+    }
+    
     private List<Vector3> CheckValidDefiniteMoves(List<Vector3> moves)
     {
         List<Vector3> validMoves = new();
@@ -1020,7 +1051,14 @@ public class ElPlayerSystem : ElDependency
     private void UpdateValidMoves()
     {
         if(_state != States.Idle || _currentPiece is null) return;
-        
+
+        if (_positionRequested != Vector3.zero && Creator.settingsSo.doubleTap)
+        {
+            _validPositionsVisuals[0].position = _positionRequested;
+            _validPositionsVisuals[0].gameObject.SetActive(true);
+            return;
+        }
+                
         Piece piece = _currentPiece.Value;
         List<Vector3> validMoves = new();
         switch (piece)

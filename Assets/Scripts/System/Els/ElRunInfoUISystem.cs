@@ -51,6 +51,10 @@ public class ElRunInfoUISystem : ElDependency
             {
                 Show();
                 _playerSystem.SetState(ElPlayerSystem.States.WaitingForTurn);
+                if (Creator.settingsSo.doubleTap)
+                {
+                    _playerSystem.UnSetPositionRequested();
+                }
             }
             else
             {

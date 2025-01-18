@@ -16,6 +16,7 @@ public class ElCreator : Creator
     public Lives_SO livesSo;
     public XPBar_SO upgradeSo;
     public GameData_SO gameDataSo;
+    public Settings_SO settingsSo;
     
     [Header("Prefabs")]
     public GameObject playerPrefab;
