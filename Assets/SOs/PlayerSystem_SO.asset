@@ -24,11 +24,11 @@ MonoBehaviour:
   invincibleEffectMaterial: {fileID: 2100000, guid: 39bec7e689318b340977712092545dfe, type: 2}
   superInvincibleEffectMaterial: {fileID: 2100000, guid: 95c4b3e7bfbde5047a296a98a8326756, type: 2}
   levelNumberSaved: 0
-  xValueToStartOn: 5.5
-  roomNumberSaved: 0
-  firstMoveMadeWhileShowingMainMenu: 0
-  moveMadeInNewRoom: 0
-  startingPiece: 5
+  xValueToStartOn: 6.5
+  roomNumberSaved: 9
+  firstMoveMadeWhileShowingMainMenu: 1
+  moveMadeInNewRoom: 1
+  startingPiece: 4
   artefacts: 
   lineOfSightsChosen: 
   allowPlayerToChoosePromotion: 0

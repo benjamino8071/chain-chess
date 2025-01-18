@@ -1,4 +1,5 @@
 using Michsky.MUIP;
+using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -84,15 +85,25 @@ public class ElSettingsUISystem : ElDependency
         _audioSwitch.onValueChanged.AddListener((isOn) =>
         { 
             elCreator.settingsSo.sound = isOn;
+            if (isOn)
+            {
+                MMSoundManager.Instance.UnmuteMaster();
+            }
+            else
+            {
+                MMSoundManager.Instance.MuteMaster();
+            }
         });
         
         if (elCreator.settingsSo.sound)
         {
             _audioSwitch.SetOn();
+            MMSoundManager.Instance.UnmuteMaster();
         }
         else
         {
             _audioSwitch.SetOff();
+            MMSoundManager.Instance.MuteMaster();
         }
         
         Hide();

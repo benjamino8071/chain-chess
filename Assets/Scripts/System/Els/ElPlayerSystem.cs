@@ -33,6 +33,7 @@ public class ElPlayerSystem : ElDependency
     private ElUpgradeUISystem _upgradeUISystem;
     private ElFreeUpgradeSystem _freeUpgradeSystem;
     private ElLivesUISystem _livesUISystem;
+    private ElPlayerWonUISystem _playerWonUISystem;
 
     private ElPromoUIController _promoUIController;
     
@@ -103,6 +104,7 @@ public class ElPlayerSystem : ElDependency
         _upgradeUISystem = elCreator.GetDependency<ElUpgradeUISystem>();
         _freeUpgradeSystem = elCreator.GetDependency<ElFreeUpgradeSystem>();
         _livesUISystem = elCreator.GetDependency<ElLivesUISystem>();
+        _playerWonUISystem = elCreator.GetDependency<ElPlayerWonUISystem>();
         
         _currentRoomStartPiece = Creator.playerSystemSo.startingPiece;
         _roomNumber = Creator.playerSystemSo.roomNumberSaved;
@@ -716,13 +718,28 @@ public class ElPlayerSystem : ElDependency
                 //Wait 1 second before we load the next level
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
-                    Creator.shopSo.ResetData();
-                    Creator.enemySo.ResetData();
-                    Creator.playerSystemSo.levelNumberSaved++;
-                    Creator.playerSystemSo.roomNumberSaved = 0;
-                    Creator.playerSystemSo.startingPiece = _currentPiece.Value;
+                    if (Creator.playerSystemSo.levelNumberSaved == Creator.gameDataSo.finalLevel)
+                    {
+                        Creator.gameDataSo.roomsEntered = Creator.playerSystemSo.levelNumberSaved * 10 +
+                                                          Creator.playerSystemSo.roomNumberSaved + 1;
+                        //piecesCaptured is managed throughout run
+                        //bestTurn is managed throughout run
+                        //chainCompletes is managed throughout run
+                        //most used piece is managed throughout run
+                        Creator.gameDataSo.seedUsed = Creator.gridSystemSo.seed;
+                        _playerWonUISystem.Show();
+                        SetState(States.EndGame);
+                    }
+                    else
+                    {
+                        Creator.shopSo.ResetData();
+                        Creator.enemySo.ResetData();
+                        Creator.playerSystemSo.levelNumberSaved++;
+                        Creator.playerSystemSo.roomNumberSaved = 0;
+                        Creator.playerSystemSo.startingPiece = _currentPiece.Value;
                     
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                    }
                 }
                 break;
             case States.EndGame:

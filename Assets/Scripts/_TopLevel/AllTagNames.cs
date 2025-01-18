@@ -86,4 +86,5 @@ public enum AllTagNames
     AudioSwitch,
     GUITopFreeRoomPosChange,
     PosChangeButton,
+    PlayerWon
 }

@@ -120,6 +120,7 @@ public class ElCreator : Creator
         _dependencies.AddLast(new ElPlayerSystem());
         _dependencies.AddLast(new ElXPBarUISystem());
         _dependencies.AddLast(new ElGameOverUISystem());
+        _dependencies.AddLast(new ElPlayerWonUISystem());
         _dependencies.AddLast(new ElScoreEntryUISystem());
         _dependencies.AddLast(new ElTimerUISystem());
         _dependencies.AddLast(new ElLivesUISystem());
