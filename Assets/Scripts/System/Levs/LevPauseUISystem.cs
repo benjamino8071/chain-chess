@@ -18,9 +18,9 @@ public class LevPauseUISystem : LevDependency
 
         _playerSystem = levCreator.GetDependency<LevPlayerSystem>();
         
-        _pauseGUI = GameObject.FindWithTag("Pause").transform;
+        _pauseGUI = levCreator.GetFirstObjectWithName(AllTagNames.Pause).transform;
         
-        _pauseButton = GameObject.FindWithTag("PauseButton").GetComponent<Button>();
+        _pauseButton = levCreator.GetFirstObjectWithName(AllTagNames.PauseButton).GetComponent<Button>();
         _pauseButton.onClick.AddListener(() =>
         {
             if (!_pauseGUI.gameObject.activeSelf)
@@ -35,26 +35,21 @@ public class LevPauseUISystem : LevDependency
             }
         });
 
-        Button[] buttons = _pauseGUI.GetComponentsInChildren<Button>();
-        foreach (Button button in buttons)
+        Transform resetButtonTf = levCreator.GetChildObjectByName(_pauseGUI.gameObject, AllTagNames.ResetButton);
+        Button resetButton = resetButtonTf.GetComponent<Button>();
+        resetButton.onClick.AddListener(() =>
         {
-            if (button.CompareTag("ResetButton"))
-            {
-                button.onClick.AddListener(() =>
-                {
-                    Creator.playerSystemSo.startingPiece = Piece.NotChosen;
+            Creator.playerSystemSo.startingPiece = Piece.NotChosen;
         
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                });
-            }
-            else if (button.CompareTag("Exit"))
-            {
-                button.onClick.AddListener(() =>
-                {
-                    SceneManager.LoadScene("MainMenuScene");
-                });
-            }
-        }
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        });
+        
+        Transform exitButtonTf = levCreator.GetChildObjectByName(_pauseGUI.gameObject, AllTagNames.Exit);
+        Button exitButton = exitButtonTf.GetComponent<Button>();
+        exitButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene("MainMenuScene");
+        });
         
         Hide();
     }

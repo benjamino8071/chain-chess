@@ -13,8 +13,8 @@ public class LevDoorsSystem : LevDependency
     {
         base.GameStart(levCreator);
 
-        GameObject[] doorPositions = GameObject.FindGameObjectsWithTag("DoorPosition");
-        foreach (GameObject doorPosition in doorPositions)
+        List<Transform> doorPositions = levCreator.GetObjectsByName(AllTagNames.DoorPosition);
+        foreach (Transform doorPosition in doorPositions)
         {
             SingleDoorPosition singleDoorPosition = doorPosition.GetComponent<SingleDoorPosition>();
             if (_roomDoors.TryGetValue(singleDoorPosition.roomNumber, out Dictionary<int, List<SingleDoorPosition>> doorNumbers))

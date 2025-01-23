@@ -130,9 +130,10 @@ GameObject:
   - component: {fileID: 854535}
   - component: {fileID: 854534}
   - component: {fileID: 854533}
+  - component: {fileID: 854536}
   m_Layer: 0
   m_Name: State-Driven Camera
-  m_TagString: CameraStateMachine
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -224,6 +225,10 @@ MonoBehaviour:
     HashOfParent: 756556552
   - Hash: 533282942
     HashOfParent: 756556552
+  - Hash: 1967336547
+    HashOfParent: 756556552
+  - Hash: -838907130
+    HashOfParent: 756556552
   m_LegacyLookAt: {fileID: 0}
   m_LegacyFollow: {fileID: 0}
 --- !u!4 &854535
@@ -242,6 +247,19 @@ Transform:
   - {fileID: 1661014844}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &854536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 2
 --- !u!1001 &5470742
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -253,10 +271,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (8)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -331,10 +345,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (13)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -471,10 +481,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (21)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -548,10 +554,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -627,10 +629,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (24)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -704,10 +702,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (22)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -783,10 +777,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (17)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -860,10 +850,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (16)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -1039,10 +1025,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
-      value: Tile
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
       value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
@@ -1387,10 +1369,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (12)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -1464,10 +1442,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (14)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -1609,10 +1583,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (31)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -1686,10 +1656,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (20)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -1765,10 +1731,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (4)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -1843,10 +1805,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (15)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -1920,10 +1878,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (11)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -2040,6 +1994,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7868292934642578659, guid: a7e4bba8b07cdc045b6bd2533f45242d, type: 3}
+      propertyPath: playerPrefab
+      value: 
+      objectReference: {fileID: 6726216011626115281, guid: 54d8d23ee5a47e34db26762c882afd96, type: 3}
+    - target: {fileID: 7868292934642578659, guid: a7e4bba8b07cdc045b6bd2533f45242d, type: 3}
       propertyPath: startingPiece
       value: 1
       objectReference: {fileID: 0}
@@ -2063,10 +2021,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -2279,10 +2233,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (26)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -2357,10 +2307,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (16)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -2434,10 +2380,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (6)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -2517,10 +2459,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (9)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -2751,10 +2689,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (12)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -2829,10 +2763,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -2901,10 +2831,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (7)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -2980,10 +2906,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (15)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -3057,10 +2979,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (29)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -3202,10 +3120,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (18)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -3268,6 +3182,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4985504799707945837, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
   m_PrefabInstance: {fileID: 803607667}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &804996157 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3342621670745830452, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
+  m_PrefabInstance: {fileID: 465241651552613447}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &804996162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 804996157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 26
 --- !u!1001 &806120403
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3279,10 +3211,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (14)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -3357,10 +3285,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (9)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -3549,9 +3473,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 910512674}
+  - component: {fileID: 910512675}
   m_Layer: 0
   m_Name: PlayerSpawnPosition
-  m_TagString: PlayerSpawnPosition
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3571,6 +3496,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &910512675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910512673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 24
 --- !u!1001 &955017350
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3582,10 +3520,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (23)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -3660,10 +3594,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (24)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -3805,10 +3735,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (22)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -3883,10 +3809,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (30)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -3948,6 +3870,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4985504799707945837, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
   m_PrefabInstance: {fileID: 1044010350}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1046664801 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4916596403943667852, guid: 5e97a2023c6d5f24cbfc0936f1cdb2f4, type: 3}
+  m_PrefabInstance: {fileID: 1654373172}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1053744252 stripped
 Transform:
@@ -4098,10 +4025,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (8)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -4164,6 +4087,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4985504799707945837, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
   m_PrefabInstance: {fileID: 1065038123}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1067208917 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2808637551210047267, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
+  m_PrefabInstance: {fileID: 2546957838102638349}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1067208922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067208917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 22
 --- !u!224 &1067782019 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4971977798137444317, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
@@ -4213,10 +4154,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (21)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -4292,10 +4229,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (10)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -4370,10 +4303,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -4447,10 +4376,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (19)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -4605,10 +4530,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (32)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -4682,10 +4603,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (7)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -4827,10 +4744,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (18)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -4904,10 +4817,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (25)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -5057,6 +4966,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1218902777501366872, guid: 8fcdd2efccc40f947b3a0b42735be685, type: 3}
   m_PrefabInstance: {fileID: 1320061127}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1336505804 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2067085826837105866, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
+  m_PrefabInstance: {fileID: 465241651552613447}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1336505809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336505804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 40
 --- !u!1001 &1355546030
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5068,10 +4995,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (17)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -5147,10 +5070,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -5224,10 +5143,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (19)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -5303,10 +5218,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (28)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -5380,10 +5291,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (23)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -5525,10 +5432,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (13)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -5602,10 +5505,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (6)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -5789,6 +5688,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Puz_Middle_-_Player_Captured
       objectReference: {fileID: 0}
+    - target: {fileID: 4916596403943667852, guid: 5e97a2023c6d5f24cbfc0936f1cdb2f4, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 5841320242924193565, guid: 5e97a2023c6d5f24cbfc0936f1cdb2f4, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 7749486357582635523, guid: 5e97a2023c6d5f24cbfc0936f1cdb2f4, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5805,16 +5712,42 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8953662175568385530, guid: 5e97a2023c6d5f24cbfc0936f1cdb2f4, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4916596403943667852, guid: 5e97a2023c6d5f24cbfc0936f1cdb2f4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1654373176}
+    - targetCorrespondingSourceObject: {fileID: 8953662175568385530, guid: 5e97a2023c6d5f24cbfc0936f1cdb2f4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1904384184}
+    - targetCorrespondingSourceObject: {fileID: 5841320242924193565, guid: 5e97a2023c6d5f24cbfc0936f1cdb2f4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1992460025}
   m_SourcePrefab: {fileID: 100100000, guid: 5e97a2023c6d5f24cbfc0936f1cdb2f4, type: 3}
 --- !u!224 &1654373173 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3000810619436135285, guid: 5e97a2023c6d5f24cbfc0936f1cdb2f4, type: 3}
   m_PrefabInstance: {fileID: 1654373172}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1654373176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046664801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 18
 --- !u!1 &1655676251
 GameObject:
   m_ObjectHideFlags: 0
@@ -6539,10 +6472,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (5)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -6616,10 +6545,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (25)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -6695,10 +6620,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (30)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -6772,10 +6693,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (27)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -6939,10 +6856,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (4)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -7005,6 +6918,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4985504799707945837, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
   m_PrefabInstance: {fileID: 1878191037}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1899201756 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5903981413219166710, guid: 79a87a0ef7d54cf49b7dc7c994a07428, type: 3}
+  m_PrefabInstance: {fileID: 6738273713810545242}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1899201759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1899201756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 37
 --- !u!1 &1903231675
 GameObject:
   m_ObjectHideFlags: 0
@@ -7100,6 +7031,24 @@ Transform:
   - {fileID: 1218294432}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1904384179 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8953662175568385530, guid: 5e97a2023c6d5f24cbfc0936f1cdb2f4, type: 3}
+  m_PrefabInstance: {fileID: 1654373172}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1904384184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1904384179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 41
 --- !u!1001 &1923576985
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7111,10 +7060,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (11)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -7189,10 +7134,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -7329,10 +7270,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (31)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -7395,6 +7332,42 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4985504799707945837, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
   m_PrefabInstance: {fileID: 1942517787}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1951910761 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8532333316272212805, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
+  m_PrefabInstance: {fileID: 465241651552613447}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1951910764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1951910761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 21
+--- !u!1 &1992460020 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5841320242924193565, guid: 5e97a2023c6d5f24cbfc0936f1cdb2f4, type: 3}
+  m_PrefabInstance: {fileID: 1654373172}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1992460025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1992460020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 40
 --- !u!1001 &2006269560
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7406,10 +7379,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: Tile (27)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -7517,10 +7486,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (28)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -7594,10 +7559,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (26)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -7673,10 +7634,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (20)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -7750,10 +7707,6 @@ PrefabInstance:
     - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Name
       value: TileOffsetColour (10)
-      objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
       objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
@@ -7829,10 +7782,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileOffsetColour (29)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.15686275
@@ -7907,10 +7856,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
-      propertyPath: m_TagString
-      value: Tile
-      objectReference: {fileID: 0}
     - target: {fileID: 2137210927761756805, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
       propertyPath: m_Color.b
       value: 0.69411767
@@ -7981,6 +7926,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 910432218}
     m_Modifications:
+    - target: {fileID: 2067085826837105866, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3342621670745830452, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 4559324202453318181, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -8101,10 +8054,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: Middle_-_Pause
       objectReference: {fileID: 0}
+    - target: {fileID: 8532333316272212805, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8532333316272212805, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1951910764}
+    - targetCorrespondingSourceObject: {fileID: 3342621670745830452, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 804996162}
+    - targetCorrespondingSourceObject: {fileID: 2067085826837105866, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1336505809}
   m_SourcePrefab: {fileID: 100100000, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
 --- !u!1001 &1724742189706899928
 PrefabInstance:
@@ -8211,6 +8177,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 910432218}
     m_Modifications:
+    - target: {fileID: 2808637551210047267, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 4031326518813841097, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
       propertyPath: m_text
       value: Puzzle 5
@@ -8302,7 +8272,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2808637551210047267, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1067208922}
   m_SourcePrefab: {fileID: 100100000, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
 --- !u!1001 &6738273713810545242
 PrefabInstance:
@@ -8432,6 +8405,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Middle_-_Level_Complete
       objectReference: {fileID: 0}
+    - target: {fileID: 5903981413219166710, guid: 79a87a0ef7d54cf49b7dc7c994a07428, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6606175884798003924, guid: 79a87a0ef7d54cf49b7dc7c994a07428, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -8451,7 +8428,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5903981413219166710, guid: 79a87a0ef7d54cf49b7dc7c994a07428, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1899201759}
   m_SourcePrefab: {fileID: 100100000, guid: 79a87a0ef7d54cf49b7dc7c994a07428, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

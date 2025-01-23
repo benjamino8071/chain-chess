@@ -15,26 +15,21 @@ public class LevGameOverUISystem : LevDependency
 
         _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
 
-        _gameOverUI = GameObject.FindWithTag("GameOver").transform;
+        _gameOverUI = levCreator.GetFirstObjectWithName(AllTagNames.GameOver).transform;
         
-        Button[] buttons = _gameOverUI.GetComponentsInChildren<Button>();
-        foreach (Button button in buttons)
+        Transform resetButtonTf = levCreator.GetChildObjectByName(_gameOverUI.gameObject, AllTagNames.RestartLevel);
+        Button resetButton = resetButtonTf.GetComponent<Button>();
+        resetButton.onClick.AddListener(() =>
         {
-            if (button.CompareTag("RestartLevel"))
-            {
-                button.onClick.AddListener(() =>
-                {
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                });
-            }
-            else if (button.CompareTag("Exit"))
-            {
-                button.onClick.AddListener(() =>
-                {
-                    SceneManager.LoadScene("MainMenuScene");
-                });
-            }
-        }
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        });
+        
+        Transform exitButtonTf = levCreator.GetChildObjectByName(_gameOverUI.gameObject, AllTagNames.Exit);
+        Button exitButton = exitButtonTf.GetComponent<Button>();
+        exitButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene("MainMenuScene");
+        });
 
         Hide();
     }

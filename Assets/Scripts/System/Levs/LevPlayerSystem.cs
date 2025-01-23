@@ -73,25 +73,18 @@ public class LevPlayerSystem : LevDependency
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
         _gameOverUISystem = levCreator.GetDependency<LevGameOverUISystem>();
         
-        Transform playerSpawnPosition = GameObject.FindWithTag("PlayerSpawnPosition").transform;
+        Transform playerSpawnPosition = levCreator.GetFirstObjectWithName(AllTagNames.PlayerSpawnPosition).transform;
         
         _playerCharacter = Creator.InstantiateGameObject(Creator.playerPrefab, playerSpawnPosition.position, Quaternion.identity).transform;
         
-         _playerCharacter.GetComponentInChildren<Canvas>().gameObject.SetActive(false);
+        _playerCharacter.GetComponentInChildren<Canvas>().gameObject.SetActive(false);
         
         _playerAnimator = _playerCharacter.GetComponentInChildren<Animator>();
         
         _jumpPosition = _playerCharacter.position;
         
-        foreach (Animator playerAnimator in _playerCharacter.GetComponentsInChildren<Animator>())
-        {
-            if (playerAnimator.CompareTag("PlayerVisual"))
-            {
-                _playerAnimator = playerAnimator;
-                _playerSprite = playerAnimator.GetComponent<SpriteRenderer>();
-                break;
-            }
-        }
+        _playerAnimator = _playerCharacter.GetComponentInChildren<Animator>();
+        _playerSprite = _playerAnimator.GetComponent<SpriteRenderer>();
         
         for (int i = 0; i < _validPositionsVisuals.Capacity; i++)
         {

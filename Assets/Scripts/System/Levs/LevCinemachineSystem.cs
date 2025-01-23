@@ -8,8 +8,8 @@ public class LevCinemachineSystem : LevDependency
     public override void GameStart(LevCreator levCreator)
     {
         base.GameStart(levCreator);
-
-        GameObject cameraStateMachine = GameObject.FindWithTag("CameraStateMachine");
+        
+        Transform cameraStateMachine = levCreator.GetFirstObjectWithName(AllTagNames.CameraStateMachine);
         _animator = cameraStateMachine.GetComponent<Animator>();
     }
 

@@ -10,7 +10,7 @@ public class LevLevelCompleteUISystem : LevDependency
     {
         base.GameStart(levCreator);
 
-        _levelCompleteUI = GameObject.FindWithTag("LevelComplete").transform;
+        _levelCompleteUI = levCreator.GetFirstObjectWithName(AllTagNames.LevelComplete).transform;
 
         Button[] buttons = _levelCompleteUI.GetComponentsInChildren<Button>();
         foreach (Button button in buttons)

@@ -17,9 +17,9 @@ public class LevGridSystem : LevDependency
         base.GameStart(levCreator);
 
         _levDoorsSystem = levCreator.GetDependency<LevDoorsSystem>();
-        
-        GameObject[] tilesAlreadyPlaced = GameObject.FindGameObjectsWithTag("Tile");
-        foreach (GameObject tileChild in tilesAlreadyPlaced)
+
+        List<Transform> tilesAlreadyPlaced = levCreator.GetObjectsByName(AllTagNames.Tile);
+        foreach (Transform tileChild in tilesAlreadyPlaced)
         {
             TileController tileController = new TileController();
             tileController.SetTile(tileChild.transform, Creator);

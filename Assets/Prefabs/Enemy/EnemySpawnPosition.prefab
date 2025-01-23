@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1362269909217546061}
   - component: {fileID: 2346729838228782555}
+  - component: {fileID: 1436543279660141530}
   m_Layer: 0
   m_Name: EnemySpawnPosition
-  m_TagString: EnemySpawnPosition
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,3 +46,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece: 0
+--- !u!114 &1436543279660141530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4578258002789465053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 17

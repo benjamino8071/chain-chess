@@ -19,7 +19,8 @@ public class LevEnemiesSystem : LevDependency
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
         _doorsSystem = levCreator.GetDependency<LevDoorsSystem>();
 
-        foreach (GameObject enemySpawnPosition in GameObject.FindGameObjectsWithTag("EnemySpawnPosition"))
+        List<Transform> enemySpawnPositions = levCreator.GetObjectsByName(AllTagNames.EnemySpawnPosition);
+        foreach (Transform enemySpawnPosition in enemySpawnPositions)
         {
             LevEnemyController enemyController = new LevEnemyController();
             enemyController.GameStart(levCreator);
