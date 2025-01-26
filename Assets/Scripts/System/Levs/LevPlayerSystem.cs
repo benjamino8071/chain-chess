@@ -18,7 +18,6 @@ public class LevPlayerSystem : LevDependency
         foreach (Transform playerSpawnPos in levCreator.GetObjectsByName(AllTagNames.PlayerSpawnPosition))
         {
             PieceType pieceType = playerSpawnPos.GetComponent<PieceType>();
-            Debug.Log("SETTING PIECE "+pieceType.piece+" AT POSITION "+playerSpawnPos.position);
             
             LevPlayerController levPlayerController = new LevPlayerController();
             levPlayerController.GameStart(levCreator);

@@ -23,7 +23,7 @@ public class LevChainUISystem : LevDependency
 
     public void ShowNewPiece(Piece piece, bool isFirstPiece = false)
     {
-        GameObject newPieceImage;
+        /*GameObject newPieceImage;
         if (_chainPiecesImages.Count != 0)
         {
             RectTransform lastPieceTransform = _chainPiecesImages.Last.Value.Item2;
@@ -53,21 +53,21 @@ public class LevChainUISystem : LevDependency
             _chainPiecesImages.AddLast((piece, arrowPointingToNextPiece.GetComponent<RectTransform>(), visual));
         }
         
-        _chainPiecesImages.AddLast((piece, newPieceImage.GetComponent<RectTransform>(), visual));
+        _chainPiecesImages.AddLast((piece, newPieceImage.GetComponent<RectTransform>(), visual));*/
     }
 
     public void ResetPosition()
     {
-        _chainParent.localPosition = _chainParentInitialPos;
+        //_chainParent.localPosition = _chainParentInitialPos;
     }
 
     public void NewRoomClearChain()
     {
-        foreach ((Piece, RectTransform, Image) capturedPiecesImage in _chainPiecesImages)
-        {
-            capturedPiecesImage.Item2.gameObject.SetActive(false);
-        }
-        _chainPiecesImages.Clear();
+        // foreach ((Piece, RectTransform, Image) capturedPiecesImage in _chainPiecesImages)
+        // {
+        //     capturedPiecesImage.Item2.gameObject.SetActive(false);
+        // }
+        // _chainPiecesImages.Clear();
     }
 
     public void HighlightNextPiece()
@@ -78,7 +78,7 @@ public class LevChainUISystem : LevDependency
 
     public void PawnPromoted(int index, Piece promotedPiece)
     {
-        LinkedListNode<(Piece, RectTransform, Image)> temp = _chainPiecesImages.First;
+        /*LinkedListNode<(Piece, RectTransform, Image)> temp = _chainPiecesImages.First;
         int tempIndex = 0;
         while (temp != null)
         {
@@ -93,12 +93,13 @@ public class LevChainUISystem : LevDependency
 
             tempIndex++;
             temp = temp.Next;
-        }
+        }*/
     }
 
     private Sprite GetSprite(Piece piece)
     {
-        switch (piece)
+        return default;
+        /*switch (piece)
         {
             case Piece.Pawn:
                 return Creator.playerSystemSo.pawn;
@@ -113,8 +114,8 @@ public class LevChainUISystem : LevDependency
             case Piece.King:
                 return Creator.playerSystemSo.king;
         }
-        
+
         //Given the logic of the code we should never get here but have to add something
-        return default;
+        return default;*/
     }
 }

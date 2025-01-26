@@ -617,7 +617,6 @@ public class LevPlayerController : LevDependency
 
     private void UpdateSprite(Piece piece)
     {
-        Debug.Log("UPDATE SPRITE CALLED. Setting sprite to "+piece);
         switch (piece)
         {
             case Piece.NotChosen:
