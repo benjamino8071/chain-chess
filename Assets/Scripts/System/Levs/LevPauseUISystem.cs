@@ -26,12 +26,12 @@ public class LevPauseUISystem : LevDependency
             if (!_pauseGUI.gameObject.activeSelf)
             {
                 Show();
-                _playerSystem.SetState(LevPlayerSystem.States.WaitingForTurn);
+                _playerSystem.SetStateForAllPlayers(LevPlayerController.States.WaitingForTurn);
             }
             else
             {
                 Hide();
-                _playerSystem.SetState(LevPlayerSystem.States.Idle);
+                _playerSystem.SetStateForAllPlayers(LevPlayerController.States.Idle);
             }
         });
 
@@ -56,7 +56,7 @@ public class LevPauseUISystem : LevDependency
 
     public override void GameEarlyUpdate(float dt)
     {
-        _pauseButton.gameObject.SetActive(_pauseGUI.gameObject.activeSelf || _playerSystem.GetState() == LevPlayerSystem.States.Idle);
+        _pauseButton.gameObject.SetActive(_pauseGUI.gameObject.activeSelf);
     }
 
     public void Show()

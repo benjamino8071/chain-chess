@@ -24,7 +24,7 @@ public class LevEnemiesSystem : LevDependency
         {
             LevEnemyController enemyController = new LevEnemyController();
             enemyController.GameStart(levCreator);
-            Piece piece = enemySpawnPosition.GetComponent<EnemyPiece>().piece;
+            Piece piece = enemySpawnPosition.GetComponent<PieceType>().piece;
             
             //Get the order of the doors, in ascending order based on y-value
             List<SingleDoorPosition> doors = _doorsSystem.GetDoorPositions().ToList();
@@ -81,6 +81,13 @@ public class LevEnemiesSystem : LevDependency
         {
             _doorsSystem.SetRoomDoorsOpen(roomNumber);
         }
+    }
+
+    public void SetStateForRandomEnemy(LevEnemyController.States state)
+    {
+        int enemySelectedIndex = Random.Range(0, _enemyControllers.Count);
+        LevEnemyController enemySelected = _enemyControllers[enemySelectedIndex];
+        enemySelected.SetState(state);
     }
 
     public void SetStateForAllEnemies(LevEnemyController.States state)

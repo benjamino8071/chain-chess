@@ -14,9 +14,6 @@ public class LevCreator : Creator
     public GameObject capturedPieceImagePrefab;
     public GameObject arrowPointingToNextPiecePrefab;
 
-    [Header("Starting Piece")]
-    public Piece startingPiece;
-
     [Header("Next Level")]
     public int nextLevelNumber;
     

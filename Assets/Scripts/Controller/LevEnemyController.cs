@@ -158,7 +158,7 @@ public class LevEnemyController : LevController
                                 
                 furthestPointOfDiagonal = nextSpot;
                 
-                if (_playerSystem.GetPlayerPosition() == furthestPointOfDiagonal)
+                if(_playerSystem.IsPlayerAtPosition(furthestPointOfDiagonal))
                     break;
             }
 
@@ -173,13 +173,6 @@ public class LevEnemyController : LevController
 
     public override void GameUpdate(float dt)
     {
-        if (_playerSystem.GetRoomNumber() != GetRoomNumber())
-        {
-            //In a different room - so don't move this enemy!
-            SetState(States.WaitingForTurn);
-            return;
-        }
-        
         //State machine
         List<Vector3> possiblePositions = new();
         switch (_state)
@@ -193,19 +186,19 @@ public class LevEnemyController : LevController
                         List<Vector3> pawnMoves = new();
                         
                         Vector3 defaultMove = new Vector3(0, -1, 0);
-                        if (_enemyInstance.position + defaultMove != _playerSystem.GetPlayerPosition())
+                        if (!_playerSystem.IsPlayerAtPosition(_enemyInstance.position + defaultMove))
                         {
                             pawnMoves.Add(defaultMove);
                         }
                         
                         Vector3 bottomLeft = new Vector3(-1, -1, 0);
-                        if (_enemyInstance.position + bottomLeft == _playerSystem.GetPlayerPosition())
+                        if (_playerSystem.IsPlayerAtPosition(_enemyInstance.position + bottomLeft))
                         {
                             pawnMoves.Add(bottomLeft);
                         }
                         
                         Vector3 bottomRight = new Vector3(1, -1, 0);
-                        if (_enemyInstance.position + bottomRight == _playerSystem.GetPlayerPosition())
+                        if (_playerSystem.IsPlayerAtPosition(_enemyInstance.position + bottomRight))
                         {
                             pawnMoves.Add(bottomRight);
                         }
@@ -293,7 +286,7 @@ public class LevEnemyController : LevController
                     bool foundPlayer = false;
                     foreach (Vector3 possiblePosition in possiblePositions)
                     {
-                        if (_playerSystem.GetPlayerPosition() == possiblePosition)
+                        if (_playerSystem.IsPlayerAtPosition(possiblePosition))
                         {
                             _positionChosen = possiblePosition;
                             foundPlayer = true;
@@ -330,11 +323,12 @@ public class LevEnemyController : LevController
                 {
                     _enemyInstance.position = new Vector3(((int)_enemyInstance.position.x) + 0.5f, ((int)_enemyInstance.position.y) + 0.5f, 0);
                     _sinTime = 0;
-                    
-                    if (_enemyInstance.position == _playerSystem.GetPlayerPosition())
+
+                    if (_playerSystem.TrySetStateOfPlayerAtPosition(_enemyInstance.position,
+                            LevPlayerController.States.Captured))
                     {
-                        _playerSystem.SetState(LevPlayerSystem.States.Captured);
-                        _enemiesSystem.SetStateForAllEnemies(States.Won);
+                        if(_playerSystem.AreAllPlayersCaptured())
+                            _enemiesSystem.SetStateForAllEnemies(States.Won);
                     }
                     else
                     {

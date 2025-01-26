@@ -21,25 +21,14 @@ public class LevTurnSystem : LevDependency
 
     public void SwitchTurn(Turn nextTurn)
     {
-        if(_playerSystem.GetState() == LevPlayerSystem.States.Captured)
-            return;
-        
-        //If there are no enemies left in room, we force turn to stay on player
-        //Also we open doors
-        int roomNumber = _playerSystem.GetRoomNumber();
-        if (_enemiesSystem.IsEnemiesInRoomCleared(roomNumber))
-        {
-            nextTurn = Turn.Player;
-        }
-        
         switch (nextTurn)
         {
             case Turn.Player:
                 _enemiesSystem.ClearPositionsTakenByOtherEnemiesForThisTurn();
-                _playerSystem.SetState(LevPlayerSystem.States.Idle);
+                _playerSystem.SetStateForAllPlayers(LevPlayerController.States.Idle);
                 break;
             case Turn.Enemy:
-                _enemiesSystem.SetStateForAllEnemies(LevEnemyController.States.ChooseTile);
+                _enemiesSystem.SetStateForRandomEnemy(LevEnemyController.States.ChooseTile);
                 break;
         }
     }

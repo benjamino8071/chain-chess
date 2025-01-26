@@ -14,13 +14,11 @@ public class LevChainUISystem : LevDependency
     {
         base.GameStart(levCreator);
         
-        //TODO: Replace with new tag system
-        _chainParent = GameObject.FindWithTag("ChainParent").transform;
+        _chainParent = levCreator.GetFirstObjectWithName(AllTagNames.ChainParent).transform;
 
         _chainParentInitialPos = _chainParent.localPosition;
         
         ResetPosition();
-        ShowNewPiece(Creator.startingPiece, true);
     }
 
     public void ShowNewPiece(Piece piece, bool isFirstPiece = false)

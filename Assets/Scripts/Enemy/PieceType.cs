@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyPiece : MonoBehaviour
+public class PieceType : MonoBehaviour
 {
     public Piece piece;
 }
