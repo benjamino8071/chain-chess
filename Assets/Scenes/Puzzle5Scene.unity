@@ -839,6 +839,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4985504799707945837, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
   m_PrefabInstance: {fileID: 121440549}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &156652205 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8558370500043781193, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
+  m_PrefabInstance: {fileID: 2546957838102638349}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &156652209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 156652205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 31
 --- !u!1001 &156979636
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1195,7 +1213,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 90
+  field of view: 57.2
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -6077,7 +6095,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 90
+    FieldOfView: 57.2
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -7475,6 +7493,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 910432218}
     m_Modifications:
+    - target: {fileID: 263927947433021507, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.00024414062
+      objectReference: {fileID: 0}
     - target: {fileID: 2067085826837105866, guid: ffb267eaa25aa2f4c8b2731ebb528fba, type: 3}
       propertyPath: m_TagString
       value: Untagged
@@ -7645,6 +7667,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Top_-_Chain
       objectReference: {fileID: 0}
+    - target: {fileID: 5268290298210041585, guid: eff612408094dfd438f7462c55564517, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9072887715208983578, guid: eff612408094dfd438f7462c55564517, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -7747,7 +7773,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4031326518813841097, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
       propertyPath: m_text
-      value: Puzzle 5
+      value: White/Black Turn
       objectReference: {fileID: 0}
     - target: {fileID: 5791107282672550181, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
       propertyPath: m_Pivot.x
@@ -7829,9 +7855,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7400121562194268032, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7779359255689450208, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
       propertyPath: m_Name
       value: Bottom_-_Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 7779359255689450208, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8558370500043781193, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
+      propertyPath: m_Name
+      value: Turn_Text
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7840,6 +7878,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2808637551210047267, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1067208922}
+    - targetCorrespondingSourceObject: {fileID: 8558370500043781193, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 156652209}
   m_SourcePrefab: {fileID: 100100000, guid: 58aad9197b115cb4d9d070744280edbe, type: 3}
 --- !u!1001 &6738273713810545242
 PrefabInstance:

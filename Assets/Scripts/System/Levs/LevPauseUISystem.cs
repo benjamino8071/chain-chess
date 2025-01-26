@@ -62,7 +62,6 @@ public class LevPauseUISystem : LevDependency
     public void Show()
     {
         _pauseGUI.gameObject.SetActive(true);
-
     }
 
     public void Hide()

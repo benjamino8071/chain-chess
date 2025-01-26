@@ -331,17 +331,14 @@ public class LevEnemyController : LevController
                     _enemyInstance.position = new Vector3(((int)_enemyInstance.position.x) + 0.5f, ((int)_enemyInstance.position.y) + 0.5f, 0);
                     _sinTime = 0;
 
-                    if (_playerSystem.TrySetStateOfPlayerAtPosition(_enemyInstance.position,
-                            LevPlayerController.States.Captured))
+                    if (_playerSystem.TryGetPlayerAtPosition(_enemyInstance.position,
+                            out LevPlayerController playerController))
                     {
-                        if(_playerSystem.AreAllPlayersCaptured())
-                            _enemiesSystem.SetStateForAllEnemies(States.Won);
+                        _playerSystem.PieceCaptured(playerController);
                     }
-                    else
-                    {
-                        SetState(States.WaitingForTurn);
-                        _turnSystem.SwitchTurn(LevTurnSystem.Turn.Player);
-                    }
+                    
+                    SetState(States.WaitingForTurn);
+                    _turnSystem.SwitchTurn(LevTurnSystem.Turn.Player);
                 }
                 break;
             case States.Captured:

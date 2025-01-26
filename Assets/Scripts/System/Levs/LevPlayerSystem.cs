@@ -47,7 +47,7 @@ public class LevPlayerSystem : LevDependency
             }
             else
             {
-                _playerControllerSelected.UpdatePlayerPosition(positionRequested);
+                _playerControllerSelected.MovePlayer(positionRequested);
             }
         }
         
@@ -127,5 +127,12 @@ public class LevPlayerSystem : LevDependency
     public void UnselectPiece()
     {
         _playerControllerSelected = null;
+    }
+
+    public void PieceCaptured(LevPlayerController playerController)
+    {
+        _playerControllers.Remove(playerController);
+        
+        playerController.SetState(LevPlayerController.States.Captured);
     }
 }

@@ -152,11 +152,9 @@ public class LevPlayerController : LevDependency
                 }
                 break;
             case States.OnTheSpotJump:
-                Debug.Log("In state: OnTheSpotJump");
                 //Wait 1 second for the jump animation to play out
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Empty"))
                 {
-                    Debug.Log("OnTheSpotJump finished!");
                     SetToNextMove();
                 }
                 break;
@@ -209,7 +207,6 @@ public class LevPlayerController : LevDependency
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
                     SetState(States.EndGame);
-                    _gameOverUISystem.Show();
                 }
                 break;
             case States.LevelComplete:
@@ -267,7 +264,7 @@ public class LevPlayerController : LevDependency
         }
     }
 
-    public void UpdatePlayerPosition(Vector3 positionRequested)
+    public void MovePlayer(Vector3 positionRequested)
     {
         //Depending on the piece, we allow the player an additional move (player will always start with a king move)
         Piece piece = _movesInThisTurn.Peek();
@@ -285,7 +282,7 @@ public class LevPlayerController : LevDependency
             _audioSystem.PlayerPieceMoveSfx();
             _movesInThisTurn.Dequeue();
         }
-        else
+        else if(_movesInThisTurn.Count == _capturedPieces.Count)
         {
             _playerSystem.UnselectPiece();
         }
@@ -517,7 +514,7 @@ public class LevPlayerController : LevDependency
         switch (state)
         {
             case States.Captured:
-                TriggerFadeOutAnimation();
+                _playerCharacter.gameObject.SetActive(false);
                 break;
             case States.Idle:
                 if (_movesInThisTurn.Count == 0)
