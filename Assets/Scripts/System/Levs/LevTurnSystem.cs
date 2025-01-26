@@ -28,6 +28,7 @@ public class LevTurnSystem : LevDependency
                 _playerSystem.SetStateForAllPlayers(LevPlayerController.States.Idle);
                 break;
             case Turn.Enemy:
+                _playerSystem.UnselectPiece();
                 _enemiesSystem.SetStateForRandomEnemy(LevEnemyController.States.ChooseTile);
                 break;
         }

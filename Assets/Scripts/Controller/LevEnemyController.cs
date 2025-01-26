@@ -36,6 +36,9 @@ public class LevEnemyController : LevController
     
     private float _moveSpeed;
     private float _sinTime;
+
+    private float _thinkingTimer;
+    private float _maxThinkTime = 1;
     
     public override void GameStart(LevCreator levCreator)
     {
@@ -180,6 +183,10 @@ public class LevEnemyController : LevController
             case States.WaitingForTurn:
                 break;
             case States.ChooseTile:
+                _thinkingTimer -= dt;
+                if(_thinkingTimer > 0)
+                    break;
+                
                 switch (_piece)
                 {
                     case Piece.Pawn:
@@ -356,6 +363,8 @@ public class LevEnemyController : LevController
 
     public void SetState(States newState)
     {
+        if (newState == States.ChooseTile)
+            _thinkingTimer = _maxThinkTime;
         _state = newState;
     }
 

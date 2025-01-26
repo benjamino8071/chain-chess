@@ -234,6 +234,26 @@ public class LevPlayerController : LevDependency
 
     private void CheckDefiniteMoves(Piece piece, List<Vector3> pieceMoves, Vector3 positionRequested)
     {
+        if (pieceMoves.Count == 0)
+        {
+            TriggerJumpAnimation();
+            _audioSystem.PlayerPieceMoveSfx();
+            _movesInThisTurn.Dequeue();
+            
+            if (_movesInThisTurn.Count > 0)
+            {
+                //Allow player to make another move
+                UpdateSprite(_movesInThisTurn.Peek());
+                SetState(States.Idle);
+                _chainUISystem.HighlightNextPiece();
+            }
+            else
+            {
+                SetState(States.WaitingForTurn);
+                _turnSystem.SwitchTurn(LevTurnSystem.Turn.Enemy);
+            }
+        }
+        
         foreach (Vector3 pieceMove in pieceMoves)
         {
             Vector3 newPos = _playerCharacter.position + pieceMove;
@@ -281,11 +301,32 @@ public class LevPlayerController : LevDependency
         }
         
         //If we get here then a valid position has not been found
-        _playerSystem.UnselectPiece();
+        if(_movesInThisTurn.Count == _capturedPieces.Count)
+            _playerSystem.UnselectPiece();
     }
 
     private void CheckIndefiniteMoves(List<Vector3> pieceMoves, Vector3 positionRequested)
     {
+        if (pieceMoves.Count == 0)
+        {
+            TriggerJumpAnimation();
+            _audioSystem.PlayerPieceMoveSfx();
+            _movesInThisTurn.Dequeue();
+            
+            if (_movesInThisTurn.Count > 0)
+            {
+                //Allow player to make another move
+                UpdateSprite(_movesInThisTurn.Peek());
+                SetState(States.Idle);
+                _chainUISystem.HighlightNextPiece();
+            }
+            else
+            {
+                SetState(States.WaitingForTurn);
+                _turnSystem.SwitchTurn(LevTurnSystem.Turn.Enemy);
+            }
+        }
+        
         foreach (Vector3 pieceMove in pieceMoves)
         {
             Vector3 newPos = _playerCharacter.position;
@@ -338,7 +379,8 @@ public class LevPlayerController : LevDependency
         }
         
         //If we get here then a valid position has not been found
-        _playerSystem.UnselectPiece();
+        if(_movesInThisTurn.Count == _capturedPieces.Count)
+            _playerSystem.UnselectPiece();
     }
 
     public void UpdatePlayerPosition(Vector3 positionRequested)
