@@ -139,6 +139,14 @@ public class LevPlayerController : LevDependency
                             break;
                         }
                     }
+                    else if (_enemiesSystem.TryGetEnemyAtPosition(_playerCharacter.position, out LevEnemyController enemyController))
+                    {
+                        //Add this player to the 'captured pieces' list
+                        Piece enemyPiece = enemyController.GetPiece();
+                        _capturedPieces.AddLast(enemyPiece);
+                        _movesInThisTurn.Enqueue(enemyPiece);
+                        _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
+                    }
 
                     SetToNextMove();
                 }
@@ -249,7 +257,6 @@ public class LevPlayerController : LevDependency
                 _movesInThisTurn.Dequeue();
                 if(_movesInThisTurn.Count > 0)
                     UpdateSprite(_movesInThisTurn.Peek());
-                Debug.Log("Number of moves left just before spot jump: "+_movesInThisTurn.Count);
                 SetState(States.OnTheSpotJump);
             }
         }
@@ -269,15 +276,6 @@ public class LevPlayerController : LevDependency
 
         if (validMoves.Contains(positionRequested))
         {
-            if (_enemiesSystem.TryGetEnemyAtPosition(positionRequested, out LevEnemyController enemyController))
-            {
-                //Add this player to the 'captured pieces' list
-                Piece enemyPiece = enemyController.GetPiece();
-                _capturedPieces.AddLast(enemyPiece);
-                _movesInThisTurn.Enqueue(enemyPiece);
-                _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
-            }
-                    
             // Set our position as a fraction of the distance between the markers.
             _jumpPosition = positionRequested;
             _moveSpeed = Creator.playerSystemSo.moveSpeed;
