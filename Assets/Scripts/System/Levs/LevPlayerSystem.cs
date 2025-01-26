@@ -4,6 +4,7 @@ using UnityEngine;
 public class LevPlayerSystem : LevDependency
 {
     private LevGridSystem _gridSystem;
+    private LevTurnSystem _turnSystem;
     
     private List<LevPlayerController> _playerControllers = new ();
 
@@ -14,6 +15,7 @@ public class LevPlayerSystem : LevDependency
         base.GameStart(levCreator);
 
         _gridSystem = levCreator.GetDependency<LevGridSystem>();
+        _turnSystem = levCreator.GetDependency<LevTurnSystem>();
 
         foreach (Transform playerSpawnPos in levCreator.GetObjectsByName(AllTagNames.PlayerSpawnPosition))
         {
@@ -29,6 +31,9 @@ public class LevPlayerSystem : LevDependency
 
     public override void GameUpdate(float dt)
     {
+        if(_turnSystem.CurrentTurn() == LevTurnSystem.Turn.Enemy)
+            return;
+        
         if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
         {
             Vector3 positionRequested = _gridSystem.GetHighlightPosition();

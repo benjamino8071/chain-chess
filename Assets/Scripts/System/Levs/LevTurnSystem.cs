@@ -10,6 +10,7 @@ public class LevTurnSystem : LevDependency
         Player,
         Enemy
     }
+    private Turn _currentTurn = Turn.Player; //Will always start with the player
 
     public override void GameStart(LevCreator levCreator)
     {
@@ -32,5 +33,11 @@ public class LevTurnSystem : LevDependency
                 _enemiesSystem.SetStateForRandomEnemy(LevEnemyController.States.ChooseTile);
                 break;
         }
+        _currentTurn = nextTurn;
+    }
+
+    public Turn CurrentTurn()
+    {
+        return _currentTurn;
     }
 }

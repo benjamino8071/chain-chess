@@ -37,6 +37,7 @@ public class LevPlayerController : LevDependency
         WaitingForTurn,
         Idle,
         Moving,
+        OnTheSpotJump,
         FadeOutBeforeDoorWalk,
         DoorWalk,
         FadeInAfterDoorWalk,
@@ -99,10 +100,6 @@ public class LevPlayerController : LevDependency
     {
         switch (_state)
         {
-            case States.WaitingForTurn:
-                break;
-            case States.Idle:
-                break;
             case States.Moving:
                 if (_playerCharacter.position != _jumpPosition)
                 {
@@ -143,18 +140,16 @@ public class LevPlayerController : LevDependency
                         }
                     }
 
-                    if (_movesInThisTurn.Count > 0)
-                    {
-                        //Allow player to make another move
-                        UpdateSprite(_movesInThisTurn.Peek());
-                        SetState(States.Idle);
-                        _chainUISystem.HighlightNextPiece();
-                    }
-                    else
-                    {
-                        SetState(States.WaitingForTurn);
-                        _turnSystem.SwitchTurn(LevTurnSystem.Turn.Enemy);
-                    }
+                    SetToNextMove();
+                }
+                break;
+            case States.OnTheSpotJump:
+                Debug.Log("In state: OnTheSpotJump");
+                //Wait 1 second for the jump animation to play out
+                if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Empty"))
+                {
+                    Debug.Log("OnTheSpotJump finished!");
+                    SetToNextMove();
                 }
                 break;
             case States.FadeOutBeforeDoorWalk:
@@ -231,156 +226,38 @@ public class LevPlayerController : LevDependency
     {
         return 0.5f * Mathf.Sin(x - Mathf.PI / 2f) + 0.5f;
     }
-
-    private void CheckDefiniteMoves(Piece piece, List<Vector3> pieceMoves, Vector3 positionRequested)
+    
+    private void SetToNextMove()
     {
-        if (pieceMoves.Count == 0)
+        if (_movesInThisTurn.Count > 0)
         {
-            TriggerJumpAnimation();
-            _audioSystem.PlayerPieceMoveSfx();
-            _movesInThisTurn.Dequeue();
+            //Allow player to make another move
+            Piece nextPiece = _movesInThisTurn.Peek();
+            UpdateSprite(nextPiece);
             
-            if (_movesInThisTurn.Count > 0)
+            List<Vector3> validMoves = GetAllValidMoves(_movesInThisTurn.Peek());
+            
+            if (validMoves.Count > 0)
             {
-                //Allow player to make another move
-                UpdateSprite(_movesInThisTurn.Peek());
                 SetState(States.Idle);
                 _chainUISystem.HighlightNextPiece();
             }
             else
             {
-                SetState(States.WaitingForTurn);
-                _turnSystem.SwitchTurn(LevTurnSystem.Turn.Enemy);
-            }
-        }
-        
-        foreach (Vector3 pieceMove in pieceMoves)
-        {
-            Vector3 newPos = _playerCharacter.position + pieceMove;
-            
-            if(positionRequested != newPos) 
-                continue;
-            
-            if (_doorsSystem.TryGetSingleDoorPosition(newPos, out SingleDoorPosition singleDoorPosition))
-            {
-                //If this door is locked, we cannot allow access
-                if(!singleDoorPosition.isDoorOpen) 
-                    continue;
-            }
-            else if(!_gridSystem.IsPositionValid(newPos))
-                continue;
-            
-            if(_playerSystem.IsPlayerAtPosition(positionRequested))
-                continue;
-            
-            if (piece == Piece.Pawn && _enemiesSystem.IsEnemyAtThisPosition(newPos) && pieceMove == new Vector3(0, 1, 0))
-            {
-                //Cannot take a piece that is directly in front of pawn
-                continue;
-            }
-                        
-            if (_enemiesSystem.TryGetEnemyAtPosition(newPos, out LevEnemyController enemyController))
-            {
-                //Add this player to the 'captured pieces' list
-                Piece enemyPiece = enemyController.GetPiece();
-                _capturedPieces.AddLast(enemyPiece);
-                _movesInThisTurn.Enqueue(enemyPiece);
-                _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
-            }
-            
-            // Set our position as a fraction of the distance between the markers.
-            _jumpPosition = positionRequested;
-            _moveSpeed = Creator.playerSystemSo.moveSpeed;
-            SetState(States.Moving);
-                    
-            TriggerJumpAnimation();
-            _audioSystem.PlayerPieceMoveSfx();
-            _movesInThisTurn.Dequeue();
-            
-            return;
-        }
-        
-        //If we get here then a valid position has not been found
-        if(_movesInThisTurn.Count == _capturedPieces.Count)
-            _playerSystem.UnselectPiece();
-    }
-
-    private void CheckIndefiniteMoves(List<Vector3> pieceMoves, Vector3 positionRequested)
-    {
-        if (pieceMoves.Count == 0)
-        {
-            TriggerJumpAnimation();
-            _audioSystem.PlayerPieceMoveSfx();
-            _movesInThisTurn.Dequeue();
-            
-            if (_movesInThisTurn.Count > 0)
-            {
-                //Allow player to make another move
-                UpdateSprite(_movesInThisTurn.Peek());
-                SetState(States.Idle);
-                _chainUISystem.HighlightNextPiece();
-            }
-            else
-            {
-                SetState(States.WaitingForTurn);
-                _turnSystem.SwitchTurn(LevTurnSystem.Turn.Enemy);
-            }
-        }
-        
-        foreach (Vector3 pieceMove in pieceMoves)
-        {
-            Vector3 newPos = _playerCharacter.position;
-
-            while (true)
-            {
-                Vector3 nextSpot = newPos + pieceMove;
-                
-                if (_doorsSystem.TryGetSingleDoorPosition(nextSpot, out SingleDoorPosition singleDoorPosition))
-                {
-                    if(!singleDoorPosition.isDoorOpen) break;
-                }
-                else if(!_gridSystem.IsPositionValid(nextSpot))
-                    break;
-                
-                if (_enemiesSystem.TryGetEnemyAtPosition(nextSpot, out LevEnemyController eneCont))
-                {
-                    if(eneCont.GetPosition() != positionRequested) break;
-                }
-                
-                if(_playerSystem.IsPlayerAtPosition(positionRequested))
-                    break;
-                
-                if (positionRequested != nextSpot)
-                {
-                    newPos = nextSpot;
-                    continue;
-                }
-                
-                if (_enemiesSystem.TryGetEnemyAtPosition(nextSpot, out LevEnemyController enemyController))
-                {
-                    //Add this player to the 'captured pieces' list
-                    Piece enemyPiece = enemyController.GetPiece();
-                    _capturedPieces.AddLast(enemyPiece);
-                    _movesInThisTurn.Enqueue(enemyPiece);
-                    _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
-                }
-                    
-                // Set our position as a fraction of the distance between the markers.
-                _jumpPosition = positionRequested;
-                _moveSpeed = Creator.playerSystemSo.moveSpeed;
-                SetState(States.Moving);
-                
                 TriggerJumpAnimation();
                 _audioSystem.PlayerPieceMoveSfx();
                 _movesInThisTurn.Dequeue();
-                
-                return;
+                if(_movesInThisTurn.Count > 0)
+                    UpdateSprite(_movesInThisTurn.Peek());
+                Debug.Log("Number of moves left just before spot jump: "+_movesInThisTurn.Count);
+                SetState(States.OnTheSpotJump);
             }
         }
-        
-        //If we get here then a valid position has not been found
-        if(_movesInThisTurn.Count == _capturedPieces.Count)
-            _playerSystem.UnselectPiece();
+        else
+        {
+            SetState(States.WaitingForTurn);
+            _turnSystem.SwitchTurn(LevTurnSystem.Turn.Enemy);
+        }
     }
 
     public void UpdatePlayerPosition(Vector3 positionRequested)
@@ -388,100 +265,31 @@ public class LevPlayerController : LevDependency
         //Depending on the piece, we allow the player an additional move (player will always start with a king move)
         Piece piece = _movesInThisTurn.Peek();
         
-        switch (piece)
+        List<Vector3> validMoves = GetAllValidMoves(piece);
+
+        if (validMoves.Contains(positionRequested))
         {
-            case Piece.Pawn:
-                //Allow player to move up one space, if that space is available
-                List<Vector3> pawnMoves = new();
+            if (_enemiesSystem.TryGetEnemyAtPosition(positionRequested, out LevEnemyController enemyController))
+            {
+                //Add this player to the 'captured pieces' list
+                Piece enemyPiece = enemyController.GetPiece();
+                _capturedPieces.AddLast(enemyPiece);
+                _movesInThisTurn.Enqueue(enemyPiece);
+                _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
+            }
+                    
+            // Set our position as a fraction of the distance between the markers.
+            _jumpPosition = positionRequested;
+            _moveSpeed = Creator.playerSystemSo.moveSpeed;
+            SetState(States.Moving);
                 
-                Vector3 defaultMove = new Vector3(0, 1, 0);
-                if (!_enemiesSystem.IsEnemyAtThisPosition(_playerCharacter.position + defaultMove))
-                {
-                    pawnMoves.Add(defaultMove);
-                }
-                
-                //Check if there is an enemy to the top left or top right. If so, these moves are allowed
-                Vector3 topLeft = new Vector3(-1, 1, 0);
-                if (_enemiesSystem.IsEnemyAtThisPosition(_playerCharacter.position + topLeft))
-                {
-                    pawnMoves.Add(topLeft);
-                }
-                
-                Vector3 topRight = new Vector3(1, 1, 0);
-                if (_enemiesSystem.IsEnemyAtThisPosition(_playerCharacter.position + topRight))
-                {
-                    pawnMoves.Add(topRight);
-                }
-                
-                CheckDefiniteMoves(piece, pawnMoves, positionRequested);
-                break;
-            case Piece.Rook:
-                List<Vector3> rookMoves = new()
-                {
-                    new Vector3(-1, 0, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, -1, 0)
-                };
-                
-                CheckIndefiniteMoves(rookMoves, positionRequested);
-                break;
-            case Piece.Knight:
-                List<Vector3> knightMoves = new()
-                {
-                    new Vector3(1, 2, 0),
-                    new Vector3(-1, 2, 0),
-                    new Vector3(1, -2, 0),
-                    new Vector3(-1, -2, 0),
-                    new Vector3(-2, 1, 0),
-                    new Vector3(-2, -1, 0),
-                    new Vector3(2, 1, 0),
-                    new Vector3(2, -1, 0)
-                };
-                
-                CheckDefiniteMoves(piece, knightMoves, positionRequested);
-                break;
-            case Piece.Bishop:
-                List<Vector3> bishopMoves = new()
-                {
-                    new Vector3(1, 1, 0),
-                    new Vector3(-1, 1, 0),
-                    new Vector3(1, -1, 0),
-                    new Vector3(-1, -1, 0)
-                };
-                
-                CheckIndefiniteMoves(bishopMoves, positionRequested);
-                break;
-            case Piece.Queen:
-                List<Vector3> queenMoves = new()
-                {
-                    new Vector3(-1, 0, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, -1, 0),
-                    new Vector3(1, 1, 0),
-                    new Vector3(-1, 1, 0),
-                    new Vector3(1, -1, 0),
-                    new Vector3(-1, -1, 0)
-                };
-                
-                CheckIndefiniteMoves(queenMoves, positionRequested);
-                break;
-            case Piece.King:
-                List<Vector3> kingMoves = new()
-                {
-                    new Vector3(-1, 0, 0),
-                    new Vector3(1, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(0, -1, 0),
-                    new Vector3(1, 1, 0),
-                    new Vector3(-1, 1, 0),
-                    new Vector3(1, -1, 0),
-                    new Vector3(-1, -1, 0)
-                };
-                
-                CheckDefiniteMoves(piece, kingMoves, positionRequested);
-                break;
+            TriggerJumpAnimation();
+            _audioSystem.PlayerPieceMoveSfx();
+            _movesInThisTurn.Dequeue();
+        }
+        else
+        {
+            _playerSystem.UnselectPiece();
         }
     }
 
@@ -542,7 +350,17 @@ public class LevPlayerController : LevDependency
     {
         if(_state != States.Idle || _movesInThisTurn.Count == 0) return;
         
-        Piece piece = _movesInThisTurn.Peek();
+        List<Vector3> validMoves = GetAllValidMoves(_movesInThisTurn.Peek());
+        
+        for (int i = 0; i < validMoves.Count; i++)
+        {
+            _validPositionsVisuals[i].position = validMoves[i];
+            _validPositionsVisuals[i].gameObject.SetActive(true);
+        }
+    }
+
+    private List<Vector3> GetAllValidMoves(Piece piece)
+    {
         List<Vector3> validMoves = new();
         switch (piece)
         {
@@ -550,7 +368,7 @@ public class LevPlayerController : LevDependency
                 List<Vector3> pawnMoves = new();
 
                 Vector3 defaultMove = new Vector3(0, 1, 0);
-                if (!_enemiesSystem.IsEnemyAtThisPosition(_playerCharacter.position + defaultMove))
+                if (!_enemiesSystem.IsEnemyAtThisPosition(_playerCharacter.position + defaultMove) && !_playerSystem.IsPlayerAtPosition(_playerCharacter.position + defaultMove))
                 {
                     pawnMoves.Add(defaultMove);
                 }
@@ -642,11 +460,7 @@ public class LevPlayerController : LevDependency
                 break;
         }
 
-        for (int i = 0; i < validMoves.Count; i++)
-        {
-            _validPositionsVisuals[i].position = validMoves[i];
-            _validPositionsVisuals[i].gameObject.SetActive(true);
-        }
+        return validMoves;
     }
 
     public void HideAllValidMoves()
