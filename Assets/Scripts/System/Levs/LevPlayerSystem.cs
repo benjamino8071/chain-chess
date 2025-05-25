@@ -5,6 +5,8 @@ public class LevPlayerSystem : LevDependency
 {
     private LevGridSystem _gridSystem;
     private LevTurnSystem _turnSystem;
+    private LevChainUISystem _chainUISystem;
+    private LevGameOverUISystem _gameOverUISystem;
     
     private List<LevPlayerController> _playerControllers = new ();
 
@@ -16,6 +18,8 @@ public class LevPlayerSystem : LevDependency
 
         _gridSystem = levCreator.GetDependency<LevGridSystem>();
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
+        _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
+        _gameOverUISystem = levCreator.GetDependency<LevGameOverUISystem>();
 
         foreach (Transform playerSpawnPos in levCreator.GetObjectsByName(AllTagNames.PlayerSpawnPosition))
         {
@@ -36,18 +40,39 @@ public class LevPlayerSystem : LevDependency
         
         if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
         {
+            /*
+             * If the player selects another piece when they haven't made a move
+             * then we want to select that piece
+             */
+            
             Vector3 positionRequested = _gridSystem.GetHighlightPosition();
-            if (_playerControllerSelected is null)
+            if (TryGetPlayerAtPosition(positionRequested,
+                    out LevPlayerController playerController))
             {
-                if (TryGetPlayerAtPosition(positionRequested,
-                        out LevPlayerController playerController))
+                if (_playerControllerSelected is null)
                 {
                     _playerControllerSelected = playerController;
+                    _chainUISystem.SetChain(_playerControllerSelected.capturedPieces);
+                }
+                else if (!_playerControllerSelected.hasMoved)
+                {
+                    if (_playerControllerSelected == playerController)
+                    {
+                        UnselectPiece();
+                    }
+                    else
+                    {
+                        _playerControllerSelected = playerController;
+                        _chainUISystem.SetChain(_playerControllerSelected.capturedPieces);
+                    }
                 }
             }
-            else
+            else if (_playerControllerSelected is not null)
             {
-                _playerControllerSelected.MovePlayer(positionRequested);
+                if (!_playerControllerSelected.TryMovePlayer(positionRequested) && !_playerControllerSelected.hasMoved)
+                {
+                    UnselectPiece();
+                }
             }
         }
         
@@ -127,6 +152,7 @@ public class LevPlayerSystem : LevDependency
     public void UnselectPiece()
     {
         _playerControllerSelected = null;
+        _chainUISystem.UnsetChain();
     }
 
     public void PieceCaptured(LevPlayerController playerController)
@@ -134,5 +160,10 @@ public class LevPlayerSystem : LevDependency
         _playerControllers.Remove(playerController);
         
         playerController.SetState(LevPlayerController.States.Captured);
+
+        if (_playerControllers.Count == 0)
+        {
+            _gameOverUISystem.Show();
+        }
     }
 }

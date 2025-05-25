@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class LevGameOverUISystem : LevDependency
 {
+    public bool isShowing => _gameOverUI.gameObject.activeSelf;
+    
     private LevPauseUISystem _pauseUISystem;
     
     private Transform _gameOverUI;
@@ -17,7 +19,7 @@ public class LevGameOverUISystem : LevDependency
 
         _gameOverUI = levCreator.GetFirstObjectWithName(AllTagNames.GameOver).transform;
         
-        Transform resetButtonTf = levCreator.GetChildObjectByName(_gameOverUI.gameObject, AllTagNames.RestartLevel);
+        Transform resetButtonTf = levCreator.GetChildObjectByName(_gameOverUI.gameObject, AllTagNames.Retry);
         Button resetButton = resetButtonTf.GetComponent<Button>();
         resetButton.onClick.AddListener(() =>
         {
@@ -36,7 +38,6 @@ public class LevGameOverUISystem : LevDependency
 
     public void Show()
     {
-        _pauseUISystem.Hide();
         _gameOverUI.gameObject.SetActive(true);
     }
 

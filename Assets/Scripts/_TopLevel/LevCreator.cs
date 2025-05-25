@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class LevCreator : Creator
@@ -6,7 +7,7 @@ public class LevCreator : Creator
     public Input_SO inputSo;
     public PlayerSystem_SO playerSystemSo;
     public Enemy_SO enemySo;
-    
+    public Chain_SO chainSo;
     [Header("Prefabs")]
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
@@ -14,7 +15,10 @@ public class LevCreator : Creator
     public GameObject capturedPieceImagePrefab;
     public GameObject arrowPointingToNextPiecePrefab;
 
-    [Header("Next Level")]
+    [Header("Current Level")]
+    public int currentLevelNumber;
+
+    [Header("Next Level")] 
     public int nextLevelNumber;
     
     private void Start()
@@ -28,6 +32,11 @@ public class LevCreator : Creator
             LevDependency levDependency = (LevDependency)dependency;
             levDependency.GameStart(this);
         }
+
+        Transform levelTextTf = GetFirstObjectWithName(AllTagNames.LevelText);
+        TMP_Text levelText = levelTextTf.GetComponent<TMP_Text>();
+
+        levelText.text = $"Level {currentLevelNumber}";
     }
     
     public override void CreateDependencies()
@@ -36,7 +45,6 @@ public class LevCreator : Creator
         _dependencies.AddLast(new LevTurnSystem());
         _dependencies.AddLast(new LevChainUISystem());
         _dependencies.AddLast(new LevCinemachineSystem());
-        _dependencies.AddLast(new LevDoorsSystem());
         _dependencies.AddLast(new LevEnemiesSystem());
         _dependencies.AddLast(new LevGridSystem());
         _dependencies.AddLast(new LevLevelCompleteUISystem());

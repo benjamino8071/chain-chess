@@ -1,18 +1,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class LevPlayerController : LevDependency
 {
+    public List<Piece> capturedPieces => _capturedPieces.ToList();
+    public bool hasMoved => _capturedPieces.Count != _movesInThisTurn.Count;
+    
     private LevGridSystem _gridSystem;
     private LevEnemiesSystem _enemiesSystem;
     private LevCinemachineSystem _cinemachineSystem;
     private LevChainUISystem _chainUISystem;
     private LevLevelCompleteUISystem _levelCompleteUISystem;
     private LevAudioSystem _audioSystem;
-    private LevDoorsSystem _doorsSystem;
     private LevTurnSystem _turnSystem;
-    private LevGameOverUISystem _gameOverUISystem;
     private LevPlayerSystem _playerSystem;
     
     private LinkedList<Piece> _capturedPieces = new();
@@ -29,8 +31,6 @@ public class LevPlayerController : LevDependency
     
     private float _moveSpeed;
     private float _sinTime;
-
-    private int _roomNumber;
     
     public enum States
     {
@@ -66,9 +66,7 @@ public class LevPlayerController : LevDependency
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
         _levelCompleteUISystem = levCreator.GetDependency<LevLevelCompleteUISystem>();
         _audioSystem = levCreator.GetDependency<LevAudioSystem>();
-        _doorsSystem = levCreator.GetDependency<LevDoorsSystem>();
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
-        _gameOverUISystem = levCreator.GetDependency<LevGameOverUISystem>();
         _playerSystem = levCreator.GetDependency<LevPlayerSystem>();
     }
 
@@ -92,7 +90,7 @@ public class LevPlayerController : LevDependency
             _validPositionsVisuals.Add(validPos.transform);
         }
         
-        SetDefaultPiece(piece);
+        AddPiece(piece, true);
         SetState(States.Idle);
     }
 
@@ -114,38 +112,13 @@ public class LevPlayerController : LevDependency
                     _playerCharacter.position = new Vector3(((int)_playerCharacter.position.x) + 0.5f, ((int)_playerCharacter.position.y) + 0.5f, 0);
                     _sinTime = 0;
 
-                    //Check if the player's position is a door position
-                    if (_doorsSystem.TryGetSingleDoorPosition(_playerCharacter.position, out SingleDoorPosition singleDoorPosition))
-                    {
-                        if (singleDoorPosition.isDoorOpen)
-                        {
-                            if (singleDoorPosition.isFinalDoor)
-                            {
-                                //Player has won!!
-                                TriggerFadeOutAnimation();
-                                _fadeOutAnimTimer = dt;
-                                _timeAtFadeOut = dt;
-                                SetState(States.LevelComplete);
-                            }
-                            else
-                            {
-                                _doorPositionOnOut = singleDoorPosition.GetPlayerPositionOnOut();
-                                _roomNumberOnOut = singleDoorPosition.GetOtherDoorRoomNumber();
-                                _roomNumber = _roomNumberOnOut;
-                                _moveSpeed = Creator.playerSystemSo.walkThroughDoorSpeed;
-                                TriggerFadeOutAnimation();
-                                SetState(States.FadeOutBeforeDoorWalk);
-                            }
-                            break;
-                        }
-                    }
-                    else if (_enemiesSystem.TryGetEnemyAtPosition(_playerCharacter.position, out LevEnemyController enemyController))
+                    if (_enemiesSystem.TryGetEnemyAtPosition(_playerCharacter.position, out LevEnemyController enemyController))
                     {
                         //Add this player to the 'captured pieces' list
                         Piece enemyPiece = enemyController.GetPiece();
-                        _capturedPieces.AddLast(enemyPiece);
+                        AddPiece(enemyPiece, false);
                         _movesInThisTurn.Enqueue(enemyPiece);
-                        _enemiesSystem.PieceCaptured(enemyController, GetRoomNumber());
+                        _enemiesSystem.PieceCaptured(enemyController);
                     }
 
                     SetToNextMove();
@@ -185,23 +158,6 @@ public class LevPlayerController : LevDependency
                     SetState(States.FadeInAfterDoorWalk);
                 }
                 break;
-            case States.FadeInAfterDoorWalk:
-                //Fade in animation is 1 second
-                if (_fadeInAnimTimer >= _timeAtFadeIn + 1)
-                {
-                    //Experimenting with having the play lose the chain after going into a new room
-                    _movesInThisTurn.Clear();
-                    _capturedPieces.Clear();
-                    _capturedPieces.AddFirst(_capturedPieces.First.Value);
-                    _chainUISystem.NewRoomClearChain();
-                    _chainUISystem.ShowNewPiece(_capturedPieces.First.Value, true);
-                    SetState(States.Idle);
-                }
-                else
-                {
-                    _fadeInAnimTimer += dt;
-                }
-                break;
             case States.Captured:
                 //Wait 1 second before we show the game over screen
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
@@ -214,7 +170,6 @@ public class LevPlayerController : LevDependency
                 if (_playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Hidden"))
                 {
                     SetState(States.EndGame);
-                    _levelCompleteUISystem.Show();
                 }
                 break;
             case States.EndGame:
@@ -222,9 +177,12 @@ public class LevPlayerController : LevDependency
         }
     }
     
-    private void SetDefaultPiece(Piece piece)
+    private void AddPiece(Piece piece, bool addFirst)
     {
-        _capturedPieces.AddFirst(piece);
+        if (addFirst)
+            _capturedPieces.AddFirst(piece);
+        else
+            _capturedPieces.AddLast(piece);
     }
 
     private float Evaluate(float x)
@@ -264,7 +222,7 @@ public class LevPlayerController : LevDependency
         }
     }
 
-    public void MovePlayer(Vector3 positionRequested)
+    public bool TryMovePlayer(Vector3 positionRequested)
     {
         //Depending on the piece, we allow the player an additional move (player will always start with a king move)
         Piece piece = _movesInThisTurn.Peek();
@@ -281,11 +239,11 @@ public class LevPlayerController : LevDependency
             TriggerJumpAnimation();
             _audioSystem.PlayerPieceMoveSfx();
             _movesInThisTurn.Dequeue();
+
+            return true;
         }
-        else if(_movesInThisTurn.Count == _capturedPieces.Count)
-        {
-            _playerSystem.UnselectPiece();
-        }
+
+        return false;
     }
 
     private List<Vector3> CheckValidDefiniteMoves(List<Vector3> moves)
@@ -294,16 +252,13 @@ public class LevPlayerController : LevDependency
         foreach (Vector3 move in moves)
         {
             Vector3 positionFromPlayer = _playerCharacter.position + move;
-                    
-            if (_doorsSystem.TryGetSingleDoorPosition(positionFromPlayer, out SingleDoorPosition singleDoorPos))
+
+
+            if (!_gridSystem.IsPositionValid(positionFromPlayer) 
+                || _playerSystem.IsPlayerAtPosition(positionFromPlayer))
             {
-                //If this door is locked, we cannot allow access
-                if(!singleDoorPos.isDoorOpen) continue;
+                continue;
             }
-            else if(!_gridSystem.IsPositionValid(positionFromPlayer))
-                continue;
-            else if(_playerSystem.IsPlayerAtPosition(positionFromPlayer))
-                continue;
             
             validMoves.Add(positionFromPlayer);
         }
@@ -320,16 +275,11 @@ public class LevPlayerController : LevDependency
             while (true)
             {
                 Vector3 nextSpot = furthestPointOfDiagonal + diagonal;
-                if (_doorsSystem.TryGetSingleDoorPosition(nextSpot, out SingleDoorPosition knightSingDoorPos))
+                if (!_gridSystem.IsPositionValid(nextSpot) 
+                    || _playerSystem.IsPlayerAtPosition(nextSpot))
                 {
-                    //If this door is locked, we cannot allow access
-                    if(!knightSingDoorPos.isDoorOpen) 
-                        break;
+                    break;
                 }
-                else if(!_gridSystem.IsPositionValid(nextSpot))
-                    break;
-                else if(_playerSystem.IsPlayerAtPosition(nextSpot))
-                    break;
                 
                 furthestPointOfDiagonal = nextSpot;
                 validMoves.Add(furthestPointOfDiagonal);
@@ -511,6 +461,11 @@ public class LevPlayerController : LevDependency
 
     public void SetState(States state)
     {
+        if (_state == States.EndGame)
+        {
+            return;
+        }
+        
         switch (state)
         {
             case States.Captured:
@@ -525,7 +480,6 @@ public class LevPlayerController : LevDependency
                     {
                         _movesInThisTurn.Enqueue(capturedPiece);
                     }
-                    _chainUISystem.ResetPosition();
                 }
                 break;
             case States.WaitingForTurn:
@@ -543,10 +497,5 @@ public class LevPlayerController : LevDependency
     public Vector3 GetPlayerPosition()
     {
         return _playerCharacter.position;
-    }
-
-    public int GetRoomNumber()
-    {
-        return _roomNumber;
     }
 }

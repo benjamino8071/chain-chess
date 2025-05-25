@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class LevGridSystem : LevDependency
 {
-    private LevDoorsSystem _levDoorsSystem;
-    
     private Dictionary<Vector3, TileController> _validTiles = new();
 
     private Dictionary<Vector3, List<Vector3>> _connectedTiles = new();
@@ -15,9 +13,7 @@ public class LevGridSystem : LevDependency
     public override void GameStart(LevCreator levCreator)
     {
         base.GameStart(levCreator);
-
-        _levDoorsSystem = levCreator.GetDependency<LevDoorsSystem>();
-
+        
         List<Transform> tilesAlreadyPlaced = levCreator.GetObjectsByName(AllTagNames.Tile);
         foreach (Transform tileChild in tilesAlreadyPlaced)
         {
@@ -65,18 +61,7 @@ public class LevGridSystem : LevDependency
 
         if (Physics.Raycast(ray, out RaycastHit hitData))
         {
-            if (_validTiles.ContainsKey(hitData.transform.position))
-            {
-                _highlightedPosition = hitData.transform.position;
-            }
-            else if (_levDoorsSystem.IsDoorPosition(hitData.transform.position))
-            {
-                _highlightedPosition = hitData.transform.position;
-            }
-            else
-            {
-                _highlightedPosition = Vector3.zero;
-            }
+            _highlightedPosition = _validTiles.ContainsKey(hitData.transform.position) ? hitData.transform.position : Vector3.zero;
         }
         else
         {

@@ -5,10 +5,11 @@ using Random = UnityEngine.Random;
 
 public class LevEnemyController : LevController
 {
+    public States state;
+    
     private LevGridSystem _gridSystem;
     private LevPlayerSystem _playerSystem;
     private LevEnemiesSystem _enemiesSystem;
-    private LevDoorsSystem _doorsSystem;
     private LevTurnSystem _turnSystem;
     
     private Transform _enemyInstance;
@@ -31,8 +32,6 @@ public class LevEnemyController : LevController
     private States _state;
     
     private Vector3 _positionChosen;
-
-    private int _roomNumber;
     
     private float _moveSpeed;
     private float _sinTime;
@@ -47,13 +46,12 @@ public class LevEnemyController : LevController
         _gridSystem = levCreator.GetDependency<LevGridSystem>();
         _playerSystem = levCreator.GetDependency<LevPlayerSystem>();
         _enemiesSystem = levCreator.GetDependency<LevEnemiesSystem>();
-        _doorsSystem = levCreator.GetDependency<LevDoorsSystem>();
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
         
         SetState(States.WaitingForTurn);
     }
     
-    public void SetEnemyInstance(Vector3 position, Piece piece, List<SingleDoorPosition> doorPositionsOrdered)
+    public void SetEnemyInstance(Vector3 position, Piece piece)
     {
         _enemyInstance =
             Creator.InstantiateGameObject(Creator.enemyPrefab, position, Quaternion.identity).transform;
@@ -61,23 +59,6 @@ public class LevEnemyController : LevController
         _spriteRenderer = _enemyInstance.GetComponentInChildren<SpriteRenderer>(); //Should only be ONE SpriteRenderer under _enemyInstance
 
         _playerAnimator = _enemyInstance.GetComponentInChildren<Animator>();
-        
-        for (int i = 0; i < doorPositionsOrdered.Count; i++)
-        {
-            float currentDoorYpos = doorPositionsOrdered[i].transform.position.y;
-            float nextDoorYpos = doorPositionsOrdered[i+1].transform.position.y;
-
-            if (position.y > currentDoorYpos && position.y < nextDoorYpos)
-            {
-                int currentRoomNumber = doorPositionsOrdered[i].roomNumber;
-                int nextRoomNumber = doorPositionsOrdered[i+1].roomNumber;
-                if (currentRoomNumber == nextRoomNumber)
-                {
-                    _roomNumber = currentRoomNumber;
-                    break;
-                }
-            }
-        }
         
         SetPiece(piece);
     }
@@ -125,9 +106,7 @@ public class LevEnemyController : LevController
             Vector3 positionFromEnemy = _enemyInstance.position + knightMove;
                             
             if(_enemiesSystem.IsEnemyAtThisPosition(positionFromEnemy)) continue;
-                            
-            if(_doorsSystem.IsDoorPosition(positionFromEnemy)) continue;
-                            
+            
             if(!_gridSystem.IsPositionValid(positionFromEnemy)) continue;
 
             if (_enemiesSystem.IsPositionTakenByOtherEnemyForThisTurn(positionFromEnemy))
@@ -154,9 +133,7 @@ public class LevEnemyController : LevController
                 Vector3 nextSpot = furthestPointOfDiagonal + move;
                 
                 if(_enemiesSystem.IsEnemyAtThisPosition(nextSpot) && nextSpot != _enemyInstance.position) break;
-                        
-                if(_doorsSystem.IsDoorPosition(nextSpot)) break;
-                            
+                
                 if(!_gridSystem.IsPositionValid(nextSpot)) break;
                                 
                 furthestPointOfDiagonal = nextSpot;
@@ -365,11 +342,6 @@ public class LevEnemyController : LevController
         _state = newState;
     }
 
-    public States GetState()
-    {
-        return _state;
-    }
-
     public Vector3 GetPosition()
     {
         return _enemyInstance.position;
@@ -380,16 +352,5 @@ public class LevEnemyController : LevController
         SetState(States.Captured);
         
         _enemyInstance.gameObject.SetActive(false);
-    }
-
-    public Sprite GetSprite()
-    {
-        return _spriteRenderer.sprite;
-    }
-
-    public int GetRoomNumber()
-    {
-        //11.5f is the halfway point, along the y-axis, between each room
-        return _roomNumber;
     }
 }

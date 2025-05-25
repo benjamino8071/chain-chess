@@ -5,6 +5,7 @@ public class LevTurnSystem : LevDependency
 {
     private LevPlayerSystem _playerSystem;
     private LevEnemiesSystem _enemiesSystem;
+    private LevPauseUISystem _pauseUISystem;
 
     private TextMeshProUGUI _turnText;
     
@@ -21,11 +22,14 @@ public class LevTurnSystem : LevDependency
 
         _playerSystem = levCreator.GetDependency<LevPlayerSystem>();
         _enemiesSystem = levCreator.GetDependency<LevEnemiesSystem>();
+        _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
 
         Transform turnText = levCreator.GetFirstObjectWithName(AllTagNames.TurnInfoText);
         _turnText = turnText.GetComponent<TextMeshProUGUI>();
+        
+        SetTurnText("White");
     }
-
+    
     public void SwitchTurn(Turn nextTurn)
     {
         switch (nextTurn)
@@ -33,12 +37,14 @@ public class LevTurnSystem : LevDependency
             case Turn.Player:
                 _enemiesSystem.ClearPositionsTakenByOtherEnemiesForThisTurn();
                 _playerSystem.SetStateForAllPlayers(LevPlayerController.States.Idle);
-                _turnText.text = "White turn";
+                _pauseUISystem.ShowButton();
+                SetTurnText("White");
                 break;
             case Turn.Enemy:
+                _pauseUISystem.HideButton();
                 _playerSystem.UnselectPiece();
                 _enemiesSystem.SetStateForRandomEnemy(LevEnemyController.States.ChooseTile);
-                _turnText.text = "Black turn";
+                SetTurnText("Black");
                 break;
         }
         _currentTurn = nextTurn;
@@ -47,5 +53,10 @@ public class LevTurnSystem : LevDependency
     public Turn CurrentTurn()
     {
         return _currentTurn;
+    }
+
+    private void SetTurnText(string turnText)
+    {
+        _turnText.text = turnText;
     }
 }

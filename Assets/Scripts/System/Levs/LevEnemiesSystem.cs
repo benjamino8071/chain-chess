@@ -6,7 +6,8 @@ using UnityEngine;
 public class LevEnemiesSystem : LevDependency
 {
     private LevChainUISystem _chainUISystem;
-    private LevDoorsSystem _doorsSystem;
+    private LevLevelCompleteUISystem _levelCompleteUISystem;
+    private LevPlayerSystem _playerSystem;
     
     private List<LevEnemyController> _enemyControllers = new ();
 
@@ -17,7 +18,8 @@ public class LevEnemiesSystem : LevDependency
         base.GameStart(levCreator);
         
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
-        _doorsSystem = levCreator.GetDependency<LevDoorsSystem>();
+        _levelCompleteUISystem = levCreator.GetDependency<LevLevelCompleteUISystem>();
+        _playerSystem = levCreator.GetDependency<LevPlayerSystem>();
 
         List<Transform> enemySpawnPositions = levCreator.GetObjectsByName(AllTagNames.EnemySpawnPosition);
         foreach (Transform enemySpawnPosition in enemySpawnPositions)
@@ -26,11 +28,7 @@ public class LevEnemiesSystem : LevDependency
             enemyController.GameStart(levCreator);
             Piece piece = enemySpawnPosition.GetComponent<PieceType>().piece;
             
-            //Get the order of the doors, in ascending order based on y-value
-            List<SingleDoorPosition> doors = _doorsSystem.GetDoorPositions().ToList();
-            doors.Sort((a, b) => a.transform.position.y.CompareTo(b.transform.position.y));
-            
-            enemyController.SetEnemyInstance(enemySpawnPosition.transform.position, piece, doors);
+            enemyController.SetEnemyInstance(enemySpawnPosition.transform.position, piece);
             _enemyControllers.Add(enemyController);
         }
     }
@@ -69,7 +67,7 @@ public class LevEnemiesSystem : LevDependency
         return false;
     }
 
-    public void PieceCaptured(LevEnemyController enemyController, int roomNumber)
+    public void PieceCaptured(LevEnemyController enemyController)
     {
         _chainUISystem.ShowNewPiece(enemyController.GetPiece());
         
@@ -77,9 +75,10 @@ public class LevEnemiesSystem : LevDependency
         
         _enemyControllers.Remove(enemyController);
 
-        if (IsEnemiesInRoomCleared(roomNumber))
+        if (IsEnemiesInRoomCleared())
         {
-            _doorsSystem.SetRoomDoorsOpen(roomNumber);
+            _playerSystem.SetStateForAllPlayers(LevPlayerController.States.EndGame);
+            _levelCompleteUISystem.Show();
         }
     }
 
@@ -94,25 +93,16 @@ public class LevEnemiesSystem : LevDependency
     {
         foreach (LevEnemyController enemyController in _enemyControllers)
         {
-            if (enemyController.GetState() != LevEnemyController.States.Captured)
+            if (enemyController.state != LevEnemyController.States.Captured)
             {
                 enemyController.SetState(state);
             }
         }
     }
 
-    public bool IsEnemiesInRoomCleared(int roomNumber)
+    public bool IsEnemiesInRoomCleared()
     {
-        int noOfEnemiesInRoom = 0;
-        foreach (LevEnemyController enemyController in _enemyControllers)
-        {
-            if (enemyController.GetRoomNumber() == roomNumber)
-            {
-                noOfEnemiesInRoom++;
-            }
-        }
-
-        return noOfEnemiesInRoom == 0;
+        return _enemyControllers.Count == 0;
     }
 
     public void AddPositionTakenByEnemyForThisTurn(Vector3 positionTakenByEnemy)

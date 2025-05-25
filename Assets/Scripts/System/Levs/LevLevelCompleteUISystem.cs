@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class LevLevelCompleteUISystem : LevDependency
 {
+    public bool isShowing => _levelCompleteUI.gameObject.activeSelf;
+    
     private Transform _levelCompleteUI;
     
     public override void GameStart(LevCreator levCreator)
@@ -12,39 +14,34 @@ public class LevLevelCompleteUISystem : LevDependency
 
         _levelCompleteUI = levCreator.GetFirstObjectWithName(AllTagNames.LevelComplete).transform;
 
-        Button[] buttons = _levelCompleteUI.GetComponentsInChildren<Button>();
-        foreach (Button button in buttons)
+        Transform retryButtonTf = levCreator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.Retry);
+        Button retryButton = retryButtonTf.GetComponent<Button>();
+        retryButton.onClick.AddListener(() =>
         {
-            switch (button.tag)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        });
+        
+        Transform nextLevelButtonTf = levCreator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.NextLevel);
+        Button nextLevelButton = nextLevelButtonTf.GetComponent<Button>();
+        nextLevelButton.onClick.AddListener(() =>
+        {
+            if (Creator.nextLevelNumber >= 1)
             {
-                case "Retry":
-                    button.onClick.AddListener(() =>
-                    {
-                        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                    });
-                    break;
-                case "NextLevel":
-                    button.onClick.AddListener(() =>
-                    {
-                        if (Creator.nextLevelNumber >= 1)
-                        {
-                            string nextSceneName = "Puzzle" + Creator.nextLevelNumber + "Scene";
-                            SceneManager.LoadScene(nextSceneName);
-                        }
-                        else
-                        {
-                            SceneManager.LoadScene("MainMenuScene");
-                        }
-                    });
-                    break;
-                case "Exit":
-                    button.onClick.AddListener(() =>
-                    {
-                        SceneManager.LoadScene("MainMenuScene");
-                    });
-                    break;
+                string nextSceneName = "Puzzle" + Creator.nextLevelNumber + "Scene";
+                SceneManager.LoadScene(nextSceneName);
             }
-        }
+            else
+            {
+                SceneManager.LoadScene("MainMenuScene");
+            }
+        });
+        
+        Transform exitButtonTf = levCreator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.Exit);
+        Button exitButton = exitButtonTf.GetComponent<Button>();
+        exitButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene("MainMenuScene");
+        });
         
         Hide();
     }
