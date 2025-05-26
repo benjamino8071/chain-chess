@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class LevChainUISystem : LevDependency
 {
+    private LevTurnSystem _turnSystem;
+    
     private Transform _guiTopChain;
     
     private Transform _chainParent;
@@ -21,6 +23,8 @@ public class LevChainUISystem : LevDependency
     {
         base.GameStart(levCreator);
 
+        _turnSystem = levCreator.GetDependency<LevTurnSystem>();
+        
         _guiTopChain = levCreator.GetFirstObjectWithName(AllTagNames.GUITopChain);
         
         _chainParent = levCreator.GetChildObjectByName(_guiTopChain.gameObject, AllTagNames.ChainParent);
@@ -43,8 +47,8 @@ public class LevChainUISystem : LevDependency
     
     public void SetChain(List<Piece> pieces)
     {
-        ResetPosition();
-        ClearChain();
+        UnsetChain();
+        
         for (int i = 0; i < pieces.Count; i++)
         {
             ShowNewPiece(pieces[i], i == 0);
@@ -70,6 +74,9 @@ public class LevChainUISystem : LevDependency
         }
         
         _nextFreeImage.Value.Item2.sprite = GetSprite(piece);
+        _nextFreeImage.Value.Item2.color = _turnSystem.CurrentTurn() == LevTurnSystem.Turn.White 
+            ? Creator.piecesSo.whiteColor 
+            : Creator.piecesSo.blackColor;
         _nextFreeImage.Value.Item2.gameObject.SetActive(true);
         _nextFreeImage.Value = (piece, _nextFreeImage.Value.Item2);
 
@@ -177,17 +184,17 @@ public class LevChainUISystem : LevDependency
         switch (piece)
         {
             case Piece.Pawn:
-                return Creator.playerSystemSo.pawn;
+                return Creator.piecesSo.pawn;
             case Piece.Rook:
-                return Creator.playerSystemSo.rook;
+                return Creator.piecesSo.rook;
             case Piece.Knight:
-                return Creator.playerSystemSo.knight;
+                return Creator.piecesSo.knight;
             case Piece.Bishop:
-                return Creator.playerSystemSo.bishop;
+                return Creator.piecesSo.bishop;
             case Piece.Queen:
-                return Creator.playerSystemSo.queen;
+                return Creator.piecesSo.queen;
             case Piece.King:
-                return Creator.playerSystemSo.king;
+                return Creator.piecesSo.king;
             case Piece.NotChosen:
                 return Creator.chainSo.arrowPointingToNextPiece;
         }

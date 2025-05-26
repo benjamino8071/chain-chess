@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class LevPauseUISystem : LevDependency
 {
-    private LevPlayerSystem _playerSystem;
     private LevLevelCompleteUISystem _levelCompleteUISystem;
     private LevGameOverUISystem _gameOverUISystem;
     
@@ -18,7 +17,6 @@ public class LevPauseUISystem : LevDependency
     {
         base.GameStart(levCreator);
 
-        _playerSystem = levCreator.GetDependency<LevPlayerSystem>();
         _levelCompleteUISystem = levCreator.GetDependency<LevLevelCompleteUISystem>();
         _gameOverUISystem = levCreator.GetDependency<LevGameOverUISystem>();
 
@@ -30,12 +28,10 @@ public class LevPauseUISystem : LevDependency
             if (!_pauseGUI.gameObject.activeSelf && !_levelCompleteUISystem.isShowing && !_gameOverUISystem.isShowing)
             {
                 _pauseGUI.gameObject.SetActive(true);
-                _playerSystem.SetStateForAllPlayers(LevPlayerController.States.WaitingForTurn);
             }
             else
             {
                 _pauseGUI.gameObject.SetActive(false);
-                _playerSystem.SetStateForAllPlayers(LevPlayerController.States.Idle);
             }
         });
 

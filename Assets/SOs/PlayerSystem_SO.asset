@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 4
   walkThroughDoorSpeed: 0.5
-  pawn: {fileID: 2533179969505074583, guid: 80927466a7a81c048bde258fe0cdeafa, type: 3}
-  rook: {fileID: 6402892968040458680, guid: 8ecce7d5b11afa54db3926fd98cf2949, type: 3}
-  knight: {fileID: -5711848221618334454, guid: e36dfa630b14b10438cb3a8aea946ca7, type: 3}
-  bishop: {fileID: 1379780806020190625, guid: 52cb59fd2104be047a124a1eecc764cf, type: 3}
-  queen: {fileID: 7519753400087680208, guid: 35daaf531971a974a977c7dfde67d248, type: 3}
-  king: {fileID: -4821530343430527414, guid: 6ab63fb05b0cd654399b0b52e0e15650, type: 3}
+  pawn: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
+  rook: {fileID: 21300000, guid: d14695bd0585e8b44bbbc4e8ba42903a, type: 3}
+  knight: {fileID: 21300000, guid: d0767ba0481335a44b352780e7c83047, type: 3}
+  bishop: {fileID: 21300000, guid: 8bb79200e5378e04bb558fc9f6a18621, type: 3}
+  queen: {fileID: 21300000, guid: 61ececf98cb087549bd062f738a02b09, type: 3}
+  king: {fileID: 21300000, guid: 57fa98800d633734dbc6d07c0c888d5e, type: 3}
   noEffectMaterial: {fileID: 2100000, guid: cc460e5b1c6c0bd498b44195a0c3da99, type: 2}
   invincibleEffectMaterial: {fileID: 2100000, guid: 39bec7e689318b340977712092545dfe, type: 2}
   superInvincibleEffectMaterial: {fileID: 2100000, guid: 95c4b3e7bfbde5047a296a98a8326756, type: 2}

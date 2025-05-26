@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Enemy_SO
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  pawn: {fileID: 2533179969505074583, guid: 5a329a228daa02849bf2a94636a1cbcf, type: 3}
-  rook: {fileID: 6402892968040458680, guid: 666e55479f5afe34badf6a7b5654f7ea, type: 3}
-  knight: {fileID: -5711848221618334454, guid: 888762c9c3666024eb515c19ba02bd86, type: 3}
-  bishop: {fileID: 1379780806020190625, guid: dfe647dfc872a814fb02d4c21eb2a8f8, type: 3}
-  king: {fileID: -4821530343430527414, guid: f7e4c9cb0fe5e7d4f86343cc0302045c, type: 3}
-  queen: {fileID: 7519753400087680208, guid: 2de24f2c962cb6746a5be0942ecca4c4, type: 3}
+  pawn: {fileID: 21300000, guid: 0452acadd5c4b0c47a790f63f613d90d, type: 3}
+  rook: {fileID: 21300000, guid: 0d25aa62516324641b2413c18f913f59, type: 3}
+  knight: {fileID: 21300000, guid: 1a9612e5ed395714fa0078106b397ba2, type: 3}
+  bishop: {fileID: 21300000, guid: 83a26a071ab9a1944bf1406c4a747ca1, type: 3}
+  king: {fileID: 21300000, guid: fbd00a5368bc4c34fbfb88ccf05c0ed4, type: 3}
+  queen: {fileID: 21300000, guid: 20bfb4daddca89747a4680b39ecd1713, type: 3}
   noneMat: {fileID: 2100000, guid: cc460e5b1c6c0bd498b44195a0c3da99, type: 2}
   glitchedMat: {fileID: 2100000, guid: 5afb5ad234e5f7b4e924c69aace4499c, type: 2}
   chainMat: {fileID: 2100000, guid: e76cfe5e58629f449af696ed6f57501e, type: 2}

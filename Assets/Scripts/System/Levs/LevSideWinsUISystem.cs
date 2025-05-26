@@ -1,0 +1,60 @@
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class LevSideWinsUISystem : LevDependency
+{
+    private Transform _sideWinsUI;
+
+    private Image _sideWinsBackgroundImage;
+    
+    private TMP_Text _sideWinsTitleText;
+    
+    public override void GameStart(LevCreator levCreator)
+    {
+        base.GameStart(levCreator);
+        
+        _sideWinsUI = levCreator.GetFirstObjectWithName(AllTagNames.SideWins).transform;
+
+        _sideWinsBackgroundImage = _sideWinsUI.GetComponent<Image>();
+        
+        Transform sideWinsTitleText = levCreator.GetChildObjectByName(_sideWinsUI.gameObject, AllTagNames.Text);
+        _sideWinsTitleText = sideWinsTitleText.GetComponent<TMP_Text>();
+        
+        Transform retryButtonTf = levCreator.GetChildObjectByName(_sideWinsUI.gameObject, AllTagNames.Retry);
+        Button retryButton = retryButtonTf.GetComponent<Button>();
+        retryButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        });
+        
+        Transform exitButtonTf = levCreator.GetChildObjectByName(_sideWinsUI.gameObject, AllTagNames.Exit);
+        Button exitButton = exitButtonTf.GetComponent<Button>();
+        exitButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene("MainMenuScene");
+        });
+        
+        Hide();
+    }
+    
+    public void Show(LevPieceController.PieceColour winningSide)
+    {
+        string winningSideName = winningSide == LevPieceController.PieceColour.White ? "White" : "Black";
+        _sideWinsTitleText.text = $"<bounce a=0.1 f=0.3>{winningSideName} Wins";
+
+        Color winningSideColour = winningSide == LevPieceController.PieceColour.White
+            ? Creator.piecesSo.whiteColor
+            : Creator.piecesSo.blackColor;
+        winningSideColour.a = _sideWinsBackgroundImage.color.a;
+        _sideWinsBackgroundImage.color = winningSideColour;
+        
+        _sideWinsUI.gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        _sideWinsUI.gameObject.SetActive(false);
+    }
+}

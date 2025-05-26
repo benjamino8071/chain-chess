@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,16 +6,12 @@ public class LevGameOverUISystem : LevDependency
 {
     public bool isShowing => _gameOverUI.gameObject.activeSelf;
     
-    private LevPauseUISystem _pauseUISystem;
-    
     private Transform _gameOverUI;
     
     public override void GameStart(LevCreator levCreator)
     {
         base.GameStart(levCreator);
-
-        _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
-
+        
         _gameOverUI = levCreator.GetFirstObjectWithName(AllTagNames.GameOver).transform;
         
         Transform resetButtonTf = levCreator.GetChildObjectByName(_gameOverUI.gameObject, AllTagNames.Retry);

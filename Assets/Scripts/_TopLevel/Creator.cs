@@ -10,7 +10,7 @@ public class Creator : MonoBehaviour
 
     public int frameRate = 120;
     
-    protected LinkedList<Dependency> _dependencies = new();
+    protected List<Dependency> _dependencies = new();
 
     private void Awake()
     {
