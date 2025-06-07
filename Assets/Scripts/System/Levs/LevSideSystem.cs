@@ -55,7 +55,7 @@ public class LevSideSystem : LevDependency
         
         _pieceControllerSelected?.GameUpdate(dt);
         
-        if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame() && controlledBy == ControlledBy.Player)
+        if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame() && controlledBy == ControlledBy.Player && _boardSystem.GetMouseWorldPosition().y < 0.8f)
         {
             /*
              * If the player selects another piece when they haven't made a move

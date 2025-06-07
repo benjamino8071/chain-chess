@@ -112,14 +112,14 @@ public class LevBoardSystem : LevDependency
         if (enemyColour == LevPieceController.PieceColour.White 
             && _whiteSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController whitePieceCont))
         {
-            _chainUISystem.ShowNewPiece(whitePieceCont.capturedPieces[0]);
+            _chainUISystem.ShowNewPiece(whitePieceCont.capturedPieces[0], pieceUsed.movesUsed);
             pieceUsed.AddCapturedPiece(whitePieceCont.capturedPieces[0]);
             return _whiteSystem.PieceCaptured(whitePieceCont, pieceUsed.piecesCapturedInThisTurn);
         }
         if (enemyColour == LevPieceController.PieceColour.Black 
             && _blackSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController blackPieceCont))
         {
-            _chainUISystem.ShowNewPiece(blackPieceCont.capturedPieces[0]);
+            _chainUISystem.ShowNewPiece(blackPieceCont.capturedPieces[0], pieceUsed.movesUsed);
             pieceUsed.AddCapturedPiece(blackPieceCont.capturedPieces[0]);
             return _blackSystem.PieceCaptured(blackPieceCont, pieceUsed.piecesCapturedInThisTurn);
         }
@@ -130,5 +130,11 @@ public class LevBoardSystem : LevDependency
     public Vector3 GetHighlightPosition()
     {
         return _highlightedPosition;
+    }
+
+    public Vector3 GetMouseWorldPosition()
+    {
+        Vector3 screenPos = Input.mousePosition;
+        return Camera.main.ScreenToViewportPoint(screenPos);
     }
 }

@@ -37,6 +37,8 @@ public class LevPieceController : LevController
     
     public bool hasMoved => _capturedPieces.Count != _movesInThisTurn.Count;
     
+    public int movesUsed => _capturedPieces.Count - _movesInThisTurn.Count;
+    
     public int piecesCapturedInThisTurn => _piecesCapturedInThisTurn;
 
     protected List<Piece> _capturedPieces = new(16);
@@ -153,7 +155,7 @@ public class LevPieceController : LevController
             List<Vector3> validMoves = GetAllValidMovesOfCurrentPiece();
             if (validMoves.Count > 0)
             {
-                _chainUISystem.HighlightNextPiece();
+                _chainUISystem.HighlightNextPiece(movesUsed);
                 _validMovesSystem.UpdateSelectedBackground(_pieceInstance.position);
                 SetState(States.FindingMove);
             }

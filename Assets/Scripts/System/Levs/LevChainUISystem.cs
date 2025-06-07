@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,7 +9,8 @@ using UnityEngine.UI;
 public class LevChainUISystem : LevDependency
 {
     private LevTurnSystem _turnSystem;
-    
+    private LevBoardSystem _boardSystem;
+
     private Transform _guiTopChain;
     
     private Transform _chainParent;
@@ -17,16 +19,23 @@ public class LevChainUISystem : LevDependency
     
     private Vector3 _chainParentInitialPos;
     private Vector3 _chainParentNewPos;
+
+    private class PieceImage
+    {
+        public Piece piece;
+        public Image image;
+    }
     
-    private LinkedList<(Piece, Image)> _chainPiecesImages = new ();
-    private LinkedListNode<(Piece, Image)> _nextFreeImage;
+    private List<PieceImage> _chainPieceImages = new ();
+    private int _nextFreeIndex;
     
     public override void GameStart(LevCreator levCreator)
     {
         base.GameStart(levCreator);
 
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
-        
+        _boardSystem = levCreator.GetDependency<LevBoardSystem>();
+
         _guiTopChain = levCreator.GetFirstObjectWithName(AllTagNames.GUITopChain);
         
         _chainParent = levCreator.GetChildObjectByName(_guiTopChain.gameObject, AllTagNames.ChainParent);
@@ -34,17 +43,20 @@ public class LevChainUISystem : LevDependency
         Image[] chainPieceImages = _chainParent.GetComponentsInChildren<Image>();
         foreach (Image chainPieceImage in chainPieceImages)
         {
-            _chainPiecesImages.AddLast((Piece.NotChosen, chainPieceImage));
+            _chainPieceImages.Add(new()
+            {
+                piece = Piece.NotChosen,
+                image = chainPieceImage
+            });
             chainPieceImage.gameObject.SetActive(false);
         }
-        _nextFreeImage = _chainPiecesImages.First;
 
         Transform movesRemainingText = levCreator.GetFirstObjectWithName(AllTagNames.MovesRemaining);
         _movesRemainingText = movesRemainingText.GetComponentInChildren<TextMeshProUGUI>();
         
         _chainParentInitialPos = _chainParent.localPosition;
         _chainParentNewPos = _chainParent.localPosition;
-
+        
         if (SceneManager.sceneCount == 1)
         {
             Show();
@@ -57,9 +69,12 @@ public class LevChainUISystem : LevDependency
         SceneManager.sceneUnloaded += SceneManager_SceneUnloaded;
     }
 
+    private float _mousePosXLastFrame = -1;
+    private float _mouseOffTimer;
+
     public override void GameUpdate(float dt)
     {
-        if (_chainParentNewPos == _chainParent.localPosition)
+        if (ProcessSlider(dt) || _chainParentNewPos == _chainParent.localPosition)
         {
             return;
         }
@@ -68,13 +83,39 @@ public class LevChainUISystem : LevDependency
         _chainParent.localPosition = lerpPos;
     }
 
+    private bool ProcessSlider(float dt)
+    {
+        if (Creator.inputSo._leftMouseButton.action.IsPressed() && _boardSystem.GetMouseWorldPosition().y >= 0.8f)
+        {
+            float3 mousePos = Input.mousePosition;
+            if (_mousePosXLastFrame > 0)
+            {
+                float mousePosXChange = mousePos.x - _mousePosXLastFrame;
+                float3 chainParentLocalPos = _chainParent.localPosition;
+                chainParentLocalPos.x += mousePosXChange;
+                _chainParent.localPosition = chainParentLocalPos;
+            }
+            _mousePosXLastFrame = mousePos.x;
+            _mouseOffTimer = 1f;
+            return true;
+        }
+        else if (_mouseOffTimer > 0)
+        {
+            _mouseOffTimer -= dt;
+            _mousePosXLastFrame = -1;
+            return _mouseOffTimer > 0;
+        }
+        _mousePosXLastFrame = -1;
+        return false;
+    }
+
     public void SetChain(List<Piece> pieces)
     {
         UnsetChain();
         
         for (int i = 0; i < pieces.Count; i++)
         {
-            ShowNewPiece(pieces[i], i == 0);
+            ShowNewPiece(pieces[i], 0, i == 0);
         }
 
         UpdateMovesRemainingText(pieces.Count);
@@ -87,117 +128,135 @@ public class LevChainUISystem : LevDependency
         UpdateMovesRemainingText(0);
     }
     
-    public void ShowNewPiece(Piece piece, bool isFirstPiece = false)
+    public void ShowNewPiece(Piece piece, int movesUsed, bool isFirstPiece = false)
     {
+        Color pieceColor = _turnSystem.CurrentTurn() == LevPieceController.PieceColour.White
+            ? Creator.piecesSo.whiteColor 
+            : Creator.piecesSo.blackColor;
+        
         //For every other piece we first want to add an arrow indicating the order for the chain
         if (!isFirstPiece)
         {
-            _nextFreeImage.Value.Item2.sprite = Creator.chainSo.arrowPointingToNextPiece;
-            _nextFreeImage.Value.Item2.gameObject.SetActive(true);
-            _nextFreeImage.Value = (Piece.NotChosen, _nextFreeImage.Value.Item2);
-            
-            _nextFreeImage = _nextFreeImage.Next;
-        }
-        
-        _nextFreeImage.Value.Item2.sprite = GetSprite(piece);
-        _nextFreeImage.Value.Item2.color = _turnSystem.CurrentTurn() == LevPieceController.PieceColour.White
-            ? Creator.piecesSo.whiteColor 
-            : Creator.piecesSo.blackColor;
-        _nextFreeImage.Value.Item2.gameObject.SetActive(true);
-        _nextFreeImage.Value = (piece, _nextFreeImage.Value.Item2);
+            _chainPieceImages[_nextFreeIndex].image.sprite = Creator.chainSo.arrowPointingToNextPiece;
+            _chainPieceImages[_nextFreeIndex].image.color = pieceColor;
+            _chainPieceImages[_nextFreeIndex].image.rectTransform.sizeDelta = new(50, 50);
+            _chainPieceImages[_nextFreeIndex].image.gameObject.SetActive(true);
+            _chainPieceImages[_nextFreeIndex].piece = Piece.NotChosen;
 
-        _nextFreeImage = _nextFreeImage.Next;
+            _nextFreeIndex++;
+        }
+
+        //Every other image is an arrow
+        movesUsed *= 2;
+        UpdateAlphaValue(0.1f, movesUsed);
+        
+        _chainPieceImages[_nextFreeIndex].image.sprite = GetSprite(piece);
+        _chainPieceImages[_nextFreeIndex].image.color = pieceColor;
+        _chainPieceImages[_nextFreeIndex].image.rectTransform.sizeDelta = new(100, 100);
+        _chainPieceImages[_nextFreeIndex].image.gameObject.SetActive(true);
+        _chainPieceImages[_nextFreeIndex].piece  = piece;
+
+        _nextFreeIndex++;
+    }
+
+    private void UpdateAlphaValue(float a, int amountToChange)
+    {
+        for (int i = 0; i < amountToChange; i++)
+        {
+            Color imageColor = _chainPieceImages[i].image.color;
+            imageColor.a = a;
+            _chainPieceImages[i].image.color = imageColor;
+        }
     }
 
     private void ResetPosition()
     {
         _chainParent.localPosition = _chainParentInitialPos;
         _chainParentNewPos = _chainParentInitialPos;
-        foreach ((Piece, Image) chainPiecesImage in _chainPiecesImages)
+        foreach (PieceImage chainPiecesImage in _chainPieceImages)
         {
-            chainPiecesImage.Item2.color = new Color(1,1,1, 1);
+            chainPiecesImage.image.color = new Color(1,1,1, 1);
         }
     }
 
     private void ClearChain()
     {
-        foreach ((Piece, Image) capturedPiecesImage in _chainPiecesImages)
+        foreach (PieceImage capturedPiecesImage in _chainPieceImages)
         {
-            capturedPiecesImage.Item2.gameObject.SetActive(false);
+            capturedPiecesImage.image.gameObject.SetActive(false);
+            Color imageColor = capturedPiecesImage.image.color;
+            imageColor.a = 1f;
+            capturedPiecesImage.image.color = imageColor;
         }
-        _nextFreeImage = _chainPiecesImages.First;
+        
+        _nextFreeIndex = 0;
     }
 
-    public void HighlightNextPiece()
+    public void HighlightNextPiece(int movesUsed)
     {
-        _chainParentNewPos += new Vector3(-260, 0, 0);
+        _chainParentNewPos += new Vector3(-210, 0, 0);
+
+        movesUsed *= 2;
+        UpdateAlphaValue(0.1f, movesUsed);
     }
 
     public void PawnPromoted(int index, Piece promotedPiece)
     {
-        LinkedListNode<(Piece, Image)> temp = _chainPiecesImages.First;
         int tempIndex = 0;
-        while (temp != null)
+        while (tempIndex < _chainPieceImages.Count)
         {
+            PieceImage pieceImage = _chainPieceImages[tempIndex];
             if (index == tempIndex)
             {
-                (Piece, Image) value = temp.Value;
-                value.Item1 = promotedPiece;
-                value.Item2.sprite = GetSprite(promotedPiece);
-                temp.Value = value;
+                pieceImage.piece = promotedPiece;
+                pieceImage.image.sprite = GetSprite(promotedPiece);
                 break;
             }
 
             tempIndex++;
-            temp = temp.Next;
         }
     }
 
     public void PieceSandwiched(int index, Piece pieceToSandwich)
     {
-        int tempIndex = 0;
+        //On reflection, this kind of goes against the idea of the chain
+        //May confuse players
+        /*int tempIndex = 0;
         int numOfImagesActive = GetNumOfImagesActive();
-
-        LinkedListNode<(Piece, Image)> temp = _chainPiecesImages.First;
         
-        LinkedList<Piece> piecesInOrder = new();
+        List<Piece> piecesInOrder = new();
         
-        while (temp is not null && tempIndex <= numOfImagesActive)
+        while (tempIndex < _chainPieceImages.Count && tempIndex <= numOfImagesActive)
         {
+            PieceImage pieceImage = _chainPieceImages[tempIndex];
             if (index == tempIndex)
             {
-                piecesInOrder.AddLast(pieceToSandwich);
+                piecesInOrder.Add(pieceToSandwich);
             }
-            else
+            else if (pieceImage.piece != Piece.NotChosen)
             {
-                if (temp.Value.Item1 != Piece.NotChosen)
-                {
-                    piecesInOrder.AddLast(temp.Value.Item1);
-                }
-                temp = temp.Next;
+                piecesInOrder.Add(pieceImage.piece);
             }
             
             tempIndex++;
         }
-        
-        LinkedListNode<Piece> piecesInOrderTemp = piecesInOrder.First;
-        _nextFreeImage = _chainPiecesImages.First;
-        ShowNewPiece(piecesInOrderTemp.Value, true);
-        piecesInOrderTemp = piecesInOrderTemp.Next;
-        while (piecesInOrderTemp is not null)
+
+        tempIndex = 0;
+        while (tempIndex < _chainPieceImages.Count)
         {
-            ShowNewPiece(piecesInOrderTemp.Value);
-            
-            piecesInOrderTemp = piecesInOrderTemp.Next;
-        }
+            PieceImage pieceImage = _chainPieceImages[tempIndex];
+            ShowNewPiece(pieceImage.piece, 0, tempIndex == 0);
+
+            tempIndex++;
+        }*/
     }
 
     private int GetNumOfImagesActive()
     {
         int count = 0;
-        foreach ((Piece, Image) chainPiecesImage in _chainPiecesImages)
+        foreach (PieceImage chainPiecesImage in _chainPieceImages)
         {
-            if (chainPiecesImage.Item2.gameObject.activeSelf)
+            if (chainPiecesImage.image.gameObject.activeSelf)
                 count++;
         }
         return count;

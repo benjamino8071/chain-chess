@@ -73,11 +73,11 @@ public class LevCreator : Creator
         _dependencies.Add(new LevAudioSystem());
         _dependencies.Add(new LevChainUISystem());
         _dependencies.Add(new LevCinemachineSystem());
-        _dependencies.Add(new LevBlackSystem());
         _dependencies.Add(new LevBoardSystem());
         _dependencies.Add(new LevLevelCompleteUISystem());
         _dependencies.Add(new LevPauseUISystem());
         _dependencies.Add(new LevWhiteSystem());
+        _dependencies.Add(new LevBlackSystem());
         _dependencies.Add(new LevRestartLevelSystem());
         _dependencies.Add(new LevGameOverUISystem());
         _dependencies.Add(new LevSideWinsUISystem());

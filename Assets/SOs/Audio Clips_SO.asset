@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Audio Clips_SO
   m_EditorClassIdentifier: 
   pieceSelected: {fileID: 8300000, guid: f4781d302b303408d8b02da3dd8aed5a, type: 3}
+  doubleTapPositionSelected: {fileID: 8300000, guid: edbf807d5cf8e4bf0951a05c20896a98, type: 3}
   pieceMoved: {fileID: 8300000, guid: 469e8b9b6277b4e4fa7cfada6a9673da, type: 3}
   pieceCaptured: {fileID: 8300000, guid: b569aada900f14e438e0ff052d4e7f45, type: 3}
   gameOver: {fileID: 8300000, guid: c1f47c4aad5f14a138bf7c0467396b25, type: 3}

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LevValidMovesSystem : LevDependency
 {
-    private List<Transform> _validPositionsVisuals;
+    private List<Transform> _validMovesVisuals;
 
     private Transform _selectedBackgroundVisual;
     
@@ -11,13 +11,15 @@ public class LevValidMovesSystem : LevDependency
     {
         base.GameStart(levCreator);
 
-        _validPositionsVisuals = new(64);
+        _validMovesVisuals = new(64);
+
+        Transform allValidMovesParent = Creator.GetFirstObjectWithName(AllTagNames.AllValidMovesParent);
         
-        for (int i = 0; i < _validPositionsVisuals.Capacity; i++)
+        for (int i = 0; i < _validMovesVisuals.Capacity; i++)
         {
-            GameObject validPos =
-                Creator.InstantiateGameObject(Creator.validPositionPrefab, Vector3.zero, Quaternion.identity);
-            _validPositionsVisuals.Add(validPos.transform);
+            GameObject validMove =
+                Creator.InstantiateGameObjectWithParent(Creator.validPositionPrefab, allValidMovesParent);
+            _validMovesVisuals.Add(validMove.transform);
         }
 
         GameObject selectedBackgroundVisual =
@@ -31,8 +33,8 @@ public class LevValidMovesSystem : LevDependency
     {
         HideAllValidMoves();
 
-        _validPositionsVisuals[0].position = validMove;
-        _validPositionsVisuals[0].gameObject.SetActive(true);
+        _validMovesVisuals[0].position = validMove;
+        _validMovesVisuals[0].gameObject.SetActive(true);
         
         _selectedBackgroundVisual.position = piecePos;
         _selectedBackgroundVisual.gameObject.SetActive(true);
@@ -44,8 +46,8 @@ public class LevValidMovesSystem : LevDependency
         
         for (int i = 0; i < validMoves.Count; i++)
         {
-            _validPositionsVisuals[i].position = validMoves[i];
-            _validPositionsVisuals[i].gameObject.SetActive(true);
+            _validMovesVisuals[i].position = validMoves[i];
+            _validMovesVisuals[i].gameObject.SetActive(true);
         }
 
         _selectedBackgroundVisual.position = piecePos;
@@ -62,7 +64,7 @@ public class LevValidMovesSystem : LevDependency
     
     public void HideAllValidMoves()
     {
-        foreach (Transform validPositionsVisual in _validPositionsVisuals)
+        foreach (Transform validPositionsVisual in _validMovesVisuals)
         {
             validPositionsVisual.position = Vector3.zero;
             validPositionsVisual.gameObject.SetActive(false);

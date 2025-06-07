@@ -89,5 +89,6 @@ public enum AllTagNames
     PlayerWon,
     WhiteSp,
     BlackSp,
-    SideWins
+    SideWins,
+    AllValidMovesParent
 }
