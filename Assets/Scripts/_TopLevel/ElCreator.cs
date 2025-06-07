@@ -9,7 +9,6 @@ public class ElCreator : Creator
     public PlayerSystem_SO playerSystemSo;
     public Enemy_SO enemySo;
     public MainMenu_SO mainMenuSo;
-    public Scoreboard_SO scoreboardSo;
     public Shop_SO shopSo;
     public Chain_SO chainSo;
     public AudioClips_SO audioClipsSo;
@@ -75,7 +74,7 @@ public class ElCreator : Creator
             elDependency.GameStart(this);
         }
 
-        if (playerSystemSo.firstMoveMadeWhileShowingMainMenu)
+        if (playerSystemSo.hideMainMenuTrigger)
         {
             ShowGUITop();
             ShowGUIBottom();
@@ -121,7 +120,6 @@ public class ElCreator : Creator
         _dependencies.Add(new ElXPBarUISystem());
         _dependencies.Add(new ElGameOverUISystem());
         _dependencies.Add(new ElPlayerWonUISystem());
-        _dependencies.Add(new ElScoreEntryUISystem());
         _dependencies.Add(new ElTimerUISystem());
         _dependencies.Add(new ElLivesUISystem());
         _dependencies.Add(new ElRoomNumberUISystem());

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class LevLevelCompleteUISystem : LevDependency
 {
+    private LevAudioSystem _audioSystem;
+    
     public bool isShowing => _levelCompleteUI.gameObject.activeSelf;
     
     private Transform _levelCompleteUI;
@@ -12,12 +14,15 @@ public class LevLevelCompleteUISystem : LevDependency
     {
         base.GameStart(levCreator);
 
+        _audioSystem = levCreator.GetDependency<LevAudioSystem>();
+        
         _levelCompleteUI = levCreator.GetFirstObjectWithName(AllTagNames.LevelComplete).transform;
 
         Transform retryButtonTf = levCreator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.Retry);
         Button retryButton = retryButtonTf.GetComponent<Button>();
         retryButton.onClick.AddListener(() =>
         {
+            _audioSystem.PlayUIClickSfx();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
         
@@ -25,6 +30,7 @@ public class LevLevelCompleteUISystem : LevDependency
         Button nextLevelButton = nextLevelButtonTf.GetComponent<Button>();
         nextLevelButton.onClick.AddListener(() =>
         {
+            _audioSystem.PlayUIClickSfx();
             if (Creator.nextLevelNumber >= 1)
             {
                 string nextSceneName = "Puzzle" + Creator.nextLevelNumber + "Scene";
@@ -40,6 +46,7 @@ public class LevLevelCompleteUISystem : LevDependency
         Button exitButton = exitButtonTf.GetComponent<Button>();
         exitButton.onClick.AddListener(() =>
         {
+            _audioSystem.PlayUIClickSfx();
             SceneManager.LoadScene("MainMenuScene");
         });
         
@@ -49,6 +56,7 @@ public class LevLevelCompleteUISystem : LevDependency
     public void Show()
     {
         _levelCompleteUI.gameObject.SetActive(true);
+        _audioSystem.PlayLevelCompleteSfx();
     }
 
     public void Hide()

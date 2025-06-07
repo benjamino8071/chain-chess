@@ -27,6 +27,17 @@ public class LevValidMovesSystem : LevDependency
         HideAllValidMoves();
     }
 
+    public void ShowSingleValidMove(Vector3 validMove, Vector3 piecePos)
+    {
+        HideAllValidMoves();
+
+        _validPositionsVisuals[0].position = validMove;
+        _validPositionsVisuals[0].gameObject.SetActive(true);
+        
+        _selectedBackgroundVisual.position = piecePos;
+        _selectedBackgroundVisual.gameObject.SetActive(true);
+    }
+
     public void UpdateValidMoves(List<Vector3> validMoves, Vector3 piecePos)
     {
         HideAllValidMoves();

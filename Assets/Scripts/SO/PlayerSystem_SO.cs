@@ -23,7 +23,7 @@ public class PlayerSystem_SO : ScriptableObject
     public int levelNumberSaved;
     public float xValueToStartOn;
     public int roomNumberSaved;
-    public bool firstMoveMadeWhileShowingMainMenu;
+    public bool hideMainMenuTrigger;
     public bool moveMadeInNewRoom;
     public Piece startingPiece = Piece.NotChosen;
     public List<ArtefactTypes> artefacts = new();

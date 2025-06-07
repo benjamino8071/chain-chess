@@ -1,5 +1,7 @@
+using System;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class LevCreator : Creator
 {
@@ -8,6 +10,8 @@ public class LevCreator : Creator
     public PlayerSystem_SO playerSystemSo;
     public Chain_SO chainSo;
     public Pieces_SO piecesSo;
+    public AudioClips_SO audioClipsSo;
+    public Settings_SO settingsSo;
     
     [Header("Prefabs")]
     public GameObject piecePrefab;
@@ -79,6 +83,14 @@ public class LevCreator : Creator
         _dependencies.Add(new LevSideWinsUISystem());
         _dependencies.Add(new LevEndGameSystem());
         _dependencies.Add(new LevTurnSystem());
+    }
+
+    private void OnDestroy()
+    {
+        foreach (Dependency dependency in _dependencies)
+        {
+            dependency.Clean();
+        }
     }
 }
 

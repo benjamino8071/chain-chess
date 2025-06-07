@@ -9,7 +9,7 @@ public class LevEndGameSystem : LevDependency
     public override void GameStart(LevCreator levCreator)
     {
         base.GameStart(levCreator);
-
+        
         _gameOverUISystem = levCreator.GetDependency<LevGameOverUISystem>();
         _levelCompleteUISystem = levCreator.GetDependency<LevLevelCompleteUISystem>();
         _sideWinsUISystem = levCreator.GetDependency<LevSideWinsUISystem>();

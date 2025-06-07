@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevChainUISystem : LevDependency
@@ -10,11 +12,11 @@ public class LevChainUISystem : LevDependency
     private Transform _guiTopChain;
     
     private Transform _chainParent;
-    private Transform _containerChild;
 
     private TextMeshProUGUI _movesRemainingText;
     
     private Vector3 _chainParentInitialPos;
+    private Vector3 _chainParentNewPos;
     
     private LinkedList<(Piece, Image)> _chainPiecesImages = new ();
     private LinkedListNode<(Piece, Image)> _nextFreeImage;
@@ -29,9 +31,7 @@ public class LevChainUISystem : LevDependency
         
         _chainParent = levCreator.GetChildObjectByName(_guiTopChain.gameObject, AllTagNames.ChainParent);
         
-        _containerChild = _chainParent.GetComponentInChildren<HorizontalLayoutGroup>().transform;
-
-        Image[] chainPieceImages = _containerChild.GetComponentsInChildren<Image>();
+        Image[] chainPieceImages = _chainParent.GetComponentsInChildren<Image>();
         foreach (Image chainPieceImage in chainPieceImages)
         {
             _chainPiecesImages.AddLast((Piece.NotChosen, chainPieceImage));
@@ -42,9 +42,32 @@ public class LevChainUISystem : LevDependency
         Transform movesRemainingText = levCreator.GetFirstObjectWithName(AllTagNames.MovesRemaining);
         _movesRemainingText = movesRemainingText.GetComponentInChildren<TextMeshProUGUI>();
         
-        _chainParentInitialPos = _containerChild.localPosition;
+        _chainParentInitialPos = _chainParent.localPosition;
+        _chainParentNewPos = _chainParent.localPosition;
+
+        if (SceneManager.sceneCount == 1)
+        {
+            Show();
+        }
+        else
+        {
+            Hide();
+        }
+        
+        SceneManager.sceneUnloaded += SceneManager_SceneUnloaded;
     }
-    
+
+    public override void GameUpdate(float dt)
+    {
+        if (_chainParentNewPos == _chainParent.localPosition)
+        {
+            return;
+        }
+        
+        Vector3 lerpPos = math.lerp(_chainParent.localPosition, _chainParentNewPos, dt * Creator.chainSo.addPieceLerpSpeed);
+        _chainParent.localPosition = lerpPos;
+    }
+
     public void SetChain(List<Piece> pieces)
     {
         UnsetChain();
@@ -53,12 +76,15 @@ public class LevChainUISystem : LevDependency
         {
             ShowNewPiece(pieces[i], i == 0);
         }
+
+        UpdateMovesRemainingText(pieces.Count);
     }
 
     public void UnsetChain()
     {
         ResetPosition();
         ClearChain();
+        UpdateMovesRemainingText(0);
     }
     
     public void ShowNewPiece(Piece piece, bool isFirstPiece = false)
@@ -74,7 +100,7 @@ public class LevChainUISystem : LevDependency
         }
         
         _nextFreeImage.Value.Item2.sprite = GetSprite(piece);
-        _nextFreeImage.Value.Item2.color = _turnSystem.CurrentTurn() == LevTurnSystem.Turn.White 
+        _nextFreeImage.Value.Item2.color = _turnSystem.CurrentTurn() == LevPieceController.PieceColour.White
             ? Creator.piecesSo.whiteColor 
             : Creator.piecesSo.blackColor;
         _nextFreeImage.Value.Item2.gameObject.SetActive(true);
@@ -86,6 +112,7 @@ public class LevChainUISystem : LevDependency
     private void ResetPosition()
     {
         _chainParent.localPosition = _chainParentInitialPos;
+        _chainParentNewPos = _chainParentInitialPos;
         foreach ((Piece, Image) chainPiecesImage in _chainPiecesImages)
         {
             chainPiecesImage.Item2.color = new Color(1,1,1, 1);
@@ -103,10 +130,7 @@ public class LevChainUISystem : LevDependency
 
     public void HighlightNextPiece()
     {
-        //Move _capturedPiecesParent along
-        //_nextFreeImage.Value.Item2.color = new Color(0.75f,0.75f,0.75f,1);
-        //_nextFreeImage = _nextFreeImage.Next.Next;
-        _chainParent.localPosition += new Vector3(-260, 0, 0);
+        _chainParentNewPos += new Vector3(-260, 0, 0);
     }
 
     public void PawnPromoted(int index, Piece promotedPiece)
@@ -200,17 +224,36 @@ public class LevChainUISystem : LevDependency
         }
         
         //Given the logic of the code we should never get here but have to add something
-        return default;
+        return null;
     }
 
-    public void UpdateMovesRemainingText(int movesRemaining)
+    private void UpdateMovesRemainingText(int movesRemaining)
     {
-        //TODO: Get the 'moves remaining' text working again
-        _movesRemainingText.text = "";
+        _movesRemainingText.gameObject.SetActive(false);
+        _movesRemainingText.text = movesRemaining == 0 ? ". . ." : $"{movesRemaining}";
+    }
+    
+    private void SceneManager_SceneUnloaded(Scene scene)
+    {
+        //Main menu scene should ALWAYS have 0 build index
+        if (scene.buildIndex == 0)
+        {
+            Show();
+        }
     }
 
-    public void Hide()
+    private void Show()
+    {
+        _guiTopChain.gameObject.SetActive(true);
+    }
+
+    private void Hide()
     {
         _guiTopChain.gameObject.SetActive(false);
+    }
+
+    public override void Clean()
+    {
+        SceneManager.sceneUnloaded -= SceneManager_SceneUnloaded;
     }
 }

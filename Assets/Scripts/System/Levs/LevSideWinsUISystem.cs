@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class LevSideWinsUISystem : LevDependency
 {
+    private LevAudioSystem _audioSystem;
+    
     private Transform _sideWinsUI;
 
     private Image _sideWinsBackgroundImage;
@@ -14,6 +16,8 @@ public class LevSideWinsUISystem : LevDependency
     public override void GameStart(LevCreator levCreator)
     {
         base.GameStart(levCreator);
+        
+        _audioSystem = levCreator.GetDependency<LevAudioSystem>();
         
         _sideWinsUI = levCreator.GetFirstObjectWithName(AllTagNames.SideWins).transform;
 
@@ -26,6 +30,7 @@ public class LevSideWinsUISystem : LevDependency
         Button retryButton = retryButtonTf.GetComponent<Button>();
         retryButton.onClick.AddListener(() =>
         {
+            _audioSystem.PlayUIClickSfx();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
         
@@ -33,6 +38,7 @@ public class LevSideWinsUISystem : LevDependency
         Button exitButton = exitButtonTf.GetComponent<Button>();
         exitButton.onClick.AddListener(() =>
         {
+            _audioSystem.PlayUIClickSfx();
             SceneManager.LoadScene("MainMenuScene");
         });
         
@@ -51,6 +57,7 @@ public class LevSideWinsUISystem : LevDependency
         _sideWinsBackgroundImage.color = winningSideColour;
         
         _sideWinsUI.gameObject.SetActive(true);
+        _audioSystem.PlayLevelCompleteSfx();
     }
 
     public void Hide()

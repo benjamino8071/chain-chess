@@ -28,12 +28,12 @@ public class ElAudioSystem : ElDependency
     /// <param name="thePitch"></param>
     public void PlayTimeAddedSfx(float thePitch)
     {
-        PlaySfx(Creator.audioClipsSo.enemyCaptured, _camera.position, thePitch);
+        PlaySfx(Creator.audioClipsSo.pieceCaptured, _camera.position, thePitch);
     }
 
     public void PlayCapturedByEnemySfx()
     {
-        PlaySfx(Creator.audioClipsSo.capturedByEnemy, _camera.position);
+        PlaySfx(Creator.audioClipsSo.gameOver, _camera.position);
     }
 
     public void PlayerLevelUpSfx()

@@ -1,14 +1,51 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevPlayerController : LevPieceController
 {
+    private Vector3 _positionRequested;
+    
     protected override void FindingMove(float dt)
     {
         //The player will find the move when they are ready
         Vector3 positionRequested = _boardSystem.GetHighlightPosition();
-        if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame() && TryMovePlayer(positionRequested))
+        if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame() && CanMove(positionRequested))
         {
-            _validMovesSystem.HideAllValidMoves();
+            if (Creator.settingsSo.doubleTap)
+            {
+                SetState(States.ConfirmingMove);
+                _validMovesSystem.ShowSingleValidMove(positionRequested, _pieceInstance.position);
+                _positionRequested = positionRequested;
+                _audioSystem.PlayPieceDoubleTapSelectedSfx(0.8f);
+            }
+            else
+            {
+                MovePiece(positionRequested);
+            }
+        }
+    }
+
+    protected override void ConfirmingMove(float dt)
+    {
+        //The player will find the move when they are ready
+        Vector3 positionRequested = _boardSystem.GetHighlightPosition();
+        if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
+        {
+            if (_positionRequested == positionRequested)
+            {
+                MovePiece(positionRequested);
+            }
+            else if(hasMoved)
+            {
+                _validMovesSystem.UpdateValidMoves(GetAllValidMovesOfCurrentPiece(), _pieceInstance.position);
+                SetState(States.FindingMove);
+            }
+            else
+            {
+                //Later in LevSideSystem.GameUpdate we check this state and if it equals, then we un-select
+                SetState(States.FindingMove);
+            }
+            _positionRequested = Vector3.zero; //For next time the player double taps
         }
     }
 
@@ -27,13 +64,38 @@ public class LevPlayerController : LevPieceController
             _pieceInstance.position = new Vector3(((int)_pieceInstance.position.x) + 0.5f, ((int)_pieceInstance.position.y) + 0.5f, 0);
             _sinTime = 0;
 
-            _boardSystem.TryCaptureEnemyPiece(_pieceInstance.position, _enemyColour, this);
-                    
-            SetToNextMove();
-            if (_movesInThisTurn.Count > 0)
+            if (!_boardSystem.TryCaptureEnemyPiece(_pieceInstance.position, _enemyColour, this))
             {
-                _validMovesSystem.UpdateValidMoves(GetAllValidMovesOfCurrentPiece(), piecePos);
+                SetToNextMove();
+                if (_movesInThisTurn.Count > 0)
+                {
+                    _validMovesSystem.UpdateValidMoves(GetAllValidMovesOfCurrentPiece(), piecePos);
+                }
             }
         }
+    }
+    
+    private bool CanMove(Vector3 positionRequested)
+    {
+        List<Vector3> validMoves = GetAllValidMovesOfCurrentPiece();
+        if (validMoves.Contains(positionRequested))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void MovePiece(Vector3 positionRequested)
+    {
+        // Set our position as a fraction of the distance between the markers.
+        _jumpPosition = positionRequested;
+        _moveSpeed = Creator.playerSystemSo.moveSpeed;
+        SetState(States.Moving);
+                
+        _audioSystem.PlayPieceMoveSfx(1);
+        _movesInThisTurn.RemoveAt(0);
+            
+        _validMovesSystem.HideAllValidMoves();
     }
 }

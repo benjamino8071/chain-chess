@@ -24,6 +24,7 @@ namespace Michsky.MUIP
         public bool showValue = true;
         public bool showPopupValue = true;
         public bool useRoundValue = false;
+        public DecimalFormat decimalFormat = DecimalFormat.F1;
         public float minValue;
         public float maxValue;
 
@@ -37,6 +38,11 @@ namespace Michsky.MUIP
         // Other Variables
         [HideInInspector] public Animator sliderAnimator;
         [HideInInspector] public float saveValue;
+
+        public enum DecimalFormat
+        { 
+            F0, F1, F2, F3, F4, F5
+        }
 
         void Awake()
         {
@@ -90,14 +96,14 @@ namespace Michsky.MUIP
             {
                 if (usePercent == true)
                 {
-                    if (valueText != null) { valueText.text = mainSlider.value.ToString("F1") + "%"; }
-                    if (popupValueText != null) { popupValueText.text = mainSlider.value.ToString("F1") + "%"; }
+                    if (valueText != null) { valueText.text = mainSlider.value.ToString(decimalFormat.ToString()) + "%"; }
+                    if (popupValueText != null) { popupValueText.text = mainSlider.value.ToString(decimalFormat.ToString()) + "%"; }
                 }
 
                 else
                 {
-                    if (valueText != null) { valueText.text = mainSlider.value.ToString("F1"); }
-                    if (popupValueText != null) { popupValueText.text = mainSlider.value.ToString("F1"); }
+                    if (valueText != null) { valueText.text = mainSlider.value.ToString(decimalFormat.ToString()); }
+                    if (popupValueText != null) { popupValueText.text = mainSlider.value.ToString(decimalFormat.ToString()); }
                 }
             }
         }

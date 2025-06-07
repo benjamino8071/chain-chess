@@ -56,6 +56,7 @@ namespace Michsky.MUIP
             var minValue = serializedObject.FindProperty("minValue");
             var maxValue = serializedObject.FindProperty("maxValue");
             var invokeOnAwake = serializedObject.FindProperty("invokeOnAwake");
+            var decimalFormat = serializedObject.FindProperty("decimalFormat");
 
             switch (currentTab)
             {
@@ -130,6 +131,8 @@ namespace Michsky.MUIP
                         GUILayout.Space(2);
                         EditorGUILayout.HelpBox("Each slider should has its own unique tag.", MessageType.Info);
                     }
+
+                    MUIPEditorHandler.DrawProperty(decimalFormat, customSkin, "Decimal Format");
 
                     MUIPEditorHandler.DrawHeader(customSkin, "UIM Header", 10);
 

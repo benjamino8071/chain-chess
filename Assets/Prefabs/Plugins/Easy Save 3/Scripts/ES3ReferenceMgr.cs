@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ES3Internal;
@@ -6,10 +5,8 @@ using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using System.Reflection;
 using System;
 using System.Linq;
-using UnityEngine.U2D;
 #endif
 
 #if UNITY_VISUAL_SCRIPTING
@@ -153,10 +150,10 @@ public class ES3ReferenceMgr : ES3ReferenceMgrBase
                 }
 
                 // Exclude all Texture2Ds which are packed into a SpriteAtlas from this manager.
-                if (dependency is SpriteAtlas)
+                /*if (dependency is SpriteAtlas)
                     foreach (var atlasDependency in EditorUtility.CollectDependencies(new UnityEngine.Object[] { dependency }))
                         if (atlasDependency is Texture2D)
-                            ExcludeObject(atlasDependency);
+                            ExcludeObject(atlasDependency);*/
 
                 Add(dependency);
 

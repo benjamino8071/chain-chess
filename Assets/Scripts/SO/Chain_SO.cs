@@ -4,5 +4,6 @@ using UnityEngine.Serialization;
 [CreateAssetMenu]
 public class Chain_SO : ScriptableObject
 {
-    [FormerlySerializedAs("arrowPointingToNextPiecePrefab")] public Sprite arrowPointingToNextPiece;
+    public Sprite arrowPointingToNextPiece;
+    public float addPieceLerpSpeed;
 }

@@ -6,6 +6,7 @@ public class LevBoardSystem : LevDependency
 {
     private LevWhiteSystem _whiteSystem;
     private LevBlackSystem _blackSystem;
+    private LevChainUISystem _chainUISystem;
     
     private Dictionary<Vector3, TileController> _validTiles = new();
 
@@ -19,7 +20,8 @@ public class LevBoardSystem : LevDependency
 
         _whiteSystem = levCreator.GetDependency<LevWhiteSystem>();
         _blackSystem = levCreator.GetDependency<LevBlackSystem>();
-
+        _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
+        
         List<Transform> tilesAlreadyPlaced = levCreator.GetObjectsByName(AllTagNames.Tile);
         foreach (Transform tileChild in tilesAlreadyPlaced)
         {
@@ -98,27 +100,28 @@ public class LevBoardSystem : LevDependency
         return enemyPositions.Contains(piecePos);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="piecePos"></param>
+    /// <param name="enemyColour"></param>
+    /// <param name="pieceUsed"></param>
+    /// <returns>True = captured all enemy pieces of pieceUsed</returns>
     public bool TryCaptureEnemyPiece(Vector3 piecePos, LevPieceController.PieceColour enemyColour, LevPieceController pieceUsed)
     {
         if (enemyColour == LevPieceController.PieceColour.White 
-            && _whiteSystem.TryGetPieceAtPosition(piecePos, out LevPieceController whitePieceCont))
+            && _whiteSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController whitePieceCont))
         {
-            _whiteSystem.PieceCaptured(whitePieceCont);
-            foreach (Piece enemyPiece in whitePieceCont.capturedPieces)
-            {
-                pieceUsed.AddCapturedPiece(enemyPiece);
-            }
-            return true;
+            _chainUISystem.ShowNewPiece(whitePieceCont.capturedPieces[0]);
+            pieceUsed.AddCapturedPiece(whitePieceCont.capturedPieces[0]);
+            return _whiteSystem.PieceCaptured(whitePieceCont, pieceUsed.piecesCapturedInThisTurn);
         }
         if (enemyColour == LevPieceController.PieceColour.Black 
-            && _blackSystem.TryGetPieceAtPosition(piecePos, out LevPieceController blackPieceCont))
+            && _blackSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController blackPieceCont))
         {
-            _blackSystem.PieceCaptured(blackPieceCont);
-            foreach (Piece enemyPiece in blackPieceCont.capturedPieces)
-            {
-                pieceUsed.AddCapturedPiece(enemyPiece);
-            }
-            return true;
+            _chainUISystem.ShowNewPiece(blackPieceCont.capturedPieces[0]);
+            pieceUsed.AddCapturedPiece(blackPieceCont.capturedPieces[0]);
+            return _blackSystem.PieceCaptured(blackPieceCont, pieceUsed.piecesCapturedInThisTurn);
         }
 
         return false;

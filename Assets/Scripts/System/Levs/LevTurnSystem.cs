@@ -9,12 +9,7 @@ public class LevTurnSystem : LevDependency
 
     private TextMeshProUGUI _turnText;
     
-    public enum Turn
-    {
-        White,
-        Black
-    }
-    private Turn _currentTurn = Turn.White; //Will always start with White
+    private LevPieceController.PieceColour _currentTurn = LevPieceController.PieceColour.White; //Will always start with White
 
     public override void GameStart(LevCreator levCreator)
     {
@@ -27,16 +22,15 @@ public class LevTurnSystem : LevDependency
         Transform turnText = levCreator.GetFirstObjectWithName(AllTagNames.TurnInfoText);
         _turnText = turnText.GetComponent<TextMeshProUGUI>();
         
-        SwitchTurn(Turn.White);
-        //SetTurnText("White");
+        SwitchTurn(LevPieceController.PieceColour.White);
     }
     
-    public void SwitchTurn(Turn nextTurn)
+    public void SwitchTurn(LevPieceController.PieceColour nextTurn)
     {
         _currentTurn = nextTurn;
         switch (nextTurn)
         {
-            case Turn.White:
+            case LevPieceController.PieceColour.White:
                 if (Creator.whiteControlledBy == ControlledBy.Player)
                 {
                     _whiteSystem.SetStateForAllPieces(LevPieceController.States.FindingMove);
@@ -50,7 +44,7 @@ public class LevTurnSystem : LevDependency
                 }
                 SetTurnText("White");
                 break;
-            case Turn.Black:
+            case LevPieceController.PieceColour.Black:
                 if (Creator.blackControlledBy == ControlledBy.Player)
                 {
                     _blackSystem.SetStateForAllPieces(LevPieceController.States.FindingMove);
@@ -67,7 +61,7 @@ public class LevTurnSystem : LevDependency
         }
     }
 
-    public Turn CurrentTurn()
+    public LevPieceController.PieceColour CurrentTurn()
     {
         return _currentTurn;
     }

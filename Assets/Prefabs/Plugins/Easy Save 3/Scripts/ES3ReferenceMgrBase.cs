@@ -18,7 +18,7 @@ namespace ES3Internal
         private static HashSet<ES3ReferenceMgrBase> mgrs = new HashSet<ES3ReferenceMgrBase>();
 #if UNITY_EDITOR
         protected static bool isEnteringPlayMode = false;
-        static readonly HideFlags[] invalidHideFlags = new HideFlags[] { HideFlags.DontSave, HideFlags.DontSaveInBuild, HideFlags.DontSaveInEditor, HideFlags.HideAndDontSave };
+        static readonly HideFlags[] invalidHideFlags = new HideFlags[] { HideFlags.HideInHierarchy, HideFlags.DontSave, HideFlags.DontSaveInBuild, HideFlags.DontSaveInEditor, HideFlags.HideAndDontSave };
 #endif
 
 #if !UNITY_EDITOR
@@ -707,9 +707,12 @@ namespace ES3Internal
                 return true;
 
             foreach (var flag in invalidHideFlags)
-                if ((obj.hideFlags & flag) != 0 && obj.hideFlags != HideFlags.HideInHierarchy && obj.hideFlags != HideFlags.HideInInspector && obj.hideFlags != HideFlags.NotEditable)
+                if ((obj.hideFlags & flag) != 0 && /*obj.hideFlags != HideFlags.HideInHierarchy &&*/ obj.hideFlags != HideFlags.HideInInspector && obj.hideFlags != HideFlags.NotEditable)
                     if (!(obj is Mesh || obj is Material))
                         return false;
+
+            if (obj is UnityEngine.U2D.SpriteAtlas)
+                return false;
 
             // Exclude the Easy Save 3 Manager, and all components attached to it.
             if (obj.name == "Easy Save 3 Manager")

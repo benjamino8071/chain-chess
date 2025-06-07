@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Chain_SO
   m_EditorClassIdentifier: 
   arrowPointingToNextPiece: {fileID: 5875827693392366951, guid: a784892189145be4cb4b25ccbac5ff28, type: 3}
+  addPieceLerpSpeed: 3.5

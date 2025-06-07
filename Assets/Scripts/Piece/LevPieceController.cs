@@ -21,6 +21,7 @@ public class LevPieceController : LevController
     {
         WaitingForTurn,
         FindingMove,
+        ConfirmingMove,
         Moving,
         NotInUse,
         EndGame
@@ -35,6 +36,8 @@ public class LevPieceController : LevController
     public List<Piece> capturedPieces => _capturedPieces;
     
     public bool hasMoved => _capturedPieces.Count != _movesInThisTurn.Count;
+    
+    public int piecesCapturedInThisTurn => _piecesCapturedInThisTurn;
 
     protected List<Piece> _capturedPieces = new(16);
     protected List<Piece> _movesInThisTurn = new(16);
@@ -49,6 +52,7 @@ public class LevPieceController : LevController
     protected PieceColour _enemyColour;
     protected States _state;
     protected Vector3 _jumpPosition;
+    protected int _piecesCapturedInThisTurn;
     protected float _moveSpeed;
     protected float _sinTime;
     
@@ -98,6 +102,9 @@ public class LevPieceController : LevController
             case States.FindingMove:
                 FindingMove(dt);
                 break;
+            case States.ConfirmingMove:
+                ConfirmingMove(dt);
+                break;
             case States.Moving:
                 Moving(dt);
                 break;
@@ -112,6 +119,11 @@ public class LevPieceController : LevController
     {
         
     }
+
+    protected virtual void ConfirmingMove(float dt)
+    {
+        
+    }
     
     protected virtual void Moving(float dt)
     {
@@ -120,6 +132,7 @@ public class LevPieceController : LevController
 
     public void AddCapturedPiece(Piece piece)
     {
+        _piecesCapturedInThisTurn++;
         _capturedPieces.Add(piece);
         _movesInThisTurn.Add(piece);
         UpdateCaptureAmountText(_capturedPieces.Count);
@@ -151,7 +164,6 @@ public class LevPieceController : LevController
                  * TODO(2): Will need to do a check on other pieces for this side, if there are non-pawn pieces then all good
                  * TODO(3): ALTERNATIVE: We just make this side lose the rest of their moves.
                  */
-                _audioSystem.PlayerPieceMoveSfx();
                 _movesInThisTurn.RemoveAt(0);
                 SetToNextMove();
             }
@@ -161,29 +173,8 @@ public class LevPieceController : LevController
             SetState(States.WaitingForTurn);
             _chainUISystem.UnsetChain();
             _validMovesSystem.HideAllValidMoves();
-            _turnSystem.SwitchTurn(_enemyColour == PieceColour.White ? LevTurnSystem.Turn.White : LevTurnSystem.Turn.Black);
+            _turnSystem.SwitchTurn(_enemyColour == PieceColour.White ? PieceColour.White : PieceColour.Black);
         }
-    }
-
-    public bool TryMovePlayer(Vector3 positionRequested)
-    {
-        //Depending on the piece, we allow the player an additional move (player will always start with a king move)
-        List<Vector3> validMoves = GetAllValidMovesOfCurrentPiece();
-
-        if (validMoves.Contains(positionRequested))
-        {
-            // Set our position as a fraction of the distance between the markers.
-            _jumpPosition = positionRequested;
-            _moveSpeed = Creator.playerSystemSo.moveSpeed;
-            SetState(States.Moving);
-                
-            _audioSystem.PlayerPieceMoveSfx();
-            _movesInThisTurn.RemoveAt(0);
-
-            return true;
-        }
-
-        return false;
     }
 
     protected List<Vector3> CheckValidDefiniteMoves(List<Vector3> moves)
@@ -390,6 +381,7 @@ public class LevPieceController : LevController
                     {
                         _movesInThisTurn.Add(capturedPiece);
                     }
+                    _piecesCapturedInThisTurn = 0;
                 }
                 break;
             case States.WaitingForTurn:

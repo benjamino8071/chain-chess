@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ebc1e410370380469283f9786e54369, type: 3}
   m_Name: Audio Clips_SO
   m_EditorClassIdentifier: 
+  pieceSelected: {fileID: 8300000, guid: f4781d302b303408d8b02da3dd8aed5a, type: 3}
   pieceMoved: {fileID: 8300000, guid: 469e8b9b6277b4e4fa7cfada6a9673da, type: 3}
-  enemyCaptured: {fileID: 8300000, guid: 09f7ee07b81774e2ea9e35333571d914, type: 3}
-  capturedByEnemy: {fileID: 8300000, guid: 1d1019545e72970429d09be24fb77135, type: 3}
+  pieceCaptured: {fileID: 8300000, guid: b569aada900f14e438e0ff052d4e7f45, type: 3}
+  gameOver: {fileID: 8300000, guid: c1f47c4aad5f14a138bf7c0467396b25, type: 3}
   timeLost: {fileID: 8300000, guid: 73f05c30facea0f468d69ec8b343cec8, type: 3}
   levelUp: {fileID: 8300000, guid: 58ee6d7d441010140b1c356cd79db905, type: 3}
-  roomComplete: {fileID: 8300000, guid: c3d4d6f2642eba447b105c36fbabd23c, type: 3}
+  roomComplete: {fileID: 8300000, guid: 4a1670bc367564e4db825093be0b7f9e, type: 3}
+  uiOpen: {fileID: 8300000, guid: 19536e2c533a449c7baf2c304e072426, type: 3}
+  uiClose: {fileID: 8300000, guid: 19536e2c533a449c7baf2c304e072426, type: 3}
+  uiClick: {fileID: 8300000, guid: 5ae86940e1dc84a4ba6a475f30b48236, type: 3}

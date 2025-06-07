@@ -1,13 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MoreMountains.Feedbacks;
-using TMPro;
-using Unity.Services.Authentication;
-using Unity.Services.Leaderboards;
-using Unity.Services.Leaderboards.Exceptions;
-using Unity.Services.Leaderboards.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -26,7 +20,6 @@ public class ElPlayerSystem : ElDependency
     private ElGameOverUISystem _gameOverUISystem;
     private ElTurnSystem _turnInfoUISystem;
     private ElRoomNumberUISystem _roomNumberUISystem;
-    private ElScoreEntryUISystem _scoreEntryUISystem;
     private ElShopSystem _shopSystem;
     private ElDoorsSystem _doorsSystem;
     private ElXPBarUISystem _xpBarUISystem;
@@ -97,7 +90,6 @@ public class ElPlayerSystem : ElDependency
         _gameOverUISystem = elCreator.GetDependency<ElGameOverUISystem>();
         _turnInfoUISystem = elCreator.GetDependency<ElTurnSystem>();
         _roomNumberUISystem = elCreator.GetDependency<ElRoomNumberUISystem>();
-        _scoreEntryUISystem = elCreator.GetDependency<ElScoreEntryUISystem>();
         _shopSystem = elCreator.GetDependency<ElShopSystem>();
         _doorsSystem = elCreator.GetDependency<ElDoorsSystem>();
         _xpBarUISystem = elCreator.GetDependency<ElXPBarUISystem>();
@@ -682,35 +674,8 @@ public class ElPlayerSystem : ElDependency
                     //SetState(States.EndGame);
                     _livesUISystem.LoseLife();
 
-                    if (_livesUISystem.IsDead())
-                    {
-                        if (Creator.scoreboardSo.useScoreboard)
-                        {
-                            if (AuthenticationService.Instance is not null)
-                            {
-                                if (AuthenticationService.Instance.IsSignedIn)
-                                {
-                                    CheckScore();
-                                }
-                                else
-                                {
-                                    _gameOverUISystem.Show();
-                                }
-                            }
-                            else
-                            {
-                                _gameOverUISystem.Show();
-                            }
-                        }
-                        else
-                        {
-                            _gameOverUISystem.Show();
-                        }
-                    }
-                    else
-                    {
-                        _gameOverUISystem.Show();
-                    }
+                    _gameOverUISystem.Show();
+                    
                     SetState(States.EndGame);
                 }
                 break;
@@ -747,78 +712,6 @@ public class ElPlayerSystem : ElDependency
         }
     }
 
-    private async void CheckScore()
-    {
-        //First we add the player's score
-        //Score examples:
-        //Level 1 Room 7 = Score of 7
-        //Level 2 Room 1 = Score of 9
-
-        double score = Creator.playerSystemSo.levelNumberSaved * 8 + Creator.playerSystemSo.roomNumberSaved + 1;
-        
-        try
-        {
-
-            LeaderboardScoresPage topScores =
-                await LeaderboardsService.Instance.GetScoresAsync(Creator.scoreboardSo.ScoreboardID,
-                    new GetScoresOptions() { Offset = 0, Limit = 11 });
-            //If there are less than 10 entries then we guarantee the player makes it onto the scoreboard
-            if (topScores.Results.Count < 10)
-            {
-                LeaderboardEntry leaderboardEntry =
-                    await LeaderboardsService.Instance.GetPlayerScoreAsync(Creator.scoreboardSo.ScoreboardID);
-                //Only need the player to enter their score if it is better than their previous score
-                if (leaderboardEntry.Score < score)
-                {
-                    _scoreEntryUISystem.Show(score);
-                }
-                else
-                {
-                    _gameOverUISystem.Show();
-                }
-            }
-            else
-            {
-                LeaderboardEntry lowestEntry = topScores.Results[^1];
-
-                if (lowestEntry.Score < score)
-                {
-                    _scoreEntryUISystem.Show(score);
-                }
-                else
-                {
-                    _gameOverUISystem.Show();
-                }
-            }
-        }
-        catch (LeaderboardsException e)
-        {
-            if (e.Reason == LeaderboardsExceptionReason.EntryNotFound)
-            {
-                try
-                {
-                    await LeaderboardsService.Instance.AddPlayerScoreAsync(Creator.scoreboardSo.ScoreboardID, score - 1);
-                    CheckScore();
-                }
-                catch (Exception)
-                {
-                    _gameOverUISystem.Show();
-                }
-            }
-            else
-            {
-                _gameOverUISystem.Show();
-            }
-            Debug.Log("Reason: "+e.Reason);
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning("Error while checking final score: "+e);
-            _gameOverUISystem.Show();
-        }
-        
-    }
-
     private void MovePlayer()
     {
         _moveSpeed = Creator.playerSystemSo.moveSpeed;
@@ -853,9 +746,9 @@ public class ElPlayerSystem : ElDependency
                 continue;
             }
             
-            if (!Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu)
+            if (!Creator.playerSystemSo.hideMainMenuTrigger)
             {
-                Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu = true;
+                Creator.playerSystemSo.hideMainMenuTrigger = true;
             }
             
             _positionRequested = positionRequested;
@@ -907,9 +800,9 @@ public class ElPlayerSystem : ElDependency
                     continue;
                 }
                     
-                if (!Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu)
+                if (!Creator.playerSystemSo.hideMainMenuTrigger)
                 {
-                    Creator.playerSystemSo.firstMoveMadeWhileShowingMainMenu = true;
+                    Creator.playerSystemSo.hideMainMenuTrigger = true;
                 }
                 
                 _positionRequested = positionRequested;

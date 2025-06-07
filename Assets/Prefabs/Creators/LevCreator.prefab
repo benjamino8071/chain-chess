@@ -45,14 +45,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridSystemSo: {fileID: 11400000, guid: b1b948b72a163f44dabc05d553b8ae0b, type: 2}
+  cinemachineSo: {fileID: 11400000, guid: 76944452bd91d3e46a1547ec90710822, type: 2}
+  frameRate: 120
   inputSo: {fileID: 11400000, guid: 389182d9fe2b7ef4497ec958f46c0386, type: 2}
   playerSystemSo: {fileID: 11400000, guid: b42972874f912ca47a5745f157580007, type: 2}
-  enemySo: {fileID: 11400000, guid: f2bc2f0c9938dec42a80867cd663f34b, type: 2}
-  playerPrefab: {fileID: 6726216011626115281, guid: 75713ed9c1ac8e7479668febf6c68b9b, type: 3}
-  enemyPrefab: {fileID: 8801429877806656753, guid: dc07e87e03a60b343b37b91975537559, type: 3}
-  tilePrefab: {fileID: 254832547993512725, guid: 569594d43c772d24d927a178a8a6fa0b, type: 3}
+  chainSo: {fileID: 11400000, guid: a8ac8f1df12467b41b7f10c5231c9216, type: 2}
+  piecesSo: {fileID: 11400000, guid: 494e90b518287b342812d0e67796c6b6, type: 2}
+  audioClipsSo: {fileID: 11400000, guid: 136cb555c82a75341b87becbfb1f2f2a, type: 2}
+  settingsSo: {fileID: 11400000, guid: b488376850aeca8498922b3fe797ca5b, type: 2}
+  piecePrefab: {fileID: 6726216011626115281, guid: 54d8d23ee5a47e34db26762c882afd96, type: 3}
   validPositionPrefab: {fileID: 8566535331156600734, guid: b92041067af09e941af178138d581f78, type: 3}
-  capturedPieceImagePrefab: {fileID: 777693429746427610, guid: 60e41656598e19d4a9109b1d05c3adfd, type: 3}
-  arrowPointingToNextPiecePrefab: {fileID: 777693429746427610, guid: 0ed40e405b8c6fc4f8e837ef777a12d2, type: 3}
-  startingPiece: 1
-  nextLevelNumber: 0
+  selectedBackgroundPrefab: {fileID: 8566535331156600734, guid: 5856883aea817af4aa24fb2cb1d948e5, type: 3}
+  currentLevelNumber: 0
+  nextLevelNumber: -1
+  whiteControlledBy: 0
+  blackControlledBy: 1
+  isPuzzle: 1

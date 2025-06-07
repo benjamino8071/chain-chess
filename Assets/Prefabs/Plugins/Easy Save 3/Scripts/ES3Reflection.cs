@@ -142,8 +142,8 @@ namespace ES3Internal
                 if (!TypeIsSerializable(field.FieldType))
                     continue;
 
-                // Don't serialize member fields.
-                if (safe && fieldName.StartsWith(memberFieldPrefix) && field.DeclaringType.Namespace != null && field.DeclaringType.Namespace.Contains("UnityEngine"))
+                // Don't serialize member fields of Unity classes unless they have the SerializeField attribute.
+                if (safe && field.DeclaringType.Namespace != null && fieldName.StartsWith(memberFieldPrefix) && !AttributeIsDefined(field, serializeFieldAttributeType) && field.DeclaringType.Namespace.Contains("UnityEngine"))
                     continue;
 
                 serializableFields.Add(field);
