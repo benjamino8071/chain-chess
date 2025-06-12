@@ -85,7 +85,7 @@ public class LevChainUISystem : LevDependency
 
     private bool ProcessSlider(float dt)
     {
-        if (Creator.inputSo._leftMouseButton.action.IsPressed() && _boardSystem.GetMouseWorldPosition().y >= 0.8f)
+        if (Creator.inputSo._leftMouseButton.action.IsPressed() && (_boardSystem.GetMouseWorldPosition().y >= 0.8f || _mousePosXLastFrame > 0))
         {
             float3 mousePos = Input.mousePosition;
             if (_mousePosXLastFrame > 0)
@@ -311,7 +311,7 @@ public class LevChainUISystem : LevDependency
         _guiTopChain.gameObject.SetActive(false);
     }
 
-    public override void Clean()
+    public override void Destroy()
     {
         SceneManager.sceneUnloaded -= SceneManager_SceneUnloaded;
     }

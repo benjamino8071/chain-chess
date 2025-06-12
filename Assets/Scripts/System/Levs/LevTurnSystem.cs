@@ -6,6 +6,8 @@ public class LevTurnSystem : LevDependency
     private LevWhiteSystem _whiteSystem;
     private LevBlackSystem _blackSystem;
     private LevPauseUISystem _pauseUISystem;
+    private LevValidMovesSystem _validMovesSystem;
+    private LevChainUISystem _chainUISystem;
 
     private TextMeshProUGUI _turnText;
     
@@ -18,6 +20,8 @@ public class LevTurnSystem : LevDependency
         _whiteSystem = levCreator.GetDependency<LevWhiteSystem>();
         _blackSystem = levCreator.GetDependency<LevBlackSystem>();
         _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
+        _validMovesSystem = levCreator.GetDependency<LevValidMovesSystem>();
+        _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
 
         Transform turnText = levCreator.GetFirstObjectWithName(AllTagNames.TurnInfoText);
         _turnText = turnText.GetComponent<TextMeshProUGUI>();
@@ -59,6 +63,20 @@ public class LevTurnSystem : LevDependency
                 SetTurnText("Black");
                 break;
         }
+    }
+    
+    public void LoadLevelRuntime()
+    {
+        _whiteSystem.Clean();
+        _blackSystem.Clean();
+        
+        _validMovesSystem.HideAllValidMoves();
+        _chainUISystem.UnsetChain();
+        
+        _whiteSystem.SpawnPieces();
+        _blackSystem.SpawnPieces();
+        
+        SwitchTurn(PieceColour.White);
     }
 
     public PieceColour CurrentTurn()

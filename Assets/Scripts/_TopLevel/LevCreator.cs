@@ -18,12 +18,6 @@ public class LevCreator : Creator
     public GameObject piecePrefab;
     public GameObject validPositionPrefab;
     public GameObject selectedBackgroundPrefab;
-    
-    [Header("Current Level")]
-    public int currentLevelNumber;
-
-    [Header("Next Level")] 
-    public int nextLevelNumber;
 
     [Header("Controlled by")] 
     public ControlledBy whiteControlledBy;
@@ -31,6 +25,8 @@ public class LevCreator : Creator
 
     [Header("Is Puzzle")]
     public bool isPuzzle;
+
+    private TextMeshProUGUI _levelText;
     
     private void Start()
     {
@@ -56,16 +52,21 @@ public class LevCreator : Creator
         }
         
         Transform levelTextTf = GetFirstObjectWithName(AllTagNames.LevelText);
+        _levelText = levelTextTf.GetComponent<TextMeshProUGUI>();
+        
         if (isPuzzle)
         {
-            TMP_Text levelText = levelTextTf.GetComponent<TMP_Text>();
-
-            levelText.text = $"Level {currentLevelNumber}";   
+            UpdateLevelText();
         }
         else
         {
             levelTextTf.gameObject.SetActive(false);
         }
+    }
+
+    public void UpdateLevelText()
+    {
+        _levelText.text = $"Level {levelsSo.levelOnLoad}";
     }
     
     public override void CreateDependencies()
@@ -89,7 +90,7 @@ public class LevCreator : Creator
     {
         foreach (Dependency dependency in _dependencies)
         {
-            dependency.Clean();
+            dependency.Destroy();
         }
     }
 }

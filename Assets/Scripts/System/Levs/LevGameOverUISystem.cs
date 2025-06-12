@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class LevGameOverUISystem : LevDependency
 {
     private LevAudioSystem _audioSystem;
-    
+    private LevTurnSystem _turnSystem;
+
     public bool isShowing => _gameOverUI.gameObject.activeSelf;
     
     private Transform _gameOverUI;
@@ -15,7 +16,8 @@ public class LevGameOverUISystem : LevDependency
         base.GameStart(levCreator);
         
         _audioSystem = levCreator.GetDependency<LevAudioSystem>();
-        
+        _turnSystem = levCreator.GetDependency<LevTurnSystem>();
+
         _gameOverUI = levCreator.GetFirstObjectWithName(AllTagNames.GameOver).transform;
         
         Transform resetButtonTf = levCreator.GetChildObjectByName(_gameOverUI.gameObject, AllTagNames.Retry);
@@ -23,7 +25,10 @@ public class LevGameOverUISystem : LevDependency
         resetButton.onClick.AddListener(() =>
         {
             _audioSystem.PlayUIClickSfx();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            
+            Hide();
+            
+            _turnSystem.LoadLevelRuntime();
         });
         
         Transform exitButtonTf = levCreator.GetChildObjectByName(_gameOverUI.gameObject, AllTagNames.Exit);

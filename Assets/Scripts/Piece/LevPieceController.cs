@@ -86,6 +86,7 @@ public class LevPieceController : LevController
         SetState(pieceColour == PieceColour.White ? States.FindingMove : States.WaitingForTurn);
         
         UpdateCaptureAmountText(1);
+        UpdateCaptureAmountTextColour();
     }
 
     public override void GameUpdate(float dt)
@@ -141,6 +142,8 @@ public class LevPieceController : LevController
     
     protected void SetToNextMove()
     {
+        UpdateCaptureAmountTextColour();
+        
         if (_movesInThisTurn.Count > 0)
         {
             //Allow player to make another move
@@ -387,8 +390,31 @@ public class LevPieceController : LevController
         _state = state;
     }
 
-    public void UpdateCaptureAmountText(int amount)
+    private void UpdateCaptureAmountText(int amount)
     {
         _captureAmountText.text = $"{amount}";
+    }
+
+    private void UpdateCaptureAmountTextColour()
+    {
+        int piecePosX = (int)_pieceInstance.position.x;
+        int piecePosY = (int)_pieceInstance.position.y;
+        int result = piecePosX + piecePosY;
+        
+        Color movesInTurnTextColor;
+        if (result % 2 == 0)
+        {
+            movesInTurnTextColor = Color.white;
+        }
+        else
+        {
+            movesInTurnTextColor = Color.black;
+        }
+        _captureAmountText.color = movesInTurnTextColor;
+    }
+    
+    public override void Destroy()
+    {
+        Object.Destroy(_pieceInstance.gameObject);
     }
 }

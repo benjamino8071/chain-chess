@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class LevSideWinsUISystem : LevDependency
 {
     private LevAudioSystem _audioSystem;
-    
+    private LevTurnSystem _turnSystem;
+
     private Transform _sideWinsUI;
 
     private Image _sideWinsBackgroundImage;
@@ -18,7 +19,8 @@ public class LevSideWinsUISystem : LevDependency
         base.GameStart(levCreator);
         
         _audioSystem = levCreator.GetDependency<LevAudioSystem>();
-        
+        _turnSystem = levCreator.GetDependency<LevTurnSystem>();
+
         _sideWinsUI = levCreator.GetFirstObjectWithName(AllTagNames.SideWins).transform;
 
         _sideWinsBackgroundImage = _sideWinsUI.GetComponent<Image>();
@@ -31,7 +33,10 @@ public class LevSideWinsUISystem : LevDependency
         retryButton.onClick.AddListener(() =>
         {
             _audioSystem.PlayUIClickSfx();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            
+            Hide();
+            
+            _turnSystem.LoadLevelRuntime();
         });
         
         Transform exitButtonTf = levCreator.GetChildObjectByName(_sideWinsUI.gameObject, AllTagNames.Exit);

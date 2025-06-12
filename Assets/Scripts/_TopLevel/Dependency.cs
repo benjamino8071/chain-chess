@@ -24,4 +24,9 @@ public class Dependency
     {
         
     }
+
+    public virtual void Destroy()
+    {
+        
+    }
 }

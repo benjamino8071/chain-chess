@@ -30,20 +30,8 @@ public class LevSideSystem : LevDependency
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
         _endGameSystem = levCreator.GetDependency<LevEndGameSystem>();
-
-        Level levelOnLoad = levCreator.levelsSo.GetLevelOnLoad();
-        foreach (PieceSpawnData pieceSpawnData in levelOnLoad.positions)
-        {
-            if (pieceSpawnData.colour == allyPieceColour)
-            {
-                LevPieceController levPlayerController = controlledBy == ControlledBy.Player 
-                    ? new LevPlayerController() : new LevAIController();
-                levPlayerController.GameStart(levCreator);
-                levPlayerController.Init(pieceSpawnData.position, pieceSpawnData.piece, allyPieceColour);
-            
-                _pieceControllers.Add(levPlayerController);
-            }
-        }
+        
+        SpawnPieces();
     }
 
     public override void GameUpdate(float dt)
@@ -94,6 +82,33 @@ public class LevSideSystem : LevDependency
         }
     }
 
+    public override void Clean()
+    {
+        _pieceControllerSelected = null;
+        foreach (LevPieceController levPieceController in _pieceControllers)
+        {
+            levPieceController.Destroy();
+        }
+        _pieceControllers.Clear();
+    }
+
+    public void SpawnPieces()
+    {
+        Level levelOnLoad = Creator.levelsSo.GetLevelOnLoad();
+        foreach (PieceSpawnData pieceSpawnData in levelOnLoad.positions)
+        {
+            if (pieceSpawnData.colour == allyPieceColour)
+            {
+                LevPieceController levPlayerController = controlledBy == ControlledBy.Player 
+                    ? new LevPlayerController() : new LevAIController();
+                levPlayerController.GameStart(Creator);
+                levPlayerController.Init(pieceSpawnData.position, pieceSpawnData.piece, allyPieceColour);
+            
+                _pieceControllers.Add(levPlayerController);
+            }
+        }
+    }
+
     public List<Vector3> PiecePositions()
     {
         List<Vector3> piecePositions = new(_pieceControllers.Count);
@@ -135,7 +150,6 @@ public class LevSideSystem : LevDependency
         pieceController.SetState(LevPieceController.States.FindingMove);
         _chainUISystem.SetChain(_pieceControllerSelected.capturedPieces);
         _validMovesSystem.UpdateValidMoves(pieceController.GetAllValidMovesOfCurrentPiece(), pieceController.piecePos);
-        Debug.Log("PIECE SELECTED");
     }
 
     public void UnselectPiece()
@@ -144,14 +158,8 @@ public class LevSideSystem : LevDependency
         _pieceControllerSelected = null;
         _chainUISystem.UnsetChain();
         _validMovesSystem.HideAllValidMoves();
-        Debug.Log("PIECE UNSELECTED");
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="capturedPieceController"></param>
-    /// <param name="takerPiecesCapturedThisTurn"></param>
+    
     /// <returns>True = all ally pieces captured</returns>
     public bool PieceCaptured(LevPieceController capturedPieceController, int takerPiecesCapturedThisTurn)
     {
