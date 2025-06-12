@@ -82,18 +82,18 @@ public class LevBoardSystem : LevDependency
         return _validTiles.ContainsKey(tilePos);
     }
 
-    public bool IsAllyAtPosition(Vector3 piecePos, LevPieceController.PieceColour allyColour)
+    public bool IsAllyAtPosition(Vector3 piecePos, PieceColour allyColour)
     {
-        List<Vector3> enemyPositions = allyColour == LevPieceController.PieceColour.White 
+        List<Vector3> enemyPositions = allyColour == PieceColour.White 
             ? _whiteSystem.PiecePositions() 
             : _blackSystem.PiecePositions();
 
         return enemyPositions.Contains(piecePos);
     }
 
-    public bool IsEnemyAtPosition(Vector3 piecePos, LevPieceController.PieceColour enemyColour)
+    public bool IsEnemyAtPosition(Vector3 piecePos, PieceColour enemyColour)
     {
-        List<Vector3> enemyPositions = enemyColour == LevPieceController.PieceColour.White 
+        List<Vector3> enemyPositions = enemyColour == PieceColour.White 
             ? _whiteSystem.PiecePositions() 
             : _blackSystem.PiecePositions();
 
@@ -107,16 +107,16 @@ public class LevBoardSystem : LevDependency
     /// <param name="enemyColour"></param>
     /// <param name="pieceUsed"></param>
     /// <returns>True = captured all enemy pieces of pieceUsed</returns>
-    public bool TryCaptureEnemyPiece(Vector3 piecePos, LevPieceController.PieceColour enemyColour, LevPieceController pieceUsed)
+    public bool TryCaptureEnemyPiece(Vector3 piecePos, PieceColour enemyColour, LevPieceController pieceUsed)
     {
-        if (enemyColour == LevPieceController.PieceColour.White 
+        if (enemyColour == PieceColour.White 
             && _whiteSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController whitePieceCont))
         {
             _chainUISystem.ShowNewPiece(whitePieceCont.capturedPieces[0], pieceUsed.movesUsed);
             pieceUsed.AddCapturedPiece(whitePieceCont.capturedPieces[0]);
             return _whiteSystem.PieceCaptured(whitePieceCont, pieceUsed.piecesCapturedInThisTurn);
         }
-        if (enemyColour == LevPieceController.PieceColour.Black 
+        if (enemyColour == PieceColour.Black 
             && _blackSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController blackPieceCont))
         {
             _chainUISystem.ShowNewPiece(blackPieceCont.capturedPieces[0], pieceUsed.movesUsed);

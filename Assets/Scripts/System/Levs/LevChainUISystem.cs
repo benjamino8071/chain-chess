@@ -130,7 +130,7 @@ public class LevChainUISystem : LevDependency
     
     public void ShowNewPiece(Piece piece, int movesUsed, bool isFirstPiece = false)
     {
-        Color pieceColor = _turnSystem.CurrentTurn() == LevPieceController.PieceColour.White
+        Color pieceColor = _turnSystem.CurrentTurn() == PieceColour.White
             ? Creator.piecesSo.whiteColor 
             : Creator.piecesSo.blackColor;
         

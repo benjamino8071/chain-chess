@@ -12,7 +12,8 @@ public class LevCreator : Creator
     public Pieces_SO piecesSo;
     public AudioClips_SO audioClipsSo;
     public Settings_SO settingsSo;
-    
+    public Levels_SO levelsSo;
+
     [Header("Prefabs")]
     public GameObject piecePrefab;
     public GameObject validPositionPrefab;
@@ -72,7 +73,6 @@ public class LevCreator : Creator
         _dependencies.Add(new LevValidMovesSystem());
         _dependencies.Add(new LevAudioSystem());
         _dependencies.Add(new LevChainUISystem());
-        _dependencies.Add(new LevCinemachineSystem());
         _dependencies.Add(new LevBoardSystem());
         _dependencies.Add(new LevLevelCompleteUISystem());
         _dependencies.Add(new LevPauseUISystem());

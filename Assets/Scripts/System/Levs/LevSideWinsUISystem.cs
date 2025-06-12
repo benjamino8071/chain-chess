@@ -45,12 +45,12 @@ public class LevSideWinsUISystem : LevDependency
         Hide();
     }
     
-    public void Show(LevPieceController.PieceColour winningSide)
+    public void Show(PieceColour winningSide)
     {
-        string winningSideName = winningSide == LevPieceController.PieceColour.White ? "White" : "Black";
+        string winningSideName = winningSide == PieceColour.White ? "White" : "Black";
         _sideWinsTitleText.text = $"<bounce a=0.1 f=0.3>{winningSideName} Wins";
 
-        Color winningSideColour = winningSide == LevPieceController.PieceColour.White
+        Color winningSideColour = winningSide == PieceColour.White
             ? Creator.piecesSo.whiteColor
             : Creator.piecesSo.blackColor;
         winningSideColour.a = _sideWinsBackgroundImage.color.a;

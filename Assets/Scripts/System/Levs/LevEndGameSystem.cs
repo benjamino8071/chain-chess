@@ -15,7 +15,7 @@ public class LevEndGameSystem : LevDependency
         _sideWinsUISystem = levCreator.GetDependency<LevSideWinsUISystem>();
     }
 
-    public void SetEndGame(LevPieceController.PieceColour winningColour)
+    public void SetEndGame(PieceColour winningColour)
     {
         /*
          * Purpose of this system is to check who has won/lost and display the correct info
@@ -25,7 +25,7 @@ public class LevEndGameSystem : LevDependency
 
         if (Creator.isPuzzle)
         {
-            if (winningColour == LevPieceController.PieceColour.White)
+            if (winningColour == PieceColour.White)
             {
                 if (Creator.whiteControlledBy == ControlledBy.Player)
                 {

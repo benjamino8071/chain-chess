@@ -11,12 +11,6 @@ public class LevPieceController : LevController
     protected LevAudioSystem _audioSystem;
     protected LevTurnSystem _turnSystem;
     
-    public enum PieceColour
-    {
-        White,
-        Black
-    }
-    
     public enum States
     {
         WaitingForTurn,
@@ -69,9 +63,9 @@ public class LevPieceController : LevController
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
     }
 
-    public virtual void Init(Transform spawnPoint, Piece startingPiece, PieceColour pieceColour)
+    public virtual void Init(Vector3 position, Piece startingPiece, PieceColour pieceColour)
     {
-        _pieceInstance = Creator.InstantiateGameObject(Creator.piecePrefab, spawnPoint.position, Quaternion.identity).transform;
+        _pieceInstance = Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity).transform;
         
         _pieceInstance.GetComponentInChildren<Canvas>(true).gameObject.SetActive(false);
         

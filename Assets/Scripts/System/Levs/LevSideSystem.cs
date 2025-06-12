@@ -16,9 +16,8 @@ public class LevSideSystem : LevDependency
 
     private LevPieceController _pieceControllerSelected;
     
-    protected AllTagNames allySpName;
-    protected LevPieceController.PieceColour allyPieceColour;
-    protected LevPieceController.PieceColour enemyPieceColour;
+    protected PieceColour allyPieceColour;
+    protected PieceColour enemyPieceColour;
     protected ControlledBy controlledBy;
     
     public override void GameStart(LevCreator levCreator)
@@ -32,17 +31,18 @@ public class LevSideSystem : LevDependency
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
         _endGameSystem = levCreator.GetDependency<LevEndGameSystem>();
 
-        List<Transform> whiteSps = levCreator.GetObjectsByName(allySpName);
-        foreach (Transform whiteSp in whiteSps)
+        Level levelOnLoad = levCreator.levelsSo.GetLevelOnLoad();
+        foreach (PieceSpawnData pieceSpawnData in levelOnLoad.positions)
         {
-            PieceType pieceType = whiteSp.GetComponent<PieceType>();
+            if (pieceSpawnData.colour == allyPieceColour)
+            {
+                LevPieceController levPlayerController = controlledBy == ControlledBy.Player 
+                    ? new LevPlayerController() : new LevAIController();
+                levPlayerController.GameStart(levCreator);
+                levPlayerController.Init(pieceSpawnData.position, pieceSpawnData.piece, allyPieceColour);
             
-            LevPieceController levPlayerController = controlledBy == ControlledBy.Player 
-                ? new LevPlayerController() : new LevAIController();
-            levPlayerController.GameStart(levCreator);
-            levPlayerController.Init(whiteSp, pieceType.piece, allyPieceColour);
-            
-            _pieceControllers.Add(levPlayerController);
+                _pieceControllers.Add(levPlayerController);
+            }
         }
     }
 
@@ -135,6 +135,7 @@ public class LevSideSystem : LevDependency
         pieceController.SetState(LevPieceController.States.FindingMove);
         _chainUISystem.SetChain(_pieceControllerSelected.capturedPieces);
         _validMovesSystem.UpdateValidMoves(pieceController.GetAllValidMovesOfCurrentPiece(), pieceController.piecePos);
+        Debug.Log("PIECE SELECTED");
     }
 
     public void UnselectPiece()
@@ -143,6 +144,7 @@ public class LevSideSystem : LevDependency
         _pieceControllerSelected = null;
         _chainUISystem.UnsetChain();
         _validMovesSystem.HideAllValidMoves();
+        Debug.Log("PIECE UNSELECTED");
     }
 
     /// <summary>

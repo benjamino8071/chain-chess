@@ -9,7 +9,7 @@ public class LevTurnSystem : LevDependency
 
     private TextMeshProUGUI _turnText;
     
-    private LevPieceController.PieceColour _currentTurn = LevPieceController.PieceColour.White; //Will always start with White
+    private PieceColour _currentTurn; //Will always start with White
 
     public override void GameStart(LevCreator levCreator)
     {
@@ -22,15 +22,16 @@ public class LevTurnSystem : LevDependency
         Transform turnText = levCreator.GetFirstObjectWithName(AllTagNames.TurnInfoText);
         _turnText = turnText.GetComponent<TextMeshProUGUI>();
         
-        SwitchTurn(LevPieceController.PieceColour.White);
+        SwitchTurn(PieceColour.White);
     }
     
-    public void SwitchTurn(LevPieceController.PieceColour nextTurn)
+    public void SwitchTurn(PieceColour nextTurn)
     {
         _currentTurn = nextTurn;
         switch (nextTurn)
         {
-            case LevPieceController.PieceColour.White:
+            case PieceColour.White:
+                _blackSystem.UnselectPiece();
                 if (Creator.whiteControlledBy == ControlledBy.Player)
                 {
                     _whiteSystem.SetStateForAllPieces(LevPieceController.States.FindingMove);
@@ -39,12 +40,12 @@ public class LevTurnSystem : LevDependency
                 else
                 {
                     _pauseUISystem.HideButton();
-                    _blackSystem.UnselectPiece();
                     _whiteSystem.SelectRandomPiece();
                 }
                 SetTurnText("White");
                 break;
-            case LevPieceController.PieceColour.Black:
+            case PieceColour.Black:
+                _whiteSystem.UnselectPiece();
                 if (Creator.blackControlledBy == ControlledBy.Player)
                 {
                     _blackSystem.SetStateForAllPieces(LevPieceController.States.FindingMove);
@@ -53,7 +54,6 @@ public class LevTurnSystem : LevDependency
                 else
                 {
                     _pauseUISystem.HideButton();
-                    _whiteSystem.UnselectPiece();
                     _blackSystem.SelectRandomPiece();
                 }
                 SetTurnText("Black");
@@ -61,7 +61,7 @@ public class LevTurnSystem : LevDependency
         }
     }
 
-    public LevPieceController.PieceColour CurrentTurn()
+    public PieceColour CurrentTurn()
     {
         return _currentTurn;
     }

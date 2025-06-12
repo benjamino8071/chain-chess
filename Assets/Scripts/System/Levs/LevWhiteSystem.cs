@@ -5,9 +5,8 @@ public class LevWhiteSystem : LevSideSystem
 {
     public override void GameStart(LevCreator levCreator)
     {
-        allySpName = AllTagNames.WhiteSp;
-        allyPieceColour = LevPieceController.PieceColour.White;
-        enemyPieceColour = LevPieceController.PieceColour.Black;
+        allyPieceColour = PieceColour.White;
+        enemyPieceColour = PieceColour.Black;
         controlledBy = levCreator.whiteControlledBy;
 
         base.GameStart(levCreator);
