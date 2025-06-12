@@ -161,7 +161,7 @@ public class LevSideSystem : LevDependency
     }
     
     /// <returns>True = all ally pieces captured</returns>
-    public bool PieceCaptured(LevPieceController capturedPieceController, int takerPiecesCapturedThisTurn)
+    public bool PieceCaptured(LevPieceController capturedPieceController, int takerPiecesCapturedThisTurn, int takerMovesUsed)
     {
         _pieceControllers.Remove(capturedPieceController);
         
@@ -169,10 +169,8 @@ public class LevSideSystem : LevDependency
         
         if (_pieceControllers.Count == 0)
         {
-            _enemySideSystem.SetStateForAllPieces(LevPieceController.States.EndGame);
-            SetStateForAllPieces(LevPieceController.States.EndGame);
-            _endGameSystem.SetEndGame(enemyPieceColour);
-            _validMovesSystem.HideAllValidMoves();
+            Lose();
+            _chainUISystem.HighlightNextPiece(takerMovesUsed);
             return true;
         }
         else
@@ -182,6 +180,14 @@ public class LevSideSystem : LevDependency
             _audioSystem.PlayPieceCapturedSfx(pitchAmount);
             return false;
         }
+    }
+
+    public void Lose()
+    {
+        _enemySideSystem.SetStateForAllPieces(LevPieceController.States.EndGame);
+        SetStateForAllPieces(LevPieceController.States.EndGame);
+        _endGameSystem.SetEndGame(enemyPieceColour);
+        _validMovesSystem.HideAllValidMoves();
     }
     
     public void SelectRandomPiece()

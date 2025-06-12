@@ -114,14 +114,14 @@ public class LevBoardSystem : LevDependency
         {
             _chainUISystem.ShowNewPiece(whitePieceCont.capturedPieces[0], pieceUsed.movesUsed);
             pieceUsed.AddCapturedPiece(whitePieceCont.capturedPieces[0]);
-            return _whiteSystem.PieceCaptured(whitePieceCont, pieceUsed.piecesCapturedInThisTurn);
+            return _whiteSystem.PieceCaptured(whitePieceCont, pieceUsed.piecesCapturedInThisTurn, pieceUsed.movesUsed);
         }
         if (enemyColour == PieceColour.Black 
             && _blackSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController blackPieceCont))
         {
             _chainUISystem.ShowNewPiece(blackPieceCont.capturedPieces[0], pieceUsed.movesUsed);
             pieceUsed.AddCapturedPiece(blackPieceCont.capturedPieces[0]);
-            return _blackSystem.PieceCaptured(blackPieceCont, pieceUsed.piecesCapturedInThisTurn);
+            return _blackSystem.PieceCaptured(blackPieceCont, pieceUsed.piecesCapturedInThisTurn, pieceUsed.movesUsed);
         }
 
         return false;

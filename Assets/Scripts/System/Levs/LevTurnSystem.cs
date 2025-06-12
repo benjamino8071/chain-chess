@@ -13,6 +13,8 @@ public class LevTurnSystem : LevDependency
     
     private PieceColour _currentTurn; //Will always start with White
 
+    private int _turnsRemaining;
+    
     public override void GameStart(LevCreator levCreator)
     {
         base.GameStart(levCreator);
@@ -26,6 +28,9 @@ public class LevTurnSystem : LevDependency
         Transform turnText = levCreator.GetFirstObjectWithName(AllTagNames.TurnInfoText);
         _turnText = turnText.GetComponent<TextMeshProUGUI>();
         
+        //Add 1 because we will lose 1 when the player 
+        _turnsRemaining = levCreator.levelsSo.GetLevelOnLoad().turns;
+        
         SwitchTurn(PieceColour.White);
     }
     
@@ -35,6 +40,15 @@ public class LevTurnSystem : LevDependency
         switch (nextTurn)
         {
             case PieceColour.White:
+                if (Creator.blackControlledBy == ControlledBy.Player && Creator.isPuzzle)
+                {
+                    if (DecrementTurnsRemaining())
+                    {
+                        _blackSystem.Lose();
+                        return;
+                    }
+                }
+                
                 _blackSystem.UnselectPiece();
                 if (Creator.whiteControlledBy == ControlledBy.Player)
                 {
@@ -49,6 +63,15 @@ public class LevTurnSystem : LevDependency
                 SetTurnText("White");
                 break;
             case PieceColour.Black:
+                if (Creator.whiteControlledBy == ControlledBy.Player && Creator.isPuzzle)
+                {
+                    if (DecrementTurnsRemaining())
+                    {
+                        _whiteSystem.Lose();
+                        return;
+                    }
+                }
+                
                 _whiteSystem.UnselectPiece();
                 if (Creator.blackControlledBy == ControlledBy.Player)
                 {
@@ -73,10 +96,22 @@ public class LevTurnSystem : LevDependency
         _validMovesSystem.HideAllValidMoves();
         _chainUISystem.UnsetChain();
         
+        Creator.UpdateLevelText();
+        
+        _turnsRemaining = Creator.levelsSo.GetLevelOnLoad().turns;
+        Creator.UpdateTurnsRemainingText(_turnsRemaining);
+        
         _whiteSystem.SpawnPieces();
         _blackSystem.SpawnPieces();
         
         SwitchTurn(PieceColour.White);
+    }
+
+    private bool DecrementTurnsRemaining()
+    {
+        _turnsRemaining--;
+        Creator.UpdateTurnsRemainingText(_turnsRemaining);
+        return _turnsRemaining == 0;
     }
 
     public PieceColour CurrentTurn()

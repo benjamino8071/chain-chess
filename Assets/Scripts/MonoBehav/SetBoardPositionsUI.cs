@@ -1,9 +1,15 @@
+using System;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
 public class SetBoardPositionsUI : MonoBehaviour
 {
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     [Button]
     public void SetBoardPositions()
     {

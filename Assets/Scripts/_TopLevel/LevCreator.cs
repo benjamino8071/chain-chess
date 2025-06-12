@@ -25,8 +25,9 @@ public class LevCreator : Creator
 
     [Header("Is Puzzle")]
     public bool isPuzzle;
-
+    
     private TextMeshProUGUI _levelText;
+    private TextMeshProUGUI _turnsText;
     
     private void Start()
     {
@@ -53,10 +54,14 @@ public class LevCreator : Creator
         
         Transform levelTextTf = GetFirstObjectWithName(AllTagNames.LevelText);
         _levelText = levelTextTf.GetComponent<TextMeshProUGUI>();
+
+        Transform turnsTextTf = GetFirstObjectWithName(AllTagNames.TurnsRemaining);
+        _turnsText = turnsTextTf.GetComponent<TextMeshProUGUI>();
         
         if (isPuzzle)
         {
             UpdateLevelText();
+            UpdateTurnsRemainingText(levelsSo.GetLevelOnLoad().turns);
         }
         else
         {
@@ -67,6 +72,13 @@ public class LevCreator : Creator
     public void UpdateLevelText()
     {
         _levelText.text = $"Level {levelsSo.levelOnLoad}";
+    }
+
+    public void UpdateTurnsRemainingText(int turnsRemaining)
+    {
+        string plural = turnsRemaining == 1 ? "" : "s";
+        
+        _turnsText.text = $"{turnsRemaining} Turn{plural} Remaining";
     }
     
     public override void CreateDependencies()

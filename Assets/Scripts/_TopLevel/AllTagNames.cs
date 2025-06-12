@@ -90,5 +90,6 @@ public enum AllTagNames
     WhiteSp,
     BlackSp,
     SideWins,
-    AllValidMovesParent
+    AllValidMovesParent,
+    TurnsRemaining
 }

@@ -12,6 +12,7 @@ public enum PieceColour
 public struct Level
 {
     public int number;
+    public int turns;
     public List<PieceSpawnData> positions;
 }
 
