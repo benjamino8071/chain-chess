@@ -60,9 +60,6 @@ namespace Michsky.MUIP
             if (saveValue) { GetSavedData(); }
             else
             {
-                if (gameObject.activeInHierarchy) { StopCoroutine("DisableAnimator"); }
-                if (gameObject.activeInHierarchy) { StartCoroutine("DisableAnimator"); }
-
                 switchAnimator.enabled = true;
 
                 if (isOn) { switchAnimator.Play("On Instant"); }
@@ -85,12 +82,6 @@ namespace Michsky.MUIP
 
         void GetSavedData()
         {
-            if (gameObject.activeInHierarchy) 
-            {
-                StopCoroutine("DisableAnimator");
-                StartCoroutine("DisableAnimator");
-            }
-
             switchAnimator.enabled = true;
 
             if (PlayerPrefs.GetString(switchTag + "Switch") == "" || !PlayerPrefs.HasKey(switchTag + "Switch"))
@@ -104,12 +95,6 @@ namespace Michsky.MUIP
 
         public void AnimateSwitch()
         {
-            if (gameObject.activeInHierarchy)
-            {
-                StopCoroutine("DisableAnimator");
-                StartCoroutine("DisableAnimator");
-            }
-
             switchAnimator.enabled = true;
 
             if (isOn)
@@ -136,11 +121,6 @@ namespace Michsky.MUIP
         public void SetOn()
         {
             if (saveValue) { PlayerPrefs.SetString(switchTag + "Switch", "true"); }
-            if (gameObject.activeInHierarchy)
-            {
-                StopCoroutine("DisableAnimator");
-                StartCoroutine("DisableAnimator");
-            }
 
             isOn = true;
 
@@ -154,11 +134,6 @@ namespace Michsky.MUIP
         public void SetOff()
         {
             if (saveValue) { PlayerPrefs.SetString(switchTag + "Switch", "false"); }
-            if (gameObject.activeInHierarchy)
-            {
-                StopCoroutine("DisableAnimator");
-                StartCoroutine("DisableAnimator");
-            }
 
             isOn = false;
 
@@ -171,12 +146,6 @@ namespace Michsky.MUIP
 
         public void UpdateUI()
         {
-            if (gameObject.activeInHierarchy)
-            {
-                StopCoroutine("DisableAnimator");
-                StartCoroutine("DisableAnimator");
-            }
-
             switchAnimator.enabled = true;
 
             if (isOn && switchAnimator.gameObject.activeInHierarchy) { switchAnimator.Play("On Instant"); }
@@ -189,12 +158,6 @@ namespace Michsky.MUIP
             {
                 soundSource.PlayOneShot(hoverSound);
             }
-        }
-
-        IEnumerator DisableAnimator()
-        {
-            yield return new WaitForSecondsRealtime(0.5f);
-            switchAnimator.enabled = false;
         }
     }
 }

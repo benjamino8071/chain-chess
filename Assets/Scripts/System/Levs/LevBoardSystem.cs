@@ -7,6 +7,14 @@ public class LevBoardSystem : LevDependency
     private LevWhiteSystem _whiteSystem;
     private LevBlackSystem _blackSystem;
     private LevChainUISystem _chainUISystem;
+    private LevValidMovesSystem _validMovesSystem;
+    private LevTurnSystem _turnSystem;
+    private LevPauseUISystem _pauseUISystem;
+    private LevEndGameSystem _endGameSystem;
+
+    public LevSideSystem activeSideSystem =>_turnSystem.CurrentTurn() == PieceColour.White 
+        ? _whiteSystem 
+        : _blackSystem;
     
     private Dictionary<Vector3, TileController> _validTiles = new();
 
@@ -21,7 +29,11 @@ public class LevBoardSystem : LevDependency
         _whiteSystem = levCreator.GetDependency<LevWhiteSystem>();
         _blackSystem = levCreator.GetDependency<LevBlackSystem>();
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
-        
+        _validMovesSystem = levCreator.GetDependency<LevValidMovesSystem>();
+        _turnSystem = levCreator.GetDependency<LevTurnSystem>();
+        _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
+        _endGameSystem = levCreator.GetDependency<LevEndGameSystem>();
+
         List<Transform> tilesAlreadyPlaced = levCreator.GetObjectsByName(AllTagNames.Tile);
         foreach (Transform tileChild in tilesAlreadyPlaced)
         {
@@ -58,12 +70,60 @@ public class LevBoardSystem : LevDependency
         UpdateHighlight();
     }
 
+    public override void GameLateUpdate(float dt)
+    {
+        Vector3 mouseWorldPosition = GetMouseWorldPosition();
+        Vector3 positionRequested = GetHighlightPosition();
+        if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame()
+            && mouseWorldPosition.y <= Creator.boardSo.maxY 
+            && mouseWorldPosition.y >= Creator.boardSo.minY
+            && !_pauseUISystem.isShowing
+            && !_endGameSystem.isEndGame)
+        {
+            if (_whiteSystem.TryGetAllyPieceAtPosition(positionRequested, out LevPieceController whitePieceController))
+            {
+                _validMovesSystem.ShowSelectedBackground(positionRequested);
+                if (_blackSystem.pieceControllerSelected is not { state: LevPieceController.States.Moving })
+                {
+                    _chainUISystem.SetChain(whitePieceController.capturedPieces, whitePieceController.pieceColour, whitePieceController.movesUsed);
+                }
+            }
+            else if (_blackSystem.TryGetAllyPieceAtPosition(positionRequested,
+                         out LevPieceController blackPieceController))
+            {
+                _validMovesSystem.ShowSelectedBackground(positionRequested);
+                if (_whiteSystem.pieceControllerSelected is not { state: LevPieceController.States.Moving })
+                {
+                    _chainUISystem.SetChain(blackPieceController.capturedPieces, blackPieceController.pieceColour, blackPieceController.movesUsed);
+                }
+            }
+            else
+            {
+                if (activeSideSystem.pieceControllerSelected is { hasMoved: true, state: LevPieceController.States.FindingMove } pieceControllerSelected
+                    && IsPositionValid(positionRequested))
+                {
+                    _validMovesSystem.ShowSelectedBackground(pieceControllerSelected.piecePos);
+                    _validMovesSystem.UpdateValidMoves(pieceControllerSelected.GetAllValidMovesOfCurrentPiece());
+                    _chainUISystem.SetChain(pieceControllerSelected.capturedPieces, pieceControllerSelected.pieceColour, pieceControllerSelected.movesUsed);
+                }
+                else
+                {
+                    _chainUISystem.UnsetChain();
+                    _validMovesSystem.ShowSelectedBackground(positionRequested);
+                }
+            }
+        }
+    }
+
     private void UpdateHighlight()
     {
         Vector3 screenPos = Input.mousePosition;
 
         Camera main = Camera.main;
-        if(main == null) return;
+        if (!main)
+        {
+            return;
+        }
         
         Ray ray = main.ScreenPointToRay(screenPos);
 
@@ -73,7 +133,7 @@ public class LevBoardSystem : LevDependency
         }
         else
         {
-            _highlightedPosition = Vector3.zero;
+            _highlightedPosition = new Vector2(-100,-100);
         }
     }
 
@@ -96,7 +156,7 @@ public class LevBoardSystem : LevDependency
         List<Vector3> enemyPositions = enemyColour == PieceColour.White 
             ? _whiteSystem.PiecePositions() 
             : _blackSystem.PiecePositions();
-
+        
         return enemyPositions.Contains(piecePos);
     }
 
@@ -112,19 +172,31 @@ public class LevBoardSystem : LevDependency
         if (enemyColour == PieceColour.White 
             && _whiteSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController whitePieceCont))
         {
-            _chainUISystem.ShowNewPiece(whitePieceCont.capturedPieces[0], pieceUsed.movesUsed);
             pieceUsed.AddCapturedPiece(whitePieceCont.capturedPieces[0]);
+            _chainUISystem.SetChain(pieceUsed.capturedPieces, PieceColour.Black, pieceUsed.movesUsed);
             return _whiteSystem.PieceCaptured(whitePieceCont, pieceUsed.piecesCapturedInThisTurn, pieceUsed.movesUsed);
         }
         if (enemyColour == PieceColour.Black 
             && _blackSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController blackPieceCont))
         {
-            _chainUISystem.ShowNewPiece(blackPieceCont.capturedPieces[0], pieceUsed.movesUsed);
             pieceUsed.AddCapturedPiece(blackPieceCont.capturedPieces[0]);
+            _chainUISystem.SetChain(pieceUsed.capturedPieces, PieceColour.White, pieceUsed.movesUsed);
             return _blackSystem.PieceCaptured(blackPieceCont, pieceUsed.piecesCapturedInThisTurn, pieceUsed.movesUsed);
         }
-
+        
         return false;
+    }
+
+    public void PieceLocked(LevPieceController pieceController, PieceColour sideColour)
+    {
+        if (sideColour == PieceColour.White)
+        {
+            _whiteSystem.PieceLocked(pieceController);
+        }
+        else
+        {
+            _blackSystem.PieceLocked(pieceController);
+        }
     }
 
     public Vector3 GetHighlightPosition()

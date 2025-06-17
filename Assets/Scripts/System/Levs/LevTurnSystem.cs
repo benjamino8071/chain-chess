@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevTurnSystem : LevDependency
 {
@@ -8,11 +9,14 @@ public class LevTurnSystem : LevDependency
     private LevPauseUISystem _pauseUISystem;
     private LevValidMovesSystem _validMovesSystem;
     private LevChainUISystem _chainUISystem;
+    private LevEndGameSystem _endGameSystem;
 
     private TextMeshProUGUI _turnText;
     
     private PieceColour _currentTurn; //Will always start with White
 
+    private Button _endTurnButton;
+    
     private int _turnsRemaining;
     
     public override void GameStart(LevCreator levCreator)
@@ -24,13 +28,21 @@ public class LevTurnSystem : LevDependency
         _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
         _validMovesSystem = levCreator.GetDependency<LevValidMovesSystem>();
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
-
+        _endGameSystem = levCreator.GetDependency<LevEndGameSystem>();
+        
         Transform turnText = levCreator.GetFirstObjectWithName(AllTagNames.TurnInfoText);
         _turnText = turnText.GetComponent<TextMeshProUGUI>();
         
         //Add 1 because we will lose 1 when the player 
         _turnsRemaining = levCreator.levelsSo.GetLevelOnLoad().turns;
-        
+
+        Transform endTurnButton = levCreator.GetFirstObjectWithName(AllTagNames.EndTurnButton);
+        _endTurnButton = endTurnButton.GetComponent<Button>();
+        _endTurnButton.onClick.AddListener(() =>
+        {
+            SwitchTurn(_currentTurn == PieceColour.Black ? PieceColour.White : PieceColour.Black);
+        });
+         
         SwitchTurn(PieceColour.White);
     }
     
@@ -49,6 +61,8 @@ public class LevTurnSystem : LevDependency
                     }
                 }
                 
+                _chainUISystem.UnsetChain();
+                _validMovesSystem.HideSelectedBackground();
                 _blackSystem.UnselectPiece();
                 if (Creator.whiteControlledBy == ControlledBy.Player)
                 {
@@ -61,6 +75,7 @@ public class LevTurnSystem : LevDependency
                     _whiteSystem.SelectRandomPiece();
                 }
                 SetTurnText("White");
+                HideEndTurnButton();
                 break;
             case PieceColour.Black:
                 if (Creator.whiteControlledBy == ControlledBy.Player && Creator.isPuzzle)
@@ -72,6 +87,8 @@ public class LevTurnSystem : LevDependency
                     }
                 }
                 
+                _chainUISystem.UnsetChain();
+                _validMovesSystem.HideSelectedBackground();
                 _whiteSystem.UnselectPiece();
                 if (Creator.blackControlledBy == ControlledBy.Player)
                 {
@@ -84,6 +101,7 @@ public class LevTurnSystem : LevDependency
                     _blackSystem.SelectRandomPiece();
                 }
                 SetTurnText("Black");
+                HideEndTurnButton();
                 break;
         }
     }
@@ -104,6 +122,8 @@ public class LevTurnSystem : LevDependency
         _whiteSystem.SpawnPieces();
         _blackSystem.SpawnPieces();
         
+        _endGameSystem.ResetEndGame();
+        
         SwitchTurn(PieceColour.White);
     }
 
@@ -122,5 +142,15 @@ public class LevTurnSystem : LevDependency
     private void SetTurnText(string turnText)
     {
         _turnText.text = turnText;
+    }
+
+    public void ShowEndTurnButton()
+    {
+        _endTurnButton.gameObject.SetActive(true);
+    }
+
+    public void HideEndTurnButton()
+    {
+        _endTurnButton.gameObject.SetActive(false);
     }
 }

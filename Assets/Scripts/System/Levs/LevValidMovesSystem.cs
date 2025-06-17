@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class LevValidMovesSystem : LevDependency
 {
-    private List<Transform> _validMovesVisuals;
+    private List<Transform> _validMovesVisuals = new(64);
 
     private Transform _selectedBackgroundVisual;
     
     public override void GameStart(LevCreator levCreator)
     {
         base.GameStart(levCreator);
-
+        
         _validMovesVisuals = new(64);
 
         Transform allValidMovesParent = Creator.GetFirstObjectWithName(AllTagNames.AllValidMovesParent);
@@ -27,20 +27,18 @@ public class LevValidMovesSystem : LevDependency
         _selectedBackgroundVisual = selectedBackgroundVisual.transform;
         
         HideAllValidMoves();
+        HideSelectedBackground();
     }
 
-    public void ShowSingleValidMove(Vector3 validMove, Vector3 piecePos)
+    public void ShowSingleValidMove(Vector3 validMove)
     {
         HideAllValidMoves();
 
         _validMovesVisuals[0].position = validMove;
         _validMovesVisuals[0].gameObject.SetActive(true);
-        
-        _selectedBackgroundVisual.position = piecePos;
-        _selectedBackgroundVisual.gameObject.SetActive(true);
     }
 
-    public void UpdateValidMoves(List<Vector3> validMoves, Vector3 piecePos)
+    public void UpdateValidMoves(List<Vector3> validMoves)
     {
         HideAllValidMoves();
         
@@ -49,17 +47,6 @@ public class LevValidMovesSystem : LevDependency
             _validMovesVisuals[i].position = validMoves[i];
             _validMovesVisuals[i].gameObject.SetActive(true);
         }
-
-        _selectedBackgroundVisual.position = piecePos;
-        _selectedBackgroundVisual.gameObject.SetActive(true);
-    }
-
-    public void UpdateSelectedBackground(Vector3 position)
-    {
-        HideAllValidMoves();
-
-        _selectedBackgroundVisual.position = position;
-        _selectedBackgroundVisual.gameObject.SetActive(true);
     }
     
     public void HideAllValidMoves()
@@ -69,7 +56,16 @@ public class LevValidMovesSystem : LevDependency
             validPositionsVisual.position = Vector3.zero;
             validPositionsVisual.gameObject.SetActive(false);
         }
-        
+    }
+
+    public void ShowSelectedBackground(Vector3 position)
+    {
+        _selectedBackgroundVisual.position = position;
+        _selectedBackgroundVisual.gameObject.SetActive(true);
+    }
+
+    public void HideSelectedBackground()
+    {
         _selectedBackgroundVisual.position = Vector3.zero;
         _selectedBackgroundVisual.gameObject.SetActive(false);
     }

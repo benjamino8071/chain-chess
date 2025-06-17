@@ -60,7 +60,7 @@ public class LoadScene : MonoBehaviour
         SceneManager.sceneLoaded += SceneManagerOnsceneLoaded;
         SceneManager.sceneUnloaded += SceneManagerOnsceneUnloaded;
         
-        SceneManager.LoadSceneAsync("Testing_Scene", LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync("Game_Scene", LoadSceneMode.Additive);
     }
 
     private void Update()
@@ -89,7 +89,7 @@ public class LoadScene : MonoBehaviour
 
     private void SceneManagerOnsceneLoaded(Scene scene, LoadSceneMode arg1)
     {
-        if (scene.name == "Testing_Scene")
+        if (scene.name == "Game_Scene")
         {
             loadingScreen.gameObject.SetActive(false);
             tempCam.gameObject.SetActive(false);
@@ -99,7 +99,7 @@ public class LoadScene : MonoBehaviour
     
     private void SceneManagerOnsceneUnloaded(Scene scene)
     {
-        if (scene.name == "Testing_Scene")
+        if (scene.name == "Game_Scene")
         {
             tempCam.gameObject.SetActive(true);
         }

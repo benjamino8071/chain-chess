@@ -14,7 +14,7 @@ public class LevPlayerController : LevPieceController
             if (Creator.settingsSo.doubleTap)
             {
                 SetState(States.ConfirmingMove);
-                _validMovesSystem.ShowSingleValidMove(positionRequested, _pieceInstance.position);
+                _validMovesSystem.ShowSingleValidMove(positionRequested);
                 _positionRequested = positionRequested;
                 _audioSystem.PlayPieceDoubleTapSelectedSfx(0.8f);
             }
@@ -37,7 +37,7 @@ public class LevPlayerController : LevPieceController
             }
             else if(hasMoved)
             {
-                _validMovesSystem.UpdateValidMoves(GetAllValidMovesOfCurrentPiece(), _pieceInstance.position);
+                _validMovesSystem.UpdateValidMoves(GetAllValidMovesOfCurrentPiece());
                 SetState(States.FindingMove);
             }
             else
@@ -67,9 +67,9 @@ public class LevPlayerController : LevPieceController
             if (!_boardSystem.TryCaptureEnemyPiece(_pieceInstance.position, _enemyColour, this))
             {
                 SetToNextMove();
-                if (_movesInThisTurn.Count > 0)
+                if (_state == States.FindingMove)
                 {
-                    _validMovesSystem.UpdateValidMoves(GetAllValidMovesOfCurrentPiece(), piecePos);
+                    _validMovesSystem.UpdateValidMoves(GetAllValidMovesOfCurrentPiece());
                 }
             }
         }

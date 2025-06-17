@@ -10,7 +10,10 @@ public class LevSideSystem : LevDependency
     private LevTurnSystem _turnSystem;
     private LevChainUISystem _chainUISystem;
     private LevEndGameSystem _endGameSystem;
+    private LevPauseUISystem _pauseUISystem;
     protected LevSideSystem _enemySideSystem;
+
+    public LevPieceController pieceControllerSelected => _pieceControllerSelected;
     
     private List<LevPieceController> _pieceControllers = new ();
 
@@ -29,6 +32,7 @@ public class LevSideSystem : LevDependency
         _boardSystem = levCreator.GetDependency<LevBoardSystem>();
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
+        _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
         _endGameSystem = levCreator.GetDependency<LevEndGameSystem>();
         
         SpawnPieces();
@@ -43,7 +47,11 @@ public class LevSideSystem : LevDependency
         
         _pieceControllerSelected?.GameUpdate(dt);
         
-        if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame() && controlledBy == ControlledBy.Player && _boardSystem.GetMouseWorldPosition().y < 0.8f)
+        if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame() 
+            && controlledBy == ControlledBy.Player 
+            && _boardSystem.GetMouseWorldPosition().y < 0.8f
+            && !_pauseUISystem.isShowing
+            && !_endGameSystem.isEndGame)
         {
             /*
              * If the player selects another piece when they haven't made a move
@@ -62,19 +70,12 @@ public class LevSideSystem : LevDependency
                 }
                 else if (!_pieceControllerSelected.hasMoved)
                 {
-                    if (_pieceControllerSelected == pieceController)
-                    {
-                        UnselectPiece();
-                        _audioSystem.PlayPieceSelectedSfx(0.8f);
-                    }
-                    else
-                    {
-                        SelectPiece(pieceController);
-                        _audioSystem.PlayPieceSelectedSfx(1);
-                    }
+                    SelectPiece(pieceController);
+                    _audioSystem.PlayPieceSelectedSfx(1);
                 }
             }
-            else if (_pieceControllerSelected is { state: LevPieceController.States.FindingMove, hasMoved: false})
+            else if (_pieceControllerSelected is { state: LevPieceController.States.FindingMove, hasMoved: false} 
+                     && _boardSystem.IsPositionValid(positionRequested))
             {
                 UnselectPiece();
                 _audioSystem.PlayPieceSelectedSfx(0.8f);
@@ -102,7 +103,7 @@ public class LevSideSystem : LevDependency
                 LevPieceController levPlayerController = controlledBy == ControlledBy.Player 
                     ? new LevPlayerController() : new LevAIController();
                 levPlayerController.GameStart(Creator);
-                levPlayerController.Init(pieceSpawnData.position, pieceSpawnData.piece, allyPieceColour);
+                levPlayerController.Init(pieceSpawnData.position, pieceSpawnData.piece, allyPieceColour, controlledBy);
             
                 _pieceControllers.Add(levPlayerController);
             }
@@ -144,19 +145,17 @@ public class LevSideSystem : LevDependency
         }
     }
 
-    private void SelectPiece(LevPieceController pieceController)
+    public void SelectPiece(LevPieceController pieceController)
     {
         _pieceControllerSelected = pieceController;
         pieceController.SetState(LevPieceController.States.FindingMove);
-        _chainUISystem.SetChain(_pieceControllerSelected.capturedPieces);
-        _validMovesSystem.UpdateValidMoves(pieceController.GetAllValidMovesOfCurrentPiece(), pieceController.piecePos);
+        _validMovesSystem.UpdateValidMoves(pieceController.GetAllValidMovesOfCurrentPiece());
     }
 
     public void UnselectPiece()
     {
         _pieceControllerSelected?.SetState(LevPieceController.States.WaitingForTurn);
         _pieceControllerSelected = null;
-        _chainUISystem.UnsetChain();
         _validMovesSystem.HideAllValidMoves();
     }
     
@@ -182,6 +181,18 @@ public class LevSideSystem : LevDependency
         }
     }
 
+    public void PieceLocked(LevPieceController pieceController)
+    {
+        _pieceControllers.Remove(pieceController);
+        
+        pieceController.SetState(LevPieceController.States.NotInUse);
+        
+        if (_pieceControllers.Count == 0)
+        {
+            Lose();
+        }
+    }
+
     public void Lose()
     {
         _enemySideSystem.SetStateForAllPieces(LevPieceController.States.EndGame);
@@ -192,10 +203,32 @@ public class LevSideSystem : LevDependency
     
     public void SelectRandomPiece()
     {
-        int enemySelectedIndex = Random.Range(0, _pieceControllers.Count);
-        _pieceControllerSelected = _pieceControllers[enemySelectedIndex];
+        List<LevPieceController> movablePieceControllers = MovablePieceControllers();
+        if (movablePieceControllers.Count == 0)
+        {
+            //todo: AI CANNOT MOVE ANY PIECE. Does this end in a draw? Or loss?
+            Debug.LogError("CANNOT FIND A RANDOM PIECE AS ALL PIECES CANNOT MOVE");
+            return;
+        }
+        
+        int enemySelectedIndex = Random.Range(0, movablePieceControllers.Count);
+        _pieceControllerSelected = movablePieceControllers[enemySelectedIndex];
+        
         _pieceControllerSelected.SetState(LevPieceController.States.FindingMove);
-        _chainUISystem.SetChain(_pieceControllerSelected.capturedPieces);
-        _validMovesSystem.UpdateSelectedBackground(_pieceControllerSelected.piecePos);
+    }
+
+    private List<LevPieceController> MovablePieceControllers()
+    {
+        List<LevPieceController> validPieceControllers = new();
+
+        foreach (LevPieceController levPieceController in _pieceControllers)
+        {
+            if (levPieceController.AllValidMovesOfFirstPiece().Count > 0)
+            {
+                validPieceControllers.Add(levPieceController);
+            }
+        }
+        
+        return validPieceControllers;
     }
 }

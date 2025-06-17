@@ -15,7 +15,7 @@ public class PuzzlesGUI : MonoBehaviour
 
     public void LoadPuzzle(int puzzleNum)
     {
-        SceneManager.UnloadSceneAsync("Testing_Scene");
+        SceneManager.UnloadSceneAsync("Game_Scene");
         
         mainMenuSo.isOtherMainMenuCanvasShowing = false;
         string sceneName = "Puzzle" + puzzleNum + "Scene";

@@ -85,7 +85,7 @@ public class LevChainUISystem : LevDependency
 
     private bool ProcessSlider(float dt)
     {
-        if (Creator.inputSo._leftMouseButton.action.IsPressed() && (_boardSystem.GetMouseWorldPosition().y >= 0.8f || _mousePosXLastFrame > 0))
+        if (Creator.inputSo._leftMouseButton.action.IsPressed() && (_boardSystem.GetMouseWorldPosition().y > Creator.boardSo.maxY || _mousePosXLastFrame > 0))
         {
             float3 mousePos = Input.mousePosition;
             if (_mousePosXLastFrame > 0)
@@ -109,28 +109,44 @@ public class LevChainUISystem : LevDependency
         return false;
     }
 
-    public void SetChain(List<Piece> pieces)
+    public void SetChain(List<Piece> pieces, PieceColour pieceColour, int movesUsed)
     {
         UnsetChain();
         
         for (int i = 0; i < pieces.Count; i++)
         {
-            ShowNewPiece(pieces[i], 0, i == 0);
+            ShowNewPiece(pieces[i], pieceColour, movesUsed,i == 0);
         }
+        
+        HighlightNextPiece(movesUsed);
 
         UpdateMovesRemainingText(pieces.Count);
     }
 
     public void UnsetChain()
     {
-        ResetPosition();
-        ClearChain();
-        UpdateMovesRemainingText(0);
+        foreach (PieceImage chainPiecesImage in _chainPieceImages)
+        {
+            chainPiecesImage.image.color = new Color(1,1,1, 1);
+        }
+        
+        foreach (PieceImage capturedPiecesImage in _chainPieceImages)
+        {
+            capturedPiecesImage.image.gameObject.SetActive(false);
+            Color imageColor = capturedPiecesImage.image.color;
+            imageColor.a = 1f;
+            capturedPiecesImage.image.color = imageColor;
+        }
+        
+        _chainParent.localPosition = _chainParentInitialPos;
+        _chainParentNewPos = _chainParentInitialPos;
+        
+        _nextFreeIndex = 0;
     }
     
-    public void ShowNewPiece(Piece piece, int movesUsed, bool isFirstPiece = false)
+    private void ShowNewPiece(Piece piece, PieceColour pieceColour, int movesUsed, bool isFirstPiece = false)
     {
-        Color pieceColor = _turnSystem.CurrentTurn() == PieceColour.White
+        Color pieceColor = pieceColour == PieceColour.White
             ? Creator.piecesSo.whiteColor 
             : Creator.piecesSo.blackColor;
         
@@ -169,35 +185,11 @@ public class LevChainUISystem : LevDependency
         }
     }
 
-    private void ResetPosition()
-    {
-        _chainParent.localPosition = _chainParentInitialPos;
-        _chainParentNewPos = _chainParentInitialPos;
-        foreach (PieceImage chainPiecesImage in _chainPieceImages)
-        {
-            chainPiecesImage.image.color = new Color(1,1,1, 1);
-        }
-    }
-
-    private void ClearChain()
-    {
-        foreach (PieceImage capturedPiecesImage in _chainPieceImages)
-        {
-            capturedPiecesImage.image.gameObject.SetActive(false);
-            Color imageColor = capturedPiecesImage.image.color;
-            imageColor.a = 1f;
-            capturedPiecesImage.image.color = imageColor;
-        }
-        
-        _nextFreeIndex = 0;
-    }
-
     public void HighlightNextPiece(int movesUsed)
     {
-        _chainParentNewPos += new Vector3(-210, 0, 0);
-
-        movesUsed *= 2;
-        UpdateAlphaValue(0.1f, movesUsed);
+        _chainParentNewPos.x = -210 * movesUsed;
+        
+        UpdateAlphaValue(0.1f, movesUsed * 2);
     }
 
     public void PawnPromoted(int index, Piece promotedPiece)

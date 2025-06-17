@@ -9,6 +9,7 @@ public class LevCreator : Creator
     public Input_SO inputSo;
     public PlayerSystem_SO playerSystemSo;
     public Chain_SO chainSo;
+    public Board_SO boardSo;
     public Pieces_SO piecesSo;
     public AudioClips_SO audioClipsSo;
     public Settings_SO settingsSo;
@@ -78,7 +79,7 @@ public class LevCreator : Creator
     {
         string plural = turnsRemaining == 1 ? "" : "s";
         
-        _turnsText.text = $"{turnsRemaining} Turn{plural} Remaining";
+        _turnsText.text = $"{turnsRemaining} Turn{plural}";
     }
     
     public override void CreateDependencies()

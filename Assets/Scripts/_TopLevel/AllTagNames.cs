@@ -91,5 +91,6 @@ public enum AllTagNames
     BlackSp,
     SideWins,
     AllValidMovesParent,
-    TurnsRemaining
+    TurnsRemaining,
+    EndTurnButton
 }

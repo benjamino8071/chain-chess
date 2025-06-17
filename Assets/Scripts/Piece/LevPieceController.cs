@@ -18,6 +18,7 @@ public class LevPieceController : LevController
         ConfirmingMove,
         Moving,
         NotInUse,
+        Paused,
         EndGame
     }
 
@@ -29,11 +30,15 @@ public class LevPieceController : LevController
     
     public List<Piece> capturedPieces => _capturedPieces;
     
-    public bool hasMoved => _capturedPieces.Count != _movesInThisTurn.Count;
+    public bool hasMoved => _hasMoved;
     
     public int movesUsed => _capturedPieces.Count - _movesInThisTurn.Count;
+
+    public int movesRemaining => _movesInThisTurn.Count;
     
     public int piecesCapturedInThisTurn => _piecesCapturedInThisTurn;
+
+    public ControlledBy controlledBy => _controlledBy;
 
     protected List<Piece> _capturedPieces = new(16);
     protected List<Piece> _movesInThisTurn = new(16);
@@ -46,11 +51,14 @@ public class LevPieceController : LevController
     
     protected PieceColour _pieceColour;
     protected PieceColour _enemyColour;
+    protected ControlledBy _controlledBy;
     protected States _state;
     protected Vector3 _jumpPosition;
     protected int _piecesCapturedInThisTurn;
     protected float _moveSpeed;
     protected float _sinTime;
+    protected bool _hasMoved;
+    protected bool _madeMove;
     
     public override void GameStart(LevCreator levCreator)
     {
@@ -63,7 +71,7 @@ public class LevPieceController : LevController
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
     }
 
-    public virtual void Init(Vector3 position, Piece startingPiece, PieceColour pieceColour)
+    public virtual void Init(Vector3 position, Piece startingPiece, PieceColour pieceColour, ControlledBy controlledBy)
     {
         _pieceInstance = Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity).transform;
         
@@ -73,6 +81,8 @@ public class LevPieceController : LevController
         
         _spriteRenderer = _pieceInstance.GetComponentInChildren<SpriteRenderer>();
 
+        _controlledBy = controlledBy;
+        
         Transform captureAmountText = Creator.GetChildObjectByName(_pieceInstance.gameObject, AllTagNames.Text);
         _captureAmountText = captureAmountText.GetComponent<TMP_Text>();
         
@@ -83,6 +93,10 @@ public class LevPieceController : LevController
         _enemyColour = pieceColour == PieceColour.White ? PieceColour.Black : PieceColour.White;
         
         _capturedPieces.Add(startingPiece);
+        _movesInThisTurn.Add(startingPiece);
+        
+        UpdateSprite(startingPiece);
+        
         SetState(pieceColour == PieceColour.White ? States.FindingMove : States.WaitingForTurn);
         
         UpdateCaptureAmountText(1);
@@ -142,6 +156,9 @@ public class LevPieceController : LevController
     
     protected void SetToNextMove()
     {
+        _hasMoved = true;
+        _madeMove = true;
+        
         UpdateCaptureAmountTextColour();
         
         if (_movesInThisTurn.Count > 0)
@@ -153,27 +170,32 @@ public class LevPieceController : LevController
             if (validMoves.Count > 0)
             {
                 _chainUISystem.HighlightNextPiece(movesUsed);
-                _validMovesSystem.UpdateSelectedBackground(_pieceInstance.position);
                 SetState(States.FindingMove);
+                if (_controlledBy == ControlledBy.Player)
+                {
+                    _turnSystem.ShowEndTurnButton();
+                }
             }
             else
             {
-                /*
-                 * TODO(1): As the player can have other pieces this may not be necessary.
-                 * TODO(2): Will need to do a check on other pieces for this side, if there are non-pawn pieces then all good
-                 * TODO(3): ALTERNATIVE: We just make this side lose the rest of their moves.
-                 */
-                _movesInThisTurn.RemoveAt(0);
-                SetToNextMove();
+                //Locked!
+                _boardSystem.PieceLocked(this, _pieceColour);
+                Finish();
             }
         }
         else
         {
-            SetState(States.WaitingForTurn);
-            _chainUISystem.UnsetChain();
-            _validMovesSystem.HideAllValidMoves();
-            _turnSystem.SwitchTurn(_enemyColour == PieceColour.White ? PieceColour.White : PieceColour.Black);
+            Finish();
         }
+    }
+
+    private void Finish()
+    {
+        SetState(States.WaitingForTurn);
+        _chainUISystem.UnsetChain();
+        _validMovesSystem.HideSelectedBackground();
+        _validMovesSystem.HideAllValidMoves();
+        _turnSystem.SwitchTurn(_enemyColour == PieceColour.White ? PieceColour.White : PieceColour.Black);
     }
 
     protected List<Vector3> CheckValidDefiniteMoves(List<Vector3> moves)
@@ -224,36 +246,58 @@ public class LevPieceController : LevController
         return validMoves;
     }
 
+    public List<Vector3> AllValidMovesOfFirstPiece()
+    {
+        return GetAllValidMovesOfPiece(_capturedPieces[0]); 
+    }
+
     public List<Vector3> GetAllValidMovesOfCurrentPiece()
     {
-        Piece piece = _movesInThisTurn[0];
-        
+        return GetAllValidMovesOfPiece(_movesInThisTurn[0]);
+    }
+
+    private List<Vector3> GetAllValidMovesOfPiece(Piece piece)
+    {
         List<Vector3> validMoves = new(64);
         switch (piece)
         {
             case Piece.Pawn:
+            {
+                int direction = _pieceColour == PieceColour.White ? 1 : -1;
+                
                 List<Vector3> pawnMoves = new();
 
-                Vector3 defaultMove = new Vector3(0, 1, 0);
-                if (!_boardSystem.IsAllyAtPosition(_pieceInstance.position + defaultMove, _pieceColour) 
-                    && !_boardSystem.IsEnemyAtPosition(_pieceInstance.position + defaultMove, _enemyColour))
+                Vector3 defaultMove = _pieceInstance.position + new Vector3(0, 1, 0) * direction;
+                if (!_boardSystem.IsAllyAtPosition(defaultMove, _pieceColour) 
+                    && !_boardSystem.IsEnemyAtPosition(defaultMove, _enemyColour))
                 {
                     pawnMoves.Add(defaultMove);
+                    
+                    Vector3 startingMove = _pieceInstance.position + new Vector3(0, 2, 0) * direction;
+                    
+                    if (!_madeMove
+                        && !_boardSystem.IsAllyAtPosition(startingMove, _pieceColour) 
+                        && !_boardSystem.IsEnemyAtPosition(startingMove, _enemyColour))
+                    {
+                        pawnMoves.Add(startingMove);
+                    }
                 }
-                Vector3 topLeft = new Vector3(-1, 1, 0);
-                if (_boardSystem.IsAllyAtPosition(_pieceInstance.position + topLeft, _pieceColour))
+                
+                Vector3 topLeft = _pieceInstance.position + new Vector3(-1, 1, 0) * direction;
+                if (_boardSystem.IsEnemyAtPosition(topLeft, _enemyColour))
                 {
                     pawnMoves.Add(topLeft);
                 }
-                Vector3 topRight = new Vector3(1, 1, 0);
-                if (_boardSystem.IsAllyAtPosition(_pieceInstance.position + topRight, _pieceColour))
+                
+                Vector3 topRight = _pieceInstance.position + new Vector3(1, 1, 0) * direction;
+                if (_boardSystem.IsEnemyAtPosition(topRight, _enemyColour))
                 {
                     pawnMoves.Add(topRight);
                 }
 
-                List<Vector3> pawnValidMoves = CheckValidDefiniteMoves(pawnMoves);
-                validMoves = validMoves.Concat(pawnValidMoves).ToList();
+                validMoves = pawnMoves;
                 break;
+            }
             case Piece.Rook:
                 List<Vector3> rookMoves = new()
                 {
@@ -372,19 +416,18 @@ public class LevPieceController : LevController
                 _pieceInstance.gameObject.SetActive(false);
                 break;
             case States.FindingMove:
+                break;
+            case States.WaitingForTurn:
                 if (_movesInThisTurn.Count == 0)
                 {
                     UpdateSprite(_capturedPieces[0]);
-                    //Reset possible moves
                     foreach (Piece capturedPiece in _capturedPieces)
                     {
                         _movesInThisTurn.Add(capturedPiece);
                     }
-                    _piecesCapturedInThisTurn = 0;
                 }
-                break;
-            case States.WaitingForTurn:
-                UpdateSprite(_capturedPieces[0]);
+                _piecesCapturedInThisTurn = 0; //For next time the player uses this piece
+                _hasMoved = false;
                 break;
         }
         _state = state;

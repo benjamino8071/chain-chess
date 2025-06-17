@@ -10,11 +10,16 @@ public class LevPauseUISystem : LevDependency
     private LevLevelCompleteUISystem _levelCompleteUISystem;
     private LevGameOverUISystem _gameOverUISystem;
     private LevTurnSystem _turnSystem;
+    private LevBoardSystem _boardSystem;
+
+    public bool isShowing => _pauseGUI.gameObject.activeSelf;
     
     private Transform _pauseGUI;
 
     private Button _pauseButton;
 
+    private LevPieceController _pieceControllerSelected;
+    
     private bool _canShow;
     
     public override void GameStart(LevCreator levCreator)
@@ -25,6 +30,7 @@ public class LevPauseUISystem : LevDependency
         _levelCompleteUISystem = levCreator.GetDependency<LevLevelCompleteUISystem>();
         _gameOverUISystem = levCreator.GetDependency<LevGameOverUISystem>();
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
+        _boardSystem = levCreator.GetDependency<LevBoardSystem>();
 
         _pauseGUI = levCreator.GetFirstObjectWithName(AllTagNames.Pause).transform;
         
@@ -33,12 +39,29 @@ public class LevPauseUISystem : LevDependency
         {
             if (!_pauseGUI.gameObject.activeSelf && !_levelCompleteUISystem.isShowing && !_gameOverUISystem.isShowing)
             {
+                if (_boardSystem.activeSideSystem.pieceControllerSelected is { } pieceControllerSelected)
+                {
+                    _pieceControllerSelected = pieceControllerSelected;
+                    pieceControllerSelected.SetState(LevPieceController.States.Paused);
+                }
+                _turnSystem.HideEndTurnButton();
                 _pauseGUI.gameObject.SetActive(true);
                 _audioSystem.PlayPauseOpenSfx();
             }
             else
             {
                 _pauseGUI.gameObject.SetActive(false);
+                
+                if (_pieceControllerSelected != null)
+                {
+                    _pieceControllerSelected.SetState(LevPieceController.States.FindingMove);
+                    
+                    if (_pieceControllerSelected.hasMoved && _pieceControllerSelected.controlledBy == ControlledBy.Player)
+                    {
+                        _turnSystem.ShowEndTurnButton();
+                    }
+                    _pieceControllerSelected = null;
+                }
                 _audioSystem.PlayPauseCloseSfx();
             }
         });
