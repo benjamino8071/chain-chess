@@ -17,9 +17,9 @@ public class SetBoardPositionsUI : MonoBehaviour
 
         foreach (TMP_Text tmpText in positionTexts)
         {
-            Vector3 worldPosition = tmpText.transform.position;
-            string x = $"{worldPosition.x:F1}";
-            string y = $"{worldPosition.y:F1}";
+            Vector3 worldPosition = tmpText.transform.position - new Vector3(0.5f,0.5f,0);
+            string x = $"{worldPosition.x:F0}";
+            string y = $"{worldPosition.y:F0}";
             
             tmpText.text = $"({x},{y})";
         }

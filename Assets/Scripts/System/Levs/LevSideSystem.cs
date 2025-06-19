@@ -103,7 +103,8 @@ public class LevSideSystem : LevDependency
                 LevPieceController levPlayerController = controlledBy == ControlledBy.Player 
                     ? new LevPlayerController() : new LevAIController();
                 levPlayerController.GameStart(Creator);
-                levPlayerController.Init(pieceSpawnData.position, pieceSpawnData.piece, allyPieceColour, controlledBy);
+                Vector3 actualPos = pieceSpawnData.position + new Vector2(0.5f, 0.5f);
+                levPlayerController.Init(actualPos, pieceSpawnData.piece, allyPieceColour, controlledBy);
             
                 _pieceControllers.Add(levPlayerController);
             }

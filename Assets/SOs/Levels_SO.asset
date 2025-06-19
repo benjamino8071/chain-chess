@@ -14,50 +14,181 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelOnLoad: 1
   levelsData:
-  - number: 1
-    turns: 1
+  - turns: 1
     positions:
     - piece: 4
       colour: 1
-      position: {x: 1.5, y: 1.5}
+      position: {x: 1, y: 1}
     - piece: 4
       colour: 0
-      position: {x: 8.5, y: 8.5}
-  - number: 2
-    turns: 1
+      position: {x: 8, y: 8}
+  - turns: 1
     positions:
     - piece: 4
       colour: 1
-      position: {x: 1.5, y: 1.5}
+      position: {x: 1, y: 1}
     - piece: 4
       colour: 0
-      position: {x: 5.5, y: 5.5}
+      position: {x: 5, y: 5}
     - piece: 4
       colour: 0
-      position: {x: 8.5, y: 8.5}
-  - number: 3
-    turns: 1
+      position: {x: 8, y: 8}
+  - turns: 1
     positions:
     - piece: 4
       colour: 1
-      position: {x: 1.5, y: 1.5}
+      position: {x: 1, y: 7}
     - piece: 4
+      colour: 0
+      position: {x: 4, y: 4}
+    - piece: 4
+      colour: 0
+      position: {x: 5, y: 5}
+    - piece: 4
+      colour: 0
+      position: {x: 8, y: 2}
+    - piece: 4
+      colour: 0
+      position: {x: 7, y: 1}
+  - turns: 3
+    positions:
+    - piece: 2
       colour: 1
-      position: {x: 1.5, y: 7.5}
+      position: {x: 4, y: 1}
     - piece: 4
       colour: 0
-      position: {x: 4.5, y: 4.5}
+      position: {x: 1, y: 1}
+    - piece: 3
+      colour: 0
+      position: {x: 4, y: 4}
+    - piece: 1
+      colour: 0
+      position: {x: 5, y: 6}
+    - piece: 1
+      colour: 0
+      position: {x: 4, y: 7}
+    - piece: 5
+      colour: 0
+      position: {x: 3, y: 8}
+  - turns: 3
+    positions:
+    - piece: 5
+      colour: 1
+      position: {x: 5, y: 1}
+    - piece: 3
+      colour: 0
+      position: {x: 6, y: 8}
+    - piece: 3
+      colour: 0
+      position: {x: 3, y: 8}
+  - turns: 2
+    positions:
+    - piece: 2
+      colour: 1
+      position: {x: 5, y: 1}
+    - piece: 3
+      colour: 0
+      position: {x: 3, y: 8}
+    - piece: 3
+      colour: 0
+      position: {x: 6, y: 8}
+    - piece: 1
+      colour: 0
+      position: {x: 4, y: 7}
+    - piece: 1
+      colour: 0
+      position: {x: 5, y: 7}
+  - turns: 1
+    positions:
+    - piece: 1
+      colour: 1
+      position: {x: 4, y: 2}
+    - piece: 1
+      colour: 0
+      position: {x: 3, y: 3}
+    - piece: 2
+      colour: 0
+      position: {x: 4, y: 4}
+    - piece: 1
+      colour: 0
+      position: {x: 8, y: 4}
+  - turns: 4
+    positions:
+    - piece: 3
+      colour: 1
+      position: {x: 3, y: 4}
     - piece: 4
       colour: 0
-      position: {x: 5.5, y: 5.5}
+      position: {x: 1, y: 8}
+    - piece: 2
+      colour: 0
+      position: {x: 2, y: 6}
+    - piece: 1
+      colour: 0
+      position: {x: 6, y: 6}
+    - piece: 1
+      colour: 0
+      position: {x: 7, y: 7}
+    - piece: 2
+      colour: 0
+      position: {x: 8, y: 6}
     - piece: 4
       colour: 0
-      position: {x: 8.5, y: 2.5}
+      position: {x: 2, y: 2}
+  - turns: 1
+    positions:
+    - piece: 2
+      colour: 1
+      position: {x: 1, y: 1}
+    - piece: 2
+      colour: 0
+      position: {x: 8, y: 1}
+    - piece: 2
+      colour: 0
+      position: {x: 8, y: 8}
+    - piece: 2
+      colour: 0
+      position: {x: 1, y: 8}
+    - piece: 2
+      colour: 0
+      position: {x: 1, y: 4}
+    - piece: 5
+      colour: 0
+      position: {x: 4, y: 4}
+  - turns: 4
+    positions:
+    - piece: 3
+      colour: 1
+      position: {x: 3, y: 7}
+    - piece: 2
+      colour: 0
+      position: {x: 1, y: 1}
+    - piece: 3
+      colour: 0
+      position: {x: 1, y: 6}
+    - piece: 1
+      colour: 0
+      position: {x: 2, y: 5}
+    - piece: 1
+      colour: 0
+      position: {x: 4, y: 5}
+    - piece: 1
+      colour: 0
+      position: {x: 6, y: 5}
+    - piece: 1
+      colour: 0
+      position: {x: 8, y: 5}
     - piece: 4
       colour: 0
-      position: {x: 7.5, y: 1.5}
-  - number: 4
-    turns: 99
+      position: {x: 5, y: 7}
+    - piece: 2
+      colour: 0
+      position: {x: 8, y: 7}
+    - piece: 3
+      colour: 0
+      position: {x: 7, y: 8}
+  reservedLevels:
+  - turns: 99
     positions:
     - piece: 2
       colour: 1
