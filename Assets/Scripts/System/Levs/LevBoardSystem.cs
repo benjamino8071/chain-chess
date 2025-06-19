@@ -75,8 +75,6 @@ public class LevBoardSystem : LevDependency
         Vector3 mouseWorldPosition = GetMouseWorldPosition();
         Vector3 positionRequested = GetHighlightPosition();
         if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame()
-            && mouseWorldPosition.y <= Creator.boardSo.maxY 
-            && mouseWorldPosition.y >= Creator.boardSo.minY
             && !_pauseUISystem.isShowing
             && !_endGameSystem.isEndGame)
         {
@@ -97,10 +95,9 @@ public class LevBoardSystem : LevDependency
                     _chainUISystem.SetChain(blackPieceController.capturedPieces, blackPieceController.pieceColour, blackPieceController.movesUsed);
                 }
             }
-            else
+            else if(IsPositionValid(positionRequested))
             {
-                if (activeSideSystem.pieceControllerSelected is { hasMoved: true, state: LevPieceController.States.FindingMove } pieceControllerSelected
-                    && IsPositionValid(positionRequested))
+                if (activeSideSystem.pieceControllerSelected is { hasMoved: true, state: LevPieceController.States.FindingMove } pieceControllerSelected)
                 {
                     _validMovesSystem.ShowSelectedBackground(pieceControllerSelected.piecePos);
                     _validMovesSystem.UpdateValidMoves(pieceControllerSelected.GetAllValidMovesOfCurrentPiece());

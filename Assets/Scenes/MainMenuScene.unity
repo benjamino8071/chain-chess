@@ -465,12 +465,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
+  m_fontSize: 137.4
   m_fontSizeBase: 150
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 137.4
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -821,6 +821,7 @@ MonoBehaviour:
   xpBarSo: {fileID: 11400000, guid: 6673b54cf0d58d242a4e2a3ccdf688f3, type: 2}
   gridSystemSo: {fileID: 11400000, guid: b1b948b72a163f44dabc05d553b8ae0b, type: 2}
   gameDataSo: {fileID: 11400000, guid: b81a35f5ff0716542acfcacdae98c9b6, type: 2}
+  levelsSo: {fileID: 11400000, guid: 250c55fcfb8393b41a1c4e0253d84ada, type: 2}
   resetCachedDataOnStart: 1
 --- !u!4 &1368535756
 Transform:

@@ -23,6 +23,7 @@ public class LoadScene : MonoBehaviour
     public XPBar_SO xpBarSo;
     public GridSystem_SO gridSystemSo;
     public GameData_SO gameDataSo;
+    public Levels_SO levelsSo;
     
     public bool resetCachedDataOnStart;
     private static readonly int Play = Animator.StringToHash("play");
@@ -31,6 +32,8 @@ public class LoadScene : MonoBehaviour
 
     private void Start()
     {
+        levelsSo.levelOnLoad = 1;
+        
         playerSystemSo.hideMainMenuTrigger = false;
         
         tempCam.backgroundColor = Color.black;
