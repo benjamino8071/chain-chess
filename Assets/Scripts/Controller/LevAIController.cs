@@ -66,8 +66,17 @@ public class LevAIController : LevPieceController
                 
         if (_pieceInstance.position == _jumpPosition)
         {
-            _pieceInstance.position = new Vector3(((int)_pieceInstance.position.x) + 0.5f, ((int)_pieceInstance.position.y) + 0.5f, 0);
+            int posX = (int)_pieceInstance.position.x;
+            int posY = (int)_pieceInstance.position.y;
+            
+            _pieceInstance.position = new Vector3(posX + 0.5f, posY + 0.5f, 0);
             _sinTime = 0;
+            
+            bool reachedPromoPoint = pieceColour == PieceColour.White ? posY == 8 : posY == 1;
+            if (reachedPromoPoint)
+            {
+                PromotePiece();
+            }
             
             if (_boardSystem.TryCaptureEnemyPiece(_pieceInstance.position, _enemyColour, this))
             {

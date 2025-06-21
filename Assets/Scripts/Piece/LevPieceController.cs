@@ -163,6 +163,16 @@ public class LevPieceController : LevController
         
         if (_movesInThisTurn.Count > 0)
         {
+            int posY = (int)_pieceInstance.position.y;
+            
+            bool reachedPromoPoint = pieceColour == PieceColour.White ? posY == 8 : posY == 1;
+            if (reachedPromoPoint && _movesInThisTurn[0] == Piece.Pawn)
+            {
+                PromotePiece();
+                Finish();
+                return;
+            }
+            
             //Allow player to make another move
             UpdateSprite(_movesInThisTurn[0]);
             
@@ -464,6 +474,15 @@ public class LevPieceController : LevController
             movesInTurnTextColor = Color.black;
         }
         _captureAmountText.color = movesInTurnTextColor;
+    }
+
+    protected void PromotePiece()
+    {
+        _capturedPieces.Clear();
+        _capturedPieces.Add(Piece.Queen);
+        _movesInThisTurn.Clear();
+        UpdateSprite(Piece.Queen);
+        UpdateCaptureAmountText(1);
     }
     
     public override void Destroy()
