@@ -26,6 +26,7 @@ public class LevCreator : Creator
 
     [Header("Is Puzzle")]
     public bool isPuzzle;
+    public bool useEndTurnButton;
     
     private TextMeshProUGUI _levelText;
     private TextMeshProUGUI _turnsText;

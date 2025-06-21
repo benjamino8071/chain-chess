@@ -10,6 +10,7 @@ public class LevTurnSystem : LevDependency
     private LevValidMovesSystem _validMovesSystem;
     private LevChainUISystem _chainUISystem;
     private LevEndGameSystem _endGameSystem;
+    private LevBoardSystem _boardSystem;
 
     private TextMeshProUGUI _turnText;
     
@@ -29,7 +30,8 @@ public class LevTurnSystem : LevDependency
         _validMovesSystem = levCreator.GetDependency<LevValidMovesSystem>();
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
         _endGameSystem = levCreator.GetDependency<LevEndGameSystem>();
-        
+        _boardSystem = levCreator.GetDependency<LevBoardSystem>();
+
         Transform turnText = levCreator.GetFirstObjectWithName(AllTagNames.TurnInfoText);
         _turnText = turnText.GetComponent<TextMeshProUGUI>();
         
@@ -61,9 +63,9 @@ public class LevTurnSystem : LevDependency
                     }
                 }
                 
-                _chainUISystem.UnsetChain();
-                _validMovesSystem.HideSelectedBackground();
-                _blackSystem.UnselectPiece();
+                _chainUISystem.HideChain();
+                _boardSystem.HideTapPoint();
+                _blackSystem.DeselectPiece();
                 if (Creator.whiteControlledBy == ControlledBy.Player)
                 {
                     _whiteSystem.SetStateForAllPieces(LevPieceController.States.FindingMove);
@@ -87,9 +89,9 @@ public class LevTurnSystem : LevDependency
                     }
                 }
                 
-                _chainUISystem.UnsetChain();
-                _validMovesSystem.HideSelectedBackground();
-                _whiteSystem.UnselectPiece();
+                _chainUISystem.HideChain();
+                _boardSystem.HideTapPoint();
+                _whiteSystem.DeselectPiece();
                 if (Creator.blackControlledBy == ControlledBy.Player)
                 {
                     _blackSystem.SetStateForAllPieces(LevPieceController.States.FindingMove);
@@ -112,7 +114,7 @@ public class LevTurnSystem : LevDependency
         _blackSystem.Clean();
         
         _validMovesSystem.HideAllValidMoves();
-        _chainUISystem.UnsetChain();
+        _chainUISystem.HideChain();
         
         Creator.UpdateLevelText();
         
@@ -146,7 +148,7 @@ public class LevTurnSystem : LevDependency
 
     public void ShowEndTurnButton()
     {
-        _endTurnButton.gameObject.SetActive(true);
+        _endTurnButton.gameObject.SetActive(Creator.useEndTurnButton);
     }
 
     public void HideEndTurnButton()

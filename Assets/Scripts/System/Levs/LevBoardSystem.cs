@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class LevBoardSystem : LevDependency
@@ -20,7 +21,11 @@ public class LevBoardSystem : LevDependency
 
     private Dictionary<Vector3, List<Vector3>> _connectedTiles = new();
     
+    private Transform _tapPoint;
+    
     private Vector3 _highlightedPosition = Vector3.zero;
+    
+    private Camera _camera;
     
     public override void GameStart(LevCreator levCreator)
     {
@@ -34,6 +39,13 @@ public class LevBoardSystem : LevDependency
         _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
         _endGameSystem = levCreator.GetDependency<LevEndGameSystem>();
 
+        _camera = Camera.main;
+        if (!_camera)
+        {
+            Debug.LogError("CAN'T FIND CAMERA");
+            return;
+        }
+        
         List<Transform> tilesAlreadyPlaced = levCreator.GetObjectsByName(AllTagNames.Tile);
         foreach (Transform tileChild in tilesAlreadyPlaced)
         {
@@ -63,74 +75,85 @@ public class LevBoardSystem : LevDependency
             
             _connectedTiles.Add(positionInGrid, nearbyPositions);
         }
+        
+        GameObject tapPoint =
+            Creator.InstantiateGameObject(Creator.selectedBackgroundPrefab, Vector3.zero, Quaternion.identity);
+        _tapPoint = tapPoint.transform;
+        HideTapPoint();
     }
 
-    public override void GameUpdate(float dt)
+    public override void GameEarlyUpdate(float dt)
     {
-        UpdateHighlight();
-    }
-
-    public override void GameLateUpdate(float dt)
-    {
-        Vector3 mouseWorldPosition = GetMouseWorldPosition();
-        Vector3 positionRequested = GetHighlightPosition();
-        if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame()
-            && !_pauseUISystem.isShowing
-            && !_endGameSystem.isEndGame)
-        {
-            if (_whiteSystem.TryGetAllyPieceAtPosition(positionRequested, out LevPieceController whitePieceController))
-            {
-                _validMovesSystem.ShowSelectedBackground(positionRequested);
-                if (_blackSystem.pieceControllerSelected is not { state: LevPieceController.States.Moving })
-                {
-                    _chainUISystem.SetChain(whitePieceController.capturedPieces, whitePieceController.pieceColour, whitePieceController.movesUsed);
-                }
-            }
-            else if (_blackSystem.TryGetAllyPieceAtPosition(positionRequested,
-                         out LevPieceController blackPieceController))
-            {
-                _validMovesSystem.ShowSelectedBackground(positionRequested);
-                if (_whiteSystem.pieceControllerSelected is not { state: LevPieceController.States.Moving })
-                {
-                    _chainUISystem.SetChain(blackPieceController.capturedPieces, blackPieceController.pieceColour, blackPieceController.movesUsed);
-                }
-            }
-            else if(IsPositionValid(positionRequested))
-            {
-                if (activeSideSystem.pieceControllerSelected is { hasMoved: true, state: LevPieceController.States.FindingMove } pieceControllerSelected)
-                {
-                    _validMovesSystem.ShowSelectedBackground(pieceControllerSelected.piecePos);
-                    _validMovesSystem.UpdateValidMoves(pieceControllerSelected.GetAllValidMovesOfCurrentPiece());
-                    _chainUISystem.SetChain(pieceControllerSelected.capturedPieces, pieceControllerSelected.pieceColour, pieceControllerSelected.movesUsed);
-                }
-                else
-                {
-                    _chainUISystem.UnsetChain();
-                    _validMovesSystem.ShowSelectedBackground(positionRequested);
-                }
-            }
-        }
-    }
-
-    private void UpdateHighlight()
-    {
-        Vector3 screenPos = Input.mousePosition;
-
-        Camera main = Camera.main;
-        if (!main)
+        Vector3 gridPoint = GetGridPointNearMouse();
+        if (!Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame()
+            || _pauseUISystem.isShowing
+            || _endGameSystem.isEndGame
+            || !IsPositionValid(gridPoint))
         {
             return;
         }
         
-        Ray ray = main.ScreenPointToRay(screenPos);
+        bool samePoint = gridPoint == _tapPoint.position;
+        UpdateTapPoint(gridPoint, samePoint);
+        UpdateChain(gridPoint, samePoint);
+        UpdateSelectedPiece(gridPoint, samePoint);
+    }
 
-        if (Physics.Raycast(ray, out RaycastHit hitData))
+    private void UpdateTapPoint(float3 gridPoint, bool samePoint)
+    {
+        if (samePoint)
         {
-            _highlightedPosition = _validTiles.ContainsKey(hitData.transform.position) ? hitData.transform.position : Vector3.zero;
+            HideTapPoint();
         }
         else
         {
-            _highlightedPosition = new Vector2(-100,-100);
+            ShowTapPoint(gridPoint);
+        }
+    }
+
+    private void UpdateChain(float3 gridPoint, bool samePoint)
+    {
+        //Don't want to do anything if a valid move point has been chosen
+        bool choseValidMovePoint = activeSideSystem.pieceControllerSelected is { } pieceControllerSelected
+                                   && pieceControllerSelected.GetAllValidMovesOfCurrentPiece().Contains(gridPoint);
+        
+        if (_whiteSystem.TryGetAllyPieceAtPosition(gridPoint, out LevPieceController whitePieceController) 
+            && !samePoint
+            && !choseValidMovePoint)
+        {
+            _chainUISystem.ShowChain(whitePieceController.capturedPieces, whitePieceController.pieceColour, whitePieceController.movesUsed);
+        }
+        else if (_blackSystem.TryGetAllyPieceAtPosition(gridPoint, out LevPieceController blackPieceController) 
+                 && !samePoint
+                 && !choseValidMovePoint)
+        {
+            _chainUISystem.ShowChain(blackPieceController.capturedPieces, blackPieceController.pieceColour, blackPieceController.movesUsed);
+        }
+        else if(!choseValidMovePoint)
+        {
+            _chainUISystem.HideChain();
+        }
+    }
+
+    private void UpdateSelectedPiece(float3 gridPoint, bool samePoint)
+    {
+        //Don't want to do anything if a valid move point has been chosen
+        bool choseValidMovePoint = activeSideSystem.pieceControllerSelected is { } pieceControllerSelected
+                                   && pieceControllerSelected.GetAllValidMovesOfCurrentPiece().Contains(gridPoint);
+        
+        if (activeSideSystem.controlledBy != ControlledBy.Player 
+            || choseValidMovePoint)
+        {
+            return;
+        }
+
+        if (activeSideSystem.TryGetAllyPieceAtPosition(gridPoint, out LevPieceController selectedPiece) && !samePoint)
+        {
+            activeSideSystem.SelectPiece(selectedPiece);
+        }
+        else
+        {
+            activeSideSystem.DeselectPiece();
         }
     }
 
@@ -170,14 +193,14 @@ public class LevBoardSystem : LevDependency
             && _whiteSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController whitePieceCont))
         {
             pieceUsed.AddCapturedPiece(whitePieceCont.capturedPieces[0]);
-            _chainUISystem.SetChain(pieceUsed.capturedPieces, PieceColour.Black, pieceUsed.movesUsed);
+            _chainUISystem.ShowChain(pieceUsed.capturedPieces, PieceColour.Black, pieceUsed.movesUsed);
             return _whiteSystem.PieceCaptured(whitePieceCont, pieceUsed.piecesCapturedInThisTurn, pieceUsed.movesUsed);
         }
         if (enemyColour == PieceColour.Black 
             && _blackSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController blackPieceCont))
         {
             pieceUsed.AddCapturedPiece(blackPieceCont.capturedPieces[0]);
-            _chainUISystem.SetChain(pieceUsed.capturedPieces, PieceColour.White, pieceUsed.movesUsed);
+            _chainUISystem.ShowChain(pieceUsed.capturedPieces, PieceColour.White, pieceUsed.movesUsed);
             return _blackSystem.PieceCaptured(blackPieceCont, pieceUsed.piecesCapturedInThisTurn, pieceUsed.movesUsed);
         }
         
@@ -195,15 +218,37 @@ public class LevBoardSystem : LevDependency
             _blackSystem.PieceLocked(pieceController);
         }
     }
-
-    public Vector3 GetHighlightPosition()
+    
+    public void ShowTapPoint(float3 position)
     {
-        return _highlightedPosition;
+        _tapPoint.position = position;
+        _tapPoint.gameObject.SetActive(true);
     }
 
-    public Vector3 GetMouseWorldPosition()
+    public void HideTapPoint()
+    {
+        _tapPoint.position = Vector3.zero;
+        _tapPoint.gameObject.SetActive(false);
+    }
+
+    public float3 GetGridPointNearMouse()
     {
         Vector3 screenPos = Input.mousePosition;
-        return Camera.main.ScreenToViewportPoint(screenPos);
+        screenPos.z = 10;
+        
+        float3 screenToWorldPoint = _camera.ScreenToWorldPoint(screenPos);
+
+        float x = (int)screenToWorldPoint.x + 0.5f;
+        float y = (int)screenToWorldPoint.y + 0.5f;
+
+        return new(x, y, 0);
+    }
+
+    public float3 GetScreenToWorldPoint()
+    {
+        Vector3 screenPos = Input.mousePosition;
+        screenPos.z = 10;
+        
+        return _camera.ScreenToWorldPoint(screenPos);
     }
 }

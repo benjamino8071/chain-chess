@@ -9,6 +9,7 @@ public class LevEndGameSystem : LevDependency
     private LevPauseUISystem _pauseUISystem;
     private LevChainUISystem _chainUISystem;
     private LevValidMovesSystem _validMovesSystem;
+    private LevBoardSystem _boardSystem;
 
     public bool isEndGame => _isEndGame;
     
@@ -25,6 +26,7 @@ public class LevEndGameSystem : LevDependency
         _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
         _validMovesSystem = levCreator.GetDependency<LevValidMovesSystem>();
+        _boardSystem = levCreator.GetDependency<LevBoardSystem>();
     }
     
     public void SetEndGame(PieceColour winningColour)
@@ -70,8 +72,8 @@ public class LevEndGameSystem : LevDependency
         }
         _turnSystem.HideEndTurnButton();
         _pauseUISystem.HideButton();
-        _chainUISystem.UnsetChain();
-        _validMovesSystem.HideSelectedBackground();
+        _chainUISystem.HideChain();
+        _boardSystem.HideTapPoint();
         _validMovesSystem.HideAllValidMoves();
         _isEndGame = true;
     }

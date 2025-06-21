@@ -25,7 +25,7 @@ public class LevChainUISystem : LevDependency
         public Piece piece;
         public Image image;
     }
-    
+
     private List<PieceImage> _chainPieceImages = new ();
     private int _nextFreeIndex;
     
@@ -85,7 +85,7 @@ public class LevChainUISystem : LevDependency
 
     private bool ProcessSlider(float dt)
     {
-        if (Creator.inputSo._leftMouseButton.action.IsPressed() && (_boardSystem.GetMouseWorldPosition().y > Creator.boardSo.maxY || _mousePosXLastFrame > 0))
+        if (Creator.inputSo._leftMouseButton.action.IsPressed() && (_boardSystem.GetGridPointNearMouse().y > Creator.boardSo.maxY || _mousePosXLastFrame > 0))
         {
             float3 mousePos = Input.mousePosition;
             if (_mousePosXLastFrame > 0)
@@ -109,9 +109,9 @@ public class LevChainUISystem : LevDependency
         return false;
     }
 
-    public void SetChain(List<Piece> pieces, PieceColour pieceColour, int movesUsed)
+    public void ShowChain(List<Piece> pieces, PieceColour pieceColour, int movesUsed)
     {
-        UnsetChain();
+        ResetChain();
         
         for (int i = 0; i < pieces.Count; i++)
         {
@@ -123,7 +123,13 @@ public class LevChainUISystem : LevDependency
         UpdateMovesRemainingText(pieces.Count);
     }
 
-    public void UnsetChain()
+    //Public function 'hide' just has a better name than 'reset'
+    public void HideChain()
+    {
+        ResetChain();
+    }
+
+    private void ResetChain()
     {
         foreach (PieceImage chainPiecesImage in _chainPieceImages)
         {
@@ -144,7 +150,7 @@ public class LevChainUISystem : LevDependency
         _nextFreeIndex = 0;
     }
     
-    private void ShowNewPiece(Piece piece, PieceColour pieceColour, int movesUsed, bool isFirstPiece = false)
+    public void ShowNewPiece(Piece piece, PieceColour pieceColour, int movesUsed, bool isFirstPiece = false)
     {
         Color pieceColor = pieceColour == PieceColour.White
             ? Creator.piecesSo.whiteColor 

@@ -8,7 +8,7 @@ public class LevPlayerController : LevPieceController
     protected override void FindingMove(float dt)
     {
         //The player will find the move when they are ready
-        Vector3 positionRequested = _boardSystem.GetHighlightPosition();
+        Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
         if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame() && CanMove(positionRequested))
         {
             if (Creator.settingsSo.doubleTap)
@@ -28,7 +28,7 @@ public class LevPlayerController : LevPieceController
     protected override void ConfirmingMove(float dt)
     {
         //The player will find the move when they are ready
-        Vector3 positionRequested = _boardSystem.GetHighlightPosition();
+        Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
         if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
         {
             if (_positionRequested == positionRequested)
@@ -64,7 +64,12 @@ public class LevPlayerController : LevPieceController
             _pieceInstance.position = new Vector3(((int)_pieceInstance.position.x) + 0.5f, ((int)_pieceInstance.position.y) + 0.5f, 0);
             _sinTime = 0;
 
-            if (!_boardSystem.TryCaptureEnemyPiece(_pieceInstance.position, _enemyColour, this))
+            if (_boardSystem.TryCaptureEnemyPiece(_pieceInstance.position, _enemyColour, this))
+            {
+                //We win!
+                UpdateSprite(_movesInThisTurn[0]);
+            }
+            else
             {
                 SetToNextMove();
                 if (_state == States.FindingMove)

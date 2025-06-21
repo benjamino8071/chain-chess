@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Xml;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class LevSideSystem : LevDependency
 {
@@ -14,14 +16,17 @@ public class LevSideSystem : LevDependency
     protected LevSideSystem _enemySideSystem;
 
     public LevPieceController pieceControllerSelected => _pieceControllerSelected;
+    public List<LevPieceController> pieceControllers => _pieceControllers;
+    
+    public ControlledBy controlledBy => _controlledBy;
     
     private List<LevPieceController> _pieceControllers = new ();
 
     private LevPieceController _pieceControllerSelected;
     
-    protected PieceColour allyPieceColour;
-    protected PieceColour enemyPieceColour;
-    protected ControlledBy controlledBy;
+    protected PieceColour _allyPieceColour;
+    protected PieceColour _enemyPieceColour;
+    protected ControlledBy _controlledBy;
     
     public override void GameStart(LevCreator levCreator)
     {
@@ -40,47 +45,12 @@ public class LevSideSystem : LevDependency
 
     public override void GameUpdate(float dt)
     {
-        if (_turnSystem.CurrentTurn() == enemyPieceColour)
+        if (_turnSystem.CurrentTurn() == _enemyPieceColour)
         {
             return;
         }
         
         _pieceControllerSelected?.GameUpdate(dt);
-        
-        if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame() 
-            && controlledBy == ControlledBy.Player 
-            && _boardSystem.GetMouseWorldPosition().y < 0.8f
-            && !_pauseUISystem.isShowing
-            && !_endGameSystem.isEndGame)
-        {
-            /*
-             * If the player selects another piece when they haven't made a move
-             * then we want to select that piece
-             */
-            
-            Vector3 positionRequested = _boardSystem.GetHighlightPosition();
-            if (TryGetAllyPieceAtPosition(positionRequested,
-                    out LevPieceController pieceController))
-            {
-                if (_pieceControllerSelected is null)
-                {
-                    SelectPiece(pieceController);
-                    Creator.playerSystemSo.hideMainMenuTrigger = true;
-                    _audioSystem.PlayPieceSelectedSfx(1);
-                }
-                else if (!_pieceControllerSelected.hasMoved)
-                {
-                    SelectPiece(pieceController);
-                    _audioSystem.PlayPieceSelectedSfx(1);
-                }
-            }
-            else if (_pieceControllerSelected is { state: LevPieceController.States.FindingMove, hasMoved: false} 
-                     && _boardSystem.IsPositionValid(positionRequested))
-            {
-                UnselectPiece();
-                _audioSystem.PlayPieceSelectedSfx(0.8f);
-            }
-        }
     }
 
     public override void Clean()
@@ -98,13 +68,13 @@ public class LevSideSystem : LevDependency
         Level levelOnLoad = Creator.levelsSo.GetLevelOnLoad();
         foreach (PieceSpawnData pieceSpawnData in levelOnLoad.positions)
         {
-            if (pieceSpawnData.colour == allyPieceColour)
+            if (pieceSpawnData.colour == _allyPieceColour)
             {
                 LevPieceController levPlayerController = controlledBy == ControlledBy.Player 
                     ? new LevPlayerController() : new LevAIController();
                 levPlayerController.GameStart(Creator);
                 Vector3 actualPos = pieceSpawnData.position + new Vector2(0.5f, 0.5f);
-                levPlayerController.Init(actualPos, pieceSpawnData.piece, allyPieceColour, controlledBy);
+                levPlayerController.Init(actualPos, pieceSpawnData.piece, _allyPieceColour, controlledBy);
             
                 _pieceControllers.Add(levPlayerController);
             }
@@ -153,9 +123,12 @@ public class LevSideSystem : LevDependency
         _validMovesSystem.UpdateValidMoves(pieceController.GetAllValidMovesOfCurrentPiece());
     }
 
-    public void UnselectPiece()
+    public void DeselectPiece()
     {
-        _pieceControllerSelected?.SetState(LevPieceController.States.WaitingForTurn);
+        if (_pieceControllerSelected is { movesRemaining: 0 })
+        {
+            _pieceControllerSelected?.SetState(LevPieceController.States.WaitingForTurn);
+        }
         _pieceControllerSelected = null;
         _validMovesSystem.HideAllValidMoves();
     }
@@ -198,7 +171,7 @@ public class LevSideSystem : LevDependency
     {
         _enemySideSystem.SetStateForAllPieces(LevPieceController.States.EndGame);
         SetStateForAllPieces(LevPieceController.States.EndGame);
-        _endGameSystem.SetEndGame(enemyPieceColour);
+        _endGameSystem.SetEndGame(_enemyPieceColour);
         _validMovesSystem.HideAllValidMoves();
     }
     

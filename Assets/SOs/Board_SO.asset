@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c50ee34ef51e74bac161b5dcc4e260, type: 3}
   m_Name: Board_SO
   m_EditorClassIdentifier: 
-  maxY: 0.7
-  minY: 0.23
+  maxY: 10
+  minY: 0

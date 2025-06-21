@@ -4,8 +4,6 @@ using UnityEngine;
 public class LevValidMovesSystem : LevDependency
 {
     private List<Transform> _validMovesVisuals = new(64);
-
-    private Transform _selectedBackgroundVisual;
     
     public override void GameStart(LevCreator levCreator)
     {
@@ -21,13 +19,8 @@ public class LevValidMovesSystem : LevDependency
                 Creator.InstantiateGameObjectWithParent(Creator.validPositionPrefab, allValidMovesParent);
             _validMovesVisuals.Add(validMove.transform);
         }
-
-        GameObject selectedBackgroundVisual =
-            Creator.InstantiateGameObject(Creator.selectedBackgroundPrefab, Vector3.zero, Quaternion.identity);
-        _selectedBackgroundVisual = selectedBackgroundVisual.transform;
         
         HideAllValidMoves();
-        HideSelectedBackground();
     }
 
     public void ShowSingleValidMove(Vector3 validMove)
@@ -56,17 +49,5 @@ public class LevValidMovesSystem : LevDependency
             validPositionsVisual.position = Vector3.zero;
             validPositionsVisual.gameObject.SetActive(false);
         }
-    }
-
-    public void ShowSelectedBackground(Vector3 position)
-    {
-        _selectedBackgroundVisual.position = position;
-        _selectedBackgroundVisual.gameObject.SetActive(true);
-    }
-
-    public void HideSelectedBackground()
-    {
-        _selectedBackgroundVisual.position = Vector3.zero;
-        _selectedBackgroundVisual.gameObject.SetActive(false);
     }
 }

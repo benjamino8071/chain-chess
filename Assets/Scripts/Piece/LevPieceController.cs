@@ -192,8 +192,6 @@ public class LevPieceController : LevController
     private void Finish()
     {
         SetState(States.WaitingForTurn);
-        _chainUISystem.UnsetChain();
-        _validMovesSystem.HideSelectedBackground();
         _validMovesSystem.HideAllValidMoves();
         _turnSystem.SwitchTurn(_enemyColour == PieceColour.White ? PieceColour.White : PieceColour.Black);
     }
@@ -253,6 +251,14 @@ public class LevPieceController : LevController
 
     public List<Vector3> GetAllValidMovesOfCurrentPiece()
     {
+        if (_movesInThisTurn.Count == 0)
+        {
+            return new(1)
+            {
+                new(-100,-100)
+            };
+        }
+        
         return GetAllValidMovesOfPiece(_movesInThisTurn[0]);
     }
 
@@ -275,7 +281,11 @@ public class LevPieceController : LevController
                     
                     Vector3 startingMove = _pieceInstance.position + new Vector3(0, 2, 0) * direction;
                     
-                    if (!_madeMove
+                    bool atStartPoint = pieceColour == PieceColour.White 
+                        ? (int)_pieceInstance.position.y == 2 
+                        : (int)_pieceInstance.position.y == 7;
+                    
+                    if (atStartPoint
                         && !_boardSystem.IsAllyAtPosition(startingMove, _pieceColour) 
                         && !_boardSystem.IsEnemyAtPosition(startingMove, _enemyColour))
                     {
