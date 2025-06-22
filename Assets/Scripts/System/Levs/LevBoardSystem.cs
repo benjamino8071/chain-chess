@@ -92,6 +92,8 @@ public class LevBoardSystem : LevDependency
         {
             return;
         }
+
+        Creator.playerSystemSo.hideMainMenuTrigger = true;
         
         bool samePoint = gridPoint == _tapPoint.position;
         UpdateTapPoint(gridPoint, samePoint);

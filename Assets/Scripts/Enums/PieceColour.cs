@@ -11,6 +11,7 @@ public enum PieceColour
 [Serializable]
 public struct Level
 {
+    public int level;
     public int turns;
     public List<PieceSpawnData> positions;
 }

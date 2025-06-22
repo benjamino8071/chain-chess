@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 1
+  levelOnLoad: 16
   levelsData:
-  - turns: 1
+  - level: 1
+    turns: 1
     positions:
     - piece: 4
       colour: 1
@@ -22,7 +23,8 @@ MonoBehaviour:
     - piece: 4
       colour: 0
       position: {x: 8, y: 8}
-  - turns: 1
+  - level: 2
+    turns: 1
     positions:
     - piece: 4
       colour: 1
@@ -33,7 +35,8 @@ MonoBehaviour:
     - piece: 4
       colour: 0
       position: {x: 8, y: 8}
-  - turns: 1
+  - level: 3
+    turns: 1
     positions:
     - piece: 4
       colour: 1
@@ -50,59 +53,80 @@ MonoBehaviour:
     - piece: 4
       colour: 0
       position: {x: 7, y: 1}
-  - turns: 2
+  - level: 4
+    turns: 1
     positions:
-    - piece: 1
-      colour: 1
-      position: {x: 4, y: 2}
-    - piece: 1
-      colour: 0
-      position: {x: 5, y: 6}
-  - turns: 2
-    positions:
-    - piece: 5
-      colour: 1
-      position: {x: 1, y: 5}
-    - piece: 1
-      colour: 0
-      position: {x: 4, y: 2}
-    - piece: 1
-      colour: 0
-      position: {x: 5, y: 6}
-  - turns: 2
-    positions:
-    - piece: 1
-      colour: 1
-      position: {x: 4, y: 7}
-    - piece: 1
-      colour: 0
-      position: {x: 4, y: 3}
-  - turns: 2
-    positions:
-    - piece: 4
-      colour: 1
-      position: {x: 4, y: 5}
-    - piece: 1
-      colour: 0
-      position: {x: 7, y: 2}
-    - piece: 1
-      colour: 0
-      position: {x: 7, y: 8}
-  - turns: 1
-    positions:
-    - piece: 1
-      colour: 1
-      position: {x: 4, y: 2}
-    - piece: 1
-      colour: 0
-      position: {x: 3, y: 3}
     - piece: 2
+      colour: 1
+      position: {x: 1, y: 1}
+    - piece: 2
+      colour: 0
+      position: {x: 8, y: 1}
+    - piece: 2
+      colour: 0
+      position: {x: 8, y: 8}
+    - piece: 2
+      colour: 0
+      position: {x: 1, y: 8}
+    - piece: 2
+      colour: 0
+      position: {x: 1, y: 4}
+    - piece: 5
+      colour: 0
+      position: {x: 4, y: 4}
+  - level: 5
+    turns: 1
+    positions:
+    - piece: 1
+      colour: 1
+      position: {x: 4, y: 2}
+    - piece: 1
+      colour: 0
+      position: {x: 5, y: 3}
+    - piece: 1
       colour: 0
       position: {x: 4, y: 4}
     - piece: 1
       colour: 0
-      position: {x: 8, y: 4}
-  - turns: 3
+      position: {x: 5, y: 5}
+    - piece: 1
+      colour: 0
+      position: {x: 4, y: 6}
+    - piece: 1
+      colour: 0
+      position: {x: 5, y: 7}
+  - level: 6
+    turns: 2
+    positions:
+    - piece: 2
+      colour: 1
+      position: {x: 5, y: 1}
+    - piece: 3
+      colour: 0
+      position: {x: 3, y: 8}
+    - piece: 3
+      colour: 0
+      position: {x: 6, y: 8}
+    - piece: 1
+      colour: 0
+      position: {x: 4, y: 7}
+    - piece: 1
+      colour: 0
+      position: {x: 5, y: 7}
+  - level: 7
+    turns: 3
+    positions:
+    - piece: 5
+      colour: 1
+      position: {x: 5, y: 1}
+    - piece: 3
+      colour: 0
+      position: {x: 6, y: 8}
+    - piece: 3
+      colour: 0
+      position: {x: 3, y: 8}
+  - level: 8
+    turns: 3
     positions:
     - piece: 2
       colour: 1
@@ -122,35 +146,101 @@ MonoBehaviour:
     - piece: 5
       colour: 0
       position: {x: 3, y: 8}
-  - turns: 3
+  - level: 9
+    turns: 1
     positions:
-    - piece: 5
+    - piece: 3
       colour: 1
-      position: {x: 5, y: 1}
+      position: {x: 4, y: 1}
     - piece: 3
       colour: 0
-      position: {x: 6, y: 8}
+      position: {x: 3, y: 3}
     - piece: 3
       colour: 0
-      position: {x: 3, y: 8}
-  - turns: 2
+      position: {x: 2, y: 5}
+    - piece: 3
+      colour: 0
+      position: {x: 4, y: 6}
+    - piece: 3
+      colour: 0
+      position: {x: 6, y: 5}
+    - piece: 2
+      colour: 0
+      position: {x: 7, y: 3}
+    - piece: 1
+      colour: 0
+      position: {x: 5, y: 3}
+  - level: 10
+    turns: 1
     positions:
     - piece: 2
       colour: 1
-      position: {x: 5, y: 1}
-    - piece: 3
+      position: {x: 1, y: 8}
+    - piece: 4
       colour: 0
-      position: {x: 3, y: 8}
-    - piece: 3
+      position: {x: 4, y: 8}
+    - piece: 2
       colour: 0
-      position: {x: 6, y: 8}
+      position: {x: 2, y: 6}
+    - piece: 4
+      colour: 0
+      position: {x: 5, y: 6}
+    - piece: 2
+      colour: 0
+      position: {x: 3, y: 4}
+    - piece: 4
+      colour: 0
+      position: {x: 6, y: 4}
+    - piece: 2
+      colour: 0
+      position: {x: 3, y: 1}
+    - piece: 5
+      colour: 0
+      position: {x: 8, y: 1}
+  - level: 11
+    turns: 2
+    positions:
+    - piece: 1
+      colour: 1
+      position: {x: 4, y: 2}
     - piece: 1
       colour: 0
+      position: {x: 5, y: 6}
+  - level: 12
+    turns: 2
+    positions:
+    - piece: 5
+      colour: 1
+      position: {x: 1, y: 5}
+    - piece: 1
+      colour: 0
+      position: {x: 4, y: 2}
+    - piece: 1
+      colour: 0
+      position: {x: 5, y: 6}
+  - level: 13
+    turns: 2
+    positions:
+    - piece: 1
+      colour: 1
       position: {x: 4, y: 7}
     - piece: 1
       colour: 0
-      position: {x: 5, y: 7}
-  - turns: 4
+      position: {x: 4, y: 3}
+  - level: 14
+    turns: 2
+    positions:
+    - piece: 4
+      colour: 1
+      position: {x: 4, y: 5}
+    - piece: 1
+      colour: 0
+      position: {x: 7, y: 2}
+    - piece: 1
+      colour: 0
+      position: {x: 7, y: 8}
+  - level: 15
+    turns: 4
     positions:
     - piece: 3
       colour: 1
@@ -173,27 +263,8 @@ MonoBehaviour:
     - piece: 4
       colour: 0
       position: {x: 2, y: 2}
-  - turns: 1
-    positions:
-    - piece: 2
-      colour: 1
-      position: {x: 1, y: 1}
-    - piece: 2
-      colour: 0
-      position: {x: 8, y: 1}
-    - piece: 2
-      colour: 0
-      position: {x: 8, y: 8}
-    - piece: 2
-      colour: 0
-      position: {x: 1, y: 8}
-    - piece: 2
-      colour: 0
-      position: {x: 1, y: 4}
-    - piece: 5
-      colour: 0
-      position: {x: 4, y: 4}
-  - turns: 4
+  - level: 16
+    turns: 4
     positions:
     - piece: 3
       colour: 1
@@ -226,7 +297,8 @@ MonoBehaviour:
       colour: 0
       position: {x: 7, y: 8}
   reservedLevels:
-  - turns: 99
+  - level: 0
+    turns: 99
     positions:
     - piece: 2
       colour: 1
