@@ -73,7 +73,7 @@ public class LevAIController : LevPieceController
             _sinTime = 0;
             
             bool reachedPromoPoint = pieceColour == PieceColour.White ? posY == 8 : posY == 1;
-            if (reachedPromoPoint)
+            if (reachedPromoPoint && _currentPiece == Piece.Pawn)
             {
                 PromotePiece();
             }

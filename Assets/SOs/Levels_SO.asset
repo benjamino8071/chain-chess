@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 16
+  levelOnLoad: 14
   levelsData:
   - level: 1
     turns: 1
@@ -96,6 +96,33 @@ MonoBehaviour:
       colour: 0
       position: {x: 5, y: 7}
   - level: 6
+    turns: 3
+    positions:
+    - piece: 2
+      colour: 1
+      position: {x: 1, y: 8}
+    - piece: 4
+      colour: 0
+      position: {x: 4, y: 8}
+    - piece: 2
+      colour: 0
+      position: {x: 2, y: 6}
+    - piece: 4
+      colour: 0
+      position: {x: 5, y: 6}
+    - piece: 2
+      colour: 0
+      position: {x: 3, y: 4}
+    - piece: 4
+      colour: 0
+      position: {x: 7, y: 4}
+    - piece: 2
+      colour: 0
+      position: {x: 4, y: 1}
+    - piece: 5
+      colour: 0
+      position: {x: 8, y: 1}
+  - level: 7
     turns: 2
     positions:
     - piece: 2
@@ -113,7 +140,7 @@ MonoBehaviour:
     - piece: 1
       colour: 0
       position: {x: 5, y: 7}
-  - level: 7
+  - level: 8
     turns: 3
     positions:
     - piece: 5
@@ -125,7 +152,7 @@ MonoBehaviour:
     - piece: 3
       colour: 0
       position: {x: 3, y: 8}
-  - level: 8
+  - level: 9
     turns: 3
     positions:
     - piece: 2
@@ -146,7 +173,7 @@ MonoBehaviour:
     - piece: 5
       colour: 0
       position: {x: 3, y: 8}
-  - level: 9
+  - level: 10
     turns: 1
     positions:
     - piece: 3
@@ -170,33 +197,6 @@ MonoBehaviour:
     - piece: 1
       colour: 0
       position: {x: 5, y: 3}
-  - level: 10
-    turns: 1
-    positions:
-    - piece: 2
-      colour: 1
-      position: {x: 1, y: 8}
-    - piece: 4
-      colour: 0
-      position: {x: 4, y: 8}
-    - piece: 2
-      colour: 0
-      position: {x: 2, y: 6}
-    - piece: 4
-      colour: 0
-      position: {x: 5, y: 6}
-    - piece: 2
-      colour: 0
-      position: {x: 3, y: 4}
-    - piece: 4
-      colour: 0
-      position: {x: 6, y: 4}
-    - piece: 2
-      colour: 0
-      position: {x: 3, y: 1}
-    - piece: 5
-      colour: 0
-      position: {x: 8, y: 1}
   - level: 11
     turns: 2
     positions:

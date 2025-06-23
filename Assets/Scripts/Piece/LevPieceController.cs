@@ -48,7 +48,8 @@ public class LevPieceController : LevController
     protected SpriteRenderer _spriteRenderer;
 
     protected TMP_Text _captureAmountText;
-    
+
+    protected Piece _currentPiece;
     protected PieceColour _pieceColour;
     protected PieceColour _enemyColour;
     protected ControlledBy _controlledBy;
@@ -421,6 +422,7 @@ public class LevPieceController : LevController
                 _spriteRenderer.sprite = Creator.piecesSo.king;
                 break;
         }
+        _currentPiece = piece;
     }
 
     public void SetState(States state)

@@ -15,11 +15,6 @@ public class Dependency
         
     }
 
-    public virtual void GameFixedUpdate(float dt)
-    {
-        
-    }
-
     public virtual void Clean()
     {
         

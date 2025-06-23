@@ -36,14 +36,6 @@ public class Creator : MonoBehaviour
             dependency.GameLateUpdate(Time.deltaTime);
         }
     }
-
-    private void FixedUpdate()
-    {
-        foreach (Dependency dependency in _dependencies)
-        {
-            dependency.GameFixedUpdate(Time.fixedDeltaTime);
-        }
-    }
     
     public GameObject InstantiateGameObject(GameObject creatorGridPrefab, Vector3 position, Quaternion rotation)
     {
