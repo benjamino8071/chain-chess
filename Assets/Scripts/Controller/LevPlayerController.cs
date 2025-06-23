@@ -111,5 +111,7 @@ public class LevPlayerController : LevPieceController
         _movesInThisTurn.RemoveAt(0);
             
         _validMovesSystem.HideAllValidMoves();
+        
+        Creator.playerFirstMoveMadeInLevel = true;
     }
 }

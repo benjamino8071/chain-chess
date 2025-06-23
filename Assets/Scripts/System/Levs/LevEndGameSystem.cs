@@ -28,7 +28,7 @@ public class LevEndGameSystem : LevDependency
         _validMovesSystem = levCreator.GetDependency<LevValidMovesSystem>();
         _boardSystem = levCreator.GetDependency<LevBoardSystem>();
     }
-    
+
     public void SetEndGame(PieceColour winningColour)
     {
         /*
@@ -39,31 +39,16 @@ public class LevEndGameSystem : LevDependency
 
         if (Creator.isPuzzle)
         {
-            if (winningColour == PieceColour.White)
+            if ((Creator.whiteControlledBy == ControlledBy.Player && winningColour == PieceColour.White)
+                || (Creator.blackControlledBy == ControlledBy.Player && winningColour == PieceColour.Black))
             {
-                if (Creator.whiteControlledBy == ControlledBy.Player)
-                {
-                    //Player has WON puzzle
-                    _levelCompleteUISystem.Show();
-                }
-                else
-                {
-                    //Player has LOST puzzle
-                    _gameOverUISystem.Show();
-                }
+                //Player has WON puzzle
+                _levelCompleteUISystem.Show();
             }
             else
             {
-                if (Creator.blackControlledBy == ControlledBy.Player)
-                {
-                    //Player has WON puzzle
-                    _levelCompleteUISystem.Show();
-                }
-                else
-                {
-                    //Player has LOST puzzle
-                    _gameOverUISystem.Show();
-                }
+                //Player has LOST puzzle
+                _gameOverUISystem.Show();
             }
         }
         else

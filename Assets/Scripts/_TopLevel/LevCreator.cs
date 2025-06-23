@@ -27,6 +27,11 @@ public class LevCreator : Creator
     [Header("Is Puzzle")]
     public bool isPuzzle;
     public bool useEndTurnButton;
+
+    public int statsTurns;
+    public int statsBestTurn;
+    public bool playerFirstMoveMadeInLevel;
+    public float statsTime;
     
     private TextMeshProUGUI _levelText;
     private TextMeshProUGUI _turnsText;

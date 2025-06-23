@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,6 +14,10 @@ public class LevLevelCompleteUISystem : LevDependency
 
     private Button _nextLevelButton;
     
+    private TextMeshProUGUI _turnsText;
+    private TextMeshProUGUI _bestTurnText;
+    private TextMeshProUGUI _timeText;
+
     public override void GameStart(LevCreator levCreator)
     {
         base.GameStart(levCreator);
@@ -22,6 +27,15 @@ public class LevLevelCompleteUISystem : LevDependency
 
         _levelCompleteUI = levCreator.GetFirstObjectWithName(AllTagNames.LevelComplete).transform;
 
+        Transform turnsText = levCreator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.StatsTurns);
+        _turnsText = turnsText.GetComponent<TextMeshProUGUI>();
+        
+        Transform bestTurnText = levCreator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.StatsBestTurn);
+        _bestTurnText = bestTurnText.GetComponent<TextMeshProUGUI>();
+        
+        Transform timeText = levCreator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.StatsTime);
+        _timeText = timeText.GetComponent<TextMeshProUGUI>();
+        
         Transform retryButtonTf = levCreator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.Retry);
         Button retryButton = retryButtonTf.GetComponent<Button>();
         retryButton.onClick.AddListener(() =>
@@ -56,9 +70,14 @@ public class LevLevelCompleteUISystem : LevDependency
         
         Hide();
     }
-
+    
     public void Show()
     {
+        _turnsText.text = $"{Creator.statsTurns} / {Creator.levelsSo.GetLevelOnLoad().turns}";
+        string plural = Creator.statsBestTurn == 1 ? "" : "s";
+        _bestTurnText.text = $"{Creator.statsBestTurn} Capture{plural}";
+        _timeText.text = $"{Creator.statsTime:0.##}s";
+        
         _nextLevelButton.gameObject.SetActive(Creator.levelsSo.levelOnLoad < Creator.levelsSo.levelsData.Count);
         
         _levelCompleteUI.gameObject.SetActive(true);

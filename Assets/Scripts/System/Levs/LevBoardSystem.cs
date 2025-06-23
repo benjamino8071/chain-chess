@@ -101,6 +101,14 @@ public class LevBoardSystem : LevDependency
         UpdateSelectedPiece(gridPoint, samePoint);
     }
 
+    public override void GameUpdate(float dt)
+    {
+        if (Creator.isPuzzle)
+        {
+            Creator.statsTime += dt;
+        }
+    }
+
     private void UpdateTapPoint(float3 gridPoint, bool samePoint)
     {
         if (samePoint)

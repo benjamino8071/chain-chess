@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 14
+  levelOnLoad: 1
   levelsData:
   - level: 1
     turns: 1
@@ -174,7 +174,7 @@ MonoBehaviour:
       colour: 0
       position: {x: 3, y: 8}
   - level: 10
-    turns: 1
+    turns: 2
     positions:
     - piece: 3
       colour: 1

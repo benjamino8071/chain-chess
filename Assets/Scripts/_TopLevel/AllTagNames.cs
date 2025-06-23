@@ -92,5 +92,8 @@ public enum AllTagNames
     SideWins,
     AllValidMovesParent,
     TurnsRemaining,
-    EndTurnButton
+    EndTurnButton,
+    StatsTurns,
+    StatsBestTurn,
+    StatsTime
 }

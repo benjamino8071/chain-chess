@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class LevTurnSystem : LevDependency
 {
+    public int turnsRemaining => _turnsRemaining;
+    
     private LevWhiteSystem _whiteSystem;
     private LevBlackSystem _blackSystem;
     private LevPauseUISystem _pauseUISystem;
@@ -63,6 +65,11 @@ public class LevTurnSystem : LevDependency
                     }
                 }
                 
+                if (Creator.whiteControlledBy == ControlledBy.Player && Creator.isPuzzle)
+                {
+                    Creator.statsTurns++;
+                }
+                
                 _chainUISystem.HideChain();
                 _boardSystem.HideTapPoint();
                 _blackSystem.DeselectPiece();
@@ -88,6 +95,8 @@ public class LevTurnSystem : LevDependency
                         return;
                     }
                 }
+                
+                //Player will ALWAYS be white in puzzles. So no need to check if we should increment Creator.statsTurns
                 
                 _chainUISystem.HideChain();
                 _boardSystem.HideTapPoint();
@@ -125,6 +134,11 @@ public class LevTurnSystem : LevDependency
         _blackSystem.SpawnPieces();
         
         _endGameSystem.ResetEndGame();
+
+        Creator.statsTurns = 0;
+        Creator.statsBestTurn = 0;
+        Creator.playerFirstMoveMadeInLevel = false;
+        Creator.statsTime = 0;
         
         SwitchTurn(PieceColour.White);
     }
