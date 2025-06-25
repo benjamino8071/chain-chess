@@ -148,11 +148,17 @@ public class LevBoardSystem : LevDependency
     private void UpdateSelectedPiece(float3 gridPoint, bool samePoint)
     {
         //Don't want to do anything if a valid move point has been chosen
-        bool choseValidMovePoint = activeSideSystem.pieceControllerSelected is { } pieceControllerSelected
-                                   && pieceControllerSelected.GetAllValidMovesOfCurrentPiece().Contains(gridPoint);
+        bool choseValidMovePoint = false;
+        bool chosenPieceMoving = false;
+        if (activeSideSystem.pieceControllerSelected is { } pieceControllerSelected)
+        {
+            choseValidMovePoint = pieceControllerSelected.GetAllValidMovesOfCurrentPiece().Contains(gridPoint);
+            chosenPieceMoving = pieceControllerSelected.state == LevPieceController.States.Moving;
+        }
         
         if (activeSideSystem.controlledBy != ControlledBy.Player 
-            || choseValidMovePoint)
+            || choseValidMovePoint
+            || chosenPieceMoving)
         {
             return;
         }

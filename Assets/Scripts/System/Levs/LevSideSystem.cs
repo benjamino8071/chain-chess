@@ -180,8 +180,7 @@ public class LevSideSystem : LevDependency
         List<LevPieceController> movablePieceControllers = MovablePieceControllers();
         if (movablePieceControllers.Count == 0)
         {
-            //todo: AI CANNOT MOVE ANY PIECE. Does this end in a draw? Or loss?
-            Debug.LogError("CANNOT FIND A RANDOM PIECE AS ALL PIECES CANNOT MOVE");
+            Lose();
             return;
         }
         

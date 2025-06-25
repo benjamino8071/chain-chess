@@ -95,5 +95,6 @@ public enum AllTagNames
     EndTurnButton,
     StatsTurns,
     StatsBestTurn,
-    StatsTime
+    StatsTime,
+    ThankYouMessage
 }

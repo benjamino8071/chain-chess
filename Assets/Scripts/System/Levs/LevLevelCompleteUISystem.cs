@@ -12,12 +12,14 @@ public class LevLevelCompleteUISystem : LevDependency
     
     private Transform _levelCompleteUI;
 
+    private Transform _thankYouMessage;
+    
     private Button _nextLevelButton;
     
     private TextMeshProUGUI _turnsText;
     private TextMeshProUGUI _bestTurnText;
     private TextMeshProUGUI _timeText;
-
+    
     public override void GameStart(LevCreator levCreator)
     {
         base.GameStart(levCreator);
@@ -27,6 +29,8 @@ public class LevLevelCompleteUISystem : LevDependency
 
         _levelCompleteUI = levCreator.GetFirstObjectWithName(AllTagNames.LevelComplete).transform;
 
+        _thankYouMessage = levCreator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.ThankYouMessage);
+        
         Transform turnsText = levCreator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.StatsTurns);
         _turnsText = turnsText.GetComponent<TextMeshProUGUI>();
         
@@ -79,6 +83,7 @@ public class LevLevelCompleteUISystem : LevDependency
         _timeText.text = $"{Creator.statsTime:0.##}s";
         
         _nextLevelButton.gameObject.SetActive(Creator.levelsSo.levelOnLoad < Creator.levelsSo.levelsData.Count);
+        _thankYouMessage.gameObject.SetActive(Creator.levelsSo.levelOnLoad == Creator.levelsSo.levelsData.Count);
         
         _levelCompleteUI.gameObject.SetActive(true);
         _audioSystem.PlayLevelCompleteSfx();
