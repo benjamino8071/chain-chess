@@ -8,6 +8,14 @@ public enum PieceColour
     White
 }
 
+public enum PieceAbility
+{
+    None,
+    MustMove,
+    Glitched,
+    CaptureLover
+}
+
 [Serializable]
 public struct Level
 {
@@ -19,7 +27,8 @@ public struct Level
 [Serializable]
 public struct PieceSpawnData
 {
-    public Piece piece;
+    public List<Piece> pieces;
     public PieceColour colour;
+    public PieceAbility ability;
     public Vector2 position;
 }

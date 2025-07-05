@@ -12,6 +12,12 @@ public class Pieces_SO : ScriptableObject
 
     public Color whiteColor;
     public Color blackColor;
+    
+    [Header("AI-Specific")]
+    public Material noneMat;
+    public Material glitchedMat;
+    public Material mustMoveMat;
+    public Material captureLoverMat;
 
     public float aiThinkingTime;
 }

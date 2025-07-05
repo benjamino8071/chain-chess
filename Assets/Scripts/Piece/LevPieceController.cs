@@ -72,7 +72,7 @@ public class LevPieceController : LevController
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
     }
 
-    public virtual void Init(Vector3 position, Piece startingPiece, PieceColour pieceColour, ControlledBy controlledBy)
+    public virtual void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour, PieceAbility pieceAbility, ControlledBy controlledBy)
     {
         _pieceInstance = Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity).transform;
         
@@ -92,15 +92,41 @@ public class LevPieceController : LevController
         
         _pieceColour = pieceColour;
         _enemyColour = pieceColour == PieceColour.White ? PieceColour.Black : PieceColour.White;
+
+        foreach (Piece startingPiece in startingPieces)
+        {
+            _capturedPieces.Add(startingPiece);
+            _movesInThisTurn.Add(startingPiece);
+        }
+
+        switch (pieceAbility)
+        {
+            case PieceAbility.None:
+            {
+                break;
+            }
+            case PieceAbility.MustMove:
+            {
+                _spriteRenderer.material = Creator.piecesSo.mustMoveMat;
+                break;
+            }
+            case PieceAbility.CaptureLover:
+            {
+                _spriteRenderer.material = Creator.piecesSo.captureLoverMat;
+                break;
+            }
+            case PieceAbility.Glitched:
+            {
+                _spriteRenderer.material = Creator.piecesSo.glitchedMat;
+                break;
+            }
+        }
         
-        _capturedPieces.Add(startingPiece);
-        _movesInThisTurn.Add(startingPiece);
-        
-        UpdateSprite(startingPiece);
+        UpdateSprite(startingPieces[0]);
         
         SetState(pieceColour == PieceColour.White ? States.FindingMove : States.WaitingForTurn);
         
-        UpdateCaptureAmountText(1);
+        UpdateCaptureAmountText(startingPieces.Count);
         UpdateCaptureAmountTextColour();
     }
 

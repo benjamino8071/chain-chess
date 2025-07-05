@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Cinemachine;
+//using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,7 +13,7 @@ public class ElCinemachineSystem : ElDependency
     
     private Animator _animator;
 
-    private List<CinemachineCamera> _cameras = new();
+    private List<Transform> _cameras = new();
 
     private ScreenOrientation _previousOrientation;
     
@@ -27,20 +27,20 @@ public class ElCinemachineSystem : ElDependency
 
         _cameraOriginalPos = _cameraStateMachine.position;
         
-        CinemachineCamera[] cameras = _cameraStateMachine.GetComponentsInChildren<CinemachineCamera>();
+        Transform[] cameras = _cameraStateMachine.GetComponentsInChildren<Transform>();
         _cameras = cameras.ToList();
 
         _previousOrientation = Screen.orientation;
         
-        foreach (CinemachineCamera camera in _cameras)
+        foreach (Transform camera in _cameras)
         {
             if (Application.isMobilePlatform)
             {
-                camera.Lens.FieldOfView = Creator.cinemachineSo.mobileVerticalFOV;
+                //camera.Lens.FieldOfView = Creator.cinemachineSo.mobileVerticalFOV;
             }
             else
             {
-                camera.Lens.FieldOfView = Creator.cinemachineSo.desktopVerticalFOV;
+                //camera.Lens.FieldOfView = Creator.cinemachineSo.desktopVerticalFOV;
             }
         }
         
@@ -87,18 +87,18 @@ public class ElCinemachineSystem : ElDependency
         {
             if (Screen.orientation == ScreenOrientation.Portrait && _previousOrientation != ScreenOrientation.Portrait)
             {
-                foreach (CinemachineCamera camera in _cameras)
+                foreach (Transform camera in _cameras)
                 {
-                    camera.Lens.FieldOfView = Creator.cinemachineSo.mobileVerticalFOV;
+                    //camera.Lens.FieldOfView = Creator.cinemachineSo.mobileVerticalFOV;
                 }
                 _previousOrientation = ScreenOrientation.Portrait;
             }
             else if ((Screen.orientation == ScreenOrientation.LandscapeLeft ||
                      Screen.orientation == ScreenOrientation.LandscapeRight) && _previousOrientation != ScreenOrientation.LandscapeLeft)
             {
-                foreach (CinemachineCamera camera in _cameras)
+                foreach (Transform camera in _cameras)
                 {
-                    camera.Lens.FieldOfView = Creator.cinemachineSo.desktopVerticalFOV;
+                    //camera.Lens.FieldOfView = Creator.cinemachineSo.desktopVerticalFOV;
                 }
                 _previousOrientation = ScreenOrientation.LandscapeLeft;
             }
