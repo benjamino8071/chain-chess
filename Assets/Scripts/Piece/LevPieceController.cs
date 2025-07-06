@@ -481,6 +481,14 @@ public class LevPieceController : LevController
             case States.WaitingForTurn:
                 if (_movesInThisTurn.Count == 0)
                 {
+                    if (_pieceAbility == PieceAbility.Glitched)
+                    {
+                        for (int i = 0; i < _capturedPieces.Count; i++)
+                        {
+                            _capturedPieces[i] = GenerateOtherRandomPiece(_capturedPieces[i]);
+                        }
+                    }
+                    
                     UpdateSprite(_capturedPieces[0]);
                     foreach (Piece capturedPiece in _capturedPieces)
                     {
@@ -492,6 +500,45 @@ public class LevPieceController : LevController
                 break;
         }
         _state = state;
+    }
+
+    private Piece GenerateOtherRandomPiece(Piece piece)
+    {
+        List<Piece> glitchedPieceChanges = new()
+        {
+            Piece.Knight,
+            Piece.Knight,
+            Piece.Rook,
+            Piece.Rook,
+            Piece.Bishop,
+            Piece.Bishop,
+            Piece.Queen
+        };
+
+        switch (piece)
+        {
+            case Piece.Knight:
+                glitchedPieceChanges.Remove(Piece.Knight);
+                glitchedPieceChanges.Remove(Piece.Knight);
+                break;
+            case Piece.Rook:
+                glitchedPieceChanges.Remove(Piece.Rook);
+                glitchedPieceChanges.Remove(Piece.Rook);
+                break;
+            case Piece.Bishop:
+                glitchedPieceChanges.Remove(Piece.Bishop);
+                glitchedPieceChanges.Remove(Piece.Bishop);
+                break;
+            case Piece.Queen:
+                glitchedPieceChanges.Remove(Piece.Queen);
+                break;
+        }
+                            
+        // Generate a random index
+        int index = Random.Range(0, glitchedPieceChanges.Count);
+
+        // Use the index to set the piece
+        return glitchedPieceChanges[index];
     }
 
     private void UpdateCaptureAmountText(int amount)
