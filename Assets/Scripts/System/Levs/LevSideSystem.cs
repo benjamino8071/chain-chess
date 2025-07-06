@@ -21,7 +21,8 @@ public class LevSideSystem : LevDependency
     public ControlledBy controlledBy => _controlledBy;
     
     private List<LevPieceController> _pieceControllers = new ();
-
+    private List<LevPieceController> _piecesToMoveThisTurn = new();
+    
     private LevPieceController _pieceControllerSelected;
     
     protected PieceColour _allyPieceColour;
@@ -74,7 +75,7 @@ public class LevSideSystem : LevDependency
                     ? new LevPlayerController() : new LevAIController();
                 levPlayerController.GameStart(Creator);
                 Vector3 actualPos = pieceSpawnData.position + new Vector2(0.5f, 0.5f);
-                levPlayerController.Init(actualPos, pieceSpawnData.pieces, _allyPieceColour, pieceSpawnData.ability, controlledBy);
+                levPlayerController.Init(actualPos, pieceSpawnData.pieces, _allyPieceColour, pieceSpawnData.ability, controlledBy, this);
             
                 _pieceControllers.Add(levPlayerController);
             }
@@ -174,20 +175,63 @@ public class LevSideSystem : LevDependency
         _endGameSystem.SetEndGame(_enemyPieceColour);
         _validMovesSystem.HideAllValidMoves();
     }
+
+    public void PieceFinished(LevPieceController pieceController)
+    {
+        _piecesToMoveThisTurn.Remove(pieceController);
+
+        if (_piecesToMoveThisTurn.Count == 0)
+        {
+            _turnSystem.SwitchTurn(_enemyPieceColour);
+        }
+        else
+        {
+            _pieceControllerSelected = _piecesToMoveThisTurn[0];
+            
+            _pieceControllerSelected.SetState(LevPieceController.States.FindingMove);
+        }
+    }
+
+    public void AiSetup()
+    {
+        _piecesToMoveThisTurn = new(_pieceControllers.Count);
+        
+        if (SelectRandomPiece() is { } randomPiece)
+        {
+            _piecesToMoveThisTurn.Add(randomPiece);
+        }
+
+        foreach (LevPieceController pieceController in _pieceControllers)
+        {
+            if (pieceController.pieceAbility == PieceAbility.MustMove)
+            {
+                _piecesToMoveThisTurn.Add(pieceController);
+            }
+        }
+        
+        if (_piecesToMoveThisTurn.Count == 0)
+        {
+            Lose();
+        }
+        else
+        {
+            _pieceControllerSelected = _piecesToMoveThisTurn[0];
+
+            _pieceControllerSelected.SetState(LevPieceController.States.FindingMove);
+        }
+    }
     
-    public void SelectRandomPiece()
+    private LevPieceController SelectRandomPiece()
     {
         List<LevPieceController> movablePieceControllers = MovablePieceControllers();
         if (movablePieceControllers.Count == 0)
         {
-            Lose();
-            return;
+            return null;
         }
         
         int enemySelectedIndex = Random.Range(0, movablePieceControllers.Count);
-        _pieceControllerSelected = movablePieceControllers[enemySelectedIndex];
         
-        _pieceControllerSelected.SetState(LevPieceController.States.FindingMove);
+        return movablePieceControllers[enemySelectedIndex];
     }
 
     private List<LevPieceController> MovablePieceControllers()
@@ -196,7 +240,8 @@ public class LevSideSystem : LevDependency
 
         foreach (LevPieceController levPieceController in _pieceControllers)
         {
-            if (levPieceController.AllValidMovesOfFirstPiece().Count > 0)
+            if (levPieceController.AllValidMovesOfFirstPiece().Count > 0 
+                && levPieceController.pieceAbility != PieceAbility.MustMove) //Must Moves will always move after the random piece has moved
             {
                 validPieceControllers.Add(levPieceController);
             }

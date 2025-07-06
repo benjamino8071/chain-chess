@@ -81,7 +81,7 @@ public class LevTurnSystem : LevDependency
                 else
                 {
                     _pauseUISystem.HideButton();
-                    _whiteSystem.SelectRandomPiece();
+                    _whiteSystem.AiSetup();
                 }
                 SetTurnText("White");
                 HideEndTurnButton();
@@ -109,7 +109,7 @@ public class LevTurnSystem : LevDependency
                 else
                 {
                     _pauseUISystem.HideButton();
-                    _blackSystem.SelectRandomPiece();
+                    _blackSystem.AiSetup();
                 }
                 SetTurnText("Black");
                 HideEndTurnButton();
@@ -119,6 +119,8 @@ public class LevTurnSystem : LevDependency
     
     public void LoadLevelRuntime()
     {
+        Random.InitState(42);
+        
         _whiteSystem.Clean();
         _blackSystem.Clean();
         

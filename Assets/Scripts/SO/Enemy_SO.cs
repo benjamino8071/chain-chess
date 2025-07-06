@@ -16,9 +16,9 @@ public class Enemy_SO : ScriptableObject
 
     [Header("Piece Effect Type Materials")]
     public Material noneMat;
+    public Material mustMoveMat;
     public Material glitchedMat;
-    public Material chainMat;
-    public Material captureMat;
+    public Material captureLoverMat;
 
     //Key = spawn point, Value = (chosen piece, room number)
     public Dictionary<Vector3, (Piece, int, ElEnemyController.PieceEffectType)> cachedSpawnPoints = new();

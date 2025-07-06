@@ -139,11 +139,11 @@ public class ElEnemiesSystem : ElDependency
                         }
                         if (Creator.playerSystemSo.levelNumberSaved >= 2)
                         {
-                            pieceEffectTypes.Add(ElEnemyController.PieceEffectType.Capture);
+                            pieceEffectTypes.Add(ElEnemyController.PieceEffectType.CaptureLover);
                         }
                         if (Creator.playerSystemSo.levelNumberSaved >= 3)
                         {
-                            pieceEffectTypes.Add(ElEnemyController.PieceEffectType.Chain);
+                            pieceEffectTypes.Add(ElEnemyController.PieceEffectType.MustMove);
                         }
 
                         // Generate a random index
@@ -318,7 +318,7 @@ public class ElEnemiesSystem : ElDependency
         
         foreach (ElEnemyController enemyController in _enemyControllers)
         {
-            if (enemyController.GetPieceEffectType() == ElEnemyController.PieceEffectType.Capture)
+            if (enemyController.GetPieceEffectType() == ElEnemyController.PieceEffectType.CaptureLover)
             {
                 captureTypePieces.Add(enemyController);
             }

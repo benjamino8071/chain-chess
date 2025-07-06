@@ -9,7 +9,6 @@ public class LevPieceController : LevController
     protected LevBoardSystem _boardSystem;
     protected LevChainUISystem _chainUISystem;
     protected LevAudioSystem _audioSystem;
-    protected LevTurnSystem _turnSystem;
     
     public enum States
     {
@@ -22,6 +21,8 @@ public class LevPieceController : LevController
         EndGame
     }
 
+    public PieceAbility pieceAbility => _pieceAbility;
+    
     public PieceColour pieceColour => _pieceColour;
     
     public States state => _state;
@@ -39,7 +40,7 @@ public class LevPieceController : LevController
     public int piecesCapturedInThisTurn => _piecesCapturedInThisTurn;
 
     public ControlledBy controlledBy => _controlledBy;
-
+    
     protected List<Piece> _capturedPieces = new(16);
     protected List<Piece> _movesInThisTurn = new(16);
     
@@ -49,7 +50,10 @@ public class LevPieceController : LevController
 
     protected TMP_Text _captureAmountText;
 
+    protected LevSideSystem _allySideSystem;
+    
     protected Piece _currentPiece;
+    protected PieceAbility _pieceAbility;
     protected PieceColour _pieceColour;
     protected PieceColour _enemyColour;
     protected ControlledBy _controlledBy;
@@ -69,26 +73,27 @@ public class LevPieceController : LevController
         _boardSystem = levCreator.GetDependency<LevBoardSystem>();
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
         _audioSystem = levCreator.GetDependency<LevAudioSystem>();
-        _turnSystem = levCreator.GetDependency<LevTurnSystem>();
     }
 
-    public virtual void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour, PieceAbility pieceAbility, ControlledBy controlledBy)
+    public virtual void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour, PieceAbility pieceAbility, ControlledBy controlledBy, LevSideSystem allySideSystem)
     {
         _pieceInstance = Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity).transform;
         
         _pieceInstance.GetComponentInChildren<Canvas>(true).gameObject.SetActive(false);
+
         
         _jumpPosition = _pieceInstance.position;
         
         _spriteRenderer = _pieceInstance.GetComponentInChildren<SpriteRenderer>();
 
+        _pieceAbility = pieceAbility;
+
         _controlledBy = controlledBy;
+
+        _allySideSystem = allySideSystem;
         
         Transform captureAmountText = Creator.GetChildObjectByName(_pieceInstance.gameObject, AllTagNames.Text);
         _captureAmountText = captureAmountText.GetComponent<TMP_Text>();
-        
-        Color color = pieceColour == PieceColour.White ? Creator.piecesSo.whiteColor : Creator.piecesSo.blackColor;
-        _spriteRenderer.color = color;
         
         _pieceColour = pieceColour;
         _enemyColour = pieceColour == PieceColour.White ? PieceColour.Black : PieceColour.White;
@@ -103,21 +108,26 @@ public class LevPieceController : LevController
         {
             case PieceAbility.None:
             {
+                _spriteRenderer.material = Creator.piecesSo.noneMat;
+                _spriteRenderer.material.color = pieceColour == PieceColour.White ? Creator.piecesSo.whiteColor : Creator.piecesSo.blackColor;
                 break;
             }
             case PieceAbility.MustMove:
             {
                 _spriteRenderer.material = Creator.piecesSo.mustMoveMat;
+                _spriteRenderer.material.color = Creator.piecesSo.mustMoveColor;
                 break;
             }
             case PieceAbility.CaptureLover:
             {
                 _spriteRenderer.material = Creator.piecesSo.captureLoverMat;
+                _spriteRenderer.material.color = Creator.piecesSo.captureLoverColor;
                 break;
             }
             case PieceAbility.Glitched:
             {
                 _spriteRenderer.material = Creator.piecesSo.glitchedMat;
+                _spriteRenderer.material.color = pieceColour == PieceColour.White ? Creator.piecesSo.whiteColor : Creator.piecesSo.blackColor;
                 break;
             }
         }
@@ -215,10 +225,6 @@ public class LevPieceController : LevController
             {
                 _chainUISystem.HighlightNextPiece(movesUsed);
                 SetState(States.FindingMove);
-                if (_controlledBy == ControlledBy.Player)
-                {
-                    _turnSystem.ShowEndTurnButton();
-                }
             }
             else
             {
@@ -237,7 +243,7 @@ public class LevPieceController : LevController
     {
         SetState(States.WaitingForTurn);
         _validMovesSystem.HideAllValidMoves();
-        _turnSystem.SwitchTurn(_enemyColour == PieceColour.White ? PieceColour.White : PieceColour.Black);
+        _allySideSystem.PieceFinished(this);
     }
 
     protected List<Vector3> CheckValidDefiniteMoves(List<Vector3> moves)

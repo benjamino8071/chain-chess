@@ -20,6 +20,6 @@ MonoBehaviour:
   king: {fileID: 21300000, guid: fbd00a5368bc4c34fbfb88ccf05c0ed4, type: 3}
   queen: {fileID: 21300000, guid: 20bfb4daddca89747a4680b39ecd1713, type: 3}
   noneMat: {fileID: 2100000, guid: cc460e5b1c6c0bd498b44195a0c3da99, type: 2}
+  mustMoveMat: {fileID: 2100000, guid: e76cfe5e58629f449af696ed6f57501e, type: 2}
   glitchedMat: {fileID: 2100000, guid: 5afb5ad234e5f7b4e924c69aace4499c, type: 2}
-  chainMat: {fileID: 2100000, guid: e76cfe5e58629f449af696ed6f57501e, type: 2}
-  captureMat: {fileID: 2100000, guid: 1e155935f67404c4b87a00eebdc7a534, type: 2}
+  captureLoverMat: {fileID: 2100000, guid: 1e155935f67404c4b87a00eebdc7a534, type: 2}

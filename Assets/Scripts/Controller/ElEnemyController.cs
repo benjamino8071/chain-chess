@@ -30,8 +30,8 @@ public class ElEnemyController : ElController
     {
         None,
         Glitched,
-        Chain,
-        Capture
+        MustMove,
+        CaptureLover
     }
     private PieceEffectType _pieceEffectType;
     
@@ -110,7 +110,7 @@ public class ElEnemyController : ElController
             case PieceEffectType.Glitched:
                 _spriteRenderer.material = Creator.enemySo.glitchedMat;
                 break;
-            case PieceEffectType.Chain:
+            case PieceEffectType.MustMove:
                 _chain = new();
                 _chain.AddFirst(_piece);
                 List<Piece> pieces = new()
@@ -124,10 +124,10 @@ public class ElEnemyController : ElController
                 int index = Creator.randomGenerator.Next(0, pieces.Count);
                 _chain.AddLast(pieces[index]);
                 _currentPieceInChain = _chain.First;
-                _spriteRenderer.material = Creator.enemySo.chainMat;
+                _spriteRenderer.material = Creator.enemySo.mustMoveMat;
                 break;
-            case PieceEffectType.Capture:
-                _spriteRenderer.material = Creator.enemySo.captureMat;
+            case PieceEffectType.CaptureLover:
+                _spriteRenderer.material = Creator.enemySo.captureLoverMat;
                 break;
         }
         
@@ -514,7 +514,7 @@ public class ElEnemyController : ElController
                             // Use the index to set the piece
                             SetPiece(glitchedPieceChanges[index]);
                         }
-                        else if (_pieceEffectType == PieceEffectType.Chain)
+                        else if (_pieceEffectType == PieceEffectType.MustMove)
                         {
                             if (promoted)
                             {
@@ -598,7 +598,7 @@ public class ElEnemyController : ElController
 
     public bool AllowMovementIfEffectTypeIsCapture()
     {
-        if(_pieceEffectType != PieceEffectType.Capture)
+        if(_pieceEffectType != PieceEffectType.CaptureLover)
             return false;
         
         //State machine
