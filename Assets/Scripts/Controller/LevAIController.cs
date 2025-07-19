@@ -44,12 +44,10 @@ public class LevAIController : LevPieceController
             
             _moveSpeed = Creator.playerSystemSo.moveSpeed;
             _audioSystem.PlayPieceMoveSfx(1);
-            _movesInThisTurn.RemoveAt(0);
             SetState(States.Moving);
         }
         else
         {
-            _movesInThisTurn.RemoveAt(0);
             SetToNextMove();
         }
     }
@@ -78,6 +76,7 @@ public class LevAIController : LevPieceController
                 PromotePiece();
             }
             
+            _movesInThisTurn.RemoveAt(0);
             if (_boardSystem.TryCaptureEnemyPiece(_pieceInstance.position, _enemyColour, this))
             {
                 //We win!

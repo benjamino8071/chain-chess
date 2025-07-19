@@ -158,7 +158,8 @@ public class LevBoardSystem : LevDependency
         
         if (activeSideSystem.controlledBy != ControlledBy.Player 
             || choseValidMovePoint
-            || chosenPieceMoving)
+            || chosenPieceMoving
+            || activeSideSystem.frozen)
         {
             return;
         }

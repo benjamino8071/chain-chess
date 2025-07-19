@@ -75,11 +75,20 @@ public class LevPlayerController : LevPieceController
             
             if (_boardSystem.TryCaptureEnemyPiece(_pieceInstance.position, _enemyColour, this))
             {
+                _movesInThisTurn.RemoveAt(0);
+                
                 //We win!
                 UpdateSprite(_movesInThisTurn[0]);
             }
+            else if(_enemySideSystem.TryGetCaptureLoverMovingToPosition(_pieceInstance.position, out LevPieceController playerController))
+            {
+                _allySideSystem.FreezeSide();
+                _enemySideSystem.SelectCaptureLoverPiece(playerController);
+            }
             else
             {
+                _movesInThisTurn.RemoveAt(0);
+                
                 SetToNextMove();
                 if (_state == States.FindingMove)
                 {
@@ -108,7 +117,6 @@ public class LevPlayerController : LevPieceController
         SetState(States.Moving);
                 
         _audioSystem.PlayPieceMoveSfx(1);
-        _movesInThisTurn.RemoveAt(0);
             
         _validMovesSystem.HideAllValidMoves();
         

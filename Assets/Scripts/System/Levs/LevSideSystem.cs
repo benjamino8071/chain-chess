@@ -20,6 +20,8 @@ public class LevSideSystem : LevDependency
     
     public ControlledBy controlledBy => _controlledBy;
     
+    public bool frozen => _frozen;
+    
     private List<LevPieceController> _pieceControllers = new ();
     private List<LevPieceController> _piecesToMoveThisTurn = new();
     
@@ -28,6 +30,8 @@ public class LevSideSystem : LevDependency
     protected PieceColour _allyPieceColour;
     protected PieceColour _enemyPieceColour;
     protected ControlledBy _controlledBy;
+    protected bool _frozen;
+    protected bool _tickCaptureLover;
     
     public override void GameStart(LevCreator levCreator)
     {
@@ -46,7 +50,7 @@ public class LevSideSystem : LevDependency
 
     public override void GameUpdate(float dt)
     {
-        if (_turnSystem.CurrentTurn() == _enemyPieceColour)
+        if (_turnSystem.CurrentTurn() == _enemyPieceColour && !_tickCaptureLover)
         {
             return;
         }
@@ -62,6 +66,8 @@ public class LevSideSystem : LevDependency
             levPieceController.Destroy();
         }
         _pieceControllers.Clear();
+        _frozen = false;
+        _tickCaptureLover = false;
     }
 
     public void SpawnPieces()
@@ -75,7 +81,8 @@ public class LevSideSystem : LevDependency
                     ? new LevPlayerController() : new LevAIController();
                 levPlayerController.GameStart(Creator);
                 Vector3 actualPos = pieceSpawnData.position + new Vector2(0.5f, 0.5f);
-                levPlayerController.Init(actualPos, pieceSpawnData.pieces, _allyPieceColour, pieceSpawnData.ability, controlledBy, this);
+                levPlayerController.Init(actualPos, pieceSpawnData.pieces, _allyPieceColour, pieceSpawnData.ability, 
+                    controlledBy, this, _enemySideSystem);
             
                 _pieceControllers.Add(levPlayerController);
             }
@@ -109,6 +116,27 @@ public class LevSideSystem : LevDependency
         return false;
     }
 
+    public bool TryGetCaptureLoverMovingToPosition(Vector3 position, out LevPieceController playerController)
+    {
+        foreach (LevPieceController levPlayerController in _pieceControllers)
+        {
+            if (levPlayerController.pieceAbility != PieceAbility.CaptureLover)
+            {
+                continue;
+            }
+            
+            List<Vector3> validMoves = levPlayerController.AllValidMovesOfFirstPiece();
+            if (validMoves.Contains(position))
+            {
+                playerController = levPlayerController;
+                return true;
+            }
+        }
+
+        playerController = null;
+        return false;
+    }
+
     public void SetStateForAllPieces(LevPieceController.States state)
     {
         foreach (LevPieceController enemyController in _pieceControllers)
@@ -124,6 +152,16 @@ public class LevSideSystem : LevDependency
         _validMovesSystem.UpdateValidMoves(pieceController.GetAllValidMovesOfCurrentPiece());
     }
 
+    /// <summary>
+    /// This just helps tick the enemy piece that's going to capture the player
+    /// </summary>
+    public void SelectCaptureLoverPiece(LevPieceController pieceController)
+    {
+        _pieceControllerSelected = pieceController;
+        pieceController.SetState(LevPieceController.States.FindingMove);
+        _tickCaptureLover = true;
+    }
+
     public void DeselectPiece()
     {
         if (_pieceControllerSelected is { movesRemaining: 0 })
@@ -132,6 +170,12 @@ public class LevSideSystem : LevDependency
         }
         _pieceControllerSelected = null;
         _validMovesSystem.HideAllValidMoves();
+    }
+
+    public void FreezeSide()
+    {
+        DeselectPiece();
+        _frozen = true;
     }
     
     /// <returns>True = all ally pieces captured</returns>

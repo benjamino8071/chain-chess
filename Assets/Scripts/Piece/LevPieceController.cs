@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class LevPieceController : LevController
 {
@@ -51,6 +53,7 @@ public class LevPieceController : LevController
     protected TMP_Text _captureAmountText;
 
     protected LevSideSystem _allySideSystem;
+    protected LevSideSystem _enemySideSystem;
     
     protected Piece _currentPiece;
     protected PieceAbility _pieceAbility;
@@ -75,7 +78,8 @@ public class LevPieceController : LevController
         _audioSystem = levCreator.GetDependency<LevAudioSystem>();
     }
 
-    public virtual void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour, PieceAbility pieceAbility, ControlledBy controlledBy, LevSideSystem allySideSystem)
+    public virtual void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour, PieceAbility pieceAbility, 
+        ControlledBy controlledBy, LevSideSystem allySideSystem, LevSideSystem enemySideSystem)
     {
         _pieceInstance = Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity).transform;
         
@@ -91,6 +95,8 @@ public class LevPieceController : LevController
         _controlledBy = controlledBy;
 
         _allySideSystem = allySideSystem;
+
+        _enemySideSystem = enemySideSystem;
         
         Transform captureAmountText = Creator.GetChildObjectByName(_pieceInstance.gameObject, AllTagNames.Text);
         _captureAmountText = captureAmountText.GetComponent<TMP_Text>();
@@ -440,7 +446,7 @@ public class LevPieceController : LevController
         switch (piece)
         {
             case Piece.NotChosen:
-                _spriteRenderer.sprite = default;
+                _spriteRenderer.sprite = null;
                 break;
             case Piece.Pawn:
                 _spriteRenderer.sprite = Creator.piecesSo.pawn;
@@ -466,7 +472,7 @@ public class LevPieceController : LevController
 
     public void SetState(States state)
     {
-        if (_state == States.NotInUse || _state == States.EndGame)
+        if (_state is States.NotInUse or States.EndGame)
         {
             return;
         }

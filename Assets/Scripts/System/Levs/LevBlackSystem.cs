@@ -8,9 +8,8 @@ public class LevBlackSystem : LevSideSystem
         _allyPieceColour = PieceColour.Black;
         _enemyPieceColour = PieceColour.White;
         _controlledBy = levCreator.blackControlledBy;
+        _enemySideSystem = levCreator.GetDependency<LevWhiteSystem>();
 
         base.GameStart(levCreator);
-        
-        _enemySideSystem = levCreator.GetDependency<LevWhiteSystem>();
     }
 }
