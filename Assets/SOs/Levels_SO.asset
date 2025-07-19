@@ -12,20 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 30
+  levelOnLoad: 39
   levelsData:
   - level: 1
-    turns: 1
-    positions:
-    - pieces: 04000000
-      colour: 1
-      ability: 0
-      position: {x: 1, y: 1}
-    - pieces: 04000000
-      colour: 0
-      ability: 0
-      position: {x: 8, y: 8}
-  - level: 2
     turns: 1
     positions:
     - pieces: 04000000
@@ -40,7 +29,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 8, y: 8}
-  - level: 3
+  - level: 2
     turns: 1
     positions:
     - pieces: 04000000
@@ -59,7 +48,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 7, y: 6}
-  - level: 4
+  - level: 3
     turns: 1
     positions:
     - pieces: 02000000
@@ -86,7 +75,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 4, y: 4}
-  - level: 5
+  - level: 4
     turns: 1
     positions:
     - pieces: 01000000
@@ -113,7 +102,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 5, y: 7}
-  - level: 6
+  - level: 5
     turns: 3
     positions:
     - pieces: 02000000
@@ -148,7 +137,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 8, y: 1}
-  - level: 7
+  - level: 6
     turns: 2
     positions:
     - pieces: 02000000
@@ -171,7 +160,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 5, y: 7}
-  - level: 8
+  - level: 7
     turns: 3
     positions:
     - pieces: 05000000
@@ -186,7 +175,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 3, y: 8}
-  - level: 9
+  - level: 8
     turns: 3
     positions:
     - pieces: 02000000
@@ -213,7 +202,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 3, y: 8}
-  - level: 10
+  - level: 9
     turns: 2
     positions:
     - pieces: 03000000
@@ -244,7 +233,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 5, y: 3}
-  - level: 11
+  - level: 10
     turns: 2
     positions:
     - pieces: 01000000
@@ -255,7 +244,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 5, y: 6}
-  - level: 12
+  - level: 11
     turns: 2
     positions:
     - pieces: 01000000
@@ -270,7 +259,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 5, y: 6}
-  - level: 13
+  - level: 12
     turns: 2
     positions:
     - pieces: 05000000
@@ -285,7 +274,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 5, y: 6}
-  - level: 14
+  - level: 13
     turns: 3
     positions:
     - pieces: 01000000
@@ -304,7 +293,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 8, y: 8}
-  - level: 15
+  - level: 14
     turns: 2
     positions:
     - pieces: 01000000
@@ -315,7 +304,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 4, y: 3}
-  - level: 16
+  - level: 15
     turns: 2
     positions:
     - pieces: 04000000
@@ -338,7 +327,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 7, y: 8}
-  - level: 17
+  - level: 16
     turns: 3
     positions:
     - pieces: 02000000
@@ -377,7 +366,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 8, y: 8}
-  - level: 18
+  - level: 17
     turns: 3
     positions:
     - pieces: 03000000
@@ -408,7 +397,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 2, y: 2}
-  - level: 19
+  - level: 18
     turns: 5
     positions:
     - pieces: 04000000
@@ -443,7 +432,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 2, y: 4}
-  - level: 20
+  - level: 19
     turns: 5
     positions:
     - pieces: 03000000
@@ -486,7 +475,349 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 7, y: 8}
+  - level: 20
+    turns: 5
+    positions:
+    - pieces: 04000000
+      colour: 1
+      ability: 0
+      position: {x: 5, y: 5}
+    - pieces: 02000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 2}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 6}
   - level: 21
+    turns: 5
+    positions:
+    - pieces: 02000000
+      colour: 1
+      ability: 0
+      position: {x: 6, y: 4}
+    - pieces: 04000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 3}
+    - pieces: 03000000
+      colour: 0
+      ability: 2
+      position: {x: 4, y: 6}
+  - level: 22
+    turns: 5
+    positions:
+    - pieces: 03000000
+      colour: 1
+      ability: 0
+      position: {x: 4, y: 4}
+    - pieces: 04000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 7}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 1}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 8, y: 4}
+  - level: 23
+    turns: 10
+    positions:
+    - pieces: 05000000
+      colour: 1
+      ability: 0
+      position: {x: 1, y: 1}
+    - pieces: 0300000002000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 7}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 5, y: 4}
+    - pieces: 0300000005000000
+      colour: 0
+      ability: 2
+      position: {x: 5, y: 6}
+    - pieces: 0200000004000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 4}
+  - level: 24
+    turns: 10
+    positions:
+    - pieces: 06000000
+      colour: 1
+      ability: 0
+      position: {x: 5, y: 2}
+    - pieces: 02000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 1}
+    - pieces: 02000000
+      colour: 0
+      ability: 0
+      position: {x: 3, y: 2}
+    - pieces: 0100000005000000
+      colour: 0
+      ability: 2
+      position: {x: 5, y: 3}
+    - pieces: 04000000
+      colour: 0
+      ability: 2
+      position: {x: 7, y: 5}
+    - pieces: 0100000005000000
+      colour: 0
+      ability: 2
+      position: {x: 4, y: 5}
+    - pieces: 0300000003000000
+      colour: 0
+      ability: 2
+      position: {x: 1, y: 3}
+    - pieces: 0300000003000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 4}
+    - pieces: 0300000003000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 5}
+    - pieces: 0300000003000000
+      colour: 0
+      ability: 2
+      position: {x: 1, y: 6}
+    - pieces: 02000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 6}
+    - pieces: 02000000
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 7}
+  - level: 25
+    turns: 10
+    positions:
+    - pieces: 04000000
+      colour: 1
+      ability: 0
+      position: {x: 5, y: 2}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 1, y: 4}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 5}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 6}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 4, y: 7}
+    - pieces: 04000000
+      colour: 0
+      ability: 2
+      position: {x: 6, y: 4}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 5, y: 5}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 6, y: 6}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 7, y: 5}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 8, y: 5}
+  - level: 26
+    turns: 10
+    positions:
+    - pieces: 04000000
+      colour: 1
+      ability: 0
+      position: {x: 3, y: 2}
+    - pieces: 04000000
+      colour: 0
+      ability: 2
+      position: {x: 6, y: 3}
+    - pieces: 03000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 5}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 6}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 7}
+  - level: 27
+    turns: 10
+    positions:
+    - pieces: 03000000
+      colour: 1
+      ability: 0
+      position: {x: 5, y: 2}
+    - pieces: 06000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 3}
+    - pieces: 04000000
+      colour: 0
+      ability: 2
+      position: {x: 6, y: 3}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 4}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 7, y: 4}
+    - pieces: 03000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 5}
+    - pieces: 0600000005000000
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 5}
+    - pieces: 03000000
+      colour: 0
+      ability: 2
+      position: {x: 1, y: 6}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 4, y: 6}
+  - level: 28
+    turns: 10
+    positions:
+    - pieces: 02000000
+      colour: 1
+      ability: 2
+      position: {x: 4, y: 8}
+    - pieces: 06000000
+      colour: 0
+      ability: 2
+      position: {x: 4, y: 1}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 8, y: 2}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 3}
+    - pieces: 03000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 4}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 4, y: 4}
+    - pieces: 04000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 5}
+    - pieces: 03000000
+      colour: 0
+      ability: 2
+      position: {x: 4, y: 5}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 6, y: 5}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 7, y: 5}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 1, y: 6}
+    - pieces: 04000000
+      colour: 0
+      ability: 2
+      position: {x: 8, y: 6}
+    - pieces: 05000000
+      colour: 0
+      ability: 2
+      position: {x: 1, y: 7}
+  - level: 29
+    turns: 10
+    positions:
+    - pieces: 05000000
+      colour: 1
+      ability: 0
+      position: {x: 7, y: 1}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 1, y: 2}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 2}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 3}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 4, y: 4}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 6, y: 4}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 4, y: 5}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 6}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 5, y: 6}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 8, y: 6}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 1, y: 7}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 7}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 7, y: 7}
+    - pieces: 06000000
+      colour: 0
+      ability: 2
+      position: {x: 7, y: 8}
+  - level: 30
     turns: 10
     positions:
     - pieces: 05000000
@@ -505,7 +836,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 3, y: 4}
-  - level: 22
+  - level: 31
     turns: 10
     positions:
     - pieces: 02000000
@@ -528,7 +859,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 6, y: 5}
-  - level: 23
+  - level: 32
     turns: 10
     positions:
     - pieces: 05000000
@@ -551,7 +882,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 7, y: 7}
-  - level: 24
+  - level: 33
     turns: 10
     positions:
     - pieces: 03000000
@@ -590,7 +921,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 3, y: 5}
-  - level: 25
+  - level: 34
     turns: 10
     positions:
     - pieces: 05000000
@@ -613,7 +944,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 7, y: 7}
-  - level: 26
+  - level: 35
     turns: 10
     positions:
     - pieces: 03000000
@@ -652,7 +983,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 6, y: 8}
-  - level: 27
+  - level: 36
     turns: 10
     positions:
     - pieces: 04000000
@@ -691,7 +1022,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 6, y: 5}
-  - level: 28
+  - level: 37
     turns: 2
     positions:
     - pieces: 02000000
@@ -714,7 +1045,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 1, y: 2}
-  - level: 29
+  - level: 38
     turns: 10
     positions:
     - pieces: 02000000
@@ -745,17 +1076,37 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 8, y: 5}
-  - level: 30
+  - level: 39
     turns: 10
     positions:
     - pieces: 05000000
       colour: 1
       ability: 0
-      position: {x: 1, y: 1}
-    - pieces: 02000000
+      position: {x: 3, y: 2}
+    - pieces: 0400000003000000
+      colour: 0
+      ability: 1
+      position: {x: 8, y: 1}
+    - pieces: 0300000004000000
       colour: 0
       ability: 2
-      position: {x: 4, y: 5}
+      position: {x: 2, y: 3}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 3, y: 3}
+    - pieces: 0300000004000000
+      colour: 0
+      ability: 2
+      position: {x: 4, y: 3}
+    - pieces: 0400000003000000
+      colour: 0
+      ability: 1
+      position: {x: 1, y: 8}
+    - pieces: 0400000003000000
+      colour: 0
+      ability: 1
+      position: {x: 8, y: 8}
   reservedLevels:
   - level: 0
     turns: 99
