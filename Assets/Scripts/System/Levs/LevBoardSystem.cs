@@ -223,18 +223,6 @@ public class LevBoardSystem : LevDependency
         
         return false;
     }
-
-    public void PieceLocked(LevPieceController pieceController, PieceColour sideColour)
-    {
-        if (sideColour == PieceColour.White)
-        {
-            _whiteSystem.PieceLocked(pieceController);
-        }
-        else
-        {
-            _blackSystem.PieceLocked(pieceController);
-        }
-    }
     
     public void ShowTapPoint(float3 position)
     {

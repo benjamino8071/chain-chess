@@ -14,7 +14,11 @@ public enum PieceAbility
     None,
     MustMove,
     Glitched,
-    CaptureLover
+    CaptureLover,
+    LeaveBehind,
+    Resetter,
+    AlwaysMove,
+    TileDestroyer
 }
 
 [Serializable]

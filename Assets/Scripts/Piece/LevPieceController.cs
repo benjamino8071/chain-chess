@@ -213,16 +213,6 @@ public class LevPieceController : LevController
         
         if (_movesInThisTurn.Count > 0)
         {
-            int posY = (int)_pieceInstance.position.y;
-            
-            bool reachedPromoPoint = pieceColour == PieceColour.White ? posY == 8 : posY == 1;
-            if (reachedPromoPoint && _movesInThisTurn[0] == Piece.Pawn)
-            {
-                PromotePiece();
-                Finish();
-                return;
-            }
-            
             //Allow player to make another move
             UpdateSprite(_movesInThisTurn[0]);
             
@@ -235,7 +225,7 @@ public class LevPieceController : LevController
             else
             {
                 //Locked!
-                _boardSystem.PieceLocked(this, _pieceColour);
+                _allySideSystem.PieceLocked(this);
                 Finish();
             }
         }
@@ -307,14 +297,6 @@ public class LevPieceController : LevController
 
     public List<Vector3> GetAllValidMovesOfCurrentPiece()
     {
-        if (_movesInThisTurn.Count == 0)
-        {
-            return new(1)
-            {
-                new(-100,-100)
-            };
-        }
-        
         return GetAllValidMovesOfPiece(_movesInThisTurn[0]);
     }
 
@@ -331,7 +313,8 @@ public class LevPieceController : LevController
 
                 Vector3 defaultMove = _pieceInstance.position + new Vector3(0, 1, 0) * direction;
                 if (!_boardSystem.IsAllyAtPosition(defaultMove, _pieceColour) 
-                    && !_boardSystem.IsEnemyAtPosition(defaultMove, _enemyColour))
+                    && !_boardSystem.IsEnemyAtPosition(defaultMove, _enemyColour)
+                    && _boardSystem.IsPositionValid(defaultMove))
                 {
                     pawnMoves.Add(defaultMove);
                     
@@ -343,20 +326,21 @@ public class LevPieceController : LevController
                     
                     if (atStartPoint
                         && !_boardSystem.IsAllyAtPosition(startingMove, _pieceColour) 
-                        && !_boardSystem.IsEnemyAtPosition(startingMove, _enemyColour))
+                        && !_boardSystem.IsEnemyAtPosition(startingMove, _enemyColour)
+                        && _boardSystem.IsPositionValid(startingMove))
                     {
                         pawnMoves.Add(startingMove);
                     }
                 }
                 
                 Vector3 topLeft = _pieceInstance.position + new Vector3(-1, 1, 0) * direction;
-                if (_boardSystem.IsEnemyAtPosition(topLeft, _enemyColour))
+                if (_boardSystem.IsEnemyAtPosition(topLeft, _enemyColour) && _boardSystem.IsPositionValid(topLeft))
                 {
                     pawnMoves.Add(topLeft);
                 }
                 
                 Vector3 topRight = _pieceInstance.position + new Vector3(1, 1, 0) * direction;
-                if (_boardSystem.IsEnemyAtPosition(topRight, _enemyColour))
+                if (_boardSystem.IsEnemyAtPosition(topRight, _enemyColour) && _boardSystem.IsPositionValid(topRight))
                 {
                     pawnMoves.Add(topRight);
                 }
@@ -568,15 +552,6 @@ public class LevPieceController : LevController
             movesInTurnTextColor = Color.black;
         }
         _captureAmountText.color = movesInTurnTextColor;
-    }
-
-    protected void PromotePiece()
-    {
-        _capturedPieces.Clear();
-        _capturedPieces.Add(Piece.Queen);
-        _movesInThisTurn.Clear();
-        UpdateSprite(Piece.Queen);
-        UpdateCaptureAmountText(1);
     }
     
     public override void Destroy()

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 40
-  levelsData:
+  levelOnLoad: 15
+  sectionOne:
   - level: 1
     turns: 1
     positions:
@@ -233,6 +233,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 5, y: 3}
+  sectionTwo:
   - level: 10
     turns: 2
     positions:
@@ -294,39 +295,43 @@ MonoBehaviour:
       ability: 0
       position: {x: 8, y: 8}
   - level: 14
-    turns: 2
+    turns: 4
     positions:
-    - pieces: 01000000
+    - pieces: 05000000
       colour: 1
       ability: 0
-      position: {x: 4, y: 7}
+      position: {x: 3, y: 7}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 8}
+    - pieces: 02000000
+      colour: 0
+      ability: 0
+      position: {x: 7, y: 7}
+  - level: 15
+    turns: 4
+    positions:
+    - pieces: 05000000
+      colour: 1
+      ability: 0
+      position: {x: 3, y: 7}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 8}
+    - pieces: 04000000
+      colour: 0
+      ability: 0
+      position: {x: 8, y: 7}
     - pieces: 01000000
       colour: 0
       ability: 0
       position: {x: 4, y: 3}
-  - level: 15
-    turns: 2
-    positions:
-    - pieces: 04000000
-      colour: 1
-      ability: 0
-      position: {x: 1, y: 2}
-    - pieces: 04000000
+    - pieces: 0100000001000000010000000100000001000000
       colour: 0
       ability: 0
-      position: {x: 3, y: 4}
-    - pieces: 04000000
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 6}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 7, y: 2}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 7, y: 8}
+      position: {x: 1, y: 5}
   - level: 16
     turns: 3
     positions:
@@ -475,6 +480,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 7, y: 8}
+  sectionThree:
   - level: 20
     turns: 5
     positions:
@@ -817,6 +823,7 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 7, y: 8}
+  sectionFour:
   - level: 30
     turns: 10
     positions:
@@ -1107,6 +1114,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 8, y: 8}
+  sectionFive:
   - level: 40
     turns: 10
     positions:
@@ -1122,6 +1130,11 @@ MonoBehaviour:
       colour: 0
       ability: 3
       position: {x: 4, y: 5}
+  sectionSix: []
+  sectionSeven: []
+  sectionEight: []
+  sectionNine: []
+  sectionTen: []
   reservedLevels:
   - level: 0
     turns: 99

@@ -67,12 +67,6 @@ public class LevPlayerController : LevPieceController
             _pieceInstance.position = new Vector3(posX + 0.5f, posY + 0.5f, 0);
             _sinTime = 0;
             
-            bool reachedPromoPoint = pieceColour == PieceColour.White ? posY == 8 : posY == 1;
-            if (reachedPromoPoint && _currentPiece == Piece.Pawn)
-            {
-                PromotePiece();
-            }
-            
             if (_boardSystem.TryCaptureEnemyPiece(_pieceInstance.position, _enemyColour, this))
             {
                 _movesInThisTurn.RemoveAt(0);

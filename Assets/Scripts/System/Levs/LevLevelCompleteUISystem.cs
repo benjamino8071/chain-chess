@@ -82,8 +82,8 @@ public class LevLevelCompleteUISystem : LevDependency
         _bestTurnText.text = $"{Creator.statsBestTurn} Capture{plural}";
         _timeText.text = $"{Creator.statsTime:0.##}s";
         
-        _nextLevelButton.gameObject.SetActive(Creator.levelsSo.levelOnLoad < Creator.levelsSo.levelsData.Count);
-        _thankYouMessage.gameObject.SetActive(Creator.levelsSo.levelOnLoad == Creator.levelsSo.levelsData.Count);
+        _nextLevelButton.gameObject.SetActive(Creator.levelsSo.levelOnLoad < Creator.levelsSo.AllLevels().Count);
+        _thankYouMessage.gameObject.SetActive(Creator.levelsSo.levelOnLoad == Creator.levelsSo.AllLevels().Count);
         
         _levelCompleteUI.gameObject.SetActive(true);
         _audioSystem.PlayLevelCompleteSfx();
