@@ -202,6 +202,10 @@ public class SideSystem : Dependency
         {
             Lose(GameOverReason.Locked);
         }
+        else
+        {
+            PieceFinished(pieceController);
+        }
     }
 
     public void Lose(GameOverReason gameOverReason)

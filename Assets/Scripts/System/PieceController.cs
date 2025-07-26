@@ -316,20 +316,6 @@ public class PieceController : Controller
                     && _boardSystem.IsPositionValid(defaultMove))
                 {
                     pawnMoves.Add(defaultMove);
-                    
-                    /*Vector3 startingMove = _pieceInstance.position + new Vector3(0, 2, 0) * direction;
-                    
-                    bool atStartPoint = pieceColour == PieceColour.White 
-                        ? (int)_pieceInstance.position.y == 2 
-                        : (int)_pieceInstance.position.y == 7;
-                    
-                    if (atStartPoint
-                        && !_boardSystem.IsAllyAtPosition(startingMove, _pieceColour) 
-                        && !_boardSystem.IsEnemyAtPosition(startingMove, _enemyColour)
-                        && _boardSystem.IsPositionValid(startingMove))
-                    {
-                        pawnMoves.Add(startingMove);
-                    }*/
                 }
                 
                 Vector3 topLeft = _pieceInstance.position + new Vector3(-1, 1, 0) * direction;

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 1
+  levelOnLoad: 19
   sectionOne:
   - level: 1
     turns: 3
@@ -138,7 +138,7 @@ MonoBehaviour:
       ability: 0
       position: {x: 5, y: 7}
   - level: 6
-    turns: 2
+    turns: 4
     positions:
     - pieces: 02000000
       colour: 1
@@ -161,7 +161,7 @@ MonoBehaviour:
       ability: 0
       position: {x: 5, y: 7}
   - level: 7
-    turns: 3
+    turns: 4
     positions:
     - pieces: 05000000
       colour: 1
@@ -203,7 +203,7 @@ MonoBehaviour:
       ability: 0
       position: {x: 3, y: 8}
   - level: 9
-    turns: 2
+    turns: 4
     positions:
     - pieces: 03000000
       colour: 1
@@ -235,66 +235,6 @@ MonoBehaviour:
       position: {x: 5, y: 3}
   sectionTwo:
   - level: 10
-    turns: 2
-    positions:
-    - pieces: 01000000
-      colour: 1
-      ability: 0
-      position: {x: 4, y: 2}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 6}
-  - level: 11
-    turns: 2
-    positions:
-    - pieces: 01000000
-      colour: 1
-      ability: 0
-      position: {x: 4, y: 3}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 4}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 6}
-  - level: 12
-    turns: 2
-    positions:
-    - pieces: 05000000
-      colour: 1
-      ability: 0
-      position: {x: 1, y: 5}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 2}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 6}
-  - level: 13
-    turns: 3
-    positions:
-    - pieces: 01000000
-      colour: 1
-      ability: 0
-      position: {x: 4, y: 1}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 2}
-    - pieces: 01000000
-      colour: 1
-      ability: 0
-      position: {x: 6, y: 6}
-    - pieces: 04000000
-      colour: 0
-      ability: 0
-      position: {x: 8, y: 8}
-  - level: 14
     turns: 4
     positions:
     - pieces: 05000000
@@ -309,7 +249,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 7, y: 7}
-  - level: 15
+  - level: 11
     turns: 4
     positions:
     - pieces: 05000000
@@ -332,6 +272,102 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 1, y: 5}
+  - level: 12
+    turns: 2
+    positions:
+    - pieces: 01000000
+      colour: 1
+      ability: 0
+      position: {x: 4, y: 3}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 4}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 6}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 8, y: 1}
+  - level: 13
+    turns: 4
+    positions:
+    - pieces: 02000000
+      colour: 1
+      ability: 0
+      position: {x: 3, y: 1}
+    - pieces: 05000000
+      colour: 0
+      ability: 0
+      position: {x: 3, y: 3}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 3, y: 5}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 1}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 2}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 3}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 4}
+  - level: 14
+    turns: 7
+    positions:
+    - pieces: 0300000003000000
+      colour: 1
+      ability: 0
+      position: {x: 1, y: 1}
+    - pieces: 0300000003000000
+      colour: 0
+      ability: 0
+      position: {x: 2, y: 6}
+    - pieces: 0300000003000000
+      colour: 0
+      ability: 0
+      position: {x: 7, y: 4}
+    - pieces: 0300000003000000
+      colour: 0
+      ability: 0
+      position: {x: 7, y: 8}
+    - pieces: 0300000003000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 2}
+  - level: 15
+    turns: 5
+    positions:
+    - pieces: 02000000
+      colour: 1
+      ability: 0
+      position: {x: 1, y: 4}
+    - pieces: 0100000005000000
+      colour: 0
+      ability: 0
+      position: {x: 7, y: 6}
+    - pieces: 0300000004000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 4}
+    - pieces: 0200000005000000
+      colour: 0
+      ability: 0
+      position: {x: 1, y: 5}
+    - pieces: 060000000200000004000000
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 4}
   - level: 16
     turns: 3
     positions:
@@ -339,19 +375,19 @@ MonoBehaviour:
       colour: 1
       ability: 0
       position: {x: 4, y: 1}
-    - pieces: 02000000
+    - pieces: 0200000002000000
       colour: 0
       ability: 0
       position: {x: 1, y: 8}
-    - pieces: 03000000
+    - pieces: 0300000003000000
       colour: 0
       ability: 0
       position: {x: 2, y: 8}
-    - pieces: 04000000
+    - pieces: 0400000004000000
       colour: 0
       ability: 0
       position: {x: 3, y: 8}
-    - pieces: 02000000
+    - pieces: 0200000002000000
       colour: 0
       ability: 0
       position: {x: 4, y: 8}
@@ -359,15 +395,15 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 5, y: 8}
-    - pieces: 04000000
+    - pieces: 0400000004000000
       colour: 0
       ability: 0
       position: {x: 6, y: 8}
-    - pieces: 03000000
+    - pieces: 0300000003000000
       colour: 0
       ability: 0
       position: {x: 7, y: 8}
-    - pieces: 02000000
+    - pieces: 0200000002000000
       colour: 0
       ability: 0
       position: {x: 8, y: 8}
@@ -390,11 +426,11 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 6, y: 6}
-    - pieces: 01000000
+    - pieces: 0100000003000000
       colour: 0
       ability: 0
       position: {x: 4, y: 6}
-    - pieces: 02000000
+    - pieces: 0200000003000000
       colour: 0
       ability: 0
       position: {x: 8, y: 6}
@@ -409,11 +445,11 @@ MonoBehaviour:
       colour: 1
       ability: 0
       position: {x: 3, y: 7}
-    - pieces: 02000000
+    - pieces: 0200000003000000
       colour: 0
       ability: 0
       position: {x: 1, y: 1}
-    - pieces: 03000000
+    - pieces: 0300000002000000
       colour: 0
       ability: 0
       position: {x: 1, y: 6}
@@ -421,7 +457,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 2, y: 5}
-    - pieces: 02000000
+    - pieces: 0200000003000000
       colour: 0
       ability: 0
       position: {x: 4, y: 5}
@@ -433,11 +469,11 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 8, y: 5}
-    - pieces: 04000000
+    - pieces: 0400000005000000
       colour: 0
       ability: 0
       position: {x: 5, y: 7}
-    - pieces: 02000000
+    - pieces: 0200000003000000
       colour: 0
       ability: 0
       position: {x: 8, y: 7}
@@ -452,31 +488,31 @@ MonoBehaviour:
       colour: 1
       ability: 0
       position: {x: 4, y: 4}
-    - pieces: 02000000
+    - pieces: 0200000003000000
       colour: 0
       ability: 0
       position: {x: 1, y: 7}
     - pieces: 01000000
       colour: 0
       ability: 0
-      position: {x: 1, y: 2}
-    - pieces: 02000000
+      position: {x: 1, y: 5}
+    - pieces: 0200000004000000
       colour: 0
       ability: 0
       position: {x: 4, y: 5}
-    - pieces: 03000000
+    - pieces: 0300000004000000
       colour: 0
       ability: 0
       position: {x: 7, y: 7}
-    - pieces: 01000000
+    - pieces: 0100000004000000
       colour: 0
       ability: 0
       position: {x: 7, y: 3}
-    - pieces: 01000000
+    - pieces: 0500000003000000
       colour: 0
       ability: 0
-      position: {x: 5, y: 3}
-    - pieces: 04000000
+      position: {x: 6, y: 3}
+    - pieces: 0400000001000000
       colour: 0
       ability: 0
       position: {x: 2, y: 4}
