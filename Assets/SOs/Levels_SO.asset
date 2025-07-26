@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 18
+  levelOnLoad: 1
   sectionOne:
   - level: 1
-    turns: 1
+    turns: 3
     positions:
     - pieces: 04000000
       colour: 1
@@ -30,7 +30,7 @@ MonoBehaviour:
       ability: 0
       position: {x: 8, y: 8}
   - level: 2
-    turns: 1
+    turns: 3
     positions:
     - pieces: 04000000
       colour: 1
@@ -49,7 +49,7 @@ MonoBehaviour:
       ability: 0
       position: {x: 7, y: 6}
   - level: 3
-    turns: 1
+    turns: 3
     positions:
     - pieces: 02000000
       colour: 1
@@ -76,33 +76,6 @@ MonoBehaviour:
       ability: 0
       position: {x: 4, y: 4}
   - level: 4
-    turns: 1
-    positions:
-    - pieces: 01000000
-      colour: 1
-      ability: 0
-      position: {x: 4, y: 2}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 3}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 4}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 5}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 6}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 7}
-  - level: 5
     turns: 3
     positions:
     - pieces: 02000000
@@ -137,6 +110,33 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 8, y: 1}
+  - level: 5
+    turns: 1
+    positions:
+    - pieces: 01000000
+      colour: 1
+      ability: 0
+      position: {x: 4, y: 2}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 3}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 4}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 5}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 6}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 7}
   - level: 6
     turns: 2
     positions:
@@ -405,6 +405,49 @@ MonoBehaviour:
   - level: 18
     turns: 5
     positions:
+    - pieces: 03000000
+      colour: 1
+      ability: 0
+      position: {x: 3, y: 7}
+    - pieces: 02000000
+      colour: 0
+      ability: 0
+      position: {x: 1, y: 1}
+    - pieces: 03000000
+      colour: 0
+      ability: 0
+      position: {x: 1, y: 6}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 2, y: 5}
+    - pieces: 02000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 5}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 5}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 8, y: 5}
+    - pieces: 04000000
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 7}
+    - pieces: 02000000
+      colour: 0
+      ability: 0
+      position: {x: 8, y: 7}
+    - pieces: 03000000
+      colour: 0
+      ability: 0
+      position: {x: 7, y: 8}
+  - level: 19
+    turns: 5
+    positions:
     - pieces: 04000000
       colour: 1
       ability: 0
@@ -437,49 +480,6 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 2, y: 4}
-  - level: 19
-    turns: 5
-    positions:
-    - pieces: 03000000
-      colour: 1
-      ability: 0
-      position: {x: 3, y: 7}
-    - pieces: 02000000
-      colour: 0
-      ability: 0
-      position: {x: 1, y: 1}
-    - pieces: 03000000
-      colour: 0
-      ability: 0
-      position: {x: 1, y: 6}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 2, y: 5}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 5}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 6, y: 5}
-    - pieces: 01000000
-      colour: 0
-      ability: 0
-      position: {x: 8, y: 5}
-    - pieces: 04000000
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 7}
-    - pieces: 02000000
-      colour: 0
-      ability: 0
-      position: {x: 8, y: 7}
-    - pieces: 03000000
-      colour: 0
-      ability: 0
-      position: {x: 7, y: 8}
   sectionThree:
   - level: 20
     turns: 5
