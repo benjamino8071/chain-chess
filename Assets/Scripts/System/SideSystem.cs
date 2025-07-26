@@ -179,7 +179,7 @@ public class SideSystem : Dependency
         
         if (_pieceControllers.Count == 0)
         {
-            Lose();
+            Lose(GameOverReason.Captured);
             _chainUISystem.HighlightNextPiece(pieceUsed);
             return true;
         }
@@ -200,15 +200,15 @@ public class SideSystem : Dependency
         
         if (_pieceControllers.Count == 0)
         {
-            Lose();
+            Lose(GameOverReason.Locked);
         }
     }
 
-    public void Lose()
+    public void Lose(GameOverReason gameOverReason)
     {
         _enemySideSystem.SetStateForAllPieces(PieceController.States.EndGame);
         SetStateForAllPieces(PieceController.States.EndGame);
-        _endGameSystem.SetEndGame(_enemyPieceColour);
+        _endGameSystem.SetEndGame(_enemyPieceColour, gameOverReason);
         _validMovesSystem.HideAllValidMoves();
     }
 
@@ -247,7 +247,7 @@ public class SideSystem : Dependency
         
         if (_piecesToMoveThisTurn.Count == 0)
         {
-            Lose();
+            Lose(GameOverReason.Captured);
         }
         else
         {

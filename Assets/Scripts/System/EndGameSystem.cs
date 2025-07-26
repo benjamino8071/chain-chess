@@ -25,7 +25,7 @@ public class EndGameSystem : Dependency
         _boardSystem = creator.GetDependency<BoardSystem>();
     }
 
-    public void SetEndGame(PieceColour winningColour)
+    public void SetEndGame(PieceColour winningColour, GameOverReason gameOverReason)
     {
         /*
          * Purpose of this system is to check who has won/lost and display the correct info
@@ -44,7 +44,7 @@ public class EndGameSystem : Dependency
             else
             {
                 //Player has LOST puzzle
-                _gameOverUISystem.Show();
+                _gameOverUISystem.Show(gameOverReason);
             }
         }
         else

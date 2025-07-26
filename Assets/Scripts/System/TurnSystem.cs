@@ -51,7 +51,7 @@ public class TurnSystem : Dependency
                 {
                     if (DecrementTurnsRemaining())
                     {
-                        _blackSystem.Lose();
+                        _blackSystem.Lose(GameOverReason.NoTurns);
                         return;
                     }
                 }
@@ -81,7 +81,7 @@ public class TurnSystem : Dependency
                 {
                     if (DecrementTurnsRemaining())
                     {
-                        _whiteSystem.Lose();
+                        _whiteSystem.Lose(GameOverReason.NoTurns);
                         return;
                     }
                 }

@@ -216,6 +216,7 @@ public class PieceController : Controller
             UpdateSprite(_movesInThisTurn[0]);
             
             List<Vector3> validMoves = GetAllValidMovesOfCurrentPiece();
+            
             if (validMoves.Count > 0)
             {
                 _chainUISystem.HighlightNextPiece(this);
@@ -225,7 +226,6 @@ public class PieceController : Controller
             {
                 //Locked!
                 _allySideSystem.PieceLocked(this);
-                Finish();
             }
         }
         else

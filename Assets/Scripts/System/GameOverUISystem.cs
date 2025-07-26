@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,6 +11,8 @@ public class GameOverUISystem : Dependency
     public bool isShowing => _gameOverUI.gameObject.activeSelf;
     
     private Transform _gameOverUI;
+
+    private TextMeshProUGUI _reasonText;
     
     public override void GameStart(Creator creator)
     {
@@ -39,11 +42,33 @@ public class GameOverUISystem : Dependency
             SceneManager.LoadScene("Main_Menu_Scene");
         });
 
+        Transform reasonTextTf = creator.GetChildObjectByName(_gameOverUI.gameObject, AllTagNames.Text);
+        _reasonText = reasonTextTf.GetComponent<TextMeshProUGUI>();
+
         Hide();
     }
 
-    public void Show()
+    public void Show(GameOverReason gameOverReason)
     {
+        switch (gameOverReason)
+        {
+            case GameOverReason.Captured:
+            {
+                _reasonText.text = "Piece captured";
+                break;
+            }
+            case GameOverReason.NoTurns:
+            {
+                _reasonText.text = "Ran out of turns";
+                break;
+            }
+            case GameOverReason.Locked:
+            {
+                _reasonText.text = "Piece locked";
+                break;
+            }
+        }
+        
         _gameOverUI.gameObject.SetActive(true);
         _audioSystem.PlayerGameOverSfx();
     }
