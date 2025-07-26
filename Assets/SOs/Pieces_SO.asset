@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c69d5257660f96d4a8cdfe9a0f085a7d, type: 3}
   m_Name: Pieces_SO
   m_EditorClassIdentifier: 
+  pieceSpeed: 4
   pawn: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
   rook: {fileID: 21300000, guid: d14695bd0585e8b44bbbc4e8ba42903a, type: 3}
   knight: {fileID: 21300000, guid: d0767ba0481335a44b352780e7c83047, type: 3}

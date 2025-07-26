@@ -3,6 +3,8 @@ using UnityEngine;
 [CreateAssetMenu]
 public class Pieces_SO : ScriptableObject
 {
+    public float pieceSpeed;
+    
     public Sprite pawn;
     public Sprite rook;
     public Sprite knight;

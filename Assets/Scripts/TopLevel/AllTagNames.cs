@@ -1,0 +1,28 @@
+public enum AllTagNames
+{
+    ChainParent = 4,
+    GameOver = 18,
+    LevelText = 20,
+    ResetButton = 26,
+    TurnInfoText = 31,
+    Tile = 32,
+    LevelComplete = 37,
+    Retry = 38,
+    NextLevel = 39,
+    Exit = 40,
+    GUITopChain = 44,
+    GUIBottom = 45,
+    MovesRemaining = 57,
+    Text = 71,
+    Settings = 80,
+    SettingsButton = 81,
+    DoubleTapSwitch = 82,
+    AudioSwitch = 83,
+    SideWins = 89,
+    AllValidMovesParent = 90,
+    TurnsRemaining = 91,
+    StatsTurns = 93,
+    StatsBestTurn = 94,
+    StatsTime = 95,
+    ThankYouMessage = 96
+}
