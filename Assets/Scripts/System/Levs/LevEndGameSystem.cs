@@ -6,7 +6,7 @@ public class LevEndGameSystem : LevDependency
     private LevLevelCompleteUISystem _levelCompleteUISystem;
     private LevSideWinsUISystem _sideWinsUISystem;
     private LevTurnSystem _turnSystem;
-    private LevPauseUISystem _pauseUISystem;
+    private LevSettingsUISystem _settingsUISystem;
     private LevChainUISystem _chainUISystem;
     private LevValidMovesSystem _validMovesSystem;
     private LevBoardSystem _boardSystem;
@@ -23,7 +23,7 @@ public class LevEndGameSystem : LevDependency
         _levelCompleteUISystem = levCreator.GetDependency<LevLevelCompleteUISystem>();
         _sideWinsUISystem = levCreator.GetDependency<LevSideWinsUISystem>();
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
-        _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
+        _settingsUISystem = levCreator.GetDependency<LevSettingsUISystem>();
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
         _validMovesSystem = levCreator.GetDependency<LevValidMovesSystem>();
         _boardSystem = levCreator.GetDependency<LevBoardSystem>();
@@ -55,8 +55,7 @@ public class LevEndGameSystem : LevDependency
         {
             _sideWinsUISystem.Show(winningColour);
         }
-        _turnSystem.HideEndTurnButton();
-        _pauseUISystem.HideButton();
+        _settingsUISystem.HideButton();
         _chainUISystem.HideChain();
         _boardSystem.HideTapPoint();
         _validMovesSystem.HideAllValidMoves();

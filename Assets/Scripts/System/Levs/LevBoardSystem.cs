@@ -10,7 +10,7 @@ public class LevBoardSystem : LevDependency
     private LevChainUISystem _chainUISystem;
     private LevValidMovesSystem _validMovesSystem;
     private LevTurnSystem _turnSystem;
-    private LevPauseUISystem _pauseUISystem;
+    private LevSettingsUISystem _settingsUISystem;
     private LevEndGameSystem _endGameSystem;
 
     public LevSideSystem activeSideSystem =>_turnSystem.CurrentTurn() == PieceColour.White 
@@ -36,7 +36,7 @@ public class LevBoardSystem : LevDependency
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
         _validMovesSystem = levCreator.GetDependency<LevValidMovesSystem>();
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
-        _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
+        _settingsUISystem = levCreator.GetDependency<LevSettingsUISystem>();
         _endGameSystem = levCreator.GetDependency<LevEndGameSystem>();
 
         _camera = Camera.main;
@@ -86,7 +86,7 @@ public class LevBoardSystem : LevDependency
     {
         Vector3 gridPoint = GetGridPointNearMouse();
         if (!Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame()
-            || _pauseUISystem.isShowing
+            || _settingsUISystem.IsShowing
             || _endGameSystem.isEndGame
             || !IsPositionValid(gridPoint))
         {
@@ -131,13 +131,13 @@ public class LevBoardSystem : LevDependency
             && !samePoint
             && !choseValidMovePoint)
         {
-            _chainUISystem.ShowChain(whitePieceController.capturedPieces, whitePieceController.pieceColour, whitePieceController.movesUsed);
+            _chainUISystem.ShowChain(whitePieceController);
         }
         else if (_blackSystem.TryGetAllyPieceAtPosition(gridPoint, out LevPieceController blackPieceController) 
                  && !samePoint
                  && !choseValidMovePoint)
         {
-            _chainUISystem.ShowChain(blackPieceController.capturedPieces, blackPieceController.pieceColour, blackPieceController.movesUsed);
+            _chainUISystem.ShowChain(blackPieceController);
         }
         else if(!choseValidMovePoint)
         {
@@ -210,15 +210,15 @@ public class LevBoardSystem : LevDependency
             && _whiteSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController whitePieceCont))
         {
             pieceUsed.AddCapturedPiece(whitePieceCont.capturedPieces[0]);
-            _chainUISystem.ShowChain(pieceUsed.capturedPieces, PieceColour.Black, pieceUsed.movesUsed);
-            return _whiteSystem.PieceCaptured(whitePieceCont, pieceUsed.piecesCapturedInThisTurn, pieceUsed.movesUsed);
+            _chainUISystem.ShowChain(pieceUsed);
+            return _whiteSystem.PieceCaptured(whitePieceCont, pieceUsed);
         }
         if (enemyColour == PieceColour.Black 
             && _blackSystem.TryGetAllyPieceAtPosition(piecePos, out LevPieceController blackPieceCont))
         {
             pieceUsed.AddCapturedPiece(blackPieceCont.capturedPieces[0]);
-            _chainUISystem.ShowChain(pieceUsed.capturedPieces, PieceColour.White, pieceUsed.movesUsed);
-            return _blackSystem.PieceCaptured(blackPieceCont, pieceUsed.piecesCapturedInThisTurn, pieceUsed.movesUsed);
+            _chainUISystem.ShowChain(pieceUsed);
+            return _blackSystem.PieceCaptured(blackPieceCont, pieceUsed);
         }
         
         return false;

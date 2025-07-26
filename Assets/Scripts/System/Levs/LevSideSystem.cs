@@ -12,7 +12,7 @@ public class LevSideSystem : LevDependency
     private LevTurnSystem _turnSystem;
     private LevChainUISystem _chainUISystem;
     private LevEndGameSystem _endGameSystem;
-    private LevPauseUISystem _pauseUISystem;
+    private LevSettingsUISystem _settingsUISystem;
     protected LevSideSystem _enemySideSystem;
 
     public LevPieceController pieceControllerSelected => _pieceControllerSelected;
@@ -42,7 +42,7 @@ public class LevSideSystem : LevDependency
         _boardSystem = levCreator.GetDependency<LevBoardSystem>();
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
         _chainUISystem = levCreator.GetDependency<LevChainUISystem>();
-        _pauseUISystem = levCreator.GetDependency<LevPauseUISystem>();
+        _settingsUISystem = levCreator.GetDependency<LevSettingsUISystem>();
         _endGameSystem = levCreator.GetDependency<LevEndGameSystem>();
         
         SpawnPieces();
@@ -179,7 +179,7 @@ public class LevSideSystem : LevDependency
     }
     
     /// <returns>True = all ally pieces captured</returns>
-    public bool PieceCaptured(LevPieceController capturedPieceController, int takerPiecesCapturedThisTurn, int takerMovesUsed)
+    public bool PieceCaptured(LevPieceController capturedPieceController, LevPieceController pieceUsed)
     {
         _pieceControllers.Remove(capturedPieceController);
         
@@ -188,12 +188,12 @@ public class LevSideSystem : LevDependency
         if (_pieceControllers.Count == 0)
         {
             Lose();
-            _chainUISystem.HighlightNextPiece(takerMovesUsed);
+            _chainUISystem.HighlightNextPiece(pieceUsed);
             return true;
         }
         else
         {
-            float pitchAmount = 1 + 0.02f * takerPiecesCapturedThisTurn;
+            float pitchAmount = 1 + 0.02f * pieceUsed.piecesCapturedInThisTurn;
             
             _audioSystem.PlayPieceCapturedSfx(pitchAmount);
             return false;

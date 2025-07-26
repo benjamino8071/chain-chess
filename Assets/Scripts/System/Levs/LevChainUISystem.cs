@@ -11,6 +11,8 @@ public class LevChainUISystem : LevDependency
     private LevTurnSystem _turnSystem;
     private LevBoardSystem _boardSystem;
 
+    private LevPieceController _cachedPieceController;
+    
     private Transform _guiTopChain;
     
     private Transform _chainParent;
@@ -28,6 +30,9 @@ public class LevChainUISystem : LevDependency
 
     private List<PieceImage> _chainPieceImages = new ();
     private int _nextFreeIndex;
+    
+    private float _mousePosXLastFrame = -1;
+    private float _mouseOffTimer;
     
     public override void GameStart(LevCreator levCreator)
     {
@@ -69,9 +74,6 @@ public class LevChainUISystem : LevDependency
         SceneManager.sceneUnloaded += SceneManager_SceneUnloaded;
     }
 
-    private float _mousePosXLastFrame = -1;
-    private float _mouseOffTimer;
-
     public override void GameUpdate(float dt)
     {
         if (ProcessSlider(dt) || _chainParentNewPos == _chainParent.localPosition)
@@ -109,18 +111,19 @@ public class LevChainUISystem : LevDependency
         return false;
     }
 
-    public void ShowChain(List<Piece> pieces, PieceColour pieceColour, int movesUsed)
+    public void ShowChain(LevPieceController pieceController)
     {
         ResetChain();
         
-        for (int i = 0; i < pieces.Count; i++)
+        for (int i = 0; i < pieceController.capturedPieces.Count; i++)
         {
-            ShowNewPiece(pieces[i], pieceColour, movesUsed,i == 0);
+            ShowNewPiece(pieceController.capturedPieces[i], pieceController.pieceColour, pieceController.movesUsed,i == 0);
         }
         
-        HighlightNextPiece(movesUsed);
+        _cachedPieceController = pieceController;
+        HighlightNextPiece(pieceController);
 
-        UpdateMovesRemainingText(pieces.Count);
+        UpdateMovesRemainingText(pieceController.capturedPieces.Count);
     }
 
     //Public function 'hide' just has a better name than 'reset'
@@ -191,11 +194,16 @@ public class LevChainUISystem : LevDependency
         }
     }
 
-    public void HighlightNextPiece(int movesUsed)
+    public void HighlightNextPiece(LevPieceController pieceController)
     {
-        _chainParentNewPos.x = -210 * movesUsed;
+        if (pieceController != _cachedPieceController)
+        {
+            return;
+        }
         
-        UpdateAlphaValue(0.1f, movesUsed * 2);
+        _chainParentNewPos.x = -210 * pieceController.movesUsed;
+        
+        UpdateAlphaValue(0.1f, pieceController.movesUsed * 2);
     }
 
     public void PawnPromoted(int index, Piece promotedPiece)

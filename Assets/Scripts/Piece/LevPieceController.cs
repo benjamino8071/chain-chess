@@ -219,7 +219,7 @@ public class LevPieceController : LevController
             List<Vector3> validMoves = GetAllValidMovesOfCurrentPiece();
             if (validMoves.Count > 0)
             {
-                _chainUISystem.HighlightNextPiece(movesUsed);
+                _chainUISystem.HighlightNextPiece(this);
                 SetState(States.FindingMove);
             }
             else
@@ -318,7 +318,7 @@ public class LevPieceController : LevController
                 {
                     pawnMoves.Add(defaultMove);
                     
-                    Vector3 startingMove = _pieceInstance.position + new Vector3(0, 2, 0) * direction;
+                    /*Vector3 startingMove = _pieceInstance.position + new Vector3(0, 2, 0) * direction;
                     
                     bool atStartPoint = pieceColour == PieceColour.White 
                         ? (int)_pieceInstance.position.y == 2 
@@ -330,7 +330,7 @@ public class LevPieceController : LevController
                         && _boardSystem.IsPositionValid(startingMove))
                     {
                         pawnMoves.Add(startingMove);
-                    }
+                    }*/
                 }
                 
                 Vector3 topLeft = _pieceInstance.position + new Vector3(-1, 1, 0) * direction;

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LevPauseUISystem : LevDependency
+public class LevSettingsUISystem : LevDependency
 {
     private LevAudioSystem _audioSystem;
     private LevLevelCompleteUISystem _levelCompleteUISystem;
@@ -12,11 +12,12 @@ public class LevPauseUISystem : LevDependency
     private LevTurnSystem _turnSystem;
     private LevBoardSystem _boardSystem;
 
-    public bool isShowing => _pauseGUI.gameObject.activeSelf;
+    public bool IsShowing => _settingsGui.gameObject.activeSelf;
     
-    private Transform _pauseGUI;
+    private Transform _settingsGui;
 
-    private Button _pauseButton;
+    private Button _uiBottomResetButton;
+    private Button _settingsButton;
 
     private LevPieceController _pieceControllerSelected;
     
@@ -32,43 +33,38 @@ public class LevPauseUISystem : LevDependency
         _turnSystem = levCreator.GetDependency<LevTurnSystem>();
         _boardSystem = levCreator.GetDependency<LevBoardSystem>();
 
-        _pauseGUI = levCreator.GetFirstObjectWithName(AllTagNames.Pause).transform;
+        _settingsGui = levCreator.GetFirstObjectWithName(AllTagNames.Settings).transform;
         
-        _pauseButton = levCreator.GetFirstObjectWithName(AllTagNames.PauseButton).GetComponent<Button>();
-        _pauseButton.onClick.AddListener(() =>
+        _settingsButton = levCreator.GetFirstObjectWithName(AllTagNames.SettingsButton).GetComponent<Button>();
+        _settingsButton.onClick.AddListener(() =>
         {
-            if (!_pauseGUI.gameObject.activeSelf && !_levelCompleteUISystem.isShowing && !_gameOverUISystem.isShowing)
+            if (!_settingsGui.gameObject.activeSelf && !_levelCompleteUISystem.isShowing && !_gameOverUISystem.isShowing)
             {
                 if (_boardSystem.activeSideSystem.pieceControllerSelected is { } pieceControllerSelected)
                 {
                     _pieceControllerSelected = pieceControllerSelected;
                     pieceControllerSelected.SetState(LevPieceController.States.Paused);
                 }
-                _turnSystem.HideEndTurnButton();
-                _pauseGUI.gameObject.SetActive(true);
+                Show();
                 _audioSystem.PlayPauseOpenSfx();
             }
             else
             {
-                _pauseGUI.gameObject.SetActive(false);
+                Hide();
                 
                 if (_pieceControllerSelected != null)
                 {
                     _pieceControllerSelected.SetState(LevPieceController.States.FindingMove);
-                    
-                    if (_pieceControllerSelected.hasMoved && _pieceControllerSelected.controlledBy == ControlledBy.Player)
-                    {
-                        _turnSystem.ShowEndTurnButton();
-                    }
                     _pieceControllerSelected = null;
                 }
                 _audioSystem.PlayPauseCloseSfx();
             }
         });
 
-        Transform resetButtonTf = levCreator.GetChildObjectByName(_pauseGUI.gameObject, AllTagNames.ResetButton);
-        Button resetButton = resetButtonTf.GetComponent<Button>();
-        resetButton.onClick.AddListener(() =>
+        Transform uiBottom = levCreator.GetFirstObjectWithName(AllTagNames.GUIBottom);
+        Transform uiBottomResetButtonTf = levCreator.GetChildObjectByName(uiBottom.gameObject, AllTagNames.ResetButton);
+        _uiBottomResetButton = uiBottomResetButtonTf.GetComponent<Button>();
+        _uiBottomResetButton.onClick.AddListener(() =>
         {
             _audioSystem.PlayUIClickSfx();
             
@@ -77,7 +73,18 @@ public class LevPauseUISystem : LevDependency
             _turnSystem.LoadLevelRuntime();
         });
         
-        Transform exitButtonTf = levCreator.GetChildObjectByName(_pauseGUI.gameObject, AllTagNames.Exit);
+        Transform resetButtonTf = levCreator.GetChildObjectByName(_settingsGui.gameObject, AllTagNames.ResetButton);
+        Button pauseUiResetButton = resetButtonTf.GetComponent<Button>();
+        pauseUiResetButton.onClick.AddListener(() =>
+        {
+            _audioSystem.PlayUIClickSfx();
+            
+            Hide();
+            
+            _turnSystem.LoadLevelRuntime();
+        });
+        
+        Transform exitButtonTf = levCreator.GetChildObjectByName(_settingsGui.gameObject, AllTagNames.Exit);
         Button exitButton = exitButtonTf.GetComponent<Button>();
         exitButton.onClick.AddListener(() =>
         {
@@ -85,7 +92,7 @@ public class LevPauseUISystem : LevDependency
             SceneManager.LoadScene("MainMenuScene");
         });
 
-        Transform doubleTapSwitchTf = levCreator.GetChildObjectByName(_pauseGUI.gameObject, AllTagNames.DoubleTapSwitch);
+        Transform doubleTapSwitchTf = levCreator.GetChildObjectByName(_settingsGui.gameObject, AllTagNames.DoubleTapSwitch);
         SwitchManager doubleTapSwitch = doubleTapSwitchTf.GetComponent<SwitchManager>();
         if (levCreator.settingsSo.doubleTap)
         {
@@ -101,7 +108,7 @@ public class LevPauseUISystem : LevDependency
             levCreator.settingsSo.doubleTap = isOn;
         });
         
-        Transform audioSwitchTf = levCreator.GetChildObjectByName(_pauseGUI.gameObject, AllTagNames.AudioSwitch);
+        Transform audioSwitchTf = levCreator.GetChildObjectByName(_settingsGui.gameObject, AllTagNames.AudioSwitch);
         SwitchManager audioSwitch = audioSwitchTf.GetComponent<SwitchManager>();
         if (levCreator.settingsSo.sound)
         {
@@ -130,21 +137,23 @@ public class LevPauseUISystem : LevDependency
 
     public void ShowButton()
     {
-        _pauseButton.gameObject.SetActive(true);
+        _settingsButton.gameObject.SetActive(true);
+        _uiBottomResetButton.gameObject.SetActive(true);
     }
 
     public void HideButton()
     {
-        _pauseButton.gameObject.SetActive(false);
+        _settingsButton.gameObject.SetActive(false);
+        _uiBottomResetButton.gameObject.SetActive(false);
     }
 
     private void Show()
     {
-        _pauseGUI.gameObject.SetActive(true);
+        _settingsGui.gameObject.SetActive(true);
     }
 
     private void Hide()
     {
-        _pauseGUI.gameObject.SetActive(false);
+        _settingsGui.gameObject.SetActive(false);
     }
 }
