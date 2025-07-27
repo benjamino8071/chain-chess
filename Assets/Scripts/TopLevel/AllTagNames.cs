@@ -21,8 +21,12 @@ public enum AllTagNames
     AllValidMovesParent = 90,
     TurnsRemaining = 91,
     StatsTurns = 93,
-    StatsBestTurn = 94,
+    StatsMoves = 94,
     StatsTime = 95,
     ThankYouMessage = 96,
     FOVSlider = 97,
+    Star1Image = 98,
+    Star2Image = 99,
+    Star3Image = 100,
+    ScoreText = 101,
 }

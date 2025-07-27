@@ -14,6 +14,7 @@ public class Creator : MonoBehaviour
     public AudioClips_SO audioClipsSo;
     public Settings_SO settingsSo;
     public Levels_SO levelsSo;
+    public LevelComplete_SO levelCompleteSo;
 
     [Header("Prefabs")]
     public GameObject piecePrefab;
@@ -34,7 +35,7 @@ public class Creator : MonoBehaviour
     public int frameRate = 120;
 
     [HideInInspector] public int statsTurns;
-    [HideInInspector] public int statsBestTurn;
+    [HideInInspector] public int statsMoves;
     [HideInInspector] public float statsTime;
     
     private List<Dependency> _dependencies = new();
@@ -218,6 +219,25 @@ public class Creator : MonoBehaviour
         return objs;
     }
 
+    public T GetChildComponentByName<T>(GameObject parent, AllTagNames gameObjectName)
+    {
+        Transform[] objects = parent.GetComponentsInChildren<Transform>(true);
+
+        foreach (Transform obj in objects)
+        {
+            if (obj.TryGetComponent(out TagName objName))
+            {
+                if (objName.tagName == gameObjectName)
+                {
+                    return obj.GetComponent<T>();
+                }
+            }
+        }
+        
+        Debug.LogError("Could not find object");
+        return default;
+    }
+    
     public Transform GetChildObjectByName(GameObject parent, AllTagNames gameObjectName)
     {
         Transform[] objects = parent.GetComponentsInChildren<Transform>(true);

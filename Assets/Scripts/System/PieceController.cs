@@ -186,13 +186,7 @@ public class PieceController : Controller
     public void AddCapturedPiece(Piece piece)
     {
         _piecesCapturedInThisTurn++;
-        if (Creator.isPuzzle 
-            && controlledBy == ControlledBy.Player
-            && _piecesCapturedInThisTurn > Creator.statsBestTurn)
-        {
-            Creator.statsBestTurn = _piecesCapturedInThisTurn;
-        }
-
+        
         _capturedPieces.Add(piece);
         _movesInThisTurn.Add(piece);
         UpdateCaptureAmountText(_capturedPieces.Count);

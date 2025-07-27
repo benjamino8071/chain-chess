@@ -127,7 +127,7 @@ public class TurnSystem : Dependency
         _endGameSystem.ResetEndGame();
 
         Creator.statsTurns = 0;
-        Creator.statsBestTurn = 0;
+        Creator.statsMoves = 0;
         Creator.statsTime = 0;
         
         SwitchTurn(PieceColour.White);

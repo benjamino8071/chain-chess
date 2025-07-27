@@ -15,9 +15,13 @@ public class LevelCompleteUISystem : Dependency
     private Transform _thankYouMessage;
     
     private Button _nextLevelButton;
+
+    private Image _starOneImage;
+    private Image _starTwoImage;
+    private Image _starThreeImage;
     
     private TextMeshProUGUI _turnsText;
-    private TextMeshProUGUI _bestTurnText;
+    private TextMeshProUGUI _movesText;
     private TextMeshProUGUI _timeText;
     
     public override void GameStart(Creator creator)
@@ -34,12 +38,16 @@ public class LevelCompleteUISystem : Dependency
         Transform turnsText = creator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.StatsTurns);
         _turnsText = turnsText.GetComponent<TextMeshProUGUI>();
         
-        Transform bestTurnText = creator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.StatsBestTurn);
-        _bestTurnText = bestTurnText.GetComponent<TextMeshProUGUI>();
+        Transform bestTurnText = creator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.StatsMoves);
+        _movesText = bestTurnText.GetComponent<TextMeshProUGUI>();
         
         Transform timeText = creator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.StatsTime);
         _timeText = timeText.GetComponent<TextMeshProUGUI>();
         
+        _starOneImage = creator.GetChildComponentByName<Image>(_levelCompleteUI.gameObject, AllTagNames.Star1Image);
+        _starTwoImage = creator.GetChildComponentByName<Image>(_levelCompleteUI.gameObject, AllTagNames.Star2Image);
+        _starThreeImage = creator.GetChildComponentByName<Image>(_levelCompleteUI.gameObject, AllTagNames.Star3Image);
+
         Transform retryButtonTf = creator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.Retry);
         Button retryButton = retryButtonTf.GetComponent<Button>();
         retryButton.onClick.AddListener(() =>
@@ -77,11 +85,27 @@ public class LevelCompleteUISystem : Dependency
     
     public void Show()
     {
-        _turnsText.text = $"{Creator.statsTurns} / {Creator.levelsSo.GetLevelOnLoad().turns}";
-        string plural = Creator.statsBestTurn == 1 ? "" : "s";
-        _bestTurnText.text = $"{Creator.statsBestTurn} Capture{plural}";
+        Level levelOnLoad = Creator.levelsSo.GetLevelOnLoad();
+        _turnsText.text = $"{Creator.statsTurns} / {levelOnLoad.turns}";
+        _movesText.text = $"{Creator.statsMoves}";
         _timeText.text = $"{Creator.statsTime:0.##}s";
+        int score = (int)((Creator.statsTurns * 10) * Creator.statsMoves * Creator.statsTime);
         
+        Debug.Log($"Score for level {levelOnLoad.level}: {score}");
+        
+        bool oneStar = score <= levelOnLoad.star1Score;
+        bool twoStar = score <= levelOnLoad.star2Score;
+        bool threeStar = score <= levelOnLoad.star3Score;
+        
+        _starOneImage.sprite = oneStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+        _starOneImage.color = oneStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+        
+        _starTwoImage.sprite = twoStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+        _starTwoImage.color = twoStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+
+        _starThreeImage.sprite = threeStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+        _starThreeImage.color = threeStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+
         _nextLevelButton.gameObject.SetActive(Creator.levelsSo.levelOnLoad < Creator.levelsSo.AllLevels().Count);
         _thankYouMessage.gameObject.SetActive(Creator.levelsSo.levelOnLoad == Creator.levelsSo.AllLevels().Count);
         

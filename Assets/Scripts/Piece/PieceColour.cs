@@ -26,6 +26,9 @@ public struct Level
 {
     public int level;
     public int turns;
+    public int star1Score;
+    public int star2Score;
+    public int star3Score;
     public List<PieceSpawnData> positions;
 }
 

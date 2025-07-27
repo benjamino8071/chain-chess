@@ -62,6 +62,8 @@ public class PlayerController : PieceController
                 
         if (_pieceInstance.position == _jumpPosition)
         {
+            Creator.statsMoves++;
+            
             _pieceInstance.position = math.round(_pieceInstance.position);
             _sinTime = 0;
             
