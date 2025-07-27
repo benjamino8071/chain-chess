@@ -27,13 +27,7 @@ public class EndGameSystem : Dependency
 
     public void SetEndGame(PieceColour winningColour, GameOverReason gameOverReason)
     {
-        /*
-         * Purpose of this system is to check who has won/lost and display the correct info
-         *
-         * If this is a puzzle then we say the player has won or lost
-         */
-
-        if (Creator.isPuzzle)
+        if (Creator.whiteControlledBy == ControlledBy.Player && Creator.blackControlledBy == ControlledBy.AI)
         {
             if ((Creator.whiteControlledBy == ControlledBy.Player && winningColour == PieceColour.White)
                 || (Creator.blackControlledBy == ControlledBy.Player && winningColour == PieceColour.Black))

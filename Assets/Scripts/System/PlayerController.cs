@@ -10,7 +10,7 @@ public class PlayerController : PieceController
     {
         //The player will find the move when they are ready
         Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
-        if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame() && CanMove(positionRequested))
+        if (Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame() && CanMove(positionRequested))
         {
             if (Creator.settingsSo.doubleTap)
             {
@@ -30,7 +30,7 @@ public class PlayerController : PieceController
     {
         //The player will find the move when they are ready
         Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
-        if (Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame())
+        if (Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame())
         {
             if (_positionRequested == positionRequested)
             {

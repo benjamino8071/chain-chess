@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Michsky.MUIP;
 using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -15,11 +16,13 @@ public class Creator : MonoBehaviour
     public Settings_SO settingsSo;
     public Levels_SO levelsSo;
     public LevelComplete_SO levelCompleteSo;
-
+    public LevelSelect_SO levelSelectSo;
+    
     [Header("Prefabs")]
     public GameObject piecePrefab;
     public GameObject validPositionPrefab;
     public GameObject selectedBackgroundPrefab;
+    public GameObject levelInfoPrefab;
 
     [Header("Camera")]
     public Camera mainCam;
@@ -27,10 +30,7 @@ public class Creator : MonoBehaviour
     [Header("Controlled by")] 
     public ControlledBy whiteControlledBy;
     public ControlledBy blackControlledBy;
-
-    [Header("Is Puzzle")]
-    public bool isPuzzle;
-
+    
     [Header("Frame Rate")]
     public int frameRate = 120;
 
@@ -39,9 +39,6 @@ public class Creator : MonoBehaviour
     [HideInInspector] public float statsTime;
     
     private List<Dependency> _dependencies = new();
-    
-    private TextMeshProUGUI _levelText;
-    private TextMeshProUGUI _turnsText;
     
     private void Awake()
     {
@@ -52,17 +49,6 @@ public class Creator : MonoBehaviour
     
     private void Start()
     {
-        if (isPuzzle && whiteControlledBy == ControlledBy.Player && blackControlledBy == ControlledBy.Player)
-        {
-            Debug.LogError("CANNOT HAVE PUZZLE WITH TWO PLAYERS");
-            return;
-        }
-        if (isPuzzle && whiteControlledBy == ControlledBy.AI && blackControlledBy == ControlledBy.AI)
-        {
-            Debug.LogError("CANNOT HAVE PUZZLE WITH TWO AIs");
-            return;
-        }
-        
         Random.InitState(42);
         
         mainCam.backgroundColor = Color.black;
@@ -71,22 +57,6 @@ public class Creator : MonoBehaviour
         {
             Dependency dependency = dependencyInUse;
             dependency.GameStart(this);
-        }
-        
-        Transform levelTextTf = GetFirstObjectWithName(AllTagNames.LevelText);
-        _levelText = levelTextTf.GetComponent<TextMeshProUGUI>();
-
-        Transform turnsTextTf = GetFirstObjectWithName(AllTagNames.TurnsRemaining);
-        _turnsText = turnsTextTf.GetComponent<TextMeshProUGUI>();
-        
-        if (isPuzzle)
-        {
-            UpdateLevelText();
-            UpdateTurnsRemainingText(levelsSo.GetLevelOnLoad().turns);
-        }
-        else
-        {
-            levelTextTf.gameObject.SetActive(false);
         }
     }
 
@@ -107,21 +77,10 @@ public class Creator : MonoBehaviour
             dependency.GameLateUpdate(Time.deltaTime);
         }
     }
-
-    public void UpdateLevelText()
-    {
-        _levelText.text = $"Level {levelsSo.levelOnLoad}";
-    }
-
-    public void UpdateTurnsRemainingText(int turnsRemaining)
-    {
-        string plural = turnsRemaining == 1 ? "" : "s";
-        
-        _turnsText.text = $"{turnsRemaining} Turn{plural}";
-    }
     
     private void CreateDependencies()
     {
+        _dependencies.Add(new LevelSelectUISystem());
         _dependencies.Add(new ValidMovesSystem());
         _dependencies.Add(new AudioSystem());
         _dependencies.Add(new ChainUISystem());
@@ -222,7 +181,7 @@ public class Creator : MonoBehaviour
     public T GetChildComponentByName<T>(GameObject parent, AllTagNames gameObjectName)
     {
         Transform[] objects = parent.GetComponentsInChildren<Transform>(true);
-
+        
         foreach (Transform obj in objects)
         {
             if (obj.TryGetComponent(out TagName objName))

@@ -8,7 +8,7 @@ public class LevelCompleteUISystem : Dependency
     private AudioSystem _audioSystem;
     private TurnSystem _turnSystem;
 
-    public bool isShowing => _levelCompleteUI.gameObject.activeSelf;
+    public bool IsShowing => _levelCompleteUI.gameObject.activeSelf;
     
     private Transform _levelCompleteUI;
 

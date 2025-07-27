@@ -9,6 +9,7 @@ public class BoardSystem : Dependency
     private ChainUISystem _chainUISystem;
     private TurnSystem _turnSystem;
     private SettingsUISystem _settingsUISystem;
+    private LevelSelectUISystem _levelSelectUISystem;
     private EndGameSystem _endGameSystem;
 
     public SideSystem activeSideSystem =>_turnSystem.CurrentTurn() == PieceColour.White 
@@ -28,6 +29,7 @@ public class BoardSystem : Dependency
         _chainUISystem = creator.GetDependency<ChainUISystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
         _settingsUISystem = creator.GetDependency<SettingsUISystem>();
+        _levelSelectUISystem = creator.GetDependency<LevelSelectUISystem>();
         _endGameSystem = creator.GetDependency<EndGameSystem>();
 
         int validTilesCapacity = 64;
@@ -50,8 +52,9 @@ public class BoardSystem : Dependency
     {
         float3 gridPoint = GetGridPointNearMouse();
         
-        if (!Creator.inputSo._leftMouseButton.action.WasPerformedThisFrame()
+        if (!Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame()
             || _settingsUISystem.IsShowing
+            || _levelSelectUISystem.IsShowing
             || _endGameSystem.isEndGame
             || !IsPositionValid(gridPoint))
         {
@@ -68,10 +71,7 @@ public class BoardSystem : Dependency
 
     public override void GameUpdate(float dt)
     {
-        if (Creator.isPuzzle)
-        {
-            Creator.statsTime += dt;
-        }
+        Creator.statsTime += dt;
     }
 
     private void UpdateTapPoint(float3 gridPoint, bool samePoint)
@@ -220,5 +220,17 @@ public class BoardSystem : Dependency
         float y = (int)screenToWorldPoint.y;
 
         return new(x, y, 0);
+    }
+
+    public float3 GetFloatPointOnBoard()
+    {
+        Vector3 screenPos = Input.mousePosition;
+        screenPos.z = 10;
+        
+        float3 screenToWorldPoint = Creator.mainCam.ScreenToWorldPoint(screenPos);
+
+        screenToWorldPoint.y = math.clamp(screenToWorldPoint.y, Creator.boardSo.minY, Creator.boardSo.maxY);
+
+        return screenToWorldPoint;
     }
 }

@@ -13,8 +13,10 @@ public class TurnSystem : Dependency
     private ChainUISystem _chainUISystem;
     private EndGameSystem _endGameSystem;
     private BoardSystem _boardSystem;
+    private LevelSelectUISystem _levelSelectUISystem;
 
-    private TextMeshProUGUI _turnText;
+    private TextMeshProUGUI _activeSideText;
+    private TextMeshProUGUI _turnsRemainingText;
     
     private PieceColour _currentTurn; //Will always start with White
     
@@ -31,13 +33,19 @@ public class TurnSystem : Dependency
         _chainUISystem = creator.GetDependency<ChainUISystem>();
         _endGameSystem = creator.GetDependency<EndGameSystem>();
         _boardSystem = creator.GetDependency<BoardSystem>();
-
-        Transform turnText = creator.GetFirstObjectWithName(AllTagNames.TurnInfoText);
-        _turnText = turnText.GetComponent<TextMeshProUGUI>();
+        _levelSelectUISystem = creator.GetDependency<LevelSelectUISystem>();
+        
+        Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
+        
+        _activeSideText = creator.GetChildComponentByName<TextMeshProUGUI>(guiBottom.gameObject, AllTagNames.TurnInfoText);
+        
+        _turnsRemainingText = creator.GetChildComponentByName<TextMeshProUGUI>(guiBottom.gameObject, AllTagNames.TurnsRemaining);
         
         //Add 1 because we will lose 1 when the player 
         _turnsRemaining = creator.levelsSo.GetLevelOnLoad().turns;
-         
+        
+        UpdateTurnsRemainingText(_turnsRemaining);
+        
         SwitchTurn(PieceColour.White);
     }
     
@@ -47,7 +55,7 @@ public class TurnSystem : Dependency
         switch (nextTurn)
         {
             case PieceColour.White:
-                if (Creator.blackControlledBy == ControlledBy.Player && Creator.isPuzzle)
+                if (Creator.blackControlledBy == ControlledBy.Player)
                 {
                     if (DecrementTurnsRemaining())
                     {
@@ -56,7 +64,7 @@ public class TurnSystem : Dependency
                     }
                 }
                 
-                if (Creator.whiteControlledBy == ControlledBy.Player && Creator.isPuzzle)
+                if (Creator.whiteControlledBy == ControlledBy.Player)
                 {
                     Creator.statsTurns++;
                 }
@@ -77,7 +85,7 @@ public class TurnSystem : Dependency
                 SetTurnText("White");
                 break;
             case PieceColour.Black:
-                if (Creator.whiteControlledBy == ControlledBy.Player && Creator.isPuzzle)
+                if (Creator.whiteControlledBy == ControlledBy.Player)
                 {
                     if (DecrementTurnsRemaining())
                     {
@@ -116,10 +124,10 @@ public class TurnSystem : Dependency
         _validMovesSystem.HideAllValidMoves();
         _chainUISystem.HideChain();
         
-        Creator.UpdateLevelText();
+        _levelSelectUISystem.UpdateLevelText(Creator.levelsSo.levelOnLoad);
         
         _turnsRemaining = Creator.levelsSo.GetLevelOnLoad().turns;
-        Creator.UpdateTurnsRemainingText(_turnsRemaining);
+        UpdateTurnsRemainingText(_turnsRemaining);
         
         _whiteSystem.SpawnPieces();
         _blackSystem.SpawnPieces();
@@ -133,10 +141,17 @@ public class TurnSystem : Dependency
         SwitchTurn(PieceColour.White);
     }
 
+    private void UpdateTurnsRemainingText(int turnsRemaining)
+    {
+        string plural = turnsRemaining == 1 ? "" : "s";
+        
+        _turnsRemainingText.text = $"{turnsRemaining} Turn{plural}";
+    }
+
     private bool DecrementTurnsRemaining()
     {
         _turnsRemaining--;
-        Creator.UpdateTurnsRemainingText(_turnsRemaining);
+        UpdateTurnsRemainingText(_turnsRemaining);
         return _turnsRemaining == 0;
     }
 
@@ -147,6 +162,6 @@ public class TurnSystem : Dependency
 
     private void SetTurnText(string turnText)
     {
-        _turnText.text = turnText;
+        _activeSideText.text = turnText;
     }
 }

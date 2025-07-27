@@ -8,6 +8,7 @@ public class SettingsUISystem : Dependency
 {
     private AudioSystem _audioSystem;
     private LevelCompleteUISystem _levelCompleteUISystem;
+    private LevelSelectUISystem _levelSelectUISystem;
     private GameOverUISystem _gameOverUISystem;
     private TurnSystem _turnSystem;
     private BoardSystem _boardSystem;
@@ -29,6 +30,7 @@ public class SettingsUISystem : Dependency
 
         _audioSystem = creator.GetDependency<AudioSystem>();
         _levelCompleteUISystem = creator.GetDependency<LevelCompleteUISystem>();
+        _levelSelectUISystem = creator.GetDependency<LevelSelectUISystem>();
         _gameOverUISystem = creator.GetDependency<GameOverUISystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
         _boardSystem = creator.GetDependency<BoardSystem>();
@@ -38,7 +40,11 @@ public class SettingsUISystem : Dependency
         _settingsButton = creator.GetFirstObjectWithName(AllTagNames.SettingsButton).GetComponent<Button>();
         _settingsButton.onClick.AddListener(() =>
         {
-            if (!_settingsGui.gameObject.activeSelf && !_levelCompleteUISystem.isShowing && !_gameOverUISystem.isShowing)
+            _levelSelectUISystem.Hide();
+            
+            if (!_settingsGui.gameObject.activeSelf 
+                && !_levelCompleteUISystem.IsShowing 
+                && !_gameOverUISystem.IsShowing)
             {
                 if (_boardSystem.activeSideSystem.pieceControllerSelected is { } pieceControllerSelected)
                 {
@@ -152,12 +158,12 @@ public class SettingsUISystem : Dependency
         _uiBottomResetButton.gameObject.SetActive(false);
     }
 
-    private void Show()
+    public void Show()
     {
         _settingsGui.gameObject.SetActive(true);
     }
 
-    private void Hide()
+    public void Hide()
     {
         _settingsGui.gameObject.SetActive(false);
     }

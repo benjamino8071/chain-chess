@@ -84,7 +84,7 @@ public class ChainUISystem : Dependency
 
     private bool ProcessSlider(float dt)
     {
-        if (Creator.inputSo._leftMouseButton.action.IsPressed() && (_boardSystem.GetGridPointNearMouse().y > Creator.boardSo.maxY || _mousePosXLastFrame > 0))
+        if (Creator.inputSo.leftMouseButton.action.IsPressed() && (_boardSystem.GetGridPointNearMouse().y > Creator.boardSo.maxY || _mousePosXLastFrame > 0))
         {
             float3 mousePos = Input.mousePosition;
             if (_mousePosXLastFrame > 0)

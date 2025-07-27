@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 [CreateAssetMenu]
 public class Input_SO : ScriptableObject
 {
-    public InputActionReference _leftMouseButton;
-
-    public InputActionReference dragCameraInput;
+    public InputActionReference leftMouseButton;
+    public InputActionReference scrollWheel;
+    public float scrollPositionChange;
 }

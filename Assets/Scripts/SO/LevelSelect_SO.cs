@@ -1,0 +1,8 @@
+using UnityEngine;
+
+[CreateAssetMenu]
+public class LevelSelect_SO : ScriptableObject
+{
+    public float swipeSpeed;
+    public float scrollSpeed;
+}

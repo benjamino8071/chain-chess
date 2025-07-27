@@ -2,7 +2,7 @@ public enum AllTagNames
 {
     ChainParent = 4,
     GameOver = 18,
-    LevelText = 20,
+    LevelButton = 20,
     ResetButton = 26,
     TurnInfoText = 31,
     LevelComplete = 37,
@@ -28,5 +28,7 @@ public enum AllTagNames
     Star1Image = 98,
     Star2Image = 99,
     Star3Image = 100,
-    ScoreText = 101,
+    LevelSelect = 101,
+    LayoutGroup = 102,
+    Pivot = 103,
 }

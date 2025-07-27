@@ -8,7 +8,7 @@ public class GameOverUISystem : Dependency
     private AudioSystem _audioSystem;
     private TurnSystem _turnSystem;
 
-    public bool isShowing => _gameOverUI.gameObject.activeSelf;
+    public bool IsShowing => _gameOverUI.gameObject.activeSelf;
     
     private Transform _gameOverUI;
 
