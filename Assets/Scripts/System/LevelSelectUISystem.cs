@@ -35,7 +35,9 @@ public class LevelSelectUISystem : Dependency
     private PieceController _pieceControllerSelected;
     
     private float3 _desiredPivotLocalPosition;
-    
+
+    private float _pivotLowerBoundY;
+    private float _pivotUpperBoundY;
     private float _mouseScreenPositionYLastFrame;
     
     public override void GameStart(Creator creator)
@@ -51,13 +53,14 @@ public class LevelSelectUISystem : Dependency
 
         _pivot = creator.GetChildComponentByName<Transform>(_levelSelectUI.gameObject, AllTagNames.Pivot);
         
-        RectTransform levelsLayoutGroup =
-            creator.GetChildComponentByName<RectTransform>(_levelSelectUI.gameObject, AllTagNames.LayoutGroup);
-
         _levelInfos = new(creator.levelsSo.AllLevels().Count);
+
+        float yPosition = 400 + creator.levelSelectSo.gap;
+        
         foreach (Level level in creator.levelsSo.AllLevels())
         {
-            GameObject levelInfoGo = creator.InstantiateGameObjectWithParent(creator.levelInfoPrefab, levelsLayoutGroup);
+            GameObject levelInfoGo = creator.InstantiateGameObjectWithParent(creator.levelInfoPrefab, _pivot);
+            
             levelInfoGo.name = $"Level {level.level} Info";
             
             LevelInfo levelInfo = new()
@@ -71,6 +74,9 @@ public class LevelSelectUISystem : Dependency
                 starThreeImage = creator.GetChildComponentByName<Image>(levelInfoGo, AllTagNames.Star3Image)
             };
             
+            yPosition -= creator.levelSelectSo.gap;
+            levelInfo.rect.anchoredPosition = new(0, yPosition);
+
             levelInfo.levelButton.SetText($"Level {level.level}");
             levelInfo.levelButton.onClick.AddListener(() =>
             {
@@ -82,6 +88,11 @@ public class LevelSelectUISystem : Dependency
             
             _levelInfos.Add(levelInfo);
         }
+
+        _pivotLowerBoundY = 50;
+        _pivot.localPosition = new(0, _pivotLowerBoundY);
+        _desiredPivotLocalPosition = _pivot.localPosition;
+        _pivotUpperBoundY = -(yPosition + 400);
         
         Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
         
@@ -159,13 +170,8 @@ public class LevelSelectUISystem : Dependency
         float3 pivotLocalPosition = _desiredPivotLocalPosition;
         float pivotNewLocalY = pivotLocalPosition.y + mousePosYChange;
 
-        //Would prefer to just cache this but Unity is being silly and doesn't set the correct position of y on start.
-        //Probably has something to do with it being under a vertical layout group
-        float upperBound = _levelInfos[^1].rect.localPosition.y + 400;
-
-        pivotLocalPosition.y = math.clamp(pivotNewLocalY, 0, -upperBound);
+        pivotLocalPosition.y = math.clamp(pivotNewLocalY, _pivotLowerBoundY, _pivotUpperBoundY);
         _desiredPivotLocalPosition = pivotLocalPosition;
-        //_pivot.localPosition = pivotLocalPosition;
     }
 
     public void UpdateLevelText(int level)

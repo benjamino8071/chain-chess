@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59d4d660ca830da47aa3315e89820113, type: 3}
   m_Name: Level Select_SO
   m_EditorClassIdentifier: 
+  gap: 200
   swipeSpeed: 150
   scrollSpeed: 5
