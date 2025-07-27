@@ -5,7 +5,6 @@ public enum AllTagNames
     LevelText = 20,
     ResetButton = 26,
     TurnInfoText = 31,
-    Tile = 32,
     LevelComplete = 37,
     Retry = 38,
     NextLevel = 39,
@@ -24,5 +23,6 @@ public enum AllTagNames
     StatsTurns = 93,
     StatsBestTurn = 94,
     StatsTime = 95,
-    ThankYouMessage = 96
+    ThankYouMessage = 96,
+    FOVSlider = 97,
 }

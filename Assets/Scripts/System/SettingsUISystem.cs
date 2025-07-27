@@ -102,7 +102,6 @@ public class SettingsUISystem : Dependency
         {
             doubleTapSwitch.SetOff();
         }
-        
         doubleTapSwitch.onValueChanged.AddListener((isOn) =>
         {
             creator.settingsSo.doubleTap = isOn;
@@ -118,11 +117,17 @@ public class SettingsUISystem : Dependency
         {
             audioSwitch.SetOff();
         }
-        
         audioSwitch.onValueChanged.AddListener((isOn) =>
         {
             Creator.settingsSo.sound = isOn;
             UpdateSoundSetting();
+        });
+
+        Transform fovSliderTf = creator.GetChildObjectByName(_settingsGui.gameObject, AllTagNames.FOVSlider);
+        SliderManager fovSlider = fovSliderTf.GetComponent<SliderManager>();
+        fovSlider.sliderEvent.AddListener((value) =>
+        {
+            Creator.mainCam.fieldOfView = value;
         });
         
         UpdateSoundSetting();
