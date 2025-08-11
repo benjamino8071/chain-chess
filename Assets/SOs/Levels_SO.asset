@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 41
+  levelOnLoad: 42
   sectionOne:
   - level: 1
     turns: 3
@@ -1303,6 +1303,28 @@ MonoBehaviour:
       ability: 3
       position: {x: 4, y: 5}
   - level: 41
+    turns: 30
+    star1Score: 14000
+    star2Score: 7000
+    star3Score: 3500
+    positions:
+    - pieces: 0200000003000000
+      colour: 1
+      ability: 0
+      position: {x: 2, y: 2}
+    - pieces: 02000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 2}
+    - pieces: 05000000
+      colour: 0
+      ability: 3
+      position: {x: 4, y: 5}
+    - pieces: 03000000
+      colour: 0
+      ability: 3
+      position: {x: 3, y: 7}
+  - level: 42
     turns: 14
     star1Score: 24000
     star2Score: 12000
@@ -1328,6 +1350,18 @@ MonoBehaviour:
       colour: 0
       ability: 3
       position: {x: 8, y: 5}
+  - level: 43
+    turns: 30
+    star1Score: 0
+    star2Score: 0
+    star3Score: 0
+    positions: []
+  - level: 44
+    turns: 0
+    star1Score: 0
+    star2Score: 0
+    star3Score: 0
+    positions: []
   sectionSix: []
   sectionSeven: []
   sectionEight: []
