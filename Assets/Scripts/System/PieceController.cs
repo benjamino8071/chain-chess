@@ -50,6 +50,8 @@ public class PieceController : Controller
 
     protected SpriteRenderer _spriteRenderer;
 
+    protected Animator _animator;
+
     protected TMP_Text _captureAmountText;
 
     protected SideSystem _allySideSystem;
@@ -83,12 +85,13 @@ public class PieceController : Controller
         _pieceInstance = Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity).transform;
         
         _pieceInstance.GetComponentInChildren<Canvas>(true).gameObject.SetActive(false);
-
         
         _jumpPosition = _pieceInstance.position;
         
         _spriteRenderer = _pieceInstance.GetComponentInChildren<SpriteRenderer>();
 
+        _animator = _pieceInstance.GetComponentInChildren<Animator>();
+        
         _pieceAbility = pieceAbility;
 
         _controlledBy = controlledBy;
@@ -469,6 +472,11 @@ public class PieceController : Controller
                 break;
         }
         _state = state;
+    }
+
+    public void PlayEnlargeAnimation()
+    {
+        _animator.SetTrigger("enlarge");
     }
 
     private Piece GenerateOtherRandomPiece(Piece piece)

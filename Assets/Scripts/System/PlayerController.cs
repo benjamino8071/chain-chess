@@ -74,10 +74,10 @@ public class PlayerController : PieceController
                 //We win!
                 UpdateSprite(_movesInThisTurn[0]);
             }
-            else if(_enemySideSystem.TryGetCaptureLoverMovingToPosition(_pieceInstance.position, out PieceController playerController))
+            else if(_enemySideSystem.TryGetCaptureLoverMovingToPosition(_pieceInstance.position, out PieceController captureLoverController))
             {
                 _allySideSystem.FreezeSide();
-                _enemySideSystem.SelectCaptureLoverPiece(playerController);
+                _enemySideSystem.SelectCaptureLoverPiece(captureLoverController);
             }
             else
             {

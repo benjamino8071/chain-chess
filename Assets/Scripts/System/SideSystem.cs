@@ -151,6 +151,7 @@ public class SideSystem : Dependency
     {
         _pieceControllerSelected = pieceController;
         pieceController.SetState(PieceController.States.FindingMove);
+        pieceController.PlayEnlargeAnimation();
         _tickCaptureLover = true;
     }
 
