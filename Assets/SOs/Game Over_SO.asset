@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31ef403a655a61a46b7e5fa51d0c040d, type: 3}
+  m_Name: Game Over_SO
+  m_EditorClassIdentifier: 
+  quotes:
+  - quote: In Chess, just as is life, today's bliss might be tomorrow's poison.
+    name: Assiac
+  - quote: Chess is not for the faint-hearted; it absorbs a person entirely.
+    name: Vladimir Kramnik
+  - quote: Chess is the struggle against error.
+    name: Johannes Zukertort
+  - quote: Chess is the gymnasium of the mind.
+    name: Blaise Pascal
+  - quote: The blunders are all there on the board, waiting to be made.
+    name: Savielly Tartakower
+  - quote: When you play chess the idea is to make good moves, not quick ones!
+    name: Jeremy Silman
+  - quote: When you see a good move, look for a better one.
+    name: Emanuel Lasker
+  - quote: Even a poor plan is better than no plan at all.
+    name: Mikhail Chigorin
+  - quote: It's a game, like Monopoly.
+    name: Josh Waitzkin
+  - quote: Sorry Dave, I think you missed it.
+    name: HAL 9000
+  - quote: Come on. C'mon Vishy, make a move!
+    name: Maurice Ashley
+  - quote: Stay flexible. Be ready to transform advantages from one type to another.
+    name: John Nunn
+  - quote: It is not a move, even the best move, that you must seek, but a realizable
+      plan.
+    name: Eugene Znosko-Borovsky
+  - quote: You may learn much more from a game you lose than from a game you win.
+    name: Jose Capablanca
