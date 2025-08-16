@@ -20,6 +20,7 @@ public class PieceController : Controller
         Moving,
         NotInUse,
         Paused,
+        Blocked,
         EndGame
     }
 
@@ -65,7 +66,7 @@ public class PieceController : Controller
     protected States _state;
     protected Vector3 _jumpPosition;
     protected int _piecesCapturedInThisTurn;
-    protected float _sinTime;
+    protected float _timer;
     protected bool _hasMoved;
     protected bool _madeMove;
     
@@ -166,6 +167,9 @@ public class PieceController : Controller
                 break;
             case States.NotInUse:
                 break;
+            case States.Blocked:
+                Blocked(dt);
+                break;
             case States.EndGame:
                 break;
         }
@@ -184,6 +188,16 @@ public class PieceController : Controller
     protected virtual void Moving(float dt)
     {
         
+    }
+
+    protected void Blocked(float dt)
+    {
+        _timer -= dt;
+        if (_timer <= 0)
+        {
+            _allySideSystem.PieceBlocked(this);
+            SetState(States.NotInUse);
+        }
     }
 
     public void AddCapturedPiece(Piece piece)
@@ -221,8 +235,9 @@ public class PieceController : Controller
             }
             else
             {
-                //Locked!
-                _allySideSystem.PieceLocked(this);
+                //Blocked!
+                SetState(States.Blocked);
+                //_allySideSystem.PieceBlocked(this);
             }
         }
         else
@@ -469,6 +484,10 @@ public class PieceController : Controller
                 }
                 _piecesCapturedInThisTurn = 0; //For next time the player uses this piece
                 _hasMoved = false;
+                break;
+            case States.Blocked:
+                _timer = 1.12f; //Shrink animation length
+                _animator.SetTrigger("shrink");
                 break;
         }
         _state = state;

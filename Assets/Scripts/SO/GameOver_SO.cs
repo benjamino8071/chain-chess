@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = System.Random;
 
@@ -8,11 +9,17 @@ public class GameOver_SO : ScriptableObject
 {
     public List<Quote> quotes;
 
+    [SerializeField] private int _previousIdx;
+    
     public Quote GetRandomQuote()
     {
+        List<Quote> tmp = quotes.ToList();
+        tmp.RemoveAt(_previousIdx);
+        
         Random rnd = new(DateTime.Now.Millisecond);
-        int idx = rnd.Next(quotes.Count);
-        return quotes[idx];
+        int idx = rnd.Next(tmp.Count);
+        _previousIdx = idx;
+        return tmp[idx];
     }
 }
 

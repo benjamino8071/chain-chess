@@ -193,11 +193,11 @@ public class SideSystem : Dependency
         }
     }
 
-    public void PieceLocked(PieceController pieceController)
+    public void PieceBlocked(PieceController pieceController)
     {
         _pieceControllers.Remove(pieceController);
         
-        pieceController.SetState(PieceController.States.NotInUse);
+        //pieceController.SetState(PieceController.States.Blocked);
         
         if (_pieceControllers.Count == 0)
         {

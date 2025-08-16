@@ -70,7 +70,7 @@ public class GameOverUISystem : Dependency
             }
             case GameOverReason.Locked:
             {
-                _titleText.text = "Locked";
+                _titleText.text = "Blocked";
                 break;
             }
         }

@@ -12,6 +12,7 @@ public class LevelSelectUISystem : Dependency
     private SettingsUISystem _settingsUISystem;
     private TurnSystem _turnSystem;
     private LevelCompleteUISystem _levelCompleteUISystem;
+    private GameOverUISystem _gameOverUISystem;
     
     public bool IsShowing => _levelSelectUI.gameObject.activeSelf;
     
@@ -50,6 +51,7 @@ public class LevelSelectUISystem : Dependency
         _settingsUISystem = creator.GetDependency<SettingsUISystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
         _levelCompleteUISystem = creator.GetDependency<LevelCompleteUISystem>();
+        _gameOverUISystem = creator.GetDependency<GameOverUISystem>();
         
         _levelSelectUI = creator.GetFirstObjectWithName(AllTagNames.LevelSelect);
 
@@ -85,6 +87,7 @@ public class LevelSelectUISystem : Dependency
                 Creator.levelsSo.levelOnLoad = levelInfo.level.level;
                 _turnSystem.LoadLevelRuntime();
                 _levelCompleteUISystem.Hide();
+                _gameOverUISystem.Hide();
                 
                 Hide();
             });

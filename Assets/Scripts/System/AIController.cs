@@ -56,16 +56,16 @@ public class AIController : PieceController
     {
         if (_pieceInstance.position != _jumpPosition)
         {
-            _sinTime += dt * Creator.piecesSo.pieceSpeed;
-            _sinTime = Mathf.Clamp(_sinTime, 0f, Mathf.PI);
-            float t = Evaluate(_sinTime);
+            _timer += dt * Creator.piecesSo.pieceSpeed;
+            _timer = Mathf.Clamp(_timer, 0f, Mathf.PI);
+            float t = Evaluate(_timer);
             _pieceInstance.position = Vector3.Lerp(_pieceInstance.position, _jumpPosition, t);
         }
                 
         if (_pieceInstance.position == _jumpPosition)
         {
             _pieceInstance.position = math.round(_pieceInstance.position);
-            _sinTime = 0;
+            _timer = 0;
             
             _movesInThisTurn.RemoveAt(0);
             if (_boardSystem.TryCaptureEnemyPiece(_pieceInstance.position, _enemyColour, this))
