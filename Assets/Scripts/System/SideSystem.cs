@@ -157,10 +157,18 @@ public class SideSystem : Dependency
 
     public void DeselectPiece()
     {
-        if (_pieceControllerSelected is { movesRemaining: 0 })
+        if (_pieceControllerSelected is { } pieceController)
         {
-            _pieceControllerSelected?.SetState(PieceController.States.WaitingForTurn);
+            if (pieceController.state is PieceController.States.Blocked or PieceController.States.Moving)
+            {
+                return;
+            }
+            if (pieceController.movesRemaining == 0)
+            {
+                _pieceControllerSelected?.SetState(PieceController.States.WaitingForTurn);
+            }
         }
+        
         _pieceControllerSelected = null;
         _validMovesSystem.HideAllValidMoves();
     }

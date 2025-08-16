@@ -486,7 +486,7 @@ public class PieceController : Controller
                 _hasMoved = false;
                 break;
             case States.Blocked:
-                _timer = 1.12f; //Shrink animation length
+                _timer = 1.6f; //Shrink animation length
                 _animator.SetTrigger("shrink");
                 break;
         }
