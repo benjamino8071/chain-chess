@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using SystemRandom = System.Random;
 
 public class SideSystem : Dependency
 {
@@ -259,6 +261,7 @@ public class SideSystem : Dependency
         {
             _pieceControllerSelected = _piecesToMoveThisTurn[0];
             
+            _pieceControllerSelected.PlayEnlargeAnimation();
             _pieceControllerSelected.SetState(PieceController.States.FindingMove);
         }
     }
@@ -267,7 +270,17 @@ public class SideSystem : Dependency
     {
         _piecesToMoveThisTurn = new(_pieceControllers.Count);
         
-        if (SelectRandomPiece() is { } randomPiece)
+        /*
+         * Try to find a piece that can capture the other player
+         */
+        SystemRandom rnd = new(DateTime.Now.Millisecond);
+        bool findPieceThatCanCapture = rnd.Next(1, 100) <= Creator.piecesSo.capturePlayerOdds;
+        
+        if(findPieceThatCanCapture && FindPieceThatCanCapture() is {} pieceThatCanCapture)
+        {
+            _piecesToMoveThisTurn.Add(pieceThatCanCapture);
+        }
+        else if (SelectRandomPiece() is { } randomPiece)
         {
             _piecesToMoveThisTurn.Add(randomPiece);
         }
@@ -288,6 +301,7 @@ public class SideSystem : Dependency
         {
             _pieceControllerSelected = _piecesToMoveThisTurn[0];
 
+            _pieceControllerSelected.PlayEnlargeAnimation();
             _pieceControllerSelected.SetState(PieceController.States.FindingMove);
         }
     }
@@ -303,6 +317,33 @@ public class SideSystem : Dependency
         int enemySelectedIndex = Random.Range(0, movablePieceControllers.Count);
         
         return movablePieceControllers[enemySelectedIndex];
+    }
+
+    private PieceController FindPieceThatCanCapture()
+    {
+        List<PieceController> enemyPieceControllers = _enemySideSystem.MovablePieceControllers();
+        
+        List<PieceController> movablePieceControllers = MovablePieceControllers();
+
+        foreach (PieceController pieceController in movablePieceControllers)
+        {
+            List<Vector3> validMoves = pieceController.GetAllValidMovesOfCurrentPiece();
+
+            foreach (Vector3 validMove in validMoves)
+            {
+                //Don't need to fear this inner for loop as it will basically always have 1 piece
+                //At least for the puzzle levels
+                foreach (PieceController enemyPieceController in enemyPieceControllers)
+                {
+                    if (enemyPieceController.piecePos == validMove)
+                    {
+                        return pieceController;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     private List<PieceController> MovablePieceControllers()

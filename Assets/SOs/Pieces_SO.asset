@@ -28,3 +28,4 @@ MonoBehaviour:
   glitchedMat: {fileID: 2100000, guid: 5afb5ad234e5f7b4e924c69aace4499c, type: 2}
   captureLoverMat: {fileID: 2100000, guid: 1e155935f67404c4b87a00eebdc7a534, type: 2}
   aiThinkingTime: 0.6
+  capturePlayerOdds: 80

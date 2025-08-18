@@ -24,6 +24,8 @@ public class PieceController : Controller
         EndGame
     }
 
+    public Piece currentPiece => _currentPiece;
+    
     public PieceAbility pieceAbility => _pieceAbility;
     
     public PieceColour pieceColour => _pieceColour;

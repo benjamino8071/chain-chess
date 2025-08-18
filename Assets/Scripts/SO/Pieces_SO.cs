@@ -24,4 +24,5 @@ public class Pieces_SO : ScriptableObject
     public Material captureLoverMat;
 
     public float aiThinkingTime;
+    [Range(1,100)] public int capturePlayerOdds;
 }
