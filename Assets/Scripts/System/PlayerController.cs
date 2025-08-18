@@ -36,16 +36,11 @@ public class PlayerController : PieceController
             {
                 MovePiece(positionRequested);
             }
-            else if(hasMoved)
-            {
-                _validMovesSystem.UpdateValidMoves(GetAllValidMovesOfCurrentPiece());
-                SetState(States.FindingMove);
-            }
             else
             {
-                //Later in LevSideSystem.GameUpdate we check this state and if it equals, then we un-select
-                SetState(States.FindingMove);
+                _allySideSystem.DeselectPiece();
             }
+            
             _positionRequested = Vector3.zero; //For next time the player double taps
         }
     }

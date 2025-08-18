@@ -27,7 +27,7 @@ public class ValidMovesSystem : Dependency
     {
         HideAllValidMoves();
 
-        _validMovesVisuals[0].position = validMove;
+        _validMovesVisuals[0].position = validMove + new Vector3(0.5f,0.5f,0);
         _validMovesVisuals[0].gameObject.SetActive(true);
     }
 

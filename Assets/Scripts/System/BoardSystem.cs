@@ -53,6 +53,27 @@ public class BoardSystem : Dependency
 
     public override void GameEarlyUpdate(float dt)
     {
+        /*float3 gridPoint = GetGridPointNearMouse();
+        
+        if (!Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame()
+            || _settingsUISystem.IsShowing
+            || _levelSelectUISystem.IsShowing
+            || _endGameSystem.isEndGame
+            || !IsPositionValid(gridPoint))
+        {
+            return;
+        }
+
+        Creator.boardSo.hideMainMenuTrigger = true;
+        
+        bool samePoint = math.distance(gridPoint, _tapPoint.position) < 0.001f;
+        UpdateTapPoint(gridPoint, samePoint);
+        UpdateChain(gridPoint, samePoint);
+        UpdateSelectedPiece(gridPoint, samePoint);*/
+    }
+
+    public override void GameUpdate(float dt)
+    {
         float3 gridPoint = GetGridPointNearMouse();
         
         if (!Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame()
@@ -70,10 +91,7 @@ public class BoardSystem : Dependency
         UpdateTapPoint(gridPoint, samePoint);
         UpdateChain(gridPoint, samePoint);
         UpdateSelectedPiece(gridPoint, samePoint);
-    }
-
-    public override void GameUpdate(float dt)
-    {
+        
         Creator.statsTime += dt;
     }
 
