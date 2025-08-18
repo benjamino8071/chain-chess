@@ -27,6 +27,9 @@ public class EndGameSystem : Dependency
 
     public void SetEndGame(PieceColour winningColour, GameOverReason gameOverReason)
     {
+        _boardSystem.activeSideSystem.ForceDeselectPiece();
+        _boardSystem.inactiveSideSystem.ForceDeselectPiece();
+        
         if (Creator.whiteControlledBy == ControlledBy.Player && Creator.blackControlledBy == ControlledBy.AI)
         {
             if ((Creator.whiteControlledBy == ControlledBy.Player && winningColour == PieceColour.White)

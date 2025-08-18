@@ -77,7 +77,7 @@ public class PlayerController : PieceController
             else if(_enemySideSystem.TryGetCaptureLoverMovingToPosition(_pieceInstance.position, out PieceController captureLoverController))
             {
                 _allySideSystem.FreezeSide();
-                _enemySideSystem.SelectCaptureLoverPiece(captureLoverController);
+                _enemySideSystem.SelectCaptureLoverPiece(captureLoverController, _pieceInstance.position);
             }
             else
             {

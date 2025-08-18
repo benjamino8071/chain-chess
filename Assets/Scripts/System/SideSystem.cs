@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,6 +11,7 @@ public class SideSystem : Dependency
     private ChainUISystem _chainUISystem;
     private EndGameSystem _endGameSystem;
     protected SideSystem _enemySideSystem;
+    private SettingsUISystem _settingsUISystem;
 
     public PieceController pieceControllerSelected => _pieceControllerSelected;
     
@@ -37,6 +39,7 @@ public class SideSystem : Dependency
         _turnSystem = creator.GetDependency<TurnSystem>();
         _chainUISystem = creator.GetDependency<ChainUISystem>();
         _endGameSystem = creator.GetDependency<EndGameSystem>();
+        _settingsUISystem = creator.GetDependency<SettingsUISystem>();
         
         SpawnPieces();
     }
@@ -140,6 +143,16 @@ public class SideSystem : Dependency
     public void SelectPiece(PieceController pieceController)
     {
         _pieceControllerSelected = pieceController;
+        
+        List<Vector3> validMoves = pieceController.GetAllValidMovesOfCurrentPiece();
+        if (validMoves.Count == 0)
+        {
+            Debug.Log("THIS PIECE CAN'T MOVE");
+            //PieceBlocked(pieceController);
+            pieceController.SetState(PieceController.States.Blocked);
+            return;
+        }
+        
         pieceController.SetState(PieceController.States.FindingMove);
         _validMovesSystem.UpdateValidMoves(pieceController.GetAllValidMovesOfCurrentPiece());
     }
@@ -147,10 +160,10 @@ public class SideSystem : Dependency
     /// <summary>
     /// This just helps tick the enemy piece that's going to capture the player
     /// </summary>
-    public void SelectCaptureLoverPiece(PieceController pieceController)
+    public void SelectCaptureLoverPiece(PieceController pieceController, float3 movePosition)
     {
         _pieceControllerSelected = pieceController;
-        pieceController.SetState(PieceController.States.FindingMove);
+        pieceController.ForceMove(movePosition);
         pieceController.PlayEnlargeAnimation();
         _tickCaptureLover = true;
     }
@@ -173,9 +186,18 @@ public class SideSystem : Dependency
         _validMovesSystem.HideAllValidMoves();
     }
 
+    public void ForceDeselectPiece()
+    {
+        _pieceControllerSelected = null;
+    }
+
     public void FreezeSide()
     {
-        DeselectPiece();
+        _pieceControllerSelected?.SetState(PieceController.States.WaitingForTurn);
+        _pieceControllerSelected = null;
+        _validMovesSystem.HideAllValidMoves();
+        
+        //DeselectPiece();
         _frozen = true;
     }
     

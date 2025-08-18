@@ -67,6 +67,7 @@ public class PieceController : Controller
     protected Vector3 _jumpPosition;
     protected int _piecesCapturedInThisTurn;
     protected float _timer;
+    protected float _thinkingTimer;
     protected bool _hasMoved;
     protected bool _madeMove;
     
@@ -453,49 +454,84 @@ public class PieceController : Controller
 
     public void SetState(States state)
     {
-        if (_state is States.NotInUse or States.EndGame)
+        switch (_state)
         {
-            return;
-        }
-        
-        switch (state)
-        {
-            case States.NotInUse:
-                _pieceInstance.gameObject.SetActive(false);
-                break;
-            case States.FindingMove:
-                break;
             case States.WaitingForTurn:
-                if (_movesInThisTurn.Count == 0)
+            case States.FindingMove:
+            case States.ConfirmingMove:
+            case States.Moving:
+            case States.Paused:
+            {
+                switch (state)
                 {
-                    if (_pieceAbility == PieceAbility.Glitched)
-                    {
-                        for (int i = 0; i < _capturedPieces.Count; i++)
+                    case States.NotInUse:
+                        _pieceInstance.gameObject.SetActive(false);
+                        break;
+                    case States.FindingMove:
+                        break;
+                    case States.WaitingForTurn:
+                        if (_movesInThisTurn.Count == 0)
                         {
-                            _capturedPieces[i] = GenerateOtherRandomPiece(_capturedPieces[i]);
-                        }
-                    }
+                            if (_pieceAbility == PieceAbility.Glitched)
+                            {
+                                for (int i = 0; i < _capturedPieces.Count; i++)
+                                {
+                                    _capturedPieces[i] = GenerateOtherRandomPiece(_capturedPieces[i]);
+                                }
+                            }
                     
-                    UpdateSprite(_capturedPieces[0]);
-                    foreach (Piece capturedPiece in _capturedPieces)
+                            UpdateSprite(_capturedPieces[0]);
+                            foreach (Piece capturedPiece in _capturedPieces)
+                            {
+                                _movesInThisTurn.Add(capturedPiece);
+                            }
+                        }
+                        _piecesCapturedInThisTurn = 0; //For next time the player uses this piece
+                        _hasMoved = false;
+                        break;
+                    case States.Blocked:
+                        _timer = 1.6f; //Shrink animation length
+                        _animator.SetTrigger("shrink");
+                        break;
+                }
+                break;
+            }
+            case States.Blocked:
+            {
+                switch (state)
+                {
+                    case States.NotInUse:
                     {
-                        _movesInThisTurn.Add(capturedPiece);
+                        _pieceInstance.gameObject.SetActive(false);
+                        break;
+                    }
+                    case States.EndGame:
+                    {
+                        break;
                     }
                 }
-                _piecesCapturedInThisTurn = 0; //For next time the player uses this piece
-                _hasMoved = false;
                 break;
-            case States.Blocked:
-                _timer = 1.6f; //Shrink animation length
-                _animator.SetTrigger("shrink");
+            }
+            case States.NotInUse:
+            case States.EndGame:
+            {
                 break;
+            }
         }
+        
         _state = state;
     }
 
     public void PlayEnlargeAnimation()
     {
         _animator.SetTrigger("enlarge");
+    }
+
+    public void ForceMove(float3 movePosition)
+    {
+        _thinkingTimer = Creator.piecesSo.aiThinkingTime;
+        _jumpPosition = movePosition;
+        SetState(States.Moving);
     }
 
     private Piece GenerateOtherRandomPiece(Piece piece)

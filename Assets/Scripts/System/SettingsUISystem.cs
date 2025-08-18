@@ -1,5 +1,6 @@
 using Michsky.MUIP;
 using MoreMountains.Tools;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -41,6 +42,14 @@ public class SettingsUISystem : Dependency
         _settingsButton.onClick.AddListener(() =>
         {
             _levelSelectUISystem.Hide();
+            
+            if (_boardSystem.activeSideSystem.pieceControllerSelected is { } pieceController
+                && (pieceController.state == PieceController.States.Blocked 
+                    || pieceController.state == PieceController.States.NotInUse
+                    || pieceController.state == PieceController.States.EndGame))
+            {
+                return;
+            }
             
             if (!_settingsGui.gameObject.activeSelf 
                 && !_levelCompleteUISystem.IsShowing 
@@ -133,7 +142,8 @@ public class SettingsUISystem : Dependency
         SliderManager fovSlider = fovSliderTf.GetComponent<SliderManager>();
         fovSlider.sliderEvent.AddListener((value) =>
         {
-            Creator.mainCam.fieldOfView = value;
+            float fov = fovSlider.mainSlider.maxValue - value + fovSlider.mainSlider.minValue;
+            Creator.mainCam.fieldOfView = fov;
         });
         
         UpdateSoundSetting();

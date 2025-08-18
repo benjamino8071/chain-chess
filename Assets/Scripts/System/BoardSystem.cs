@@ -15,7 +15,10 @@ public class BoardSystem : Dependency
     public SideSystem activeSideSystem =>_turnSystem.CurrentTurn() == PieceColour.White 
         ? _whiteSystem 
         : _blackSystem;
-
+    public SideSystem inactiveSideSystem =>_turnSystem.CurrentTurn() == PieceColour.White 
+        ? _blackSystem 
+        : _whiteSystem;
+    
     private List<float3> _validTiles;
     
     private Transform _tapPoint;

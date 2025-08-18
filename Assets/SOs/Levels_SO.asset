@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 6
+  levelOnLoad: 49
   sectionOne:
   - level: 1
     turns: 3
@@ -1351,6 +1351,40 @@ MonoBehaviour:
       ability: 3
       position: {x: 8, y: 5}
   - level: 43
+    turns: 13
+    star1Score: 120000
+    star2Score: 60000
+    star3Score: 30000
+    positions:
+    - pieces: 05000000
+      colour: 1
+      ability: 0
+      position: {x: 8, y: 1}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 7}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 4, y: 7}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 6, y: 7}
+    - pieces: 03000000
+      colour: 0
+      ability: 3
+      position: {x: 3, y: 5}
+    - pieces: 03000000
+      colour: 0
+      ability: 3
+      position: {x: 5, y: 5}
+    - pieces: 05000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 3}
+  - level: 44
     turns: 30
     star1Score: 40000
     star2Score: 20000
@@ -1376,7 +1410,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 8, y: 8}
-  - level: 44
+  - level: 45
     turns: 27
     star1Score: 36000
     star2Score: 18000
@@ -1406,11 +1440,11 @@ MonoBehaviour:
       colour: 0
       ability: 3
       position: {x: 5, y: 6}
-  - level: 45
+  - level: 46
     turns: 18
-    star1Score: 0
-    star2Score: 0
-    star3Score: 0
+    star1Score: 20000
+    star2Score: 10000
+    star3Score: 5000
     positions:
     - pieces: 05000000
       colour: 1
@@ -1436,30 +1470,160 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 4, y: 3}
-  - level: 46
-    turns: 0
-    star1Score: 0
-    star2Score: 0
-    star3Score: 0
-    positions: []
   - level: 47
-    turns: 0
-    star1Score: 0
-    star2Score: 0
-    star3Score: 0
-    positions: []
+    turns: 19
+    star1Score: 80000
+    star2Score: 40000
+    star3Score: 20000
+    positions:
+    - pieces: 06000000
+      colour: 1
+      ability: 0
+      position: {x: 1, y: 3}
+    - pieces: 04000000
+      colour: 0
+      ability: 2
+      position: {x: 1, y: 2}
+    - pieces: 02000000
+      colour: 0
+      ability: 3
+      position: {x: 5, y: 1}
+    - pieces: 04000000
+      colour: 0
+      ability: 1
+      position: {x: 7, y: 1}
+    - pieces: 01000000
+      colour: 0
+      ability: 0
+      position: {x: 3, y: 4}
+    - pieces: 01000000
+      colour: 0
+      ability: 3
+      position: {x: 3, y: 5}
+    - pieces: 03000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 5}
+    - pieces: 02000000
+      colour: 0
+      ability: 3
+      position: {x: 4, y: 6}
+    - pieces: 06000000
+      colour: 0
+      ability: 0
+      position: {x: 3, y: 8}
+    - pieces: 0500000006000000
+      colour: 0
+      ability: 1
+      position: {x: 7, y: 4}
+    - pieces: 04000000
+      colour: 0
+      ability: 2
+      position: {x: 2, y: 2}
   - level: 48
-    turns: 0
-    star1Score: 0
-    star2Score: 0
-    star3Score: 0
-    positions: []
+    turns: 27
+    star1Score: 160000
+    star2Score: 80000
+    star3Score: 40000
+    positions:
+    - pieces: 01000000
+      colour: 1
+      ability: 0
+      position: {x: 5, y: 4}
+    - pieces: 04000000
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 5}
+    - pieces: 04000000
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 5}
+    - pieces: 02000000
+      colour: 0
+      ability: 1
+      position: {x: 4, y: 1}
+    - pieces: 02000000
+      colour: 0
+      ability: 3
+      position: {x: 3, y: 2}
+    - pieces: 02000000
+      colour: 0
+      ability: 2
+      position: {x: 5, y: 2}
+    - pieces: 03000000
+      colour: 0
+      ability: 3
+      position: {x: 2, y: 6}
+    - pieces: 03000000
+      colour: 0
+      ability: 1
+      position: {x: 1, y: 7}
+    - pieces: 03000000
+      colour: 0
+      ability: 2
+      position: {x: 3, y: 7}
+    - pieces: 01000000
+      colour: 0
+      ability: 3
+      position: {x: 8, y: 6}
+    - pieces: 01000000
+      colour: 0
+      ability: 2
+      position: {x: 7, y: 7}
+    - pieces: 01000000
+      colour: 0
+      ability: 1
+      position: {x: 8, y: 8}
   - level: 49
-    turns: 0
-    star1Score: 0
-    star2Score: 0
-    star3Score: 0
-    positions: []
+    turns: 23
+    star1Score: 120000
+    star2Score: 60000
+    star3Score: 30000
+    positions:
+    - pieces: 02000000
+      colour: 1
+      ability: 0
+      position: {x: 5, y: 1}
+    - pieces: 02000000
+      colour: 0
+      ability: 3
+      position: {x: 2, y: 1}
+    - pieces: 03000000
+      colour: 0
+      ability: 3
+      position: {x: 6, y: 2}
+    - pieces: 03000000
+      colour: 0
+      ability: 3
+      position: {x: 5, y: 3}
+    - pieces: 02000000
+      colour: 0
+      ability: 3
+      position: {x: 4, y: 4}
+    - pieces: 03000000
+      colour: 0
+      ability: 3
+      position: {x: 2, y: 6}
+    - pieces: 02000000
+      colour: 0
+      ability: 3
+      position: {x: 1, y: 8}
+    - pieces: 02000000
+      colour: 0
+      ability: 3
+      position: {x: 6, y: 7}
+    - pieces: 06000000
+      colour: 0
+      ability: 3
+      position: {x: 8, y: 8}
+    - pieces: 02000000
+      colour: 0
+      ability: 3
+      position: {x: 7, y: 6}
+    - pieces: 03000000
+      colour: 0
+      ability: 3
+      position: {x: 8, y: 5}
   sectionSix: []
   sectionSeven: []
   sectionEight: []

@@ -5,8 +5,6 @@ using Random = UnityEngine.Random;
 
 public class AIController : PieceController
 {
-    private float _thinkingTimer;
-
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
@@ -54,6 +52,12 @@ public class AIController : PieceController
 
     protected override void Moving(float dt)
     {
+        _thinkingTimer -= dt;
+        if (_thinkingTimer > 0 || _movesInThisTurn.Count == 0)
+        {
+            return;
+        }
+        
         if (_pieceInstance.position != _jumpPosition)
         {
             _timer += dt * Creator.piecesSo.pieceSpeed;

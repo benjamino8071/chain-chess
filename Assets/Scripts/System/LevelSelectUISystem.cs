@@ -96,9 +96,12 @@ public class LevelSelectUISystem : Dependency
         }
 
         _pivotLowerBoundY = 50;
-        _pivot.localPosition = new(0, _pivotLowerBoundY);
-        _desiredPivotLocalPosition = _pivot.localPosition;
         _pivotUpperBoundY = -(yPosition + 400);
+        
+        float startingYPos = _pivotLowerBoundY + ((creator.levelsSo.levelOnLoad - 1) * 200);
+        startingYPos = math.clamp(startingYPos, _pivotLowerBoundY, _pivotUpperBoundY);
+        _pivot.localPosition = new(0, startingYPos);
+        _desiredPivotLocalPosition = _pivot.localPosition;
         
         Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
         
@@ -106,6 +109,14 @@ public class LevelSelectUISystem : Dependency
         _levelSelectButton.onClick.AddListener(() =>
         {
             _settingsUISystem.Hide();
+            
+            if (_boardSystem.activeSideSystem.pieceControllerSelected is { } pieceController
+                && (pieceController.state == PieceController.States.Blocked 
+                    || pieceController.state == PieceController.States.NotInUse
+                    || pieceController.state == PieceController.States.EndGame))
+            {
+                return;
+            }
             
             if (!_levelSelectUI.gameObject.activeSelf)
             {
@@ -189,7 +200,7 @@ public class LevelSelectUISystem : Dependency
     {
         _levelSelectUI.gameObject.SetActive(true);
     }
-
+    
     public void Hide()
     {
         _levelSelectUI.gameObject.SetActive(false);

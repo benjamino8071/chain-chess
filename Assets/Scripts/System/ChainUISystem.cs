@@ -82,9 +82,20 @@ public class ChainUISystem : Dependency
         _chainParent.localPosition = lerpPos;
     }
 
+    private bool _move;
+
     private bool ProcessSlider(float dt)
     {
-        if (Creator.inputSo.leftMouseButton.action.IsPressed() && (_boardSystem.GetGridPointNearMouse().y > Creator.boardSo.maxY || _mousePosXLastFrame > 0))
+        if(Creator.inputSo.leftMouseButton.action.WasPressedThisFrame() && (_boardSystem.GetGridPointNearMouse().y > Creator.boardSo.maxY || _mousePosXLastFrame > 0))
+        {
+            _move = true;
+        }
+        else if (Creator.inputSo.leftMouseButton.action.WasReleasedThisFrame())
+        {
+            _move = false;
+        }
+        
+        if (_move)
         {
             float3 mousePos = Input.mousePosition;
             if (_mousePosXLastFrame > 0)
