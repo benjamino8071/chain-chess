@@ -75,15 +75,20 @@ public class SideSystem : Dependency
         {
             if (pieceSpawnData.colour == _allyPieceColour)
             {
-                PieceController playerController = controlledBy == ControlledBy.Player 
-                    ? new PlayerController() : new AIController();
-                playerController.GameStart(Creator);
-                playerController.Init(pieceSpawnData.position, pieceSpawnData.pieces, _allyPieceColour, pieceSpawnData.ability, 
-                    controlledBy, this, _enemySideSystem);
-            
-                _pieceControllers.Add(playerController);
+                CreatePiece(pieceSpawnData.position, pieceSpawnData.pieces, pieceSpawnData.ability);
             }
         }
+    }
+
+    public void CreatePiece(Vector2 position, List<Piece> pieceMoves, PieceAbility ability)
+    {
+        PieceController playerController = controlledBy == ControlledBy.Player 
+            ? new PlayerController() : new AIController();
+        playerController.GameStart(Creator);
+        playerController.Init(position, pieceMoves, _allyPieceColour, ability, 
+            controlledBy, this, _enemySideSystem);
+            
+        _pieceControllers.Add(playerController);
     }
 
     public List<Vector3> PiecePositions()

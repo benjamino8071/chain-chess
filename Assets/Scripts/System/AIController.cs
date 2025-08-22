@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -40,6 +41,14 @@ public class AIController : PieceController
                 int chosenPositionIndex = Random.Range(0, possiblePositions.Count);
                 _jumpPosition = possiblePositions[chosenPositionIndex];
             }
+
+            _startPosition = _pieceInstance.position;
+            if (_pieceAbility == PieceAbility.LeaveBehind)
+            {
+                Piece randomPiece = Creator.piecesSo.GetRandomPiece();
+                Debug.Log("PIECE: "+randomPiece);
+                _allySideSystem.CreatePiece(_pieceInstance.position, new(){randomPiece}, _pieceAbility);
+            }
             
             _audioSystem.PlayPieceMoveSfx(1);
             SetState(States.Moving);
@@ -79,9 +88,61 @@ public class AIController : PieceController
             }
             else
             {
+                if (_pieceAbility == PieceAbility.TileDestroyer)
+                {
+                    //Find out the x tiles between start position and end position
+
+                    Vector2Int startPos = new((int)_startPosition.x, (int)_startPosition.y);
+                    Vector2Int jumpPos = new((int)_jumpPosition.x, (int)_jumpPosition.y);
+
+                    List<Vector2Int> intermediaryPositions = GetPath(startPos, jumpPos);
+                    
+                    List<Vector3> tilesCrossed = new(1 + intermediaryPositions.Count)
+                    {
+                        _startPosition
+                    };
+                    foreach (Vector2Int intermediaryPosition in intermediaryPositions)
+                    {
+                        Vector3 pos = new(intermediaryPosition.x, intermediaryPosition.y);
+                        
+                        tilesCrossed.Add(pos);
+                    }
+                    
+                    _invalidMovesSystem.AddMoves(tilesCrossed);
+                }
+                
                 SetToNextMove();
                 _thinkingTimer = Creator.piecesSo.aiThinkingTime;
             }
         }
+    }
+    
+    public List<Vector2Int> GetPath(Vector2Int start, Vector2Int end)
+    {
+        List<Vector2Int> path = new List<Vector2Int>();
+
+        int dx = end.x - start.x;
+        int dy = end.y - start.y;
+
+        // Determine step direction
+        int stepX = dx == 0 ? 0 : (dx > 0 ? 1 : -1);
+        int stepY = dy == 0 ? 0 : (dy > 0 ? 1 : -1);
+
+        // Make sure it's a valid straight or diagonal move
+        if (dx != 0 && dy != 0 && Mathf.Abs(dx) != Mathf.Abs(dy))
+        {
+            Debug.LogWarning("Invalid chess move: not straight or diagonal");
+            return path;
+        }
+
+        Vector2Int current = start + new Vector2Int(stepX, stepY);
+
+        while (current != end)
+        {
+            path.Add(current);
+            current += new Vector2Int(stepX, stepY);
+        }
+
+        return path;
     }
 }

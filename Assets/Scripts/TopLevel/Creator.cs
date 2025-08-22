@@ -21,6 +21,7 @@ public class Creator : MonoBehaviour
     [Header("Prefabs")]
     public GameObject piecePrefab;
     public GameObject validPositionPrefab;
+    public GameObject invalidPositionPrefab;
     public GameObject selectedBackgroundPrefab;
     public GameObject levelInfoPrefab;
 
@@ -82,6 +83,7 @@ public class Creator : MonoBehaviour
     {
         _dependencies.Add(new LevelSelectUISystem());
         _dependencies.Add(new ValidMovesSystem());
+        _dependencies.Add(new InvalidMovesSystem());
         _dependencies.Add(new AudioSystem());
         _dependencies.Add(new ChainUISystem());
         _dependencies.Add(new LevelCompleteUISystem());

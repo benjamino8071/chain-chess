@@ -8217,7 +8217,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 67.65
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -19479,7 +19479,7 @@ Transform:
   m_GameObject: {fileID: 1982012398}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 386.79108, y: 594.4421, z: 1.9541004}
+  m_LocalPosition: {x: -10, y: -10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20100,6 +20100,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2034367401}
   m_CullTransparentMesh: 1
+--- !u!1 &2047528012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2047528014}
+  - component: {fileID: 2047528013}
+  m_Layer: 0
+  m_Name: Invalid_Moves_Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2047528013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2047528012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5cdb183261944187ad94ed1727d88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: 104
+--- !u!4 &2047528014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2047528012}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10, y: -10, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2051011534
 GameObject:
   m_ObjectHideFlags: 0
@@ -39181,6 +39226,7 @@ MonoBehaviour:
   levelSelectSo: {fileID: 11400000, guid: fedd3b37489edca44a98aa40b47d12e3, type: 2}
   piecePrefab: {fileID: 6726216011626115281, guid: 54d8d23ee5a47e34db26762c882afd96, type: 3}
   validPositionPrefab: {fileID: 8566535331156600734, guid: b92041067af09e941af178138d581f78, type: 3}
+  invalidPositionPrefab: {fileID: 8566535331156600734, guid: be7aa1440d56891428d79a4af3060b44, type: 3}
   selectedBackgroundPrefab: {fileID: 8566535331156600734, guid: 5856883aea817af4aa24fb2cb1d948e5, type: 3}
   levelInfoPrefab: {fileID: 5137343936622446410, guid: 36b683f3132fa704aa66a80d0911a324, type: 3}
   mainCam: {fileID: 198807215}
@@ -41778,4 +41824,5 @@ SceneRoots:
   - {fileID: 1267706847}
   - {fileID: 1597102580}
   - {fileID: 1982012400}
+  - {fileID: 2047528014}
   - {fileID: 1725590413}

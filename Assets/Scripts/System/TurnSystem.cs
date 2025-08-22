@@ -14,6 +14,7 @@ public class TurnSystem : Dependency
     private EndGameSystem _endGameSystem;
     private BoardSystem _boardSystem;
     private LevelSelectUISystem _levelSelectUISystem;
+    private InvalidMovesSystem _invalidMovesSystem;
 
     private TextMeshProUGUI _activeSideText;
     private TextMeshProUGUI _turnsRemainingText;
@@ -34,6 +35,7 @@ public class TurnSystem : Dependency
         _endGameSystem = creator.GetDependency<EndGameSystem>();
         _boardSystem = creator.GetDependency<BoardSystem>();
         _levelSelectUISystem = creator.GetDependency<LevelSelectUISystem>();
+        _invalidMovesSystem = creator.GetDependency<InvalidMovesSystem>();
         
         Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
         
@@ -116,12 +118,14 @@ public class TurnSystem : Dependency
     
     public void LoadLevelRuntime()
     {
+        Creator.piecesSo.ResetSystemRandom();
         Random.InitState(42);
-        
+       
         _whiteSystem.Clean();
         _blackSystem.Clean();
         
         _validMovesSystem.HideAllValidMoves();
+        _invalidMovesSystem.HideAll();
         _chainUISystem.HideChain();
         
         _levelSelectUISystem.UpdateLevelText(Creator.levelsSo.levelOnLoad);

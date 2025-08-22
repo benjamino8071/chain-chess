@@ -34,4 +34,5 @@ public enum AllTagNames
     LevelSelect = 101,
     LayoutGroup = 102,
     Pivot = 103,
+    AllInvalidMovesParent = 104
 }

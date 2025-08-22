@@ -11,6 +11,7 @@ public class PieceController : Controller
     protected BoardSystem _boardSystem;
     protected ChainUISystem _chainUISystem;
     protected AudioSystem _audioSystem;
+    protected InvalidMovesSystem _invalidMovesSystem;
     
     public enum States
     {
@@ -66,6 +67,7 @@ public class PieceController : Controller
     protected PieceColour _enemyColour;
     protected ControlledBy _controlledBy;
     protected States _state;
+    protected Vector3 _startPosition;
     protected Vector3 _jumpPosition;
     protected int _piecesCapturedInThisTurn;
     protected float _timer;
@@ -81,6 +83,7 @@ public class PieceController : Controller
         _boardSystem = creator.GetDependency<BoardSystem>();
         _chainUISystem = creator.GetDependency<ChainUISystem>();
         _audioSystem = creator.GetDependency<AudioSystem>();
+        _invalidMovesSystem = creator.GetDependency<InvalidMovesSystem>();
     }
 
     public virtual void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour, PieceAbility pieceAbility, 
@@ -140,6 +143,18 @@ public class PieceController : Controller
             {
                 _spriteRenderer.material = Creator.piecesSo.glitchedMat;
                 _spriteRenderer.material.color = pieceColour == PieceColour.White ? Creator.piecesSo.whiteColor : Creator.piecesSo.blackColor;
+                break;
+            }
+            case PieceAbility.LeaveBehind:
+            {
+                _spriteRenderer.material = Creator.piecesSo.leaveBehindMat;
+                _spriteRenderer.material.color = Creator.piecesSo.leaveBehindColor;
+                break;
+            }
+            case PieceAbility.TileDestroyer:
+            {
+                _spriteRenderer.material = Creator.piecesSo.tileDestroyerMat;
+                _spriteRenderer.material.color = Creator.piecesSo.tileDestroyerColor;
                 break;
             }
         }
@@ -263,9 +278,9 @@ public class PieceController : Controller
         {
             Vector3 positionFromPlayer = _pieceInstance.position + move;
 
-
             if (!_boardSystem.IsPositionValid(positionFromPlayer) 
-                || _boardSystem.IsAllyAtPosition(positionFromPlayer, _pieceColour))
+                || _boardSystem.IsAllyAtPosition(positionFromPlayer, _pieceColour)
+                || _invalidMovesSystem.IsInvalidMove(positionFromPlayer))
             {
                 continue;
             }
@@ -286,7 +301,8 @@ public class PieceController : Controller
             {
                 Vector3 nextSpot = furthestPointOfMoveLine + move;
                 if (!_boardSystem.IsPositionValid(nextSpot) 
-                    || _boardSystem.IsAllyAtPosition(nextSpot, _pieceColour))
+                    || _boardSystem.IsAllyAtPosition(nextSpot, _pieceColour)
+                    || _invalidMovesSystem.IsInvalidMove(nextSpot))
                 {
                     break;
                 }
