@@ -23,6 +23,7 @@ public class SideSystem : Dependency
     
     private List<PieceController> _pieceControllers = new ();
     private List<PieceController> _piecesToMoveThisTurn = new();
+    private List<PieceController> _mustMovers = new();
     
     private PieceController _pieceControllerSelected;
     
@@ -31,6 +32,7 @@ public class SideSystem : Dependency
     protected ControlledBy _controlledBy;
     protected bool _frozen;
     protected bool _tickCaptureLover;
+    protected int _endTurnFrameCount;
     
     public override void GameStart(Creator creator)
     {
@@ -48,6 +50,20 @@ public class SideSystem : Dependency
 
     public override void GameUpdate(float dt)
     {
+        if (_endTurnFrameCount > 0)
+        {
+            _endTurnFrameCount--;
+            if (_endTurnFrameCount == 0)
+            {
+                _turnSystem.SwitchTurn(_enemyPieceColour);
+            }
+        }
+        
+        foreach (PieceController pieceController in _mustMovers)
+        {
+            pieceController.GameUpdate(dt);
+        }
+        
         if (_turnSystem.CurrentTurn() == _enemyPieceColour && !_tickCaptureLover)
         {
             return;
@@ -64,6 +80,7 @@ public class SideSystem : Dependency
             levPieceController.Destroy();
         }
         _pieceControllers.Clear();
+        _mustMovers.Clear();
         _frozen = false;
         _tickCaptureLover = false;
     }
@@ -82,13 +99,19 @@ public class SideSystem : Dependency
 
     public void CreatePiece(Vector2 position, List<Piece> pieceMoves, PieceAbility ability)
     {
-        PieceController playerController = controlledBy == ControlledBy.Player 
+        PieceController pieceController = controlledBy == ControlledBy.Player 
             ? new PlayerController() : new AIController();
-        playerController.GameStart(Creator);
-        playerController.Init(position, pieceMoves, _allyPieceColour, ability, 
+        pieceController.GameStart(Creator);
+        pieceController.Init(position, pieceMoves, _allyPieceColour, ability, 
             controlledBy, this, _enemySideSystem);
-            
-        _pieceControllers.Add(playerController);
+        
+        _pieceControllers.Add(pieceController);
+        
+        if (ability == PieceAbility.AlwaysMove)
+        {
+            _mustMovers.Add(pieceController);
+            pieceController.SetState(PieceController.States.FindingMove);
+        }
     }
 
     public List<Vector3> PiecePositions()
@@ -161,7 +184,16 @@ public class SideSystem : Dependency
         }
         
         pieceController.SetState(PieceController.States.FindingMove);
+        Debug.Log("Piece selected. Update valid moves!");
         _validMovesSystem.UpdateValidMoves(pieceController.GetAllValidMovesOfCurrentPiece());
+    }
+
+    public void UpdateSelectedPieceValidMoves()
+    {
+        if (_pieceControllerSelected is {} pieceController && pieceController.state != PieceController.States.Moving)
+        {
+            _validMovesSystem.UpdateValidMoves(_pieceControllerSelected.GetAllValidMovesOfCurrentPiece());
+        }
     }
 
     /// <summary>
@@ -300,7 +332,14 @@ public class SideSystem : Dependency
         
         if (_piecesToMoveThisTurn.Count == 0)
         {
-            Lose(GameOverReason.Captured);
+            if (_mustMovers.Count > 0)
+            {
+                _endTurnFrameCount = 2;
+            }
+            else
+            {
+                Lose(GameOverReason.Captured);
+            }
         }
         else
         {
@@ -358,7 +397,8 @@ public class SideSystem : Dependency
         foreach (PieceController levPieceController in _pieceControllers)
         {
             if (levPieceController.AllValidMovesOfFirstPiece().Count > 0 
-                && levPieceController.pieceAbility != PieceAbility.MustMove) //Must Moves will always move after the random piece has moved
+                && levPieceController.pieceAbility != PieceAbility.MustMove //Must Moves will always move after the random piece has moved
+                && levPieceController.pieceAbility != PieceAbility.AlwaysMove) //Always Moves just move on their own
             {
                 validPieceControllers.Add(levPieceController);
             }

@@ -16,7 +16,6 @@ public enum PieceAbility
     Glitched,
     CaptureLover,
     LeaveBehind,
-    Resetter,
     AlwaysMove,
     TileDestroyer
 }

@@ -6,11 +6,19 @@ using Random = UnityEngine.Random;
 
 public class AIController : PieceController
 {
+    private float _thinkingTimer;
+    
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
+    }
+
+    public override void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour, PieceAbility pieceAbility,
+        ControlledBy controlledBy, SideSystem allySideSystem, SideSystem enemySideSystem)
+    {
+        base.Init(position, startingPieces, pieceColour, pieceAbility, controlledBy, allySideSystem, enemySideSystem);
         
-        _thinkingTimer = Creator.piecesSo.aiThinkingTime;
+        SetThinkingTime();
     }
 
     protected override void FindingMove(float dt)
@@ -46,7 +54,6 @@ public class AIController : PieceController
             if (_pieceAbility == PieceAbility.LeaveBehind)
             {
                 Piece randomPiece = Creator.piecesSo.GetRandomPiece();
-                Debug.Log("PIECE: "+randomPiece);
                 _allySideSystem.CreatePiece(_pieceInstance.position, new(){randomPiece}, _pieceAbility);
             }
             
@@ -112,12 +119,12 @@ public class AIController : PieceController
                 }
                 
                 SetToNextMove();
-                _thinkingTimer = Creator.piecesSo.aiThinkingTime;
+                SetThinkingTime();
             }
         }
     }
     
-    public List<Vector2Int> GetPath(Vector2Int start, Vector2Int end)
+    private List<Vector2Int> GetPath(Vector2Int start, Vector2Int end)
     {
         List<Vector2Int> path = new List<Vector2Int>();
 
@@ -144,5 +151,18 @@ public class AIController : PieceController
         }
 
         return path;
+    }
+
+    public override void ForceMove(float3 movePosition)
+    {
+        SetThinkingTime();
+        base.ForceMove(movePosition);
+    }
+
+    private void SetThinkingTime()
+    {
+        _thinkingTimer = _pieceAbility == PieceAbility.AlwaysMove 
+            ? Creator.piecesSo.alwaysMoveThinkingTime 
+            : Creator.piecesSo.aiThinkingTime;
     }
 }

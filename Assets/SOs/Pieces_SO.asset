@@ -32,4 +32,5 @@ MonoBehaviour:
   leaveBehindMat: {fileID: 2100000, guid: 707f65d514bd3ef4fbfa9f85aaca7212, type: 2}
   tileDestroyerMat: {fileID: 2100000, guid: 53bde61c1a94ee74ea142be035932ccc, type: 2}
   aiThinkingTime: 0.6
+  alwaysMoveThinkingTime: 1.2
   capturePlayerOdds: 80

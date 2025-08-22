@@ -29,6 +29,7 @@ public class Pieces_SO : ScriptableObject
     public Material tileDestroyerMat;
 
     public float aiThinkingTime;
+    public float alwaysMoveThinkingTime;
     [Range(1,100)] public int capturePlayerOdds;
     
     private SystemRandom _systemRand = new(42);

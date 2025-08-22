@@ -71,7 +71,6 @@ public class PieceController : Controller
     protected Vector3 _jumpPosition;
     protected int _piecesCapturedInThisTurn;
     protected float _timer;
-    protected float _thinkingTimer;
     protected bool _hasMoved;
     protected bool _madeMove;
     
@@ -255,8 +254,13 @@ public class PieceController : Controller
             {
                 //Blocked!
                 SetState(States.Blocked);
-                //_allySideSystem.PieceBlocked(this);
             }
+        }
+        else if (_pieceAbility == PieceAbility.AlwaysMove)
+        {
+            SetState(States.WaitingForTurn);
+            SetState(States.FindingMove);
+            _enemySideSystem.UpdateSelectedPieceValidMoves();
         }
         else
         {
@@ -545,9 +549,8 @@ public class PieceController : Controller
         _animator.SetTrigger("enlarge");
     }
 
-    public void ForceMove(float3 movePosition)
+    public virtual void ForceMove(float3 movePosition)
     {
-        _thinkingTimer = Creator.piecesSo.aiThinkingTime;
         _jumpPosition = movePosition;
         SetState(States.Moving);
     }

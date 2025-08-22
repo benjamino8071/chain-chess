@@ -88,9 +88,9 @@ public class Creator : MonoBehaviour
         _dependencies.Add(new ChainUISystem());
         _dependencies.Add(new LevelCompleteUISystem());
         _dependencies.Add(new SettingsUISystem());
+        _dependencies.Add(new BoardSystem());
         _dependencies.Add(new WhiteSystem());
         _dependencies.Add(new BlackSystem());
-        _dependencies.Add(new BoardSystem());
         _dependencies.Add(new GameOverUISystem());
         _dependencies.Add(new SideWinsUISystem());
         _dependencies.Add(new EndGameSystem());
