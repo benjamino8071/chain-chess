@@ -25,7 +25,7 @@ public class EndGameSystem : Dependency
         _boardSystem = creator.GetDependency<BoardSystem>();
     }
 
-    public void SetEndGame(PieceColour winningColour, GameOverReason gameOverReason)
+    public void SetEndGame(PieceColour winningColour, GameOverReason gameOverReason, float delayTimer)
     {
         _boardSystem.activeSideSystem.ForceDeselectPiece();
         _boardSystem.inactiveSideSystem.ForceDeselectPiece();
@@ -36,7 +36,7 @@ public class EndGameSystem : Dependency
                 || (Creator.blackControlledBy == ControlledBy.Player && winningColour == PieceColour.Black))
             {
                 //Player has WON puzzle
-                _levelCompleteUISystem.Show();
+                _levelCompleteUISystem.Show(delayTimer);
             }
             else
             {

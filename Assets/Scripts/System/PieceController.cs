@@ -512,7 +512,8 @@ public class PieceController : Controller
                         _hasMoved = false;
                         break;
                     case States.Blocked:
-                        _timer = 1.6f; //Shrink animation length
+                        _timer = 1.1f; //Shrink animation length
+                        _captureAmountText.gameObject.SetActive(false);
                         _animator.SetTrigger("shrink");
                         break;
                 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 52
+  levelOnLoad: 13
   sectionOne:
   - level: 1
     turns: 3
@@ -1673,6 +1673,14 @@ MonoBehaviour:
       colour: 0
       ability: 5
       position: {x: 8, y: 4}
+    - pieces: 04000000
+      colour: 0
+      ability: 6
+      position: {x: 1, y: 8}
+    - pieces: 02000000
+      colour: 0
+      ability: 4
+      position: {x: 5, y: 7}
   sectionNine: []
   sectionTen: []
   reservedLevels:

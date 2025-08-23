@@ -184,7 +184,6 @@ public class SideSystem : Dependency
         }
         
         pieceController.SetState(PieceController.States.FindingMove);
-        Debug.Log("Piece selected. Update valid moves!");
         _validMovesSystem.UpdateValidMoves(pieceController.GetAllValidMovesOfCurrentPiece());
     }
 
@@ -249,7 +248,7 @@ public class SideSystem : Dependency
         
         if (_pieceControllers.Count == 0)
         {
-            Lose(GameOverReason.Captured);
+            Lose(GameOverReason.Captured, 0);
             _chainUISystem.HighlightNextPiece(pieceUsed);
             return true;
         }
@@ -270,7 +269,7 @@ public class SideSystem : Dependency
         
         if (_pieceControllers.Count == 0)
         {
-            Lose(GameOverReason.Locked);
+            Lose(GameOverReason.Locked, 0);
         }
         else
         {
@@ -278,11 +277,11 @@ public class SideSystem : Dependency
         }
     }
 
-    public void Lose(GameOverReason gameOverReason)
+    public void Lose(GameOverReason gameOverReason, float delayTimer)
     {
         _enemySideSystem.SetStateForAllPieces(PieceController.States.EndGame);
-        SetStateForAllPieces(PieceController.States.EndGame);
-        _endGameSystem.SetEndGame(_enemyPieceColour, gameOverReason);
+        SetStateForAllPieces(PieceController.States.Blocked);
+        _endGameSystem.SetEndGame(_enemyPieceColour, gameOverReason, delayTimer);
         _validMovesSystem.HideAllValidMoves();
     }
 
@@ -338,7 +337,7 @@ public class SideSystem : Dependency
             }
             else
             {
-                Lose(GameOverReason.Captured);
+                Lose(GameOverReason.Captured, 1.1f);
             }
         }
         else

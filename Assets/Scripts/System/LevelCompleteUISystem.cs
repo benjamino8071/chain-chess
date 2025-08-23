@@ -23,6 +23,8 @@ public class LevelCompleteUISystem : Dependency
     private TextMeshProUGUI _turnsText;
     private TextMeshProUGUI _movesText;
     private TextMeshProUGUI _timeText;
+
+    private float _delayTimer;
     
     public override void GameStart(Creator creator)
     {
@@ -82,8 +84,20 @@ public class LevelCompleteUISystem : Dependency
         
         Hide();
     }
-    
-    public void Show()
+
+    public override void GameUpdate(float dt)
+    {
+        if (_delayTimer > 0)
+        {
+            _delayTimer -= dt;
+            if (_delayTimer <= 0)
+            {
+                _levelCompleteUI.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void Show(float delayTimer = 0)
     {
         Level levelOnLoad = Creator.levelsSo.GetLevelOnLoad();
         _turnsText.text = $"{Creator.statsTurns} / {levelOnLoad.turns}";
@@ -109,7 +123,8 @@ public class LevelCompleteUISystem : Dependency
         _nextLevelButton.gameObject.SetActive(Creator.levelsSo.levelOnLoad < Creator.levelsSo.AllLevels().Count);
         _thankYouMessage.gameObject.SetActive(Creator.levelsSo.levelOnLoad == Creator.levelsSo.AllLevels().Count);
         
-        _levelCompleteUI.gameObject.SetActive(true);
+        _levelCompleteUI.gameObject.SetActive(delayTimer == 0);
+        _delayTimer = delayTimer;
         _audioSystem.PlayLevelCompleteSfx();
     }
 

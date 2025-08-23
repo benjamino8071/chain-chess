@@ -81,7 +81,6 @@ public class PlayerController : PieceController
                 SetToNextMove();
                 if (_movesInThisTurn.Count > 0 && _state == States.FindingMove)
                 {
-                    Debug.Log("There's another piece in the chain! Update valid moves");
                     _validMovesSystem.UpdateValidMoves(GetAllValidMovesOfCurrentPiece());
                 }
             }
