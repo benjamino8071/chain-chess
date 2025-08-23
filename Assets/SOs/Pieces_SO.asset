@@ -25,12 +25,14 @@ MonoBehaviour:
   captureLoverColor: {r: 0.2830189, g: 0.2830189, b: 0.2830189, a: 1}
   leaveBehindColor: {r: 1, g: 1, b: 1, a: 1}
   tileDestroyerColor: {r: 0.8666667, g: 0.28235295, b: 0.28235295, a: 1}
+  alwaysMoveColor: {r: 0.5294118, g: 0.7607843, b: 0.8666667, a: 1}
   noneMat: {fileID: 2100000, guid: cc460e5b1c6c0bd498b44195a0c3da99, type: 2}
   mustMoveMat: {fileID: 2100000, guid: e76cfe5e58629f449af696ed6f57501e, type: 2}
   glitchedMat: {fileID: 2100000, guid: 5afb5ad234e5f7b4e924c69aace4499c, type: 2}
   captureLoverMat: {fileID: 2100000, guid: 1e155935f67404c4b87a00eebdc7a534, type: 2}
   leaveBehindMat: {fileID: 2100000, guid: 707f65d514bd3ef4fbfa9f85aaca7212, type: 2}
   tileDestroyerMat: {fileID: 2100000, guid: 53bde61c1a94ee74ea142be035932ccc, type: 2}
+  alwaysMoveMat: {fileID: 2100000, guid: d188009b26a30d64e8f869335300568e, type: 2}
   aiThinkingTime: 0.6
   alwaysMoveThinkingTime: 1.2
   capturePlayerOdds: 80

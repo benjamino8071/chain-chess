@@ -156,6 +156,12 @@ public class PieceController : Controller
                 _spriteRenderer.material.color = Creator.piecesSo.tileDestroyerColor;
                 break;
             }
+            case PieceAbility.AlwaysMove:
+            {
+                _spriteRenderer.material = Creator.piecesSo.alwaysMoveMat;
+                _spriteRenderer.material.color = Creator.piecesSo.alwaysMoveColor;
+                break;
+            }
         }
         
         UpdateSprite(startingPieces[0]);

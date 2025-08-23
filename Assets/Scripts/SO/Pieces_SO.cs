@@ -19,7 +19,8 @@ public class Pieces_SO : ScriptableObject
     public Color captureLoverColor;
     public Color leaveBehindColor;
     public Color tileDestroyerColor;
-    
+    public Color alwaysMoveColor;
+
     [Header("AI-Specific")]
     public Material noneMat;
     public Material mustMoveMat;
@@ -27,6 +28,7 @@ public class Pieces_SO : ScriptableObject
     public Material captureLoverMat;
     public Material leaveBehindMat;
     public Material tileDestroyerMat;
+    public Material alwaysMoveMat;
 
     public float aiThinkingTime;
     public float alwaysMoveThinkingTime;

@@ -125,7 +125,7 @@ public class ChainUISystem : Dependency
         
         for (int i = 0; i < pieceController.capturedPieces.Count; i++)
         {
-            ShowNewPiece(pieceController.capturedPieces[i], pieceController.pieceColour, pieceController.movesUsed,i == 0);
+            ShowNewPiece(pieceController.capturedPieces[i], pieceController.pieceColour, pieceController.pieceAbility, pieceController.movesUsed, i == 0);
         }
         
         _cachedPieceController = pieceController;
@@ -161,11 +161,50 @@ public class ChainUISystem : Dependency
         _nextFreeIndex = 0;
     }
     
-    public void ShowNewPiece(Piece piece, PieceColour pieceColour, int movesUsed, bool isFirstPiece = false)
+    public void ShowNewPiece(Piece piece, PieceColour pieceColour, PieceAbility pieceAbility, int movesUsed, bool isFirstPiece = false)
     {
         Color pieceColor = pieceColour == PieceColour.White
             ? Creator.piecesSo.whiteColor 
             : Creator.piecesSo.blackColor;
+        Material pieceMaterial = Creator.piecesSo.noneMat;
+        switch (pieceAbility)
+        {
+            case PieceAbility.MustMove:
+            {
+                pieceColor = Creator.piecesSo.mustMoveColor;
+                pieceMaterial = Creator.piecesSo.mustMoveMat;
+                break;
+            }
+            case PieceAbility.CaptureLover:
+            {
+                pieceColor = Creator.piecesSo.captureLoverColor;
+                pieceMaterial = Creator.piecesSo.captureLoverMat;
+                break;
+            }
+            case PieceAbility.Glitched:
+            {
+                pieceMaterial = Creator.piecesSo.glitchedMat;
+                break;
+            }
+            case PieceAbility.LeaveBehind:
+            {
+                pieceColor = Creator.piecesSo.leaveBehindColor;
+                pieceMaterial = Creator.piecesSo.leaveBehindMat;
+                break;
+            }
+            case PieceAbility.TileDestroyer:
+            {
+                pieceColor = Creator.piecesSo.tileDestroyerColor;
+                pieceMaterial = Creator.piecesSo.tileDestroyerMat;
+                break;
+            }
+            case PieceAbility.AlwaysMove:
+            {
+                pieceColor = Creator.piecesSo.alwaysMoveColor;
+                pieceMaterial = Creator.piecesSo.alwaysMoveMat;
+                break;
+            }
+        }
         
         //For every other piece we first want to add an arrow indicating the order for the chain
         if (!isFirstPiece)
@@ -185,6 +224,7 @@ public class ChainUISystem : Dependency
         
         _chainPieceImages[_nextFreeIndex].image.sprite = GetSprite(piece);
         _chainPieceImages[_nextFreeIndex].image.color = pieceColor;
+        _chainPieceImages[_nextFreeIndex].image.material = pieceMaterial;
         _chainPieceImages[_nextFreeIndex].image.rectTransform.sizeDelta = new(100, 100);
         _chainPieceImages[_nextFreeIndex].image.gameObject.SetActive(true);
         _chainPieceImages[_nextFreeIndex].piece  = piece;
