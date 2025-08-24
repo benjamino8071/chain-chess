@@ -54,6 +54,7 @@ public class TurnSystem : Dependency
     public void SwitchTurn(PieceColour nextTurn)
     {
         _currentTurn = nextTurn;
+        _invalidMovesSystem.DecrementPositions();
         switch (nextTurn)
         {
             case PieceColour.White:

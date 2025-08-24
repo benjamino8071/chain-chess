@@ -15,4 +15,4 @@ MonoBehaviour:
   starHollowSprite: {fileID: 21300000, guid: c07549e02a2d55049906af989d15fe22, type: 3}
   starFilledSprite: {fileID: 21300000, guid: 9df0f4d8c02014347ad2d7de427e0ced, type: 3}
   starFilledColor: {r: 0.9607843, g: 0.89411765, b: 0.46666667, a: 1}
-  starHollowColor: {r: 0.9607843, g: 0.89411765, b: 0.46666667, a: 0.101960786}
+  starHollowColor: {r: 0.9607843, g: 0.89411765, b: 0.46666667, a: 0.5019608}

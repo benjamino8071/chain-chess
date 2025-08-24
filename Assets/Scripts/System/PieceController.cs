@@ -290,7 +290,7 @@ public class PieceController : Controller
 
             if (!_boardSystem.IsPositionValid(positionFromPlayer) 
                 || _boardSystem.IsAllyAtPosition(positionFromPlayer, _pieceColour)
-                || _invalidMovesSystem.IsInvalidMove(positionFromPlayer))
+                || (_pieceAbility != PieceAbility.TileDestroyer && _invalidMovesSystem.IsInvalidMove(positionFromPlayer)))
             {
                 continue;
             }
@@ -312,7 +312,7 @@ public class PieceController : Controller
                 Vector3 nextSpot = furthestPointOfMoveLine + move;
                 if (!_boardSystem.IsPositionValid(nextSpot) 
                     || _boardSystem.IsAllyAtPosition(nextSpot, _pieceColour)
-                    || _invalidMovesSystem.IsInvalidMove(nextSpot))
+                    || (_pieceAbility != PieceAbility.TileDestroyer && _invalidMovesSystem.IsInvalidMove(nextSpot)))
                 {
                     break;
                 }

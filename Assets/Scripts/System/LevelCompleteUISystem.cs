@@ -7,6 +7,7 @@ public class LevelCompleteUISystem : Dependency
 {
     private AudioSystem _audioSystem;
     private TurnSystem _turnSystem;
+    private LevelSelectUISystem _levelSelectUISystem;
 
     public bool IsShowing => _levelCompleteUI.gameObject.activeSelf;
     
@@ -32,6 +33,7 @@ public class LevelCompleteUISystem : Dependency
 
         _audioSystem = creator.GetDependency<AudioSystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
+        _levelSelectUISystem = creator.GetDependency<LevelSelectUISystem>();
 
         _levelCompleteUI = creator.GetFirstObjectWithName(AllTagNames.LevelComplete).transform;
 
@@ -110,6 +112,20 @@ public class LevelCompleteUISystem : Dependency
         bool oneStar = score <= levelOnLoad.star1Score;
         bool twoStar = score <= levelOnLoad.star2Score;
         bool threeStar = score <= levelOnLoad.star3Score;
+        int count = 0;
+        if (threeStar)
+        {
+            count = 3;
+        }
+        else if (twoStar)
+        {
+            count = 2;
+        }
+        else if (oneStar)
+        {
+            count = 1;
+        }
+        _levelSelectUISystem.UpdateLevelStars(levelOnLoad.level, count);
         
         _starOneImage.sprite = oneStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
         _starOneImage.color = oneStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;

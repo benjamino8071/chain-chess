@@ -30,6 +30,7 @@ public class LevelSelectUISystem : Dependency
         public Image starOneImage;
         public Image starTwoImage;
         public Image starThreeImage;
+        public int starCount;
     }
     
     private Transform _pivot;
@@ -194,6 +195,33 @@ public class LevelSelectUISystem : Dependency
     public void UpdateLevelText(int level)
     {
         _levelSelectButton.SetText($"Level {level}");
+    }
+
+    public void UpdateLevelStars(int level, int starCount)
+    {
+        foreach (LevelInfo levelInfo in _levelInfos)
+        {
+            if (levelInfo.level.level != level)
+            {
+                continue;
+            }
+            if (levelInfo.starCount > starCount)
+            {
+                break;
+            }
+            
+            levelInfo.starOneImage.sprite = starCount >= 1 ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starOneImage.color = starCount >= 1 ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+        
+            levelInfo.starTwoImage.sprite = starCount >= 2 ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starTwoImage.color = starCount >= 2 ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+
+            levelInfo.starThreeImage.sprite = starCount == 3 ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starThreeImage.color = starCount == 3 ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+
+            levelInfo.starCount = starCount;
+            break;
+        }
     }
 
     public void Show()

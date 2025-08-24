@@ -21,6 +21,8 @@ public class Pieces_SO : ScriptableObject
     public Color tileDestroyerColor;
     public Color alwaysMoveColor;
 
+    public int tileDestroyerMaxCount;
+    
     [Header("AI-Specific")]
     public Material noneMat;
     public Material mustMoveMat;
