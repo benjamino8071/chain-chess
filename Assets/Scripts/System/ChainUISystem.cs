@@ -59,14 +59,14 @@ public class ChainUISystem : Dependency
         _chainParentInitialPos = _chainParent.localPosition;
         _chainParentNewPos = _chainParent.localPosition;
         
-        if (SceneManager.sceneCount == 1)
-        {
-            Show();
-        }
-        else
-        {
-            Hide();
-        }
+        // if (SceneManager.sceneCount == 1)
+        // {
+        //     Show();
+        // }
+        // else
+        // {
+        //     Hide();
+        // }
         
         SceneManager.sceneUnloaded += SceneManager_SceneUnloaded;
     }
