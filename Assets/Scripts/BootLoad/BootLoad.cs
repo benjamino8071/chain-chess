@@ -14,6 +14,8 @@ public class BootLoad : MonoBehaviour
     
     private static readonly int Play = Animator.StringToHash("play");
 
+    public float animationTime;
+    
     private float _unloadSceneTimer;
 
     private void Start()
@@ -36,7 +38,7 @@ public class BootLoad : MonoBehaviour
         {
             _unloadSceneTimer += Time.deltaTime;
             //Animations take one second to complete
-            if (_unloadSceneTimer >= 1)
+            if (_unloadSceneTimer >= animationTime)
             {
                 SceneManager.UnloadSceneAsync("Main_Menu_Scene");
             }
