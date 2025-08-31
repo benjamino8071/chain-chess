@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 4
+  levelOnLoad: 41
   sectionOne:
   - level: 1
     turns: 3
@@ -123,7 +123,7 @@ MonoBehaviour:
       ability: 0
       position: {x: 8, y: 1}
   - level: 5
-    turns: 1
+    turns: 2
     star1Score: 1600
     star2Score: 800
     star3Score: 400
@@ -1302,6 +1302,10 @@ MonoBehaviour:
       colour: 0
       ability: 3
       position: {x: 4, y: 5}
+    - piece: 3
+      colour: 0
+      ability: 0
+      position: {x: 2, y: 4}
   - level: 41
     turns: 30
     star1Score: 14000

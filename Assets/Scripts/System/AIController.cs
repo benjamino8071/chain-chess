@@ -158,6 +158,28 @@ public class AIController : PieceController
         base.ForceMove(movePosition);
     }
 
+    protected override void SetToNextMove()
+    {
+        if (_movesInThisTurn.Count > 0)
+        {
+            //Allow player to make another move
+            UpdateSprite(_movesInThisTurn[0]);
+            
+            List<ValidMove> validMoves = GetAllValidMovesOfCurrentPiece();
+            SetState(validMoves.Count > 0 ? States.FindingMove : States.Blocked);
+        }
+        else if (_pieceAbility == PieceAbility.AlwaysMove)
+        {
+            SetState(States.WaitingForTurn);
+            SetState(States.FindingMove);
+            _enemySideSystem.UpdateSelectedPieceValidMoves();
+        }
+        else
+        {
+            Finish();
+        }
+    }
+
     private void SetThinkingTime()
     {
         _thinkingTimer = _pieceAbility == PieceAbility.AlwaysMove 

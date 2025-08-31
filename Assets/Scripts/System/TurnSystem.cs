@@ -65,7 +65,7 @@ public class TurnSystem : Dependency
                 
                 _whiteSystem.SetStateForAllPieces(PieceController.States.FindingMove);
                 
-                _chainUISystem.ShowChain(_whiteSystem.pieceControllerSelected);
+                _chainUISystem.ShowChain(_whiteSystem.pieceControllerSelected, false);
                 
                 _settingsUISystem.ShowButton();
                 break;
@@ -95,7 +95,7 @@ public class TurnSystem : Dependency
         
         _whiteSystem.SpawnPieces();
         _blackSystem.SpawnPieces();
-        _chainUISystem.ShowChain(_whiteSystem.pieceControllerSelected);
+        _chainUISystem.ShowChain(_whiteSystem.pieceControllerSelected, true);
         _boardSystem.ShowTapPoint(_whiteSystem.pieceControllerSelected.piecePos);
         _validMovesSystem.UpdateValidMoves(_whiteSystem.pieceControllerSelected.GetAllValidMovesOfCurrentPiece());
         
@@ -117,7 +117,7 @@ public class TurnSystem : Dependency
 
     private bool DecrementTurnsRemaining()
     {
-        _turnsRemaining--;
+        //_turnsRemaining--;
         UpdateTurnsRemainingText(_turnsRemaining);
         return _turnsRemaining == 0;
     }

@@ -117,26 +117,31 @@ public class ChainUISystem : Dependency
         return false;
     }
 
-    public void ShowChain(PieceController pieceController)
+    public void ShowChain(PieceController pieceController, bool setMovesRemainingText)
     {
         ResetChain();
         
         for (int i = 0; i < pieceController.capturedPieces.Count; i++)
         {
-            ShowNewPiece(pieceController.capturedPieces[i], pieceController.pieceColour, pieceController.movesUsed,i == 0);
+            ShowNewPiece(pieceController.capturedPieces[i], pieceController.movesUsed, i == 0);
         }
         
         HighlightNextPiece(pieceController);
 
-        UpdateMovesRemainingText(pieceController.capturedPieces.Count);
+        if (setMovesRemainingText)
+        {
+            UpdateMovesRemainingText(pieceController.capturedPieces.Count);
+        }
     }
 
-    public void AddToChain(PieceController capturedPiece)
+    public void AddToChain(PieceController capturedPiece, int playerPieceCaptureCount)
     {
-        ShowNewPiece(capturedPiece.currentPiece, capturedPiece.pieceColour, capturedPiece.movesUsed);
+        ShowNewPiece(capturedPiece.currentPiece, capturedPiece.movesUsed);
+        
+        UpdateMovesRemainingText(playerPieceCaptureCount);
     }
     
-    private void ShowNewPiece(Piece piece, PieceColour pieceColour, int movesUsed, bool isFirstPiece = false)
+    private void ShowNewPiece(Piece piece, int movesUsed, bool isFirstPiece = false)
     {
         Color pieceColor = Creator.piecesSo.whiteColor;
         
@@ -201,6 +206,11 @@ public class ChainUISystem : Dependency
         _chainParentNewPos.x = -150 * pieceController.movesUsed;
         
         UpdateAlphaValue(0.1f, pieceController.movesUsed * 2);
+    }
+
+    public void HideAllPieces()
+    {
+        UpdateAlphaValue(0.1f, _chainPieceImages.Count);
     }
 
     public void PawnPromoted(int index, Piece promotedPiece)
@@ -289,9 +299,8 @@ public class ChainUISystem : Dependency
         return null;
     }
 
-    private void UpdateMovesRemainingText(int movesRemaining)
+    private void UpdateMovesRemainingText(int movesInChain)
     {
-        _movesRemainingText.gameObject.SetActive(false);
-        _movesRemainingText.text = movesRemaining == 0 ? ". . ." : $"{movesRemaining}";
+        _movesRemainingText.text = movesInChain == 0 ? ". . ." : $"{movesInChain}";
     }
 }

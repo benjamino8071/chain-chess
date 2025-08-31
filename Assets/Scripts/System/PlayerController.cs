@@ -111,4 +111,31 @@ public class PlayerController : PieceController
             
         _validMovesSystem.HideAllValidMoves();
     }
+
+    protected override void SetToNextMove()
+    {
+        if (_movesInThisTurn.Count > 0)
+        {
+            //Allow player to make another move
+            UpdateSprite(_movesInThisTurn[0]);
+            
+            List<ValidMove> validMoves = GetAllValidMovesOfCurrentPiece();
+            
+            if (validMoves.Count > 0)
+            {
+                _chainUISystem.HighlightNextPiece(this);
+                SetState(States.FindingMove);
+            }
+            else
+            {
+                //Blocked!
+                SetState(States.Blocked);
+            }
+        }
+        else
+        {
+            _chainUISystem.HideAllPieces();
+            Finish();
+        }
+    }
 }

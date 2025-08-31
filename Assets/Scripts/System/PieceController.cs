@@ -37,8 +37,6 @@ public class PieceController : Controller
     
     public List<Piece> capturedPieces => _capturedPieces;
     
-    public bool hasMoved => _hasMoved;
-    
     public int movesUsed => _capturedPieces.Count - _movesInThisTurn.Count;
 
     public int movesRemaining => _movesInThisTurn.Count;
@@ -68,8 +66,6 @@ public class PieceController : Controller
     protected Vector3 _jumpPosition;
     protected int _piecesCapturedInThisTurn;
     protected float _timer;
-    protected bool _hasMoved;
-    protected bool _madeMove;
     
     public override void GameStart(Creator creator)
     {
@@ -215,42 +211,12 @@ public class PieceController : Controller
         return 0.5f * Mathf.Sin(x - Mathf.PI / 2f) + 0.5f;
     }
     
-    protected void SetToNextMove()
+    protected virtual void SetToNextMove()
     {
-        _hasMoved = true;
-        _madeMove = true;
         
-        if (_movesInThisTurn.Count > 0)
-        {
-            //Allow player to make another move
-            UpdateSprite(_movesInThisTurn[0]);
-            
-            List<ValidMove> validMoves = GetAllValidMovesOfCurrentPiece();
-            
-            if (validMoves.Count > 0)
-            {
-                _chainUISystem.HighlightNextPiece(this);
-                SetState(States.FindingMove);
-            }
-            else
-            {
-                //Blocked!
-                SetState(States.Blocked);
-            }
-        }
-        else if (_pieceAbility == PieceAbility.AlwaysMove)
-        {
-            SetState(States.WaitingForTurn);
-            SetState(States.FindingMove);
-            _enemySideSystem.UpdateSelectedPieceValidMoves();
-        }
-        else
-        {
-            Finish();
-        }
     }
 
-    private void Finish()
+    protected void Finish()
     {
         SetState(States.WaitingForTurn);
         _validMovesSystem.HideAllValidMoves();
@@ -497,10 +463,8 @@ public class PieceController : Controller
                         _background.SetActive(_pieceColour == PieceColour.White);
                         break;
                     case States.Moving:
-                    {
                         _background.SetActive(false);
                         break;
-                    }
                     case States.WaitingForTurn:
                         if (_movesInThisTurn.Count == 0)
                         {
@@ -519,7 +483,6 @@ public class PieceController : Controller
                             }
                         }
                         _piecesCapturedInThisTurn = 0; //For next time the player uses this piece
-                        _hasMoved = false;
                         _background.SetActive(false);
                         break;
                     case States.Blocked:

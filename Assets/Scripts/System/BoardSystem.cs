@@ -123,14 +123,13 @@ public class BoardSystem : Dependency
             && _whiteSystem.TryGetAllyPieceAtPosition(piecePos, out PieceController whitePieceCont))
         {
             pieceUsed.AddCapturedPiece(whitePieceCont.capturedPieces[0]);
-            _chainUISystem.AddToChain(whitePieceCont);
             return _whiteSystem.PieceCaptured(whitePieceCont, pieceUsed);
         }
         if (enemyColour == PieceColour.Black 
             && _blackSystem.TryGetAllyPieceAtPosition(piecePos, out PieceController blackPieceCont))
         {
             pieceUsed.AddCapturedPiece(blackPieceCont.capturedPieces[0]);
-            _chainUISystem.AddToChain(blackPieceCont);
+            _chainUISystem.AddToChain(blackPieceCont, pieceUsed.capturedPieces.Count);
             return _blackSystem.PieceCaptured(blackPieceCont, pieceUsed);
         }
         
