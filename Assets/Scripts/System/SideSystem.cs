@@ -17,19 +17,16 @@ public class SideSystem : Dependency
 
     public PieceController pieceControllerSelected => _pieceControllerSelected;
     
-    public ControlledBy controlledBy => _controlledBy;
-    
     public bool frozen => _frozen;
     
-    private List<PieceController> _pieceControllers = new ();
-    private List<PieceController> _piecesToMoveThisTurn = new();
-    private List<PieceController> _mustMovers = new();
+    protected List<PieceController> _pieceControllers = new ();
+    protected List<PieceController> _piecesToMoveThisTurn = new();
+    protected List<PieceController> _mustMovers = new();
     
-    private PieceController _pieceControllerSelected;
+    protected PieceController _pieceControllerSelected;
     
     protected PieceColour _allyPieceColour;
     protected PieceColour _enemyPieceColour;
-    protected ControlledBy _controlledBy;
     protected bool _frozen;
     protected bool _tickCaptureLover;
     protected int _endTurnFrameCount;
@@ -44,8 +41,6 @@ public class SideSystem : Dependency
         _chainUISystem = creator.GetDependency<ChainUISystem>();
         _endGameSystem = creator.GetDependency<EndGameSystem>();
         _settingsUISystem = creator.GetDependency<SettingsUISystem>();
-        
-        SpawnPieces();
     }
 
     public override void GameUpdate(float dt)
@@ -85,7 +80,7 @@ public class SideSystem : Dependency
         _tickCaptureLover = false;
     }
 
-    public void SpawnPieces()
+    public virtual void SpawnPieces()
     {
         Level levelOnLoad = Creator.levelsSo.GetLevelOnLoad();
         foreach (PieceSpawnData pieceSpawnData in levelOnLoad.positions)
@@ -99,11 +94,10 @@ public class SideSystem : Dependency
 
     public void CreatePiece(Vector2 position, List<Piece> pieceMoves, PieceAbility ability)
     {
-        PieceController pieceController = controlledBy == ControlledBy.Player 
+        PieceController pieceController = _allyPieceColour == PieceColour.White 
             ? new PlayerController() : new AIController();
         pieceController.GameStart(Creator);
-        pieceController.Init(position, pieceMoves, _allyPieceColour, ability, 
-            controlledBy, this, _enemySideSystem);
+        pieceController.Init(position, pieceMoves, _allyPieceColour, ability, this, _enemySideSystem);
         
         _pieceControllers.Add(pieceController);
         
@@ -150,11 +144,14 @@ public class SideSystem : Dependency
                 continue;
             }
             
-            List<Vector3> validMoves = levPlayerController.AllValidMovesOfFirstPiece();
-            if (validMoves.Contains(position))
+            List<ValidMove> validMoves = levPlayerController.AllValidMovesOfFirstPiece();
+            foreach (ValidMove validMove in validMoves)
             {
-                playerController = levPlayerController;
-                return true;
+                if ((Vector3)validMove.position == position)
+                {
+                    playerController = levPlayerController;
+                    return true;
+                }
             }
         }
 
@@ -174,7 +171,7 @@ public class SideSystem : Dependency
     {
         _pieceControllerSelected = pieceController;
         
-        List<Vector3> validMoves = pieceController.GetAllValidMovesOfCurrentPiece();
+        List<ValidMove> validMoves = pieceController.GetAllValidMovesOfCurrentPiece();
         if (validMoves.Count == 0)
         {
             Debug.Log("THIS PIECE CAN'T MOVE");
@@ -221,7 +218,6 @@ public class SideSystem : Dependency
         }
         
         _pieceControllerSelected = null;
-        _validMovesSystem.HideAllValidMoves();
     }
 
     public void ForceDeselectPiece()
@@ -249,7 +245,6 @@ public class SideSystem : Dependency
         if (_pieceControllers.Count == 0)
         {
             Lose(GameOverReason.Captured, 0);
-            _chainUISystem.HighlightNextPiece(pieceUsed);
             return true;
         }
         else
@@ -370,15 +365,15 @@ public class SideSystem : Dependency
 
         foreach (PieceController pieceController in movablePieceControllers)
         {
-            List<Vector3> validMoves = pieceController.GetAllValidMovesOfCurrentPiece();
+            List<ValidMove> validMoves = pieceController.GetAllValidMovesOfCurrentPiece();
 
-            foreach (Vector3 validMove in validMoves)
+            foreach (ValidMove validMove in validMoves)
             {
                 //Don't need to fear this inner for loop as it will basically always have 1 piece
                 //At least for the puzzle levels
                 foreach (PieceController enemyPieceController in enemyPieceControllers)
                 {
-                    if (enemyPieceController.piecePos == validMove)
+                    if (enemyPieceController.piecePos == (Vector3)validMove.position)
                     {
                         return pieceController;
                     }

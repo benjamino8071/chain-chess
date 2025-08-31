@@ -8,12 +8,8 @@ using UnityEngine.UI;
 public class ChainUISystem : Dependency
 {
     private BoardSystem _boardSystem;
-
-    private PieceController _cachedPieceController;
     
-    private Transform _guiTopChain;
-    
-    private Transform _chainParent;
+    private Transform _pivot;
 
     private TextMeshProUGUI _movesRemainingText;
     
@@ -38,55 +34,57 @@ public class ChainUISystem : Dependency
 
         _boardSystem = creator.GetDependency<BoardSystem>();
 
-        _guiTopChain = creator.GetFirstObjectWithName(AllTagNames.GUITopChain);
-        
-        _chainParent = creator.GetChildObjectByName(_guiTopChain.gameObject, AllTagNames.ChainParent);
-        
-        Image[] chainPieceImages = _chainParent.GetComponentsInChildren<Image>();
-        foreach (Image chainPieceImage in chainPieceImages)
+        Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
+        _pivot = creator.GetChildObjectByName(guiBottom.gameObject, AllTagNames.Pivot);
+
+        int chainImagesAmount = 64;
+        float xPos = 0;
+        for (int i = 0; i < chainImagesAmount; i++)
         {
+            GameObject chainPieceImage = creator.InstantiateGameObjectWithParent(Creator.imagePrefab, _pivot);
+            //Every odd image will be the arrow, which we want to be a smaller than the piece images
+            if (i % 2 != 0)
+            {
+                chainPieceImage.transform.localScale = new(0.7f, 0.7f);
+            }
+            
+            Image image = chainPieceImage.GetComponent<Image>();
+            
+            chainPieceImage.transform.localPosition = new(xPos, 0, 0);
+            xPos += image.rectTransform.sizeDelta.x;
+            
             _chainPieceImages.Add(new()
             {
                 piece = Piece.NotChosen,
-                image = chainPieceImage
+                image = image
             });
-            chainPieceImage.gameObject.SetActive(false);
+            
+            chainPieceImage.SetActive(false);
         }
 
         Transform movesRemainingText = creator.GetFirstObjectWithName(AllTagNames.MovesRemaining);
         _movesRemainingText = movesRemainingText.GetComponentInChildren<TextMeshProUGUI>();
         
-        _chainParentInitialPos = _chainParent.localPosition;
-        _chainParentNewPos = _chainParent.localPosition;
-        
-        if (SceneManager.sceneCount == 1)
-        {
-            Show();
-        }
-        else
-        {
-            Hide();
-        }
-        
-        SceneManager.sceneUnloaded += SceneManager_SceneUnloaded;
+        _chainParentInitialPos = _pivot.localPosition;
+        _chainParentNewPos = _pivot.localPosition;
     }
 
     public override void GameUpdate(float dt)
     {
-        if (ProcessSlider(dt) || _chainParentNewPos == _chainParent.localPosition)
+        if (ProcessSlider(dt) || _chainParentNewPos == _pivot.localPosition)
         {
             return;
         }
         
-        Vector3 lerpPos = math.lerp(_chainParent.localPosition, _chainParentNewPos, dt * Creator.chainSo.addPieceLerpSpeed);
-        _chainParent.localPosition = lerpPos;
+        Vector3 lerpPos = math.lerp(_pivot.localPosition, _chainParentNewPos, dt * Creator.chainSo.addPieceLerpSpeed);
+        _pivot.localPosition = lerpPos;
     }
 
     private bool _move;
 
     private bool ProcessSlider(float dt)
     {
-        if(Creator.inputSo.leftMouseButton.action.WasPressedThisFrame() && (_boardSystem.GetGridPointNearMouse().y > Creator.boardSo.maxY || _mousePosXLastFrame > 0))
+        if(Creator.inputSo.leftMouseButton.action.WasPressedThisFrame() && (_boardSystem.GetGridPointNearMouse().y < Creator.boardSo.minY || _mousePosXLastFrame > 0))
         {
             _move = true;
         }
@@ -101,9 +99,9 @@ public class ChainUISystem : Dependency
             if (_mousePosXLastFrame > 0)
             {
                 float mousePosXChange = mousePos.x - _mousePosXLastFrame;
-                float3 chainParentLocalPos = _chainParent.localPosition;
+                float3 chainParentLocalPos = _pivot.localPosition;
                 chainParentLocalPos.x += mousePosXChange;
-                _chainParent.localPosition = chainParentLocalPos;
+                _pivot.localPosition = chainParentLocalPos;
             }
             _mousePosXLastFrame = mousePos.x;
             _mouseOffTimer = 1f;
@@ -128,44 +126,19 @@ public class ChainUISystem : Dependency
             ShowNewPiece(pieceController.capturedPieces[i], pieceController.pieceColour, pieceController.movesUsed,i == 0);
         }
         
-        _cachedPieceController = pieceController;
         HighlightNextPiece(pieceController);
 
         UpdateMovesRemainingText(pieceController.capturedPieces.Count);
     }
 
-    //Public function 'hide' just has a better name than 'reset'
-    public void HideChain()
+    public void AddToChain(PieceController capturedPiece)
     {
-        ResetChain();
-    }
-
-    private void ResetChain()
-    {
-        foreach (PieceImage chainPiecesImage in _chainPieceImages)
-        {
-            chainPiecesImage.image.color = new Color(1,1,1, 1);
-        }
-        
-        foreach (PieceImage capturedPiecesImage in _chainPieceImages)
-        {
-            capturedPiecesImage.image.gameObject.SetActive(false);
-            Color imageColor = capturedPiecesImage.image.color;
-            imageColor.a = 1f;
-            capturedPiecesImage.image.color = imageColor;
-        }
-        
-        _chainParent.localPosition = _chainParentInitialPos;
-        _chainParentNewPos = _chainParentInitialPos;
-        
-        _nextFreeIndex = 0;
+        ShowNewPiece(capturedPiece.currentPiece, capturedPiece.pieceColour, capturedPiece.movesUsed);
     }
     
-    public void ShowNewPiece(Piece piece, PieceColour pieceColour, int movesUsed, bool isFirstPiece = false)
+    private void ShowNewPiece(Piece piece, PieceColour pieceColour, int movesUsed, bool isFirstPiece = false)
     {
-        Color pieceColor = pieceColour == PieceColour.White
-            ? Creator.piecesSo.whiteColor 
-            : Creator.piecesSo.blackColor;
+        Color pieceColor = Creator.piecesSo.whiteColor;
         
         //For every other piece we first want to add an arrow indicating the order for the chain
         if (!isFirstPiece)
@@ -191,6 +164,27 @@ public class ChainUISystem : Dependency
 
         _nextFreeIndex++;
     }
+    
+    private void ResetChain()
+    {
+        foreach (PieceImage chainPiecesImage in _chainPieceImages)
+        {
+            chainPiecesImage.image.color = new Color(1,1,1, 1);
+        }
+        
+        foreach (PieceImage capturedPiecesImage in _chainPieceImages)
+        {
+            capturedPiecesImage.image.gameObject.SetActive(false);
+            Color imageColor = capturedPiecesImage.image.color;
+            imageColor.a = 1f;
+            capturedPiecesImage.image.color = imageColor;
+        }
+        
+        _pivot.localPosition = _chainParentInitialPos;
+        _chainParentNewPos = _chainParentInitialPos;
+        
+        _nextFreeIndex = 0;
+    }
 
     private void UpdateAlphaValue(float a, int amountToChange)
     {
@@ -204,12 +198,7 @@ public class ChainUISystem : Dependency
 
     public void HighlightNextPiece(PieceController pieceController)
     {
-        if (pieceController != _cachedPieceController)
-        {
-            return;
-        }
-        
-        _chainParentNewPos.x = -210 * pieceController.movesUsed;
+        _chainParentNewPos.x = -150 * pieceController.movesUsed;
         
         UpdateAlphaValue(0.1f, pieceController.movesUsed * 2);
     }
@@ -304,29 +293,5 @@ public class ChainUISystem : Dependency
     {
         _movesRemainingText.gameObject.SetActive(false);
         _movesRemainingText.text = movesRemaining == 0 ? ". . ." : $"{movesRemaining}";
-    }
-    
-    private void SceneManager_SceneUnloaded(Scene scene)
-    {
-        //Main menu scene should ALWAYS have 0 build index
-        if (scene.buildIndex == 0)
-        {
-            Show();
-        }
-    }
-
-    private void Show()
-    {
-        _guiTopChain.gameObject.SetActive(true);
-    }
-
-    private void Hide()
-    {
-        _guiTopChain.gameObject.SetActive(false);
-    }
-
-    public override void Destroy()
-    {
-        SceneManager.sceneUnloaded -= SceneManager_SceneUnloaded;
     }
 }

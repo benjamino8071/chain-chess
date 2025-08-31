@@ -4,7 +4,6 @@ public class BlackSystem : SideSystem
     {
         _allyPieceColour = PieceColour.Black;
         _enemyPieceColour = PieceColour.White;
-        _controlledBy = creator.blackControlledBy;
         _enemySideSystem = creator.GetDependency<WhiteSystem>();
 
         base.GameStart(creator);

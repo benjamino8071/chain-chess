@@ -38,7 +38,7 @@ public class PlayerController : PieceController
             }
             else
             {
-                _allySideSystem.DeselectPiece();
+                _allySideSystem.SelectPiece(this);
             }
             
             _positionRequested = Vector3.zero; //For next time the player double taps
@@ -89,12 +89,15 @@ public class PlayerController : PieceController
     
     private bool CanMove(Vector3 positionRequested)
     {
-        List<Vector3> validMoves = GetAllValidMovesOfCurrentPiece();
-        if (validMoves.Contains(positionRequested))
+        List<ValidMove> validMoves = GetAllValidMovesOfCurrentPiece();
+        foreach (ValidMove validMove in validMoves)
         {
-            return true;
+            if ((Vector3)validMove.position == positionRequested)
+            {
+                return true;
+            }
         }
-
+        
         return false;
     }
 

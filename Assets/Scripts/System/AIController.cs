@@ -13,10 +13,10 @@ public class AIController : PieceController
         base.GameStart(creator);
     }
 
-    public override void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour, PieceAbility pieceAbility,
-        ControlledBy controlledBy, SideSystem allySideSystem, SideSystem enemySideSystem)
+    public override void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour, 
+        PieceAbility pieceAbility, SideSystem allySideSystem, SideSystem enemySideSystem)
     {
-        base.Init(position, startingPieces, pieceColour, pieceAbility, controlledBy, allySideSystem, enemySideSystem);
+        base.Init(position, startingPieces, pieceColour, pieceAbility, allySideSystem, enemySideSystem);
         
         SetThinkingTime();
     }
@@ -29,17 +29,17 @@ public class AIController : PieceController
             return;
         }
 
-        List<Vector3> possiblePositions = GetAllValidMovesOfCurrentPiece();
+        List<ValidMove> possiblePositions = GetAllValidMovesOfCurrentPiece();
                 
         if (possiblePositions.Count > 0)
         {
             //Go through each position and see if the player is at that position. If they are, capture it!
             bool foundPlayer = false;
-            foreach (Vector3 possiblePosition in possiblePositions)
+            foreach (ValidMove possiblePosition in possiblePositions)
             {
-                if (_boardSystem.IsEnemyAtPosition(possiblePosition, _enemyColour))
+                if (_boardSystem.IsEnemyAtPosition(possiblePosition.position, _enemyColour))
                 {
-                    _jumpPosition = possiblePosition;
+                    _jumpPosition = possiblePosition.position;
                     foundPlayer = true;
                     break;
                 }
@@ -47,7 +47,7 @@ public class AIController : PieceController
             if (!foundPlayer)
             {
                 int chosenPositionIndex = Random.Range(0, possiblePositions.Count);
-                _jumpPosition = possiblePositions[chosenPositionIndex];
+                _jumpPosition = possiblePositions[chosenPositionIndex].position;
             }
 
             _startPosition = _pieceInstance.position;

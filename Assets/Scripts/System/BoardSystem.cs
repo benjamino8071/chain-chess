@@ -69,13 +69,6 @@ public class BoardSystem : Dependency
         Creator.boardSo.hideMainMenuTrigger = true;
         
         bool samePoint = math.distance(gridPoint, _tapPoint.position) < 0.001f;
-        UpdateTapPoint(gridPoint, samePoint);
-        UpdateChain(gridPoint, samePoint);
-        UpdateSelectedPiece(gridPoint, samePoint);
-    }
-
-    private void UpdateTapPoint(float3 gridPoint, bool samePoint)
-    {
         if (samePoint)
         {
             HideTapPoint();
@@ -83,59 +76,6 @@ public class BoardSystem : Dependency
         else
         {
             ShowTapPoint(gridPoint);
-        }
-    }
-
-    private void UpdateChain(float3 gridPoint, bool samePoint)
-    {
-        //Don't want to do anything if a valid move point has been chosen
-        bool choseValidMovePoint = activeSideSystem.pieceControllerSelected is { } pieceControllerSelected
-                                   && pieceControllerSelected.GetAllValidMovesOfCurrentPiece().Contains(gridPoint);
-        
-        if (_whiteSystem.TryGetAllyPieceAtPosition(gridPoint, out PieceController whitePieceController) 
-            && !samePoint
-            && !choseValidMovePoint)
-        {
-            _chainUISystem.ShowChain(whitePieceController);
-        }
-        else if (_blackSystem.TryGetAllyPieceAtPosition(gridPoint, out PieceController blackPieceController) 
-                 && !samePoint
-                 && !choseValidMovePoint)
-        {
-            _chainUISystem.ShowChain(blackPieceController);
-        }
-        else if(!choseValidMovePoint)
-        {
-            _chainUISystem.HideChain();
-        }
-    }
-
-    private void UpdateSelectedPiece(float3 gridPoint, bool samePoint)
-    {
-        //Don't want to do anything if a valid move point has been chosen
-        bool choseValidMovePoint = false;
-        bool chosenPieceMoving = false;
-        if (activeSideSystem.pieceControllerSelected is { } pieceControllerSelected)
-        {
-            choseValidMovePoint = pieceControllerSelected.GetAllValidMovesOfCurrentPiece().Contains(gridPoint);
-            chosenPieceMoving = pieceControllerSelected.state == PieceController.States.Moving;
-        }
-        
-        if (activeSideSystem.controlledBy != ControlledBy.Player 
-            || choseValidMovePoint
-            || chosenPieceMoving
-            || activeSideSystem.frozen)
-        {
-            return;
-        }
-
-        if (activeSideSystem.TryGetAllyPieceAtPosition(gridPoint, out PieceController selectedPiece) && !samePoint)
-        {
-            activeSideSystem.SelectPiece(selectedPiece);
-        }
-        else
-        {
-            activeSideSystem.DeselectPiece();
         }
     }
 
@@ -183,14 +123,14 @@ public class BoardSystem : Dependency
             && _whiteSystem.TryGetAllyPieceAtPosition(piecePos, out PieceController whitePieceCont))
         {
             pieceUsed.AddCapturedPiece(whitePieceCont.capturedPieces[0]);
-            _chainUISystem.ShowChain(pieceUsed);
+            _chainUISystem.AddToChain(whitePieceCont);
             return _whiteSystem.PieceCaptured(whitePieceCont, pieceUsed);
         }
         if (enemyColour == PieceColour.Black 
             && _blackSystem.TryGetAllyPieceAtPosition(piecePos, out PieceController blackPieceCont))
         {
             pieceUsed.AddCapturedPiece(blackPieceCont.capturedPieces[0]);
-            _chainUISystem.ShowChain(pieceUsed);
+            _chainUISystem.AddToChain(blackPieceCont);
             return _blackSystem.PieceCaptured(blackPieceCont, pieceUsed);
         }
         

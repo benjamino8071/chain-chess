@@ -29,27 +29,17 @@ public class EndGameSystem : Dependency
     {
         _boardSystem.activeSideSystem.ForceDeselectPiece();
         _boardSystem.inactiveSideSystem.ForceDeselectPiece();
-        
-        if (Creator.whiteControlledBy == ControlledBy.Player && Creator.blackControlledBy == ControlledBy.AI)
+
+        if (winningColour == PieceColour.White)
         {
-            if ((Creator.whiteControlledBy == ControlledBy.Player && winningColour == PieceColour.White)
-                || (Creator.blackControlledBy == ControlledBy.Player && winningColour == PieceColour.Black))
-            {
-                //Player has WON puzzle
-                _levelCompleteUISystem.Show(delayTimer);
-            }
-            else
-            {
-                //Player has LOST puzzle
-                _gameOverUISystem.Show(gameOverReason);
-            }
+            _levelCompleteUISystem.Show(delayTimer);
         }
         else
         {
-            _sideWinsUISystem.Show(winningColour);
+            _gameOverUISystem.Show(gameOverReason);
         }
+        
         _settingsUISystem.HideButton();
-        _chainUISystem.HideChain();
         _boardSystem.HideTapPoint();
         _validMovesSystem.HideAllValidMoves();
         _isEndGame = true;

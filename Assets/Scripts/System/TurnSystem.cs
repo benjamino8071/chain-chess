@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class TurnSystem : Dependency
 {
-    public int turnsRemaining => _turnsRemaining;
-    
     private WhiteSystem _whiteSystem;
     private BlackSystem _blackSystem;
     private SettingsUISystem _settingsUISystem;
@@ -16,7 +14,6 @@ public class TurnSystem : Dependency
     private LevelSelectUISystem _levelSelectUISystem;
     private InvalidMovesSystem _invalidMovesSystem;
 
-    private TextMeshProUGUI _activeSideText;
     private TextMeshProUGUI _turnsRemainingText;
     
     private PieceColour _currentTurn; //Will always start with White
@@ -39,8 +36,6 @@ public class TurnSystem : Dependency
         
         Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
         
-        _activeSideText = creator.GetChildComponentByName<TextMeshProUGUI>(guiBottom.gameObject, AllTagNames.TurnInfoText);
-        
         _turnsRemainingText = creator.GetChildComponentByName<TextMeshProUGUI>(guiBottom.gameObject, AllTagNames.TurnsRemaining);
         
         //Add 1 because we will lose 1 when the player 
@@ -48,7 +43,7 @@ public class TurnSystem : Dependency
         
         UpdateTurnsRemainingText(_turnsRemaining);
         
-        SwitchTurn(PieceColour.White);
+        LoadLevelRuntime();
     }
     
     public void SwitchTurn(PieceColour nextTurn)
@@ -57,61 +52,26 @@ public class TurnSystem : Dependency
         switch (nextTurn)
         {
             case PieceColour.White:
-                if (Creator.blackControlledBy == ControlledBy.Player)
+                if (DecrementTurnsRemaining())
                 {
-                    if (DecrementTurnsRemaining())
-                    {
-                        _blackSystem.Lose(GameOverReason.NoTurns, 1.1f);
-                        return;
-                    }
+                    _blackSystem.Lose(GameOverReason.NoTurns, 1.1f);
+                    return;
                 }
                 
-                if (Creator.whiteControlledBy == ControlledBy.Player)
-                {
-                    Creator.statsTurns++;
-                }
+                Creator.statsTurns++;
                 
-                _chainUISystem.HideChain();
-                _boardSystem.HideTapPoint();
                 _blackSystem.DeselectPiece();
-                if (Creator.whiteControlledBy == ControlledBy.Player)
-                {
-                    _whiteSystem.SetStateForAllPieces(PieceController.States.FindingMove);
-                    _settingsUISystem.ShowButton();
-                }
-                else
-                {
-                    _settingsUISystem.HideButton();
-                    _whiteSystem.AiSetup();
-                }
-                SetTurnText("White");
+                _validMovesSystem.UpdateValidMoves(_whiteSystem.pieceControllerSelected.GetAllValidMovesOfCurrentPiece());
+                
+                _whiteSystem.SetStateForAllPieces(PieceController.States.FindingMove);
+                
+                _settingsUISystem.ShowButton();
                 break;
             case PieceColour.Black:
-                if (Creator.whiteControlledBy == ControlledBy.Player)
-                {
-                    if (DecrementTurnsRemaining())
-                    {
-                        _whiteSystem.Lose(GameOverReason.NoTurns, 1.1f);
-                        return;
-                    }
-                }
+                _settingsUISystem.HideButton();
                 
-                //Player will ALWAYS be white in puzzles. So no need to check if we should increment Creator.statsTurns
-                
-                _chainUISystem.HideChain();
-                _boardSystem.HideTapPoint();
-                _whiteSystem.DeselectPiece();
-                if (Creator.blackControlledBy == ControlledBy.Player)
-                {
-                    _blackSystem.SetStateForAllPieces(PieceController.States.FindingMove);
-                    _settingsUISystem.ShowButton();
-                }
-                else
-                {
-                    _settingsUISystem.HideButton();
-                    _blackSystem.AiSetup();
-                }
-                SetTurnText("Black");
+                _validMovesSystem.HideAllValidMoves();
+                _blackSystem.AiSetup();
                 break;
         }
     }
@@ -125,7 +85,6 @@ public class TurnSystem : Dependency
         
         _validMovesSystem.HideAllValidMoves();
         _invalidMovesSystem.HideAll();
-        _chainUISystem.HideChain();
         
         _levelSelectUISystem.UpdateLevelText(Creator.levelsSo.levelOnLoad);
         
@@ -134,6 +93,9 @@ public class TurnSystem : Dependency
         
         _whiteSystem.SpawnPieces();
         _blackSystem.SpawnPieces();
+        _chainUISystem.ShowChain(_whiteSystem.pieceControllerSelected);
+        _boardSystem.ShowTapPoint(_whiteSystem.pieceControllerSelected.piecePos);
+        _validMovesSystem.UpdateValidMoves(_whiteSystem.pieceControllerSelected.GetAllValidMovesOfCurrentPiece());
         
         _endGameSystem.ResetEndGame();
 
@@ -161,10 +123,5 @@ public class TurnSystem : Dependency
     public PieceColour CurrentTurn()
     {
         return _currentTurn;
-    }
-
-    private void SetTurnText(string turnText)
-    {
-        _activeSideText.text = turnText;
     }
 }

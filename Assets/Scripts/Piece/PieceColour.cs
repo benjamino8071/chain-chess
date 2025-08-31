@@ -28,7 +28,21 @@ public struct Level
     public int star1Score;
     public int star2Score;
     public int star3Score;
+
+    public NewPieceSpawnData whiteStartingPiece;
+    
+    public List<NewPieceSpawnData> blackStartingPieces;
+    
     public List<PieceSpawnData> positions;
+}
+
+[Serializable]
+public struct NewPieceSpawnData
+{
+    public Piece startingPiece;
+    public PieceColour colour;
+    public PieceAbility ability;
+    public Vector2 position;
 }
 
 [Serializable]

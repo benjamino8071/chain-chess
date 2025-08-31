@@ -44,8 +44,6 @@ public class PieceController : Controller
     public int movesRemaining => _movesInThisTurn.Count;
     
     public int piecesCapturedInThisTurn => _piecesCapturedInThisTurn;
-
-    public ControlledBy controlledBy => _controlledBy;
     
     protected List<Piece> _capturedPieces = new(16);
     protected List<Piece> _movesInThisTurn = new(16);
@@ -55,9 +53,7 @@ public class PieceController : Controller
     protected SpriteRenderer _spriteRenderer;
 
     protected Animator _animator;
-
-    protected TMP_Text _captureAmountText;
-
+    
     protected SideSystem _allySideSystem;
     protected SideSystem _enemySideSystem;
     
@@ -65,7 +61,6 @@ public class PieceController : Controller
     protected PieceAbility _pieceAbility;
     protected PieceColour _pieceColour;
     protected PieceColour _enemyColour;
-    protected ControlledBy _controlledBy;
     protected States _state;
     protected Vector3 _startPosition;
     protected Vector3 _jumpPosition;
@@ -85,12 +80,10 @@ public class PieceController : Controller
         _invalidMovesSystem = creator.GetDependency<InvalidMovesSystem>();
     }
 
-    public virtual void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour, PieceAbility pieceAbility, 
-        ControlledBy controlledBy, SideSystem allySideSystem, SideSystem enemySideSystem)
+    public virtual void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour,
+        PieceAbility pieceAbility, SideSystem allySideSystem, SideSystem enemySideSystem)
     {
         _pieceInstance = Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity).transform;
-        
-        _pieceInstance.GetComponentInChildren<Canvas>(true).gameObject.SetActive(false);
         
         _jumpPosition = _pieceInstance.position;
         
@@ -99,15 +92,10 @@ public class PieceController : Controller
         _animator = _pieceInstance.GetComponentInChildren<Animator>();
         
         _pieceAbility = pieceAbility;
-
-        _controlledBy = controlledBy;
-
+        
         _allySideSystem = allySideSystem;
 
         _enemySideSystem = enemySideSystem;
-        
-        Transform captureAmountText = Creator.GetChildObjectByName(_pieceInstance.gameObject, AllTagNames.Text);
-        _captureAmountText = captureAmountText.GetComponent<TMP_Text>();
         
         _pieceColour = pieceColour;
         _enemyColour = pieceColour == PieceColour.White ? PieceColour.Black : PieceColour.White;
@@ -161,9 +149,6 @@ public class PieceController : Controller
         UpdateSprite(startingPieces[0]);
         
         SetState(pieceColour == PieceColour.White ? States.FindingMove : States.WaitingForTurn);
-        
-        UpdateCaptureAmountText(startingPieces.Count);
-        UpdateCaptureAmountTextColour();
     }
 
     public override void GameUpdate(float dt)
@@ -223,7 +208,6 @@ public class PieceController : Controller
         
         _capturedPieces.Add(piece);
         _movesInThisTurn.Add(piece);
-        UpdateCaptureAmountText(_capturedPieces.Count);
     }
     
     protected float Evaluate(float x)
@@ -236,14 +220,12 @@ public class PieceController : Controller
         _hasMoved = true;
         _madeMove = true;
         
-        UpdateCaptureAmountTextColour();
-        
         if (_movesInThisTurn.Count > 0)
         {
             //Allow player to make another move
             UpdateSprite(_movesInThisTurn[0]);
             
-            List<Vector3> validMoves = GetAllValidMovesOfCurrentPiece();
+            List<ValidMove> validMoves = GetAllValidMovesOfCurrentPiece();
             
             if (validMoves.Count > 0)
             {
@@ -275,9 +257,9 @@ public class PieceController : Controller
         _allySideSystem.PieceFinished(this);
     }
 
-    protected List<Vector3> CheckValidDefiniteMoves(List<Vector3> moves)
+    protected List<ValidMove> CheckValidDefiniteMoves(List<Vector3> moves)
     {
-        List<Vector3> validMoves = new();
+        List<ValidMove> validMoves = new();
         foreach (Vector3 move in moves)
         {
             Vector3 positionFromPlayer = _pieceInstance.position + move;
@@ -289,15 +271,19 @@ public class PieceController : Controller
                 continue;
             }
             
-            validMoves.Add(positionFromPlayer);
+            validMoves.Add(new()
+            {
+                position = positionFromPlayer,
+                enemyHere = _boardSystem.IsEnemyAtPosition(positionFromPlayer, _enemyColour)
+            });
         }
 
         return validMoves;
     }
 
-    protected List<Vector3> CheckValidIndefiniteMoves(List<Vector3> moves)
+    protected List<ValidMove> CheckValidIndefiniteMoves(List<Vector3> moves)
     {
-        List<Vector3> validMoves = new();
+        List<ValidMove> validMoves = new();
         foreach (Vector3 move in moves)
         {
             Vector3 furthestPointOfMoveLine = _pieceInstance.position;
@@ -311,10 +297,16 @@ public class PieceController : Controller
                     break;
                 }
                 
+                bool enemyHere = _boardSystem.IsEnemyAtPosition(nextSpot, _enemyColour);
+                
                 furthestPointOfMoveLine = nextSpot;
-                validMoves.Add(furthestPointOfMoveLine);
+                validMoves.Add(new()
+                {
+                    position = furthestPointOfMoveLine,
+                    enemyHere = enemyHere
+                });
 
-                if (_boardSystem.IsEnemyAtPosition(nextSpot, _enemyColour))
+                if (enemyHere)
                 {
                     break;
                 }
@@ -324,45 +316,57 @@ public class PieceController : Controller
         return validMoves;
     }
 
-    public List<Vector3> AllValidMovesOfFirstPiece()
+    public List<ValidMove> AllValidMovesOfFirstPiece()
     {
         return GetAllValidMovesOfPiece(_capturedPieces[0]); 
     }
 
-    public List<Vector3> GetAllValidMovesOfCurrentPiece()
+    public List<ValidMove> GetAllValidMovesOfCurrentPiece()
     {
         return GetAllValidMovesOfPiece(_movesInThisTurn[0]);
     }
 
-    private List<Vector3> GetAllValidMovesOfPiece(Piece piece)
+    private List<ValidMove> GetAllValidMovesOfPiece(Piece piece)
     {
-        List<Vector3> validMoves = new(64);
+        List<ValidMove> validMoves = new(64);
         switch (piece)
         {
             case Piece.Pawn:
             {
                 int direction = _pieceColour == PieceColour.White ? 1 : -1;
                 
-                List<Vector3> pawnMoves = new();
+                List<ValidMove> pawnMoves = new();
 
                 Vector3 defaultMove = _pieceInstance.position + new Vector3(0, 1, 0) * direction;
                 if (!_boardSystem.IsAllyAtPosition(defaultMove, _pieceColour) 
                     && !_boardSystem.IsEnemyAtPosition(defaultMove, _enemyColour)
                     && _boardSystem.IsPositionValid(defaultMove))
                 {
-                    pawnMoves.Add(defaultMove);
+                    pawnMoves.Add(new()
+                    {
+                        position = defaultMove,
+                        enemyHere = false
+                    });
                 }
                 
                 Vector3 topLeft = _pieceInstance.position + new Vector3(-1, 1, 0) * direction;
                 if (_boardSystem.IsEnemyAtPosition(topLeft, _enemyColour) && _boardSystem.IsPositionValid(topLeft))
                 {
-                    pawnMoves.Add(topLeft);
+                    pawnMoves.Add(new()
+                    {
+                        position = topLeft,
+                        enemyHere = true
+                    });
                 }
                 
                 Vector3 topRight = _pieceInstance.position + new Vector3(1, 1, 0) * direction;
                 if (_boardSystem.IsEnemyAtPosition(topRight, _enemyColour) && _boardSystem.IsPositionValid(topRight))
                 {
-                    pawnMoves.Add(topRight);
+                    pawnMoves.Add(new()
+                    {
+                        position = topRight,
+                        enemyHere = true
+                    });
                 }
 
                 validMoves = pawnMoves;
@@ -377,8 +381,8 @@ public class PieceController : Controller
                     new Vector3(0, -1, 0)
                 };
 
-                List<Vector3> rookValidMoves = CheckValidIndefiniteMoves(rookMoves);
-                validMoves = validMoves.Concat(rookValidMoves).ToList();
+                List<ValidMove> rookValidMoves = CheckValidIndefiniteMoves(rookMoves);
+                validMoves = rookValidMoves.ToList();
                 break;
             case Piece.Knight:
                 List<Vector3> knightMoves = new()
@@ -393,8 +397,8 @@ public class PieceController : Controller
                     new Vector3(2, -1, 0)
                 };
                 
-                List<Vector3> knightValidMoves = CheckValidDefiniteMoves(knightMoves);
-                validMoves = validMoves.Concat(knightValidMoves).ToList();
+                List<ValidMove> knightValidMoves = CheckValidDefiniteMoves(knightMoves);
+                validMoves = knightValidMoves.ToList();
                 break;
             case Piece.Bishop:
                 List<Vector3> bishopMoves = new()
@@ -405,8 +409,8 @@ public class PieceController : Controller
                     new Vector3(-1, -1, 0)
                 };
                 
-                List<Vector3> bishopValidMoves = CheckValidIndefiniteMoves(bishopMoves);
-                validMoves = validMoves.Concat(bishopValidMoves).ToList();
+                List<ValidMove> bishopValidMoves = CheckValidIndefiniteMoves(bishopMoves);
+                validMoves = bishopValidMoves.ToList();
                 break;
             case Piece.Queen:
                 List<Vector3> queenMoves = new()
@@ -421,8 +425,8 @@ public class PieceController : Controller
                     new Vector3(-1, -1, 0)
                 };
                 
-                List<Vector3> queenValidMoves = CheckValidIndefiniteMoves(queenMoves);
-                validMoves = validMoves.Concat(queenValidMoves).ToList();
+                List<ValidMove> queenValidMoves = CheckValidIndefiniteMoves(queenMoves);
+                validMoves = queenValidMoves.ToList();
                 break;
             case Piece.King:
                 List<Vector3> kingMoves = new()
@@ -437,8 +441,8 @@ public class PieceController : Controller
                     new Vector3(-1, -1, 0)
                 };
                 
-                List<Vector3> kingValidMoves = CheckValidDefiniteMoves(kingMoves);
-                validMoves = validMoves.Concat(kingValidMoves).ToList();
+                List<ValidMove> kingValidMoves = CheckValidDefiniteMoves(kingMoves);
+                validMoves = kingValidMoves.ToList();
                 break;
         }
 
@@ -513,7 +517,6 @@ public class PieceController : Controller
                         break;
                     case States.Blocked:
                         _timer = 1.1f; //Shrink animation length
-                        _captureAmountText.gameObject.SetActive(false);
                         _animator.SetTrigger("shrink");
                         break;
                 }
@@ -593,29 +596,6 @@ public class PieceController : Controller
 
         // Use the index to set the piece
         return glitchedPieceChanges[index];
-    }
-
-    private void UpdateCaptureAmountText(int amount)
-    {
-        _captureAmountText.text = $"{amount}";
-    }
-
-    private void UpdateCaptureAmountTextColour()
-    {
-        int piecePosX = (int)_pieceInstance.position.x;
-        int piecePosY = (int)_pieceInstance.position.y;
-        int result = piecePosX + piecePosY;
-        
-        Color movesInTurnTextColor;
-        if (result % 2 == 0)
-        {
-            movesInTurnTextColor = Color.white;
-        }
-        else
-        {
-            movesInTurnTextColor = Color.black;
-        }
-        _captureAmountText.color = movesInTurnTextColor;
     }
     
     public override void Destroy()

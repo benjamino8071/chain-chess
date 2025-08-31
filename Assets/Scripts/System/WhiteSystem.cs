@@ -7,9 +7,15 @@ public class WhiteSystem : SideSystem
     {
         _allyPieceColour = PieceColour.White;
         _enemyPieceColour = PieceColour.Black;
-        _controlledBy = creator.whiteControlledBy;
         _enemySideSystem = creator.GetDependency<BlackSystem>();
         
         base.GameStart(creator);
+    }
+
+    public override void SpawnPieces()
+    {
+        base.SpawnPieces();
+
+        SelectPiece(_pieceControllers[0]);
     }
 }

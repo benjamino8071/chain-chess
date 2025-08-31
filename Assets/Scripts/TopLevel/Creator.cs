@@ -24,13 +24,10 @@ public class Creator : MonoBehaviour
     public GameObject invalidPositionPrefab;
     public GameObject selectedBackgroundPrefab;
     public GameObject levelInfoPrefab;
+    public GameObject imagePrefab;
 
     [Header("Camera")]
     public Camera mainCam;
-    
-    [Header("Controlled by")] 
-    public ControlledBy whiteControlledBy;
-    public ControlledBy blackControlledBy;
     
     [Header("Frame Rate")]
     public int frameRate = 120;
@@ -225,10 +222,4 @@ public class Creator : MonoBehaviour
             dependency.Destroy();
         }
     }
-}
-
-public enum ControlledBy
-{
-    Player,
-    AI
 }
