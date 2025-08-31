@@ -118,7 +118,6 @@ public class TurnSystem : Dependency
     
     public void LoadLevelRuntime()
     {
-        Creator.piecesSo.ResetSystemRandom();
         Random.InitState(42);
        
         _whiteSystem.Clean();

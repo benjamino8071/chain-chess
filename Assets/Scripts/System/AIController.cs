@@ -53,8 +53,7 @@ public class AIController : PieceController
             _startPosition = _pieceInstance.position;
             if (_pieceAbility == PieceAbility.LeaveBehind)
             {
-                Piece randomPiece = Creator.piecesSo.GetRandomPiece();
-                _allySideSystem.CreatePiece(_pieceInstance.position, new(){randomPiece}, _pieceAbility);
+                _allySideSystem.CreatePiece(_pieceInstance.position, new(){_currentPiece}, _pieceAbility);
             }
             
             _audioSystem.PlayPieceMoveSfx(1);

@@ -31,16 +31,4 @@ public class Pieces_SO : ScriptableObject
     public float aiThinkingTime;
     public float alwaysMoveThinkingTime;
     [Range(1,100)] public int capturePlayerOdds;
-    
-    private SystemRandom _systemRand = new(42);
-
-    public void ResetSystemRandom()
-    {
-        _systemRand = new(42);
-    }
-    
-    public Piece GetRandomPiece()
-    {
-        return (Piece)_systemRand.Next(1, 6);
-    }
 }
