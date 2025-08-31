@@ -36,5 +36,7 @@ public enum AllTagNames
     Pivot = 103,
     AllInvalidMovesParent = 104,
     EnemyHere,
-    EnemyNotHere
+    EnemyNotHere,
+    PlayerSprite,
+    Background
 }

@@ -65,6 +65,8 @@ public class TurnSystem : Dependency
                 
                 _whiteSystem.SetStateForAllPieces(PieceController.States.FindingMove);
                 
+                _chainUISystem.ShowChain(_whiteSystem.pieceControllerSelected);
+                
                 _settingsUISystem.ShowButton();
                 break;
             case PieceColour.Black:

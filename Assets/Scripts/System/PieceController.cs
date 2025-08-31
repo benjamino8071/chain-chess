@@ -49,9 +49,11 @@ public class PieceController : Controller
     protected List<Piece> _movesInThisTurn = new(16);
     
     protected Transform _pieceInstance;
-
+    
     protected SpriteRenderer _spriteRenderer;
 
+    protected GameObject _background;
+    
     protected Animator _animator;
     
     protected SideSystem _allySideSystem;
@@ -85,11 +87,13 @@ public class PieceController : Controller
     {
         _pieceInstance = Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity).transform;
         
-        _jumpPosition = _pieceInstance.position;
+        _background = Creator.GetChildObjectByName(_pieceInstance.gameObject, AllTagNames.Background).gameObject;
         
-        _spriteRenderer = _pieceInstance.GetComponentInChildren<SpriteRenderer>();
-
+        _spriteRenderer = Creator.GetChildComponentByName<SpriteRenderer>(_pieceInstance.gameObject, AllTagNames.PlayerSprite);
+        
         _animator = _pieceInstance.GetComponentInChildren<Animator>();
+        
+        _jumpPosition = _pieceInstance.position;
         
         _pieceAbility = pieceAbility;
         
@@ -99,10 +103,10 @@ public class PieceController : Controller
         
         _pieceColour = pieceColour;
         _enemyColour = pieceColour == PieceColour.White ? PieceColour.Black : PieceColour.White;
-
+        
         _capturedPieces.Add(startingPiece);
         _movesInThisTurn.Add(startingPiece);
-
+        
         switch (pieceAbility)
         {
             case PieceAbility.None:
@@ -490,7 +494,13 @@ public class PieceController : Controller
                         _pieceInstance.gameObject.SetActive(false);
                         break;
                     case States.FindingMove:
+                        _background.SetActive(_pieceColour == PieceColour.White);
                         break;
+                    case States.Moving:
+                    {
+                        _background.SetActive(false);
+                        break;
+                    }
                     case States.WaitingForTurn:
                         if (_movesInThisTurn.Count == 0)
                         {
@@ -510,10 +520,12 @@ public class PieceController : Controller
                         }
                         _piecesCapturedInThisTurn = 0; //For next time the player uses this piece
                         _hasMoved = false;
+                        _background.SetActive(false);
                         break;
                     case States.Blocked:
                         _timer = 1.1f; //Shrink animation length
                         _animator.SetTrigger("shrink");
+                        _background.SetActive(false);
                         break;
                 }
                 break;

@@ -29,8 +29,6 @@ public struct Level
     public int star2Score;
     public int star3Score;
     
-    public List<StartingPieceSpawnData> newPositions;
-    
     public List<StartingPieceSpawnData> positions;
 }
 
