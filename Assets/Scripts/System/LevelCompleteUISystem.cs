@@ -22,7 +22,6 @@ public class LevelCompleteUISystem : Dependency
     
     private TextMeshProUGUI _turnsText;
     private TextMeshProUGUI _movesText;
-    private TextMeshProUGUI _timeText;
 
     private float _delayTimer;
     
@@ -42,9 +41,6 @@ public class LevelCompleteUISystem : Dependency
         
         Transform bestTurnText = creator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.StatsMoves);
         _movesText = bestTurnText.GetComponent<TextMeshProUGUI>();
-        
-        Transform timeText = creator.GetChildObjectByName(_levelCompleteUI.gameObject, AllTagNames.StatsTime);
-        _timeText = timeText.GetComponent<TextMeshProUGUI>();
         
         _starOneImage = creator.GetChildComponentByName<Image>(_levelCompleteUI.gameObject, AllTagNames.Star1Image);
         _starTwoImage = creator.GetChildComponentByName<Image>(_levelCompleteUI.gameObject, AllTagNames.Star2Image);
@@ -100,10 +96,9 @@ public class LevelCompleteUISystem : Dependency
     public void Show(float delayTimer = 0)
     {
         Level levelOnLoad = Creator.levelsSo.GetLevelOnLoad();
-        _turnsText.text = $"{Creator.statsTurns} / {levelOnLoad.turns}";
+        _turnsText.text = $"{Creator.statsTurns}";
         _movesText.text = $"{Creator.statsMoves}";
-        _timeText.text = $"{Creator.statsTime:0.##}s";
-        int score = (int)((Creator.statsTurns * 10) * Creator.statsMoves * Creator.statsTime);
+        int score = Creator.statsTurns * 10 * Creator.statsMoves;
         
         Debug.Log($"Score for level {levelOnLoad.level}: {score}");
         
