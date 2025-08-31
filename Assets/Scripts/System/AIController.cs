@@ -13,10 +13,10 @@ public class AIController : PieceController
         base.GameStart(creator);
     }
 
-    public override void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour, 
+    public override void Init(Vector3 position, Piece startingPiece, PieceColour pieceColour, 
         PieceAbility pieceAbility, SideSystem allySideSystem, SideSystem enemySideSystem)
     {
-        base.Init(position, startingPieces, pieceColour, pieceAbility, allySideSystem, enemySideSystem);
+        base.Init(position, startingPiece, pieceColour, pieceAbility, allySideSystem, enemySideSystem);
         
         SetThinkingTime();
     }
@@ -53,7 +53,7 @@ public class AIController : PieceController
             _startPosition = _pieceInstance.position;
             if (_pieceAbility == PieceAbility.LeaveBehind)
             {
-                _allySideSystem.CreatePiece(_pieceInstance.position, new(){_currentPiece}, _pieceAbility);
+                _allySideSystem.CreatePiece(_pieceInstance.position, _currentPiece, _pieceAbility);
             }
             
             _audioSystem.PlayPieceMoveSfx(1);

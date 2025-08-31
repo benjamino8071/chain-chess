@@ -80,7 +80,7 @@ public class PieceController : Controller
         _invalidMovesSystem = creator.GetDependency<InvalidMovesSystem>();
     }
 
-    public virtual void Init(Vector3 position, List<Piece> startingPieces, PieceColour pieceColour,
+    public virtual void Init(Vector3 position, Piece startingPiece, PieceColour pieceColour,
         PieceAbility pieceAbility, SideSystem allySideSystem, SideSystem enemySideSystem)
     {
         _pieceInstance = Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity).transform;
@@ -100,11 +100,8 @@ public class PieceController : Controller
         _pieceColour = pieceColour;
         _enemyColour = pieceColour == PieceColour.White ? PieceColour.Black : PieceColour.White;
 
-        foreach (Piece startingPiece in startingPieces)
-        {
-            _capturedPieces.Add(startingPiece);
-            _movesInThisTurn.Add(startingPiece);
-        }
+        _capturedPieces.Add(startingPiece);
+        _movesInThisTurn.Add(startingPiece);
 
         switch (pieceAbility)
         {
@@ -145,8 +142,7 @@ public class PieceController : Controller
                 break;
             }
         }
-        
-        UpdateSprite(startingPieces[0]);
+        UpdateSprite(startingPiece);
         
         SetState(pieceColour == PieceColour.White ? States.FindingMove : States.WaitingForTurn);
     }

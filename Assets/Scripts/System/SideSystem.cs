@@ -83,21 +83,21 @@ public class SideSystem : Dependency
     public virtual void SpawnPieces()
     {
         Level levelOnLoad = Creator.levelsSo.GetLevelOnLoad();
-        foreach (PieceSpawnData pieceSpawnData in levelOnLoad.positions)
+        foreach (StartingPieceSpawnData pieceSpawnData in levelOnLoad.positions)
         {
             if (pieceSpawnData.colour == _allyPieceColour)
             {
-                CreatePiece(pieceSpawnData.position, pieceSpawnData.pieces, pieceSpawnData.ability);
+                CreatePiece(pieceSpawnData.position, pieceSpawnData.piece, pieceSpawnData.ability);
             }
         }
     }
 
-    public void CreatePiece(Vector2 position, List<Piece> pieceMoves, PieceAbility ability)
+    public void CreatePiece(Vector2 position, Piece startingPiece, PieceAbility ability)
     {
         PieceController pieceController = _allyPieceColour == PieceColour.White 
             ? new PlayerController() : new AIController();
         pieceController.GameStart(Creator);
-        pieceController.Init(position, pieceMoves, _allyPieceColour, ability, this, _enemySideSystem);
+        pieceController.Init(position, startingPiece, _allyPieceColour, ability, this, _enemySideSystem);
         
         _pieceControllers.Add(pieceController);
         

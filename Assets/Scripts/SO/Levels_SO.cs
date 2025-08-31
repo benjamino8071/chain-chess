@@ -38,6 +38,83 @@ public class Levels_SO : ScriptableObject
         SetLevelNumber(sectionTen, levelNumber);
     }
 
+    [Button]
+    public void SetNewLevelLists()
+    {
+        /*List<List<Level>> allSections = new()
+        {
+            sectionOne,
+            sectionTwo,
+            sectionThree,
+            sectionFour,
+            sectionFive,
+            sectionSix,
+            sectionSeven,
+            sectionEight,
+            sectionNine,
+            sectionTen,
+        };
+
+        foreach (List<Level> section in allSections)
+        {
+            for (int i = 0; i < section.Count; i++)
+            {
+                Level level = section[i];
+            
+                List<StartingPieceSpawnData> startingPieceSpawns = new();
+            
+                foreach (PieceSpawnData pieceSpawnData in level.positions)
+                {
+                    startingPieceSpawns.Add(new()
+                    {
+                        position = pieceSpawnData.position,
+                        colour = pieceSpawnData.colour,
+                        ability = pieceSpawnData.ability,
+                        piece = pieceSpawnData.pieces[0]
+                    });
+                }
+
+                level.newPositions = startingPieceSpawns;
+
+                section[i] = level;
+            }
+        }
+        
+        Debug.Log("DONE!");*/
+    }
+    
+    [Button]
+    public void FillPositionListsWithNewLists()
+    {
+        List<List<Level>> allSections = new()
+        {
+            sectionOne,
+            sectionTwo,
+            sectionThree,
+            sectionFour,
+            sectionFive,
+            sectionSix,
+            sectionSeven,
+            sectionEight,
+            sectionNine,
+            sectionTen,
+        };
+
+        foreach (List<Level> section in allSections)
+        {
+            for (int i = 0; i < section.Count; i++)
+            {
+                Level level = section[i];
+
+                level.positions = level.newPositions.ToList();
+                
+                section[i] = level;
+            }
+        }
+
+        Debug.Log("DONE!");
+    }
+
     private int SetLevelNumber(List<Level> section, int levelNumber)
     {
         for (int i = 0; i < section.Count; i++)
@@ -54,7 +131,7 @@ public class Levels_SO : ScriptableObject
     
     [Title("Reserved Levels")]
     public List<Level> reservedLevels;
-
+    
     public List<Level> AllLevels()
     {
         List<Level> levels = sectionOne;
