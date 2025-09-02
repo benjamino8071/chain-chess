@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 9
+  levelOnLoad: 8
   sectionOne:
   - level: 1
     turns: 3
@@ -258,10 +258,6 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 3, y: 3}
-    - piece: 0
-      colour: 0
-      ability: 0
-      position: {x: 0, y: 0}
   - level: 9
     turns: 3
     star1Score: 490
