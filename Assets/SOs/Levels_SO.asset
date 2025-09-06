@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  levelOnLoad: 18
+  levelOnLoad: 25
   sectionOne:
   - level: 1
     turns: 3
@@ -715,6 +715,302 @@ MonoBehaviour:
       position: {x: 2, y: 7}
   sectionThree:
   - level: 20
+    turns: 20
+    star1Score: 300
+    star2Score: 200
+    star3Score: 100
+    positions:
+    - piece: 3
+      colour: 1
+      ability: 0
+      position: {x: 4, y: 5}
+    - piece: 3
+      colour: 0
+      ability: 0
+      position: {x: 3, y: 3}
+    - piece: 2
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 4}
+    - piece: 6
+      colour: 0
+      ability: 7
+      position: {x: 5, y: 5}
+    - piece: 1
+      colour: 0
+      ability: 0
+      position: {x: 7, y: 7}
+  - level: 21
+    turns: 20
+    star1Score: 300
+    star2Score: 180
+    star3Score: 70
+    positions:
+    - piece: 5
+      colour: 1
+      ability: 0
+      position: {x: 4, y: 4}
+    - piece: 6
+      colour: 0
+      ability: 7
+      position: {x: 7, y: 5}
+    - piece: 3
+      colour: 0
+      ability: 0
+      position: {x: 3, y: 4}
+    - piece: 2
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 6}
+    - piece: 3
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 2}
+    - piece: 3
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 3}
+    - piece: 1
+      colour: 0
+      ability: 0
+      position: {x: 7, y: 6}
+    - piece: 5
+      colour: 0
+      ability: 7
+      position: {x: 2, y: 6}
+  - level: 22
+    turns: 20
+    star1Score: 800
+    star2Score: 600
+    star3Score: 400
+    positions:
+    - piece: 1
+      colour: 1
+      ability: 0
+      position: {x: 5, y: 2}
+    - piece: 6
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 3}
+    - piece: 5
+      colour: 0
+      ability: 0
+      position: {x: 3, y: 4}
+    - piece: 4
+      colour: 0
+      ability: 7
+      position: {x: 3, y: 6}
+    - piece: 3
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 3}
+    - piece: 4
+      colour: 0
+      ability: 0
+      position: {x: 2, y: 3}
+    - piece: 3
+      colour: 0
+      ability: 0
+      position: {x: 7, y: 5}
+    - piece: 3
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 6}
+    - piece: 3
+      colour: 0
+      ability: 7
+      position: {x: 7, y: 7}
+  - level: 23
+    turns: 20
+    star1Score: 900
+    star2Score: 700
+    star3Score: 500
+    positions:
+    - piece: 5
+      colour: 1
+      ability: 0
+      position: {x: 5, y: 5}
+    - piece: 5
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 4}
+    - piece: 1
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 4}
+    - piece: 2
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 4}
+    - piece: 5
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 5}
+    - piece: 4
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 5}
+    - piece: 4
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 6}
+    - piece: 3
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 6}
+    - piece: 2
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 6}
+    - piece: 4
+      colour: 0
+      ability: 7
+      position: {x: 1, y: 1}
+    - piece: 2
+      colour: 0
+      ability: 7
+      position: {x: 6, y: 2}
+    - piece: 3
+      colour: 0
+      ability: 7
+      position: {x: 4, y: 8}
+    - piece: 5
+      colour: 0
+      ability: 7
+      position: {x: 8, y: 5}
+    - piece: 5
+      colour: 0
+      ability: 7
+      position: {x: 2, y: 6}
+  - level: 24
+    turns: 20
+    star1Score: 500
+    star2Score: 380
+    star3Score: 240
+    positions:
+    - piece: 5
+      colour: 1
+      ability: 0
+      position: {x: 7, y: 2}
+    - piece: 5
+      colour: 0
+      ability: 0
+      position: {x: 2, y: 2}
+    - piece: 3
+      colour: 0
+      ability: 7
+      position: {x: 3, y: 2}
+    - piece: 4
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 2}
+    - piece: 5
+      colour: 0
+      ability: 7
+      position: {x: 2, y: 4}
+    - piece: 2
+      colour: 0
+      ability: 0
+      position: {x: 3, y: 4}
+    - piece: 3
+      colour: 0
+      ability: 7
+      position: {x: 4, y: 4}
+    - piece: 2
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 4}
+    - piece: 2
+      colour: 0
+      ability: 0
+      position: {x: 2, y: 6}
+    - piece: 6
+      colour: 0
+      ability: 0
+      position: {x: 3, y: 6}
+    - piece: 2
+      colour: 0
+      ability: 7
+      position: {x: 4, y: 6}
+    - piece: 4
+      colour: 0
+      ability: 7
+      position: {x: 7, y: 7}
+  - level: 25
+    turns: 20
+    star1Score: 750
+    star2Score: 650
+    star3Score: 500
+    positions:
+    - piece: 5
+      colour: 1
+      ability: 0
+      position: {x: 2, y: 2}
+    - piece: 2
+      colour: 0
+      ability: 0
+      position: {x: 2, y: 6}
+    - piece: 4
+      colour: 0
+      ability: 0
+      position: {x: 3, y: 7}
+    - piece: 2
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 6}
+    - piece: 4
+      colour: 0
+      ability: 7
+      position: {x: 5, y: 7}
+    - piece: 2
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 6}
+    - piece: 3
+      colour: 0
+      ability: 0
+      position: {x: 7, y: 3}
+    - piece: 5
+      colour: 0
+      ability: 7
+      position: {x: 6, y: 4}
+    - piece: 4
+      colour: 0
+      ability: 0
+      position: {x: 5, y: 3}
+    - piece: 3
+      colour: 0
+      ability: 0
+      position: {x: 4, y: 4}
+    - piece: 2
+      colour: 0
+      ability: 7
+      position: {x: 3, y: 3}
+  - level: 26
+    turns: 0
+    star1Score: 0
+    star2Score: 0
+    star3Score: 0
+    positions: []
+  - level: 27
+    turns: 0
+    star1Score: 0
+    star2Score: 0
+    star3Score: 0
+    positions: []
+  - level: 28
+    turns: 0
+    star1Score: 0
+    star2Score: 0
+    star3Score: 0
+    positions: []
+  - level: 29
+    turns: 0
+    star1Score: 0
+    star2Score: 0
+    star3Score: 0
+    positions: []
+  - level: 30
     turns: 5
     star1Score: 2400
     star2Score: 1200
@@ -732,7 +1028,7 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 3, y: 6}
-  - level: 21
+  - level: 31
     turns: 5
     star1Score: 6400
     star2Score: 3200
@@ -750,7 +1046,7 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 4, y: 6}
-  - level: 22
+  - level: 32
     turns: 25
     star1Score: 24000
     star2Score: 12000
@@ -772,7 +1068,7 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 8, y: 4}
-  - level: 23
+  - level: 33
     turns: 25
     star1Score: 12000
     star2Score: 6000
@@ -798,7 +1094,7 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 3, y: 4}
-  - level: 24
+  - level: 34
     turns: 25
     star1Score: 60000
     star2Score: 30000
@@ -840,7 +1136,7 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 8, y: 5}
-  - level: 25
+  - level: 35
     turns: 25
     star1Score: 20000
     star2Score: 10000
@@ -866,7 +1162,7 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 3, y: 7}
-  - level: 26
+  - level: 36
     turns: 25
     star1Score: 100000
     star2Score: 50000
@@ -920,7 +1216,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 5, y: 7}
-  - level: 27
+  - level: 37
     turns: 25
     star1Score: 60000
     star2Score: 30000
@@ -962,7 +1258,7 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 4, y: 6}
-  - level: 28
+  - level: 38
     turns: 25
     star1Score: 160000
     star2Score: 80000
@@ -1020,7 +1316,7 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 1, y: 7}
-  - level: 29
+  - level: 39
     turns: 25
     star1Score: 120000
     star2Score: 60000
@@ -1075,7 +1371,7 @@ MonoBehaviour:
       ability: 2
       position: {x: 7, y: 8}
   sectionFour:
-  - level: 30
+  - level: 40
     turns: 25
     star1Score: 6000
     star2Score: 3000
@@ -1097,7 +1393,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 3, y: 4}
-  - level: 31
+  - level: 41
     turns: 25
     star1Score: 16000
     star2Score: 8000
@@ -1123,7 +1419,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 6, y: 5}
-  - level: 32
+  - level: 42
     turns: 25
     star1Score: 28000
     star2Score: 14000
@@ -1149,7 +1445,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 7, y: 7}
-  - level: 33
+  - level: 43
     turns: 25
     star1Score: 92000
     star2Score: 46000
@@ -1191,7 +1487,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 3, y: 5}
-  - level: 34
+  - level: 44
     turns: 25
     star1Score: 18000
     star2Score: 9000
@@ -1217,7 +1513,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 7, y: 7}
-  - level: 35
+  - level: 45
     turns: 25
     star1Score: 120000
     star2Score: 60000
@@ -1259,7 +1555,7 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 6, y: 8}
-  - level: 36
+  - level: 46
     turns: 25
     star1Score: 48000
     star2Score: 24000
@@ -1301,7 +1597,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 6, y: 5}
-  - level: 37
+  - level: 47
     turns: 25
     star1Score: 80000
     star2Score: 40000
@@ -1347,7 +1643,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 8, y: 8}
-  - level: 38
+  - level: 48
     turns: 15
     star1Score: 40000
     star2Score: 20000
@@ -1381,7 +1677,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 8, y: 8}
-  - level: 39
+  - level: 49
     turns: 25
     star1Score: 120000
     star2Score: 60000
@@ -1424,7 +1720,7 @@ MonoBehaviour:
       ability: 1
       position: {x: 6, y: 8}
   sectionFive:
-  - level: 40
+  - level: 50
     turns: 10
     star1Score: 4000
     star2Score: 2000
@@ -1446,7 +1742,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 2, y: 4}
-  - level: 41
+  - level: 51
     turns: 30
     star1Score: 14000
     star2Score: 7000
@@ -1468,7 +1764,7 @@ MonoBehaviour:
       colour: 0
       ability: 3
       position: {x: 3, y: 7}
-  - level: 42
+  - level: 52
     turns: 14
     star1Score: 24000
     star2Score: 12000
@@ -1494,7 +1790,7 @@ MonoBehaviour:
       colour: 0
       ability: 3
       position: {x: 8, y: 5}
-  - level: 43
+  - level: 53
     turns: 13
     star1Score: 120000
     star2Score: 60000
@@ -1528,7 +1824,7 @@ MonoBehaviour:
       colour: 0
       ability: 0
       position: {x: 4, y: 3}
-  - level: 44
+  - level: 54
     turns: 30
     star1Score: 40000
     star2Score: 20000
@@ -1554,7 +1850,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 8, y: 8}
-  - level: 45
+  - level: 55
     turns: 27
     star1Score: 36000
     star2Score: 18000
@@ -1584,7 +1880,7 @@ MonoBehaviour:
       colour: 0
       ability: 3
       position: {x: 5, y: 6}
-  - level: 46
+  - level: 56
     turns: 18
     star1Score: 20000
     star2Score: 10000
@@ -1614,7 +1910,7 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 4, y: 3}
-  - level: 47
+  - level: 57
     turns: 19
     star1Score: 80000
     star2Score: 40000
@@ -1664,7 +1960,7 @@ MonoBehaviour:
       colour: 0
       ability: 2
       position: {x: 2, y: 2}
-  - level: 48
+  - level: 58
     turns: 27
     star1Score: 160000
     star2Score: 80000
@@ -1718,7 +2014,7 @@ MonoBehaviour:
       colour: 0
       ability: 1
       position: {x: 8, y: 8}
-  - level: 49
+  - level: 59
     turns: 23
     star1Score: 120000
     star2Score: 60000
@@ -1769,7 +2065,7 @@ MonoBehaviour:
       ability: 3
       position: {x: 8, y: 5}
   sectionSix:
-  - level: 50
+  - level: 60
     turns: 25
     star1Score: 4000
     star2Score: 2000
@@ -1788,7 +2084,7 @@ MonoBehaviour:
       ability: 4
       position: {x: 1, y: 8}
   sectionSeven:
-  - level: 51
+  - level: 61
     turns: 28
     star1Score: 0
     star2Score: 0
@@ -1803,7 +2099,7 @@ MonoBehaviour:
       ability: 7
       position: {x: 4, y: 5}
   sectionEight:
-  - level: 52
+  - level: 62
     turns: 29
     star1Score: 16000
     star2Score: 8000
@@ -1819,12 +2115,16 @@ MonoBehaviour:
       position: {x: 8, y: 4}
     - piece: 4
       colour: 0
-      ability: 6
+      ability: 5
       position: {x: 1, y: 8}
     - piece: 2
       colour: 0
-      ability: 4
+      ability: 5
       position: {x: 5, y: 7}
+    - piece: 6
+      colour: 0
+      ability: 0
+      position: {x: 6, y: 1}
   sectionNine: []
   sectionTen: []
   reservedLevels:

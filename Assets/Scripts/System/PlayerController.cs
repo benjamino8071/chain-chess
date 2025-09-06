@@ -47,43 +47,68 @@ public class PlayerController : PieceController
 
     protected override void Moving(float dt)
     {
-        if (_pieceInstance.position != _jumpPosition)
-        {
-            _timer += dt * Creator.piecesSo.pieceSpeed;
-            _timer = Mathf.Clamp(_timer, 0f, Mathf.PI);
-            float t = Evaluate(_timer);
-            _pieceInstance.position = Vector3.Lerp(_pieceInstance.position, _jumpPosition, t);
-        }
-                
         if (_pieceInstance.position == _jumpPosition)
         {
             Creator.statsMoves++;
             
             _pieceInstance.position = math.round(_pieceInstance.position);
             _timer = 0;
-            
-            if (_boardSystem.TryCaptureEnemyPiece(_pieceInstance.position, _enemyColour, this))
+
+            bool won = false;
+            PieceController enemyPieceController = _enemySideSystem.GetPieceAtPosition(_pieceInstance.position);
+            if (enemyPieceController is not null)
+            {
+                if (enemyPieceController.pieceAbility == PieceAbility.Resetter)
+                {
+                    _capturedPieces.Clear();
+                    _movesInThisTurn.Clear();
+                    _piecesCapturedInThisTurn = 0;
+                    
+                    AddCapturedPiece(enemyPieceController.capturedPieces[0]);
+                    
+                    _chainUISystem.ShowChain(this, true);
+                }
+                else
+                {
+                    AddCapturedPiece(enemyPieceController.capturedPieces[0]);
+                    _chainUISystem.AddToChain(enemyPieceController, _capturedPieces.Count);
+                    
+                    _movesInThisTurn.RemoveAt(0);
+                }
+                
+                won = _enemySideSystem.PieceCaptured(enemyPieceController);
+                
+                float pitchAmount = 1 + 0.02f * _piecesCapturedInThisTurn;
+                _audioSystem.PlayPieceCapturedSfx(pitchAmount);
+            }
+            else
             {
                 _movesInThisTurn.RemoveAt(0);
-                
+            }
+            
+            if (won)
+            {
                 //We win!
                 UpdateSprite(_movesInThisTurn[0]);
+                
+                _enemySideSystem.Lose(GameOverReason.Captured, 0);
             }
-            else if(_enemySideSystem.TryGetCaptureLoverMovingToPosition(_pieceInstance.position, out PieceController captureLoverController))
+            else if (_enemySideSystem.TryGetCaptureLoverMovingToPosition(_pieceInstance.position, out PieceController captureLoverController))
             {
                 _allySideSystem.FreezeSide();
                 _enemySideSystem.SelectCaptureLoverPiece(captureLoverController, _pieceInstance.position);
             }
             else
             {
-                _movesInThisTurn.RemoveAt(0);
-                
                 SetToNextMove();
-                if (_movesInThisTurn.Count > 0 && _state == States.FindingMove)
-                {
-                    _validMovesSystem.UpdateValidMoves(GetAllValidMovesOfCurrentPiece());
-                }
             }
+        }
+        else
+        {
+            _timer += dt * Creator.piecesSo.pieceSpeed;
+            _timer = Mathf.Clamp(_timer, 0f, Mathf.PI);
+            float t = Evaluate(_timer);
+            _pieceInstance.position = Vector3.Lerp(_pieceInstance.position, _jumpPosition, t);
         }
     }
     
@@ -125,6 +150,11 @@ public class PlayerController : PieceController
             {
                 _chainUISystem.HighlightNextPiece(this);
                 SetState(States.FindingMove);
+
+                if (!_boardSystem.blackSystem.TickAlwaysMovers())
+                {
+                    _validMovesSystem.UpdateValidMoves(validMoves);
+                }
             }
             else
             {
@@ -134,6 +164,8 @@ public class PlayerController : PieceController
         }
         else
         {
+            _boardSystem.blackSystem.TickAlwaysMovers();
+            
             _chainUISystem.HideAllPieces();
             Finish();
         }

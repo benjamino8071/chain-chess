@@ -6,10 +6,14 @@ using Random = UnityEngine.Random;
 
 public class AIController : PieceController
 {
+    private TurnSystem _turnSystem;
+    
     private float _thinkingTimer;
     
     public override void GameStart(Creator creator)
     {
+        _turnSystem = creator.GetDependency<TurnSystem>();
+        
         base.GameStart(creator);
     }
 
@@ -72,25 +76,24 @@ public class AIController : PieceController
         {
             return;
         }
-        
-        if (_pieceInstance.position != _jumpPosition)
-        {
-            _timer += dt * Creator.piecesSo.pieceSpeed;
-            _timer = Mathf.Clamp(_timer, 0f, Mathf.PI);
-            float t = Evaluate(_timer);
-            _pieceInstance.position = Vector3.Lerp(_pieceInstance.position, _jumpPosition, t);
-        }
-                
+
         if (_pieceInstance.position == _jumpPosition)
         {
             _pieceInstance.position = math.round(_pieceInstance.position);
             _timer = 0;
             
-            _movesInThisTurn.RemoveAt(0);
-            if (_boardSystem.TryCaptureEnemyPiece(_pieceInstance.position, _enemyColour, this))
+            bool won = false;
+            PieceController enemyPieceController = _enemySideSystem.GetPieceAtPosition(_pieceInstance.position);
+            if (enemyPieceController is not null)
             {
-                //We win!
-                UpdateSprite(_movesInThisTurn[0]);
+                won = _enemySideSystem.PieceCaptured(enemyPieceController);
+            }
+            
+            _movesInThisTurn.RemoveAt(0);
+
+            if (won)
+            {
+                _enemySideSystem.Lose(GameOverReason.Captured, 0);
             }
             else
             {
@@ -120,6 +123,13 @@ public class AIController : PieceController
                 SetToNextMove();
                 SetThinkingTime();
             }
+        }
+        else
+        {
+            _timer += dt * Creator.piecesSo.pieceSpeed;
+            _timer = Mathf.Clamp(_timer, 0f, Mathf.PI);
+            float t = Evaluate(_timer);
+            _pieceInstance.position = Vector3.Lerp(_pieceInstance.position, _jumpPosition, t);
         }
     }
     
@@ -168,11 +178,11 @@ public class AIController : PieceController
             List<ValidMove> validMoves = GetAllValidMovesOfCurrentPiece();
             SetState(validMoves.Count > 0 ? States.FindingMove : States.Blocked);
         }
-        else if (_pieceAbility == PieceAbility.AlwaysMove)
+        else if (_pieceAbility == PieceAbility.AlwaysMove && _turnSystem.CurrentTurn() == _enemyColour)
         {
             SetState(States.WaitingForTurn);
-            SetState(States.FindingMove);
-            _enemySideSystem.UpdateSelectedPieceValidMoves();
+            _validMovesSystem.UpdateValidMovesOfWhitePiece();
+            _enemySideSystem.UnfreezeSide();
         }
         else
         {

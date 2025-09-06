@@ -9,7 +9,7 @@ public class SideSystem : Dependency
 {
     private AudioSystem _audioSystem;
     private ValidMovesSystem _validMovesSystem;
-    private TurnSystem _turnSystem;
+    protected TurnSystem _turnSystem;
     private ChainUISystem _chainUISystem;
     private EndGameSystem _endGameSystem;
     protected SideSystem _enemySideSystem;
@@ -17,19 +17,14 @@ public class SideSystem : Dependency
 
     public PieceController pieceControllerSelected => _pieceControllerSelected;
     
-    public bool frozen => _frozen;
-    
     protected List<PieceController> _pieceControllers = new ();
     protected List<PieceController> _piecesToMoveThisTurn = new();
-    protected List<PieceController> _mustMovers = new();
     
     protected PieceController _pieceControllerSelected;
     
     protected PieceColour _allyPieceColour;
     protected PieceColour _enemyPieceColour;
     protected bool _frozen;
-    protected bool _tickCaptureLover;
-    protected int _endTurnFrameCount;
     
     public override void GameStart(Creator creator)
     {
@@ -43,30 +38,6 @@ public class SideSystem : Dependency
         _settingsUISystem = creator.GetDependency<SettingsUISystem>();
     }
 
-    public override void GameUpdate(float dt)
-    {
-        if (_endTurnFrameCount > 0)
-        {
-            _endTurnFrameCount--;
-            if (_endTurnFrameCount == 0)
-            {
-                _turnSystem.SwitchTurn(_enemyPieceColour);
-            }
-        }
-        
-        foreach (PieceController pieceController in _mustMovers)
-        {
-            pieceController.GameUpdate(dt);
-        }
-        
-        if (_turnSystem.CurrentTurn() == _enemyPieceColour && !_tickCaptureLover)
-        {
-            return;
-        }
-        
-        _pieceControllerSelected?.GameUpdate(dt);
-    }
-
     public override void Clean()
     {
         _pieceControllerSelected = null;
@@ -75,9 +46,7 @@ public class SideSystem : Dependency
             levPieceController.Destroy();
         }
         _pieceControllers.Clear();
-        _mustMovers.Clear();
         _frozen = false;
-        _tickCaptureLover = false;
     }
 
     public virtual void SpawnPieces()
@@ -92,20 +61,9 @@ public class SideSystem : Dependency
         }
     }
 
-    public void CreatePiece(Vector2 position, Piece startingPiece, PieceAbility ability)
+    public virtual void CreatePiece(Vector2 position, Piece startingPiece, PieceAbility ability)
     {
-        PieceController pieceController = _allyPieceColour == PieceColour.White 
-            ? new PlayerController() : new AIController();
-        pieceController.GameStart(Creator);
-        pieceController.Init(position, startingPiece, _allyPieceColour, ability, this, _enemySideSystem);
         
-        _pieceControllers.Add(pieceController);
-        
-        if (ability == PieceAbility.AlwaysMove)
-        {
-            _mustMovers.Add(pieceController);
-            pieceController.SetState(PieceController.States.FindingMove);
-        }
     }
 
     public List<Vector3> PiecePositions()
@@ -120,19 +78,17 @@ public class SideSystem : Dependency
         return piecePositions;
     }
 
-    public bool TryGetAllyPieceAtPosition(Vector3 position, out PieceController playerController)
+    public PieceController GetPieceAtPosition(Vector3 position)
     {
         foreach (PieceController levPlayerController in _pieceControllers)
         {
             if (levPlayerController.piecePos == position)
             {
-                playerController = levPlayerController;
-                return true;
+                return levPlayerController;
             }
         }
-
-        playerController = null;
-        return false;
+        
+        return null;
     }
 
     public bool TryGetCaptureLoverMovingToPosition(Vector3 position, out PieceController playerController)
@@ -200,7 +156,6 @@ public class SideSystem : Dependency
         _pieceControllerSelected = pieceController;
         pieceController.ForceMove(movePosition);
         pieceController.PlayEnlargeAnimation();
-        _tickCaptureLover = true;
     }
 
     public void DeselectPiece()
@@ -228,39 +183,28 @@ public class SideSystem : Dependency
     public void FreezeSide()
     {
         _pieceControllerSelected?.SetState(PieceController.States.WaitingForTurn);
-        _pieceControllerSelected = null;
         _validMovesSystem.HideAllValidMoves();
         
-        //DeselectPiece();
         _frozen = true;
+    }
+
+    public void UnfreezeSide()
+    {
+        _frozen = false;
     }
     
     /// <returns>True = all ally pieces captured</returns>
-    public bool PieceCaptured(PieceController capturedPieceController, PieceController pieceUsed)
+    public virtual bool PieceCaptured(PieceController capturedPieceController)
     {
         _pieceControllers.Remove(capturedPieceController);
-        
         capturedPieceController.SetState(PieceController.States.NotInUse);
-        
-        if (_pieceControllers.Count == 0)
-        {
-            Lose(GameOverReason.Captured, 0);
-            return true;
-        }
-        else
-        {
-            float pitchAmount = 1 + 0.02f * pieceUsed.piecesCapturedInThisTurn;
-            
-            _audioSystem.PlayPieceCapturedSfx(pitchAmount);
-            return false;
-        }
+
+        return _pieceControllers.Count == 0;
     }
 
     public void PieceBlocked(PieceController pieceController)
     {
         _pieceControllers.Remove(pieceController);
-        
-        //pieceController.SetState(PieceController.States.Blocked);
         
         if (_pieceControllers.Count == 0)
         {
@@ -295,109 +239,5 @@ public class SideSystem : Dependency
             _pieceControllerSelected.PlayEnlargeAnimation();
             _pieceControllerSelected.SetState(PieceController.States.FindingMove);
         }
-    }
-
-    public void AiSetup()
-    {
-        _piecesToMoveThisTurn = new(_pieceControllers.Count);
-        
-        /*
-         * Try to find a piece that can capture the other player
-         */
-        SystemRandom rnd = new(DateTime.Now.Millisecond);
-        bool findPieceThatCanCapture = rnd.Next(1, 100) <= Creator.piecesSo.capturePlayerOdds;
-        
-        if(findPieceThatCanCapture && FindPieceThatCanCapture() is {} pieceThatCanCapture)
-        {
-            _piecesToMoveThisTurn.Add(pieceThatCanCapture);
-        }
-        else if (SelectRandomPiece() is { } randomPiece)
-        {
-            _piecesToMoveThisTurn.Add(randomPiece);
-        }
-
-        foreach (PieceController pieceController in _pieceControllers)
-        {
-            if (pieceController.pieceAbility == PieceAbility.MustMove)
-            {
-                _piecesToMoveThisTurn.Add(pieceController);
-            }
-        }
-        
-        if (_piecesToMoveThisTurn.Count == 0)
-        {
-            if (_mustMovers.Count > 0)
-            {
-                _endTurnFrameCount = 2;
-            }
-            else
-            {
-                Lose(GameOverReason.Captured, 1.1f);
-            }
-        }
-        else
-        {
-            _pieceControllerSelected = _piecesToMoveThisTurn[0];
-
-            _pieceControllerSelected.PlayEnlargeAnimation();
-            _pieceControllerSelected.SetState(PieceController.States.FindingMove);
-        }
-    }
-    
-    private PieceController SelectRandomPiece()
-    {
-        List<PieceController> movablePieceControllers = MovablePieceControllers();
-        if (movablePieceControllers.Count == 0)
-        {
-            return null;
-        }
-        
-        int enemySelectedIndex = Random.Range(0, movablePieceControllers.Count);
-        
-        return movablePieceControllers[enemySelectedIndex];
-    }
-
-    private PieceController FindPieceThatCanCapture()
-    {
-        List<PieceController> enemyPieceControllers = _enemySideSystem.MovablePieceControllers();
-        
-        List<PieceController> movablePieceControllers = MovablePieceControllers();
-
-        foreach (PieceController pieceController in movablePieceControllers)
-        {
-            List<ValidMove> validMoves = pieceController.GetAllValidMovesOfCurrentPiece();
-
-            foreach (ValidMove validMove in validMoves)
-            {
-                //Don't need to fear this inner for loop as it will basically always have 1 piece
-                //At least for the puzzle levels
-                foreach (PieceController enemyPieceController in enemyPieceControllers)
-                {
-                    if (enemyPieceController.piecePos == (Vector3)validMove.position)
-                    {
-                        return pieceController;
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private List<PieceController> MovablePieceControllers()
-    {
-        List<PieceController> validPieceControllers = new();
-
-        foreach (PieceController levPieceController in _pieceControllers)
-        {
-            if (levPieceController.AllValidMovesOfFirstPiece().Count > 0 
-                && levPieceController.pieceAbility != PieceAbility.MustMove //Must Moves will always move after the random piece has moved
-                && levPieceController.pieceAbility != PieceAbility.AlwaysMove) //Always Moves just move on their own
-            {
-                validPieceControllers.Add(levPieceController);
-            }
-        }
-        
-        return validPieceControllers;
     }
 }

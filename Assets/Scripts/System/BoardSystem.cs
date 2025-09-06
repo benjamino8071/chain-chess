@@ -18,6 +18,9 @@ public class BoardSystem : Dependency
     public SideSystem inactiveSideSystem =>_turnSystem.CurrentTurn() == PieceColour.White 
         ? _blackSystem 
         : _whiteSystem;
+
+    public BlackSystem blackSystem => _blackSystem;
+    public WhiteSystem whiteSystem => _whiteSystem;
     
     private List<float3> _validTiles;
     
@@ -108,32 +111,6 @@ public class BoardSystem : Dependency
             : _blackSystem.PiecePositions();
         
         return enemyPositions.Contains(piecePos);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="piecePos"></param>
-    /// <param name="enemyColour"></param>
-    /// <param name="pieceUsed"></param>
-    /// <returns>True = captured all enemy pieces of pieceUsed</returns>
-    public bool TryCaptureEnemyPiece(Vector3 piecePos, PieceColour enemyColour, PieceController pieceUsed)
-    {
-        if (enemyColour == PieceColour.White 
-            && _whiteSystem.TryGetAllyPieceAtPosition(piecePos, out PieceController whitePieceCont))
-        {
-            pieceUsed.AddCapturedPiece(whitePieceCont.capturedPieces[0]);
-            return _whiteSystem.PieceCaptured(whitePieceCont, pieceUsed);
-        }
-        if (enemyColour == PieceColour.Black 
-            && _blackSystem.TryGetAllyPieceAtPosition(piecePos, out PieceController blackPieceCont))
-        {
-            pieceUsed.AddCapturedPiece(blackPieceCont.capturedPieces[0]);
-            _chainUISystem.AddToChain(blackPieceCont, pieceUsed.capturedPieces.Count);
-            return _blackSystem.PieceCaptured(blackPieceCont, pieceUsed);
-        }
-        
-        return false;
     }
     
     public void ShowTapPoint(float3 position)

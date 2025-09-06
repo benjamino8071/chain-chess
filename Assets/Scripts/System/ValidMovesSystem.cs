@@ -11,12 +11,16 @@ public class ValidMovesSystem : Dependency
         public GameObject enemyHere;
         public GameObject enemyNotHere;
     }
+
+    private WhiteSystem _whiteSystem;
     
     private List<ValidPositionVisuals> _validMovesVisuals = new(64);
     
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
+
+        _whiteSystem = creator.GetDependency<WhiteSystem>();
         
         _validMovesVisuals = new(64);
 
@@ -54,6 +58,14 @@ public class ValidMovesSystem : Dependency
             validPositionVisual.visual.transform.position = Vector3.zero;
             validPositionVisual.enemyHere.SetActive(false);
             validPositionVisual.enemyNotHere.SetActive(false);
+        }
+    }
+
+    public void UpdateValidMovesOfWhitePiece()
+    {
+        if (_whiteSystem.pieceControllerSelected is { } pieceControllerSelected)
+        {
+            UpdateValidMoves(pieceControllerSelected.GetAllValidMovesOfCurrentPiece());
         }
     }
 
