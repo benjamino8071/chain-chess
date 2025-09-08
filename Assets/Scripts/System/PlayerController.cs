@@ -58,22 +58,74 @@ public class PlayerController : PieceController
             PieceController enemyPieceController = _enemySideSystem.GetPieceAtPosition(_pieceInstance.position);
             if (enemyPieceController is not null)
             {
-                if (enemyPieceController.pieceAbility == PieceAbility.Resetter)
+                switch (enemyPieceController.pieceAbility)
                 {
-                    _capturedPieces.Clear();
-                    _movesInThisTurn.Clear();
-                    _piecesCapturedInThisTurn = 0;
+                    case PieceAbility.Resetter:
+                        _capturedPieces.Clear();
+                        _movesInThisTurn.Clear();
+                        _piecesCapturedInThisTurn = 0;
                     
-                    AddCapturedPiece(enemyPieceController.capturedPieces[0]);
+                        AddCapturedPiece(enemyPieceController.capturedPieces[0]);
                     
-                    _chainUISystem.ShowChain(this, true);
-                }
-                else
-                {
-                    AddCapturedPiece(enemyPieceController.capturedPieces[0]);
-                    _chainUISystem.AddToChain(enemyPieceController, _capturedPieces.Count);
+                        _chainUISystem.ShowChain(this, true);
+                        break;
+                    case PieceAbility.Multiplier:
+                        float3 topLeft = enemyPieceController.piecePos + new Vector3(-1, 1, 0);
+                        float3 topRight = enemyPieceController.piecePos + new Vector3(1, 1, 0);
+                        float3 botLeft = enemyPieceController.piecePos + new Vector3(-1, -1, 0);
+                        float3 botRight = enemyPieceController.piecePos + new Vector3(1, -1, 0);
+                        if (_boardSystem.IsPositionValid(topLeft))
+                        {
+                            _enemySideSystem.CreatePiece(new(topLeft.x, topLeft.y), Piece.Knight, PieceAbility.None);
+                        }
+                        if (_boardSystem.IsPositionValid(topRight))
+                        {
+                            _enemySideSystem.CreatePiece(new(topRight.x, topRight.y), Piece.Bishop, PieceAbility.None);
+                        }
+                        if (_boardSystem.IsPositionValid(botLeft))
+                        {
+                            _enemySideSystem.CreatePiece(new(botLeft.x, botLeft.y), Piece.King, PieceAbility.None);
+                        }
+                        if (_boardSystem.IsPositionValid(botRight))
+                        {
+                            _enemySideSystem.CreatePiece(new(botRight.x, botRight.y), Piece.Queen, PieceAbility.None);
+                        }
+                        
+                        
+                        /*List<float3> newPiecePosses = new()
+                        {
+                            enemyPieceController.piecePos + new Vector3(-1, 1, 0),
+                            enemyPieceController.piecePos + new Vector3(1, 1, 0),
+                            enemyPieceController.piecePos + new Vector3(-1, -1, 0),
+                            enemyPieceController.piecePos + new Vector3(1, -1, 0)
+                        };
+                        foreach (float3 newPiecePos in newPiecePosses)
+                        {
+                            if (_boardSystem.IsPositionValid(newPiecePos))
+                            {
+                                _enemySideSystem.CreatePiece(new(newPiecePos.x, newPiecePos.y), enemyPieceController.currentPiece, PieceAbility.None);
+                            }
+                        }*/
+                        
+                        AddCapturedPiece(enemyPieceController.capturedPieces[0]);
+                        _chainUISystem.AddToChain(enemyPieceController, _capturedPieces.Count);
+                        
+                        _movesInThisTurn.RemoveAt(0);
+                        break;
+                    case PieceAbility.StopTurn:
+                    {
+                        AddCapturedPiece(enemyPieceController.capturedPieces[0]);
+                        _chainUISystem.AddToChain(enemyPieceController, _capturedPieces.Count);
+                        
+                        _movesInThisTurn.Clear();
+                        break;
+                    }
+                    default:
+                        AddCapturedPiece(enemyPieceController.capturedPieces[0]);
+                        _chainUISystem.AddToChain(enemyPieceController, _capturedPieces.Count);
                     
-                    _movesInThisTurn.RemoveAt(0);
+                        _movesInThisTurn.RemoveAt(0);
+                        break;
                 }
                 
                 won = _enemySideSystem.PieceCaptured(enemyPieceController);
@@ -89,8 +141,6 @@ public class PlayerController : PieceController
             if (won)
             {
                 //We win!
-                UpdateSprite(_movesInThisTurn[0]);
-                
                 _enemySideSystem.Lose(GameOverReason.Captured, 0);
             }
             else if (_enemySideSystem.TryGetCaptureLoverMovingToPosition(_pieceInstance.position, out PieceController captureLoverController))

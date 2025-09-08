@@ -111,10 +111,22 @@ public class PieceController : Controller
                 _spriteRenderer.material.color = pieceColour == PieceColour.White ? Creator.piecesSo.whiteColor : Creator.piecesSo.blackColor;
                 break;
             }
+            case PieceAbility.Resetter:
+            {
+                _spriteRenderer.material = Creator.piecesSo.resetterMat;
+                _spriteRenderer.material.color = Creator.piecesSo.resetterColor;
+                break;
+            }
             case PieceAbility.MustMove:
             {
                 _spriteRenderer.material = Creator.piecesSo.mustMoveMat;
                 _spriteRenderer.material.color = Creator.piecesSo.mustMoveColor;
+                break;
+            }
+            case PieceAbility.Multiplier:
+            {
+                _spriteRenderer.material = Creator.piecesSo.multiplierMat;
+                _spriteRenderer.material.color = Creator.piecesSo.multiplierColor;
                 break;
             }
             case PieceAbility.CaptureLover:
@@ -123,22 +135,16 @@ public class PieceController : Controller
                 _spriteRenderer.material.color = Creator.piecesSo.captureLoverColor;
                 break;
             }
-            case PieceAbility.Glitched:
+            case PieceAbility.StopTurn:
             {
-                _spriteRenderer.material = Creator.piecesSo.glitchedMat;
-                _spriteRenderer.material.color = pieceColour == PieceColour.White ? Creator.piecesSo.whiteColor : Creator.piecesSo.blackColor;
+                _spriteRenderer.material = Creator.piecesSo.stopTurnMat;
+                _spriteRenderer.material.color = Creator.piecesSo.stopTurnColor;
                 break;
             }
-            case PieceAbility.LeaveBehind:
+            case PieceAbility.AlwaysMove:
             {
-                _spriteRenderer.material = Creator.piecesSo.leaveBehindMat;
-                _spriteRenderer.material.color = Creator.piecesSo.leaveBehindColor;
-                break;
-            }
-            case PieceAbility.TileDestroyer:
-            {
-                _spriteRenderer.material = Creator.piecesSo.tileDestroyerMat;
-                _spriteRenderer.material.color = Creator.piecesSo.tileDestroyerColor;
+                _spriteRenderer.material = Creator.piecesSo.alwaysMoveMat;
+                _spriteRenderer.material.color = Creator.piecesSo.alwaysMoveColor;
                 break;
             }
         }
@@ -468,14 +474,6 @@ public class PieceController : Controller
                     case States.WaitingForTurn:
                         if (_movesInThisTurn.Count == 0)
                         {
-                            if (_pieceAbility == PieceAbility.Glitched)
-                            {
-                                for (int i = 0; i < _capturedPieces.Count; i++)
-                                {
-                                    _capturedPieces[i] = GenerateOtherRandomPiece(_capturedPieces[i]);
-                                }
-                            }
-                    
                             UpdateSprite(_capturedPieces[0]);
                             foreach (Piece capturedPiece in _capturedPieces)
                             {

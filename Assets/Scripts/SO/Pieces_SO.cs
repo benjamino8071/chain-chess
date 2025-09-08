@@ -17,18 +17,21 @@ public class Pieces_SO : ScriptableObject
 
     public Color whiteColor;
     public Color blackColor;
+    public Color resetterColor;
     public Color mustMoveColor;
+    public Color multiplierColor;
     public Color captureLoverColor;
-    public Color leaveBehindColor;
-    public Color tileDestroyerColor;
+    public Color stopTurnColor;
+    public Color alwaysMoveColor;
     
     [Header("AI-Specific")]
     public Material noneMat;
+    public Material resetterMat;
     public Material mustMoveMat;
-    public Material glitchedMat;
+    public Material multiplierMat;
     public Material captureLoverMat;
-    public Material leaveBehindMat;
-    public Material tileDestroyerMat;
+    public Material stopTurnMat;
+    public Material alwaysMoveMat;
 
     public float aiThinkingTime;
     public float alwaysMoveThinkingTime;
@@ -42,14 +45,13 @@ public enum PieceColour
 
 public enum PieceAbility
 {
-    None,
-    MustMove,
-    Glitched,
-    CaptureLover,
-    LeaveBehind,
-    AlwaysMove,
-    TileDestroyer,
-    Resetter
+    None = 0,
+    MustMove = 1,
+    CaptureLover = 3,
+    AlwaysMove = 5,
+    Resetter = 7,
+    Multiplier = 8,
+    StopTurn = 9
 }
 
 [Serializable]

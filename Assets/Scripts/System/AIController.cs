@@ -55,10 +55,6 @@ public class AIController : PieceController
             }
 
             _startPosition = _pieceInstance.position;
-            if (_pieceAbility == PieceAbility.LeaveBehind)
-            {
-                _allySideSystem.CreatePiece(_pieceInstance.position, _currentPiece, _pieceAbility);
-            }
             
             _audioSystem.PlayPieceMoveSfx(1);
             SetState(States.Moving);
@@ -97,29 +93,6 @@ public class AIController : PieceController
             }
             else
             {
-                if (_pieceAbility == PieceAbility.TileDestroyer)
-                {
-                    //Find out the x tiles between start position and end position
-
-                    Vector2Int startPos = new((int)_startPosition.x, (int)_startPosition.y);
-                    Vector2Int jumpPos = new((int)_jumpPosition.x, (int)_jumpPosition.y);
-
-                    List<Vector2Int> intermediaryPositions = GetPath(startPos, jumpPos);
-                    
-                    List<Vector3> tilesCrossed = new(1 + intermediaryPositions.Count)
-                    {
-                        _startPosition
-                    };
-                    foreach (Vector2Int intermediaryPosition in intermediaryPositions)
-                    {
-                        Vector3 pos = new(intermediaryPosition.x, intermediaryPosition.y);
-                        
-                        tilesCrossed.Add(pos);
-                    }
-                    
-                    _invalidMovesSystem.AddMoves(tilesCrossed);
-                }
-                
                 SetToNextMove();
                 SetThinkingTime();
             }
