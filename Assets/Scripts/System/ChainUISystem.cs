@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class ChainUISystem : Dependency
 {
     private BoardSystem _boardSystem;
-    
+    private AudioSystem _audioSystem;
+
     private Transform _pivot;
 
     private TextMeshProUGUI _movesRemainingText;
@@ -33,6 +34,7 @@ public class ChainUISystem : Dependency
         base.GameStart(creator);
 
         _boardSystem = creator.GetDependency<BoardSystem>();
+        _audioSystem = creator.GetDependency<AudioSystem>();
 
         Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
         _pivot = creator.GetChildObjectByName(guiBottom.gameObject, AllTagNames.Pivot);
@@ -133,7 +135,7 @@ public class ChainUISystem : Dependency
             UpdateMovesRemainingText(pieceController.capturedPieces.Count);
         }
     }
-
+    
     public void AddToChain(PieceController capturedPiece, int playerPieceCaptureCount)
     {
         ShowNewPiece(capturedPiece.currentPiece, capturedPiece.movesUsed);

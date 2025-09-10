@@ -44,6 +44,8 @@ public class PlayerController : PieceController
             _positionRequested = Vector3.zero; //For next time the player double taps
         }
     }
+    
+    private float _pitchAmount = 1;
 
     protected override void Moving(float dt)
     {
@@ -74,38 +76,22 @@ public class PlayerController : PieceController
                         float3 topRight = enemyPieceController.piecePos + new Vector3(1, 1, 0);
                         float3 botLeft = enemyPieceController.piecePos + new Vector3(-1, -1, 0);
                         float3 botRight = enemyPieceController.piecePos + new Vector3(1, -1, 0);
-                        if (_boardSystem.IsPositionValid(topLeft))
+                        if (_boardSystem.IsPositionValid(topLeft) && !_boardSystem.IsEnemyAtPosition(topLeft, _enemyColour))
                         {
-                            _enemySideSystem.CreatePiece(new(topLeft.x, topLeft.y), Piece.Knight, PieceAbility.None);
+                            _enemySideSystem.CreatePiece(new(topLeft.x, topLeft.y), enemyPieceController.currentPiece, PieceAbility.None);
                         }
-                        if (_boardSystem.IsPositionValid(topRight))
+                        if (_boardSystem.IsPositionValid(topRight) && !_boardSystem.IsEnemyAtPosition(topRight, _enemyColour))
                         {
-                            _enemySideSystem.CreatePiece(new(topRight.x, topRight.y), Piece.Bishop, PieceAbility.None);
+                            _enemySideSystem.CreatePiece(new(topRight.x, topRight.y), enemyPieceController.currentPiece, PieceAbility.None);
                         }
-                        if (_boardSystem.IsPositionValid(botLeft))
+                        if (_boardSystem.IsPositionValid(botLeft) && !_boardSystem.IsEnemyAtPosition(botLeft, _enemyColour))
                         {
-                            _enemySideSystem.CreatePiece(new(botLeft.x, botLeft.y), Piece.King, PieceAbility.None);
+                            _enemySideSystem.CreatePiece(new(botLeft.x, botLeft.y), enemyPieceController.currentPiece, PieceAbility.None);
                         }
-                        if (_boardSystem.IsPositionValid(botRight))
+                        if (_boardSystem.IsPositionValid(botRight) && !_boardSystem.IsEnemyAtPosition(botRight, _enemyColour))
                         {
-                            _enemySideSystem.CreatePiece(new(botRight.x, botRight.y), Piece.Queen, PieceAbility.None);
+                            _enemySideSystem.CreatePiece(new(botRight.x, botRight.y), enemyPieceController.currentPiece, PieceAbility.None);
                         }
-                        
-                        
-                        /*List<float3> newPiecePosses = new()
-                        {
-                            enemyPieceController.piecePos + new Vector3(-1, 1, 0),
-                            enemyPieceController.piecePos + new Vector3(1, 1, 0),
-                            enemyPieceController.piecePos + new Vector3(-1, -1, 0),
-                            enemyPieceController.piecePos + new Vector3(1, -1, 0)
-                        };
-                        foreach (float3 newPiecePos in newPiecePosses)
-                        {
-                            if (_boardSystem.IsPositionValid(newPiecePos))
-                            {
-                                _enemySideSystem.CreatePiece(new(newPiecePos.x, newPiecePos.y), enemyPieceController.currentPiece, PieceAbility.None);
-                            }
-                        }*/
                         
                         AddCapturedPiece(enemyPieceController.capturedPieces[0]);
                         _chainUISystem.AddToChain(enemyPieceController, _capturedPieces.Count);
@@ -129,9 +115,11 @@ public class PlayerController : PieceController
                 }
                 
                 won = _enemySideSystem.PieceCaptured(enemyPieceController);
-                
-                float pitchAmount = 1 + 0.02f * _piecesCapturedInThisTurn;
-                _audioSystem.PlayPieceCapturedSfx(pitchAmount);
+
+                _pitchAmount += 0.02f;
+
+                // float pitchAmount = 1 + 0.02f * _piecesCapturedInThisTurn;
+                _audioSystem.PlayPieceCapturedSfx(_pitchAmount);
             }
             else
             {

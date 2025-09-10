@@ -98,7 +98,7 @@ public class LevelCompleteUISystem : Dependency
         Level levelOnLoad = Creator.levelsSo.GetLevelOnLoad();
         _turnsText.text = $"{Creator.statsTurns}";
         _movesText.text = $"{Creator.statsMoves}";
-        int score = Creator.statsTurns * 10 * Creator.statsMoves;
+        int score = Creator.statsTurns * Creator.statsMoves;
         
         Debug.Log($"Score for level {levelOnLoad.level}: {score}");
         
