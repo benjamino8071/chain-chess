@@ -7,6 +7,7 @@ using SystemRandom = System.Random;
 public class Pieces_SO : ScriptableObject
 {
     public float pieceSpeed;
+    public float alwaysMoveSpeed;
     
     public Sprite pawn;
     public Sprite rook;

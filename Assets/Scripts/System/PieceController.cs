@@ -34,6 +34,8 @@ public class PieceController : Controller
     public States state => _state;
     
     public Vector3 piecePos => _pieceInstance.position;
+
+    public Vector3 jumpPos => _jumpPosition;
     
     public List<Piece> capturedPieces => _capturedPieces;
     

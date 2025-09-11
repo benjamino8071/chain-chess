@@ -73,6 +73,7 @@ public class SideSystem : Dependency
         foreach (PieceController pieceController in _pieceControllers)
         {
             piecePositions.Add(pieceController.piecePos);
+            piecePositions.Add(pieceController.jumpPos);
         }
 
         return piecePositions;

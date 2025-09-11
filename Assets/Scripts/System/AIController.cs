@@ -99,7 +99,10 @@ public class AIController : PieceController
         }
         else
         {
-            _timer += dt * Creator.piecesSo.pieceSpeed;
+            float speed = _pieceAbility == PieceAbility.AlwaysMove
+                ? Creator.piecesSo.alwaysMoveSpeed
+                : Creator.piecesSo.pieceSpeed;
+            _timer += dt * speed;
             _timer = Mathf.Clamp(_timer, 0f, Mathf.PI);
             float t = Evaluate(_timer);
             _pieceInstance.position = Vector3.Lerp(_pieceInstance.position, _jumpPosition, t);
