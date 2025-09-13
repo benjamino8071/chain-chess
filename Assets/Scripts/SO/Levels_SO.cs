@@ -17,7 +17,8 @@ public class Levels_SO : ScriptableObject
     public List<Level> sectionSix;
     public List<Level> sectionSeven;
     public List<Level> sectionEight;
-
+    public Level finalLevel;
+    
     [Title("Level Numbers")]
     [Button]
     public void SetAllLevelNumbers()
@@ -32,6 +33,7 @@ public class Levels_SO : ScriptableObject
         levelNumber = SetLevelNumber(sectionSix, levelNumber);
         levelNumber = SetLevelNumber(sectionSeven, levelNumber);
         levelNumber = SetLevelNumber(sectionEight, levelNumber);
+        finalLevel.level = levelNumber;
     }
 
     private int SetLevelNumber(List<Level> section, int levelNumber)
@@ -61,6 +63,7 @@ public class Levels_SO : ScriptableObject
             .Concat(sectionSix)
             .Concat(sectionSeven)
             .Concat(sectionEight).ToList();
+        levels.Add(finalLevel);
 
         return levels;
     }
