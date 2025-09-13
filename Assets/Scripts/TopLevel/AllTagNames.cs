@@ -27,7 +27,7 @@ public enum AllTagNames
     Star3Image = 100,
     LevelSelect = 101,
     Pivot = 103,
-    AllInvalidMovesParent = 104,
+    PlayerSetTilesParent = 104,
     EnemyHere,
     EnemyNotHere,
     PlayerSprite,

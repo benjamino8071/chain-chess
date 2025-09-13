@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Input_SO
   m_EditorClassIdentifier: 
   leftMouseButton: {fileID: -4305100787901301527, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  rightMouseButton: {fileID: 5098487772117644747, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   scrollWheel: {fileID: 6240969308177333660, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   scrollPositionChange: 100

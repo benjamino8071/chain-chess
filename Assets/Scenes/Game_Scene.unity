@@ -28880,7 +28880,7 @@ MonoBehaviour:
   levelSelectSo: {fileID: 11400000, guid: fedd3b37489edca44a98aa40b47d12e3, type: 2}
   piecePrefab: {fileID: 6726216011626115281, guid: 54d8d23ee5a47e34db26762c882afd96, type: 3}
   validPositionPrefab: {fileID: 8566535331156600734, guid: b92041067af09e941af178138d581f78, type: 3}
-  invalidPositionPrefab: {fileID: 8566535331156600734, guid: be7aa1440d56891428d79a4af3060b44, type: 3}
+  playerSetTilePrefab: {fileID: 8566535331156600734, guid: be7aa1440d56891428d79a4af3060b44, type: 3}
   selectedBackgroundPrefab: {fileID: 8566535331156600734, guid: 5856883aea817af4aa24fb2cb1d948e5, type: 3}
   levelInfoPrefab: {fileID: 5137343936622446410, guid: 36b683f3132fa704aa66a80d0911a324, type: 3}
   imagePrefab: {fileID: 8769478543979816571, guid: 6e2383a44dd40e64d976c80c6277622f, type: 3}

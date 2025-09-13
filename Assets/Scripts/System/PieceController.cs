@@ -11,7 +11,6 @@ public class PieceController : Controller
     protected BoardSystem _boardSystem;
     protected ChainUISystem _chainUISystem;
     protected AudioSystem _audioSystem;
-    protected InvalidMovesSystem _invalidMovesSystem;
     
     public enum States
     {
@@ -76,7 +75,6 @@ public class PieceController : Controller
         _boardSystem = creator.GetDependency<BoardSystem>();
         _chainUISystem = creator.GetDependency<ChainUISystem>();
         _audioSystem = creator.GetDependency<AudioSystem>();
-        _invalidMovesSystem = creator.GetDependency<InvalidMovesSystem>();
     }
 
     public virtual void Init(Vector3 position, Piece startingPiece, PieceColour pieceColour,
@@ -230,8 +228,7 @@ public class PieceController : Controller
             Vector3 positionFromPlayer = _pieceInstance.position + move;
 
             if (!_boardSystem.IsPositionValid(positionFromPlayer) 
-                || _boardSystem.IsAllyAtPosition(positionFromPlayer, _pieceColour)
-                || _invalidMovesSystem.IsInvalidMove(positionFromPlayer))
+                || _boardSystem.IsAllyAtPosition(positionFromPlayer, _pieceColour))
             {
                 continue;
             }
@@ -256,8 +253,7 @@ public class PieceController : Controller
             {
                 Vector3 nextSpot = furthestPointOfMoveLine + move;
                 if (!_boardSystem.IsPositionValid(nextSpot) 
-                    || _boardSystem.IsAllyAtPosition(nextSpot, _pieceColour)
-                    || _invalidMovesSystem.IsInvalidMove(nextSpot))
+                    || _boardSystem.IsAllyAtPosition(nextSpot, _pieceColour))
                 {
                     break;
                 }

@@ -12,7 +12,7 @@ public class TurnSystem : Dependency
     private EndGameSystem _endGameSystem;
     private BoardSystem _boardSystem;
     private LevelSelectUISystem _levelSelectUISystem;
-    private InvalidMovesSystem _invalidMovesSystem;
+    private PlayerSetTilesSystem _playerSetTilesSystem;
     
     private PieceColour _currentTurn; //Will always start with White
     
@@ -28,7 +28,7 @@ public class TurnSystem : Dependency
         _endGameSystem = creator.GetDependency<EndGameSystem>();
         _boardSystem = creator.GetDependency<BoardSystem>();
         _levelSelectUISystem = creator.GetDependency<LevelSelectUISystem>();
-        _invalidMovesSystem = creator.GetDependency<InvalidMovesSystem>();
+        _playerSetTilesSystem = creator.GetDependency<PlayerSetTilesSystem>();
         
         LoadLevelRuntime();
     }
@@ -67,7 +67,7 @@ public class TurnSystem : Dependency
         _blackSystem.Clean();
         
         _validMovesSystem.HideAllValidMoves();
-        _invalidMovesSystem.HideAll();
+        _playerSetTilesSystem.HideAll();
         
         _levelSelectUISystem.UpdateLevelText(Creator.levelsSo.levelOnLoad);
         
