@@ -1,40 +1,105 @@
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
-public class WhiteSystem : SideSystem
+public class WhiteSystem : Dependency
 {
+    private AudioSystem _audioSystem;
+    private ValidMovesSystem _validMovesSystem;
+    private TurnSystem _turnSystem;
+    private ChainUISystem _chainUISystem;
+    private EndGameSystem _endGameSystem;
+    private BlackSystem _blackSystem;
+    private SettingsUISystem _settingsUISystem;
+    
+    public PlayerController playerController => _playerController;
+    
+    private PlayerController _playerController;
+    
+    private bool _frozen;
+    
     public override void GameStart(Creator creator)
     {
-        _allyPieceColour = PieceColour.White;
-        _enemyPieceColour = PieceColour.Black;
-        _enemySideSystem = creator.GetDependency<BlackSystem>();
-        
         base.GameStart(creator);
+        
+        _blackSystem = creator.GetDependency<BlackSystem>();
+        _audioSystem = creator.GetDependency<AudioSystem>();
+        _validMovesSystem = creator.GetDependency<ValidMovesSystem>();
+        _turnSystem = creator.GetDependency<TurnSystem>();
+        _chainUISystem = creator.GetDependency<ChainUISystem>();
+        _endGameSystem = creator.GetDependency<EndGameSystem>();
+        _settingsUISystem = creator.GetDependency<SettingsUISystem>();
     }
 
-    public override void CreatePiece(Vector2 position, Piece startingPiece, PieceAbility ability)
+    public void CreatePiece(Vector2 position, Piece startingPiece)
     {
-        PieceController pieceController = new PlayerController();
-        pieceController.GameStart(Creator);
-        pieceController.Init(position, startingPiece, _allyPieceColour, ability, this, _enemySideSystem);
-        
-        _pieceControllers.Add(pieceController);
+        _playerController = new PlayerController();
+        _playerController.GameStart(Creator);
+        _playerController.Init(position, startingPiece);
     }
 
     public override void GameUpdate(float dt)
     {
-        if (_frozen || _turnSystem.CurrentTurn() == _enemyPieceColour)
+        if (_frozen || _turnSystem.CurrentTurn() == PieceColour.Black)
         {
             return;
         }
         
-        _pieceControllerSelected?.GameUpdate(dt);
+        _playerController?.GameUpdate(dt);
+    }
+    
+    public override void Clean()
+    {
+        _playerController?.Destroy();
+        _playerController = null;
+        
+        _frozen = false;
     }
 
-    public override void SpawnPieces()
+    public void SpawnPieces()
     {
-        base.SpawnPieces();
+        Level levelOnLoad = Creator.levelsSo.GetLevelOnLoad();
+        foreach (StartingPieceSpawnData pieceSpawnData in levelOnLoad.positions)
+        {
+            if (pieceSpawnData.colour == PieceColour.White)
+            {
+                CreatePiece(pieceSpawnData.position, pieceSpawnData.piece);
+                break;
+            }
+        }
+    }
 
-        SelectPiece(_pieceControllers[0]);
+    public void UpdateSelectedPieceValidMoves()
+    {
+        if (_playerController.state == PieceState.Moving)
+        {
+            return;
+        }
+        
+        _validMovesSystem.UpdateValidMoves(_playerController.GetAllValidMovesOfCurrentPiece());
+    }
+
+    public void FreezeSide()
+    {
+        _playerController.SetState(PieceState.WaitingForTurn);
+        _validMovesSystem.HideAllValidMoves();
+        
+        _frozen = true;
+    }
+
+    public void UnfreezeSide()
+    {
+        _frozen = false;
+    }
+
+    public void Lose(GameOverReason gameOverReason, float delayTimer)
+    {
+        _blackSystem.SetStateForAllPieces(PieceState.EndGame);
+        _playerController.SetState(PieceState.EndGame);
+        _playerController.Destroy();
+        _playerController = null;
+        
+        _endGameSystem.SetEndGame(PieceColour.Black, gameOverReason, delayTimer);
+        _validMovesSystem.HideAllValidMoves();
     }
 }

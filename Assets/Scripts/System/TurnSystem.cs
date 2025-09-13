@@ -42,11 +42,12 @@ public class TurnSystem : Dependency
                 Creator.statsTurns++;
                 
                 _blackSystem.DeselectPiece();
-                _validMovesSystem.UpdateValidMoves(_whiteSystem.pieceControllerSelected.GetAllValidMovesOfCurrentPiece());
+                _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfCurrentPiece());
                 
-                _whiteSystem.SetStateForAllPieces(PieceController.States.FindingMove);
+                _whiteSystem.playerController.SetState(PieceState.FindingMove);
+                _blackSystem.SetStateForAllPieces(PieceState.WaitingForTurn);
                 
-                _chainUISystem.ShowChain(_whiteSystem.pieceControllerSelected, false);
+                _chainUISystem.ShowChain(_whiteSystem.playerController, false);
                 
                 _settingsUISystem.ShowButton();
                 break;
@@ -54,6 +55,8 @@ public class TurnSystem : Dependency
                 _settingsUISystem.HideButton();
                 
                 _validMovesSystem.HideAllValidMoves();
+                
+                _whiteSystem.playerController.SetState(PieceState.WaitingForTurn);
                 _blackSystem.AiSetup();
                 break;
         }
@@ -73,9 +76,9 @@ public class TurnSystem : Dependency
         
         _whiteSystem.SpawnPieces();
         _blackSystem.SpawnPieces();
-        _chainUISystem.ShowChain(_whiteSystem.pieceControllerSelected, true);
-        _boardSystem.ShowTapPoint(_whiteSystem.pieceControllerSelected.piecePos);
-        _validMovesSystem.UpdateValidMoves(_whiteSystem.pieceControllerSelected.GetAllValidMovesOfCurrentPiece());
+        _chainUISystem.ShowChain(_whiteSystem.playerController, true);
+        _boardSystem.ShowTapPoint(_whiteSystem.playerController.piecePos);
+        _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfCurrentPiece());
         
         _endGameSystem.ResetEndGame();
 

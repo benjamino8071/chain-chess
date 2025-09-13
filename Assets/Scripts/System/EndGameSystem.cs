@@ -25,9 +25,6 @@ public class EndGameSystem : Dependency
 
     public void SetEndGame(PieceColour winningColour, GameOverReason gameOverReason, float delayTimer)
     {
-        _boardSystem.activeSideSystem.ForceDeselectPiece();
-        _boardSystem.inactiveSideSystem.ForceDeselectPiece();
-
         if (winningColour == PieceColour.White)
         {
             _levelCompleteUISystem.Show(delayTimer);

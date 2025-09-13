@@ -61,14 +61,6 @@ public class ValidMovesSystem : Dependency
         }
     }
 
-    public void UpdateValidMovesOfWhitePiece()
-    {
-        if (_whiteSystem.pieceControllerSelected is { } pieceControllerSelected)
-        {
-            UpdateValidMoves(pieceControllerSelected.GetAllValidMovesOfCurrentPiece());
-        }
-    }
-
     public void UpdateValidMoves(List<ValidMove> validMoves)
     {
         HideAllValidMoves();

@@ -38,6 +38,17 @@ public class Pieces_SO : ScriptableObject
     public float alwaysMoveThinkingTime;
 }
 
+public enum Piece
+{
+    NotChosen,
+    Pawn,
+    Rook,
+    Knight,
+    Bishop,
+    Queen,
+    King
+}
+
 public enum PieceColour
 {
     Black,
@@ -53,6 +64,17 @@ public enum PieceAbility
     Resetter = 7,
     Multiplier = 8,
     StopTurn = 9
+}
+
+public enum PieceState
+{
+    WaitingForTurn = 0,
+    FindingMove = 1,
+    Moving = 2,
+    NotInUse = 3,
+    Paused = 4,
+    Blocked = 5,
+    EndGame = 6
 }
 
 [Serializable]

@@ -20,8 +20,6 @@ public class SettingsUISystem : Dependency
 
     private Button _uiBottomResetButton;
     private Button _settingsButton;
-
-    private PieceController _pieceControllerSelected;
     
     private bool _canShow;
     
@@ -43,23 +41,10 @@ public class SettingsUISystem : Dependency
         {
             _levelSelectUISystem.Hide();
             
-            if (_boardSystem.activeSideSystem.pieceControllerSelected is { } pieceController
-                && (pieceController.state == PieceController.States.Blocked 
-                    || pieceController.state == PieceController.States.NotInUse
-                    || pieceController.state == PieceController.States.EndGame))
-            {
-                return;
-            }
-            
             if (!_settingsGui.gameObject.activeSelf 
                 && !_levelCompleteUISystem.IsShowing 
                 && !_gameOverUISystem.IsShowing)
             {
-                if (_boardSystem.activeSideSystem.pieceControllerSelected is { } pieceControllerSelected)
-                {
-                    _pieceControllerSelected = pieceControllerSelected;
-                    pieceControllerSelected.SetState(PieceController.States.Paused);
-                }
                 Show();
                 _audioSystem.PlayPauseOpenSfx();
             }
@@ -67,11 +52,6 @@ public class SettingsUISystem : Dependency
             {
                 Hide();
                 
-                if (_pieceControllerSelected != null)
-                {
-                    _pieceControllerSelected.SetState(PieceController.States.FindingMove);
-                    _pieceControllerSelected = null;
-                }
                 _audioSystem.PlayPauseCloseSfx();
             }
         });

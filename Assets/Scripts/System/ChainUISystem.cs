@@ -119,7 +119,7 @@ public class ChainUISystem : Dependency
         return false;
     }
 
-    public void ShowChain(PieceController pieceController, bool setMovesRemainingText)
+    public void ShowChain(PlayerController pieceController, bool setMovesRemainingText)
     {
         ResetChain();
         
@@ -136,9 +136,9 @@ public class ChainUISystem : Dependency
         }
     }
     
-    public void AddToChain(PieceController capturedPiece, int playerPieceCaptureCount)
+    public void AddToChain(AIController capturedPiece, int movesUsed, int playerPieceCaptureCount)
     {
-        ShowNewPiece(capturedPiece.currentPiece, capturedPiece.movesUsed);
+        ShowNewPiece(capturedPiece.piece, movesUsed);
         
         UpdateMovesRemainingText(playerPieceCaptureCount);
     }
@@ -203,7 +203,7 @@ public class ChainUISystem : Dependency
         }
     }
 
-    public void HighlightNextPiece(PieceController pieceController)
+    public void HighlightNextPiece(PlayerController pieceController)
     {
         _chainParentNewPos.x = -150 * pieceController.movesUsed;
         

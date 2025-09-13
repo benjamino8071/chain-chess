@@ -1,32 +1,132 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class PlayerController : PieceController
+public class PlayerController : Dependency
 {
+    private ValidMovesSystem _validMovesSystem;
+    private BoardSystem _boardSystem;
+    private ChainUISystem _chainUISystem;
+    private AudioSystem _audioSystem;
+    private BlackSystem _blackSystem;
+    private WhiteSystem _whiteSystem;
+    private TurnSystem _turnSystem;
+
+    public Piece currentPiece => _currentPiece;
+    
+    public PieceState state => _state;
+    
+    public Vector3 piecePos => _model.position;
+
+    public Vector3 jumpPos => _jumpPosition;
+    
+    public List<Piece> capturedPieces => _capturedPieces;
+    
+    public int movesUsed => _capturedPieces.Count - _movesInThisTurn.Count;
+
+    public int movesRemaining => _movesInThisTurn.Count;
+    
+    public int piecesCapturedInThisTurn => _piecesCapturedInThisTurn;
+    
+    private List<Piece> _capturedPieces = new(16);
+    private List<Piece> _movesInThisTurn = new(16);
+    
+    private Transform _model;
+    
+    private SpriteRenderer _spriteRenderer;
+
+    private GameObject _background;
+    
+    private Animator _animator;
+    
+    private PieceState _state;
+    private Piece _currentPiece;
+    private Vector3 _startPosition;
+    private Vector3 _jumpPosition;
+    private int _piecesCapturedInThisTurn;
+    private float _timer;
+    
     private float _pitchAmount = 1;
 
-    protected override void FindingMove(float dt)
+    public override void GameStart(Creator creator)
+    {
+        base.GameStart(creator);
+        
+        _validMovesSystem = creator.GetDependency<ValidMovesSystem>();
+        _boardSystem = creator.GetDependency<BoardSystem>();
+        _chainUISystem = creator.GetDependency<ChainUISystem>();
+        _audioSystem = creator.GetDependency<AudioSystem>();
+        _blackSystem = creator.GetDependency<BlackSystem>();
+        _whiteSystem = creator.GetDependency<WhiteSystem>();
+        _turnSystem = creator.GetDependency<TurnSystem>();
+    }
+    
+    public void Init(Vector3 position, Piece startingPiece)
+    {
+        _model = Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity).transform;
+        
+        _background = Creator.GetChildObjectByName(_model.gameObject, AllTagNames.Background).gameObject;
+        
+        _spriteRenderer = Creator.GetChildComponentByName<SpriteRenderer>(_model.gameObject, AllTagNames.PlayerSprite);
+
+        _spriteRenderer.color = Creator.piecesSo.whiteColor;
+        
+        _animator = _model.GetComponentInChildren<Animator>();
+        
+        _jumpPosition = _model.position;
+        
+        _capturedPieces.Add(startingPiece);
+        _movesInThisTurn.Add(startingPiece);
+
+        _state = PieceState.NotInUse;
+    }
+
+    public override void GameUpdate(float dt)
+    {
+        //State machine
+        switch (_state)
+        {
+            case PieceState.WaitingForTurn:
+                break;
+            case PieceState.FindingMove:
+                FindingMove(dt);
+                break;
+            case PieceState.Moving:
+                Moving(dt);
+                break;
+            case PieceState.NotInUse:
+                break;
+            case PieceState.Blocked:
+                Blocked(dt);
+                break;
+            case PieceState.EndGame:
+                break;
+        }
+    }
+
+    private void FindingMove(float dt)
     {
         //The player will find the move when they are ready
         Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
-        if (Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame() && CanMove(positionRequested) && !_enemySideSystem.IsPieceMoving())
+        if (Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame() && CanMove(positionRequested) && !_blackSystem.IsPieceMoving())
         {
             MovePiece(positionRequested);
         }
     }
     
-    protected override void Moving(float dt)
+    private void Moving(float dt)
     {
-        if (_pieceInstance.position == _jumpPosition)
+        if (_model.position == _jumpPosition)
         {
             Creator.statsMoves++;
             
-            _pieceInstance.position = math.round(_pieceInstance.position);
+            _model.position = math.round(_model.position);
             _timer = 0;
 
             bool won = false;
-            PieceController enemyPieceController = _enemySideSystem.GetPieceAtPosition(_pieceInstance.position);
+            AIController enemyPieceController = _blackSystem.GetPieceAtPosition(_model.position);
             if (enemyPieceController is not null)
             {
                 switch (enemyPieceController.pieceAbility)
@@ -36,54 +136,48 @@ public class PlayerController : PieceController
                         _movesInThisTurn.Clear();
                         _piecesCapturedInThisTurn = 0;
                     
-                        AddCapturedPiece(enemyPieceController.capturedPieces[0]);
+                        AddCapturedPiece(enemyPieceController.piece);
                     
                         _chainUISystem.ShowChain(this, true);
                         break;
                     case PieceAbility.Multiplier:
-                        float3 topLeft = enemyPieceController.piecePos + new Vector3(-1, 1, 0);
-                        float3 topRight = enemyPieceController.piecePos + new Vector3(1, 1, 0);
-                        float3 botLeft = enemyPieceController.piecePos + new Vector3(-1, -1, 0);
-                        float3 botRight = enemyPieceController.piecePos + new Vector3(1, -1, 0);
-                        if (_boardSystem.IsPositionValid(topLeft) && !_boardSystem.IsEnemyAtPosition(topLeft, _enemyColour))
+                        List<float3> spawnPositions = new()
                         {
-                            _enemySideSystem.CreatePiece(new(topLeft.x, topLeft.y), enemyPieceController.currentPiece, PieceAbility.None);
-                        }
-                        if (_boardSystem.IsPositionValid(topRight) && !_boardSystem.IsEnemyAtPosition(topRight, _enemyColour))
+                            enemyPieceController.piecePos + new Vector3(-1, 1, 0),
+                            enemyPieceController.piecePos + new Vector3(1, 1, 0),
+                            enemyPieceController.piecePos + new Vector3(-1, -1, 0),
+                            enemyPieceController.piecePos + new Vector3(1, -1, 0)
+                        };
+                        foreach (float3 spawnPosition in spawnPositions)
                         {
-                            _enemySideSystem.CreatePiece(new(topRight.x, topRight.y), enemyPieceController.currentPiece, PieceAbility.None);
-                        }
-                        if (_boardSystem.IsPositionValid(botLeft) && !_boardSystem.IsEnemyAtPosition(botLeft, _enemyColour))
-                        {
-                            _enemySideSystem.CreatePiece(new(botLeft.x, botLeft.y), enemyPieceController.currentPiece, PieceAbility.None);
-                        }
-                        if (_boardSystem.IsPositionValid(botRight) && !_boardSystem.IsEnemyAtPosition(botRight, _enemyColour))
-                        {
-                            _enemySideSystem.CreatePiece(new(botRight.x, botRight.y), enemyPieceController.currentPiece, PieceAbility.None);
+                            if (_boardSystem.IsPositionValid(spawnPosition) && !_blackSystem.IsPieceAtPosition(spawnPosition))
+                            {
+                                _blackSystem.CreatePiece(new(spawnPosition.x, spawnPosition.y), enemyPieceController.piece, PieceAbility.None);
+                            }
                         }
                         
-                        AddCapturedPiece(enemyPieceController.capturedPieces[0]);
-                        _chainUISystem.AddToChain(enemyPieceController, _capturedPieces.Count);
+                        AddCapturedPiece(enemyPieceController.piece);
+                        _chainUISystem.AddToChain(enemyPieceController, movesUsed, _capturedPieces.Count);
                         
                         _movesInThisTurn.RemoveAt(0);
                         break;
                     case PieceAbility.StopTurn:
                     {
-                        AddCapturedPiece(enemyPieceController.capturedPieces[0]);
-                        _chainUISystem.AddToChain(enemyPieceController, _capturedPieces.Count);
+                        AddCapturedPiece(enemyPieceController.piece);
+                        _chainUISystem.AddToChain(enemyPieceController, movesUsed, _capturedPieces.Count);
                         
                         _movesInThisTurn.Clear();
                         break;
                     }
                     default:
-                        AddCapturedPiece(enemyPieceController.capturedPieces[0]);
-                        _chainUISystem.AddToChain(enemyPieceController, _capturedPieces.Count);
+                        AddCapturedPiece(enemyPieceController.piece);
+                        _chainUISystem.AddToChain(enemyPieceController, movesUsed, _capturedPieces.Count);
                     
                         _movesInThisTurn.RemoveAt(0);
                         break;
                 }
                 
-                won = _enemySideSystem.PieceCaptured(enemyPieceController);
+                won = _blackSystem.PieceCaptured(enemyPieceController);
 
                 _pitchAmount += 0.02f;
 
@@ -98,12 +192,12 @@ public class PlayerController : PieceController
             if (won)
             {
                 //We win!
-                _enemySideSystem.Lose(GameOverReason.Captured, 0);
+                _blackSystem.Lose(GameOverReason.Captured, 0);
             }
-            else if (_enemySideSystem.TryGetCaptureLoverMovingToPosition(_pieceInstance.position, out PieceController captureLoverController))
+            else if (_blackSystem.TryGetCaptureLoverMovingToPosition(_model.position, out AIController captureLoverController))
             {
-                _allySideSystem.FreezeSide();
-                _enemySideSystem.SelectCaptureLoverPiece(captureLoverController, _pieceInstance.position);
+                _whiteSystem.FreezeSide();
+                _blackSystem.SelectCaptureLoverPiece(captureLoverController, _model.position);
             }
             else
             {
@@ -115,7 +209,7 @@ public class PlayerController : PieceController
             _timer += dt * Creator.piecesSo.pieceSpeed;
             _timer = Mathf.Clamp(_timer, 0f, Mathf.PI);
             float t = Evaluate(_timer);
-            _pieceInstance.position = Vector3.Lerp(_pieceInstance.position, _jumpPosition, t);
+            _model.position = Vector3.Lerp(_model.position, _jumpPosition, t);
         }
     }
     
@@ -133,18 +227,26 @@ public class PlayerController : PieceController
         return false;
     }
 
+    public bool IsPieceAtPosition(Vector3 position)
+    {
+        float d1 = math.distance(_model.position, position);
+        float d2 = math.distance(_jumpPosition, position);
+        
+        return d1 < 0.01f && d2 < 0.01f;
+    }
+
     private void MovePiece(Vector3 positionRequested)
     {
         // Set our position as a fraction of the distance between the markers.
         _jumpPosition = positionRequested;
-        SetState(States.Moving);
+        SetState(PieceState.Moving);
                 
         _audioSystem.PlayPieceMoveSfx(1);
             
         _validMovesSystem.HideAllValidMoves();
     }
 
-    protected override void SetToNextMove()
+    private void SetToNextMove()
     {
         if (_movesInThisTurn.Count > 0)
         {
@@ -156,9 +258,9 @@ public class PlayerController : PieceController
             if (validMoves.Count > 0)
             {
                 _chainUISystem.HighlightNextPiece(this);
-                SetState(States.FindingMove);
+                SetState(PieceState.FindingMove);
 
-                if (!_boardSystem.blackSystem.TickAlwaysMovers())
+                if (!_blackSystem.TickAlwaysMovers())
                 {
                     _validMovesSystem.UpdateValidMoves(validMoves);
                 }
@@ -166,15 +268,319 @@ public class PlayerController : PieceController
             else
             {
                 //Blocked!
-                SetState(States.Blocked);
+                SetState(PieceState.Blocked);
             }
         }
         else
         {
-            _boardSystem.blackSystem.TickAlwaysMovers();
+            _blackSystem.TickAlwaysMovers();
             
             _chainUISystem.HideAllPieces();
             Finish();
         }
+    }
+    
+    private void Blocked(float dt)
+    {
+        _timer -= dt;
+        if (_timer <= 0)
+        {
+            _whiteSystem.Lose(GameOverReason.Locked, 0);
+        }
+    }
+
+    public void AddCapturedPiece(Piece piece)
+    {
+        _piecesCapturedInThisTurn++;
+        
+        _capturedPieces.Add(piece);
+        _movesInThisTurn.Add(piece);
+    }
+    
+    private float Evaluate(float x)
+    {
+        return 0.5f * Mathf.Sin(x - Mathf.PI / 2f) + 0.5f;
+    }
+
+    private void Finish()
+    {
+        SetState(PieceState.WaitingForTurn);
+        _validMovesSystem.HideAllValidMoves();
+        _turnSystem.SwitchTurn(PieceColour.Black);
+    }
+
+    private List<ValidMove> CheckValidDefiniteMoves(List<Vector3> moves)
+    {
+        List<ValidMove> validMoves = new();
+        foreach (Vector3 move in moves)
+        {
+            Vector3 positionFromPlayer = _model.position + move;
+
+            if (!_boardSystem.IsPositionValid(positionFromPlayer))
+            {
+                continue;
+            }
+            
+            validMoves.Add(new()
+            {
+                position = positionFromPlayer,
+                enemyHere = _blackSystem.IsPieceAtPosition(positionFromPlayer)
+            });
+        }
+
+        return validMoves;
+    }
+
+    private List<ValidMove> CheckValidIndefiniteMoves(List<Vector3> moves)
+    {
+        List<ValidMove> validMoves = new();
+        foreach (Vector3 move in moves)
+        {
+            Vector3 furthestPointOfMoveLine = _model.position;
+            while (true)
+            {
+                Vector3 nextSpot = furthestPointOfMoveLine + move;
+                if (!_boardSystem.IsPositionValid(nextSpot))
+                {
+                    break;
+                }
+                
+                bool enemyHere = _blackSystem.IsPieceAtPosition(nextSpot);
+                
+                furthestPointOfMoveLine = nextSpot;
+                validMoves.Add(new()
+                {
+                    position = furthestPointOfMoveLine,
+                    enemyHere = enemyHere
+                });
+
+                if (enemyHere)
+                {
+                    break;
+                }
+            }
+        }
+
+        return validMoves;
+    }
+
+    public List<ValidMove> AllValidMovesOfFirstPiece()
+    {
+        return GetAllValidMovesOfPiece(_capturedPieces[0]); 
+    }
+
+    public List<ValidMove> GetAllValidMovesOfCurrentPiece()
+    {
+        return GetAllValidMovesOfPiece(_movesInThisTurn[0]);
+    }
+
+    private List<ValidMove> GetAllValidMovesOfPiece(Piece piece)
+    {
+        List<ValidMove> validMoves = new(64);
+        switch (piece)
+        {
+            case Piece.Pawn:
+            {
+                int direction = 1;
+                
+                List<ValidMove> pawnMoves = new();
+
+                Vector3 defaultMove = _model.position + new Vector3(0, 1, 0) * direction;
+                if (_boardSystem.IsPositionValid(defaultMove) && !_blackSystem.IsPieceAtPosition(defaultMove))
+                {
+                    pawnMoves.Add(new()
+                    {
+                        position = defaultMove,
+                        enemyHere = false
+                    });
+                }
+                
+                Vector3 topLeft = _model.position + new Vector3(-1, 1, 0) * direction;
+                if (_blackSystem.IsPieceAtPosition(topLeft))
+                {
+                    pawnMoves.Add(new()
+                    {
+                        position = topLeft,
+                        enemyHere = true
+                    });
+                }
+                
+                Vector3 topRight = _model.position + new Vector3(1, 1, 0) * direction;
+                if (_blackSystem.IsPieceAtPosition(topRight))
+                {
+                    pawnMoves.Add(new()
+                    {
+                        position = topRight,
+                        enemyHere = true
+                    });
+                }
+
+                validMoves = pawnMoves;
+                break;
+            }
+            case Piece.Rook:
+                List<Vector3> rookMoves = new()
+                {
+                    new Vector3(-1, 0, 0),
+                    new Vector3(1, 0, 0),
+                    new Vector3(0, 1, 0),
+                    new Vector3(0, -1, 0)
+                };
+
+                List<ValidMove> rookValidMoves = CheckValidIndefiniteMoves(rookMoves);
+                validMoves = rookValidMoves.ToList();
+                break;
+            case Piece.Knight:
+                List<Vector3> knightMoves = new()
+                {
+                    new Vector3(1, 2, 0),
+                    new Vector3(-1, 2, 0),
+                    new Vector3(1, -2, 0),
+                    new Vector3(-1, -2, 0),
+                    new Vector3(-2, 1, 0),
+                    new Vector3(-2, -1, 0),
+                    new Vector3(2, 1, 0),
+                    new Vector3(2, -1, 0)
+                };
+                
+                List<ValidMove> knightValidMoves = CheckValidDefiniteMoves(knightMoves);
+                validMoves = knightValidMoves.ToList();
+                break;
+            case Piece.Bishop:
+                List<Vector3> bishopMoves = new()
+                {
+                    new Vector3(1, 1, 0),
+                    new Vector3(-1, 1, 0),
+                    new Vector3(1, -1, 0),
+                    new Vector3(-1, -1, 0)
+                };
+                
+                List<ValidMove> bishopValidMoves = CheckValidIndefiniteMoves(bishopMoves);
+                validMoves = bishopValidMoves.ToList();
+                break;
+            case Piece.Queen:
+                List<Vector3> queenMoves = new()
+                {
+                    new Vector3(-1, 0, 0),
+                    new Vector3(1, 0, 0),
+                    new Vector3(0, 1, 0),
+                    new Vector3(0, -1, 0),
+                    new Vector3(1, 1, 0),
+                    new Vector3(-1, 1, 0),
+                    new Vector3(1, -1, 0),
+                    new Vector3(-1, -1, 0)
+                };
+                
+                List<ValidMove> queenValidMoves = CheckValidIndefiniteMoves(queenMoves);
+                validMoves = queenValidMoves.ToList();
+                break;
+            case Piece.King:
+                List<Vector3> kingMoves = new()
+                {
+                    new Vector3(-1, 0, 0),
+                    new Vector3(1, 0, 0),
+                    new Vector3(0, 1, 0),
+                    new Vector3(0, -1, 0),
+                    new Vector3(1, 1, 0),
+                    new Vector3(-1, 1, 0),
+                    new Vector3(1, -1, 0),
+                    new Vector3(-1, -1, 0)
+                };
+                
+                List<ValidMove> kingValidMoves = CheckValidDefiniteMoves(kingMoves);
+                validMoves = kingValidMoves.ToList();
+                break;
+        }
+
+        return validMoves;
+    }
+
+    private void UpdateSprite(Piece piece)
+    {
+        switch (piece)
+        {
+            case Piece.NotChosen:
+                _spriteRenderer.sprite = null;
+                break;
+            case Piece.Pawn:
+                _spriteRenderer.sprite = Creator.piecesSo.pawn;
+                break;
+            case Piece.Rook:
+                _spriteRenderer.sprite = Creator.piecesSo.rook;
+                break;
+            case Piece.Knight:
+                _spriteRenderer.sprite = Creator.piecesSo.knight;
+                break;
+            case Piece.Bishop:
+                _spriteRenderer.sprite = Creator.piecesSo.bishop;
+                break;
+            case Piece.Queen:
+                _spriteRenderer.sprite = Creator.piecesSo.queen;
+                break;
+            case Piece.King:
+                _spriteRenderer.sprite = Creator.piecesSo.king;
+                break;
+        }
+        _currentPiece = piece;
+    }
+
+    public void SetState(PieceState state)
+    {
+        if (_state == PieceState.Blocked || _state == PieceState.EndGame)
+        {
+            return;
+        }
+        
+        switch (state)
+        {
+            case PieceState.NotInUse:
+            {
+                _model.gameObject.SetActive(false);
+
+                break;
+            }
+            case PieceState.FindingMove:
+            {
+                _background.SetActive(true);
+
+                break;
+            }
+            case PieceState.Moving:
+            {
+                _background.SetActive(false);
+
+                break;
+            }
+            case PieceState.WaitingForTurn:
+            {
+                if (_movesInThisTurn.Count == 0)
+                {
+                    UpdateSprite(_capturedPieces[0]);
+                    foreach (Piece capturedPiece in _capturedPieces)
+                    {
+                        _movesInThisTurn.Add(capturedPiece);
+                    }
+                }
+                _piecesCapturedInThisTurn = 0; //For next time the player uses this piece
+                _background.SetActive(false);
+                
+                break;
+            }
+            case PieceState.Blocked:
+            {
+                _timer = 1.1f; //Shrink animation length
+                _animator.SetTrigger("shrink");
+                _background.SetActive(false);
+                
+                break;
+            }
+        }
+        
+        _state = state;
+    }
+    
+    public override void Destroy()
+    {
+        Object.Destroy(_model.gameObject);
     }
 }

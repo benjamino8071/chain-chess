@@ -1,32 +1,51 @@
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class BlackSystem : SideSystem
+public class BlackSystem : Dependency
 {
-    private int _endTurnFrameCount;
+    private ValidMovesSystem _validMovesSystem;
+    private TurnSystem _turnSystem;
+    private EndGameSystem _endGameSystem;
+    private WhiteSystem _whiteSystem;
     
-    private List<PieceController> _alwaysMovers = new();
+    private List<AIController> _pieceControllers = new ();
+    private List<AIController> _piecesToMoveThisTurn = new();
+    private List<AIController> _alwaysMovers = new();
+
+    private AIController _pieceControllerSelected;
+    
+    private int _endTurnFrameCount;
     
     public override void GameStart(Creator creator)
     {
-        _allyPieceColour = PieceColour.Black;
-        _enemyPieceColour = PieceColour.White;
-        _enemySideSystem = creator.GetDependency<WhiteSystem>();
-
         base.GameStart(creator);
+        
+        _whiteSystem = creator.GetDependency<WhiteSystem>();
+        _validMovesSystem = creator.GetDependency<ValidMovesSystem>();
+        _turnSystem = creator.GetDependency<TurnSystem>();
+        _endGameSystem = creator.GetDependency<EndGameSystem>();
     }
 
     public override void Clean()
     {
-        base.Clean();
+        foreach (AIController aiController in _pieceControllers)
+        {
+            aiController.Destroy();
+        }
+        
+        _pieceControllers.Clear();
         _alwaysMovers.Clear();
+        
+        _pieceControllerSelected = null;
     }
 
-    public override void CreatePiece(Vector2 position, Piece startingPiece, PieceAbility ability)
+    public void CreatePiece(Vector2 position, Piece startingPiece, PieceAbility ability)
     {
-        PieceController pieceController = new AIController();
+        AIController pieceController = new AIController();
         pieceController.GameStart(Creator);
-        pieceController.Init(position, startingPiece, _allyPieceColour, ability, this, _enemySideSystem);
+        pieceController.Init(position, startingPiece, ability);
         
         if (ability == PieceAbility.AlwaysMove)
         {
@@ -43,7 +62,7 @@ public class BlackSystem : SideSystem
             _endTurnFrameCount--;
             if (_endTurnFrameCount == 0)
             {
-                _turnSystem.SwitchTurn(_enemyPieceColour);
+                _turnSystem.SwitchTurn(PieceColour.White);
             }
             
             return;
@@ -59,26 +78,23 @@ public class BlackSystem : SideSystem
     
     public bool TickAlwaysMovers()
     {
-        foreach (PieceController pieceController in _alwaysMovers)
+        foreach (AIController pieceController in _alwaysMovers)
         {
-            pieceController.SetState(PieceController.States.FindingMove);
+            pieceController.SetState(PieceState.FindingMove);
         }
 
         return _alwaysMovers.Count > 0;
     }
 
-    public override bool PieceCaptured(PieceController capturedPieceController)
+    public bool PieceCaptured(AIController capturedPieceController)
     {
         _alwaysMovers.Remove(capturedPieceController);
         
-        return base.PieceCaptured(capturedPieceController);
-    }
-
-    public override void PieceBlocked(PieceController pieceController)
-    {
-        _alwaysMovers.Remove(pieceController);
+        _pieceControllers.Remove(capturedPieceController);
+        capturedPieceController.SetState(PieceState.NotInUse);
+        capturedPieceController.Destroy();
         
-        base.PieceBlocked(pieceController);
+        return _pieceControllers.Count == 0;
     }
 
     public void AiSetup()
@@ -97,7 +113,7 @@ public class BlackSystem : SideSystem
             _piecesToMoveThisTurn.Add(randomPiece);
         }
 
-        foreach (PieceController pieceController in _pieceControllers)
+        foreach (AIController pieceController in _pieceControllers)
         {
             if (pieceController.pieceAbility == PieceAbility.MustMove)
             {
@@ -121,13 +137,14 @@ public class BlackSystem : SideSystem
             _pieceControllerSelected = _piecesToMoveThisTurn[0];
 
             _pieceControllerSelected.PlayEnlargeAnimation();
-            _pieceControllerSelected.SetState(PieceController.States.FindingMove);
+            _pieceControllerSelected.SetState(PieceState.FindingMove);
         }
     }
     
-    private PieceController SelectRandomPiece()
+    private AIController SelectRandomPiece()
     {
-        List<PieceController> movablePieceControllers = MovablePieceControllers();
+        List<AIController> movablePieceControllers = MovablePieceControllers();
+        
         if (movablePieceControllers.Count == 0)
         {
             return null;
@@ -138,22 +155,20 @@ public class BlackSystem : SideSystem
         return movablePieceControllers[enemySelectedIndex];
     }
 
-    private PieceController FindPieceThatCanCapture()
+    private AIController FindPieceThatCanCapture()
     {
-        PieceController whitePieceController = _enemySideSystem.pieceControllerSelected;
-        
-        List<PieceController> movablePieceControllers = MovablePieceControllers();
+        List<AIController> movablePieceControllers = MovablePieceControllers();
 
-        foreach (PieceController pieceController in movablePieceControllers)
+        foreach (AIController pieceController in movablePieceControllers)
         {
-            List<ValidMove> validMoves = pieceController.GetAllValidMovesOfCurrentPiece();
-
+            List<ValidMove> validMoves = pieceController.GetAllValidMovesOfPiece();
+            
             foreach (ValidMove validMove in validMoves)
             {
                 //Don't need to fear this inner for loop as it will basically always have 1 piece
                 //At least for the puzzle levels
 
-                if (whitePieceController.piecePos == (Vector3)validMove.position)
+                if (_whiteSystem.playerController.piecePos == (Vector3)validMove.position)
                 {
                     return pieceController;
                 }
@@ -163,13 +178,13 @@ public class BlackSystem : SideSystem
         return null;
     }
     
-    private List<PieceController> MovablePieceControllers()
+    private List<AIController> MovablePieceControllers()
     {
-        List<PieceController> validPieceControllers = new();
+        List<AIController> validPieceControllers = new();
         
-        foreach (PieceController levPieceController in _pieceControllers)
+        foreach (AIController levPieceController in _pieceControllers)
         {
-            if (levPieceController.AllValidMovesOfFirstPiece().Count > 0 
+            if (levPieceController.GetAllValidMovesOfPiece().Count > 0 
                 && levPieceController.pieceAbility != PieceAbility.MustMove //Must Moves will always move after the random piece has moved
                 && levPieceController.pieceAbility != PieceAbility.AlwaysMove) //Always Moves either move on their own
             {
@@ -178,5 +193,172 @@ public class BlackSystem : SideSystem
         }
         
         return validPieceControllers;
+    }
+    
+    public void SpawnPieces()
+    {
+        Level levelOnLoad = Creator.levelsSo.GetLevelOnLoad();
+        foreach (StartingPieceSpawnData pieceSpawnData in levelOnLoad.positions)
+        {
+            if (pieceSpawnData.colour == PieceColour.Black)
+            {
+                CreatePiece(pieceSpawnData.position, pieceSpawnData.piece, pieceSpawnData.ability);
+            }
+        }
+    }
+
+    public List<Vector3> PiecePositions()
+    {
+        List<Vector3> piecePositions = new(_pieceControllers.Count);
+
+        foreach (AIController pieceController in _pieceControllers)
+        {
+            piecePositions.Add(pieceController.piecePos);
+            piecePositions.Add(pieceController.jumpPos);
+        }
+
+        return piecePositions;
+    }
+
+    public AIController GetPieceAtPosition(Vector3 position)
+    {
+        foreach (AIController levPlayerController in _pieceControllers)
+        {
+            if (levPlayerController.piecePos == position)
+            {
+                return levPlayerController;
+            }
+        }
+        
+        return null;
+    }
+
+    public bool TryGetCaptureLoverMovingToPosition(Vector3 position, out AIController playerController)
+    {
+        foreach (AIController levPlayerController in _pieceControllers)
+        {
+            if (levPlayerController.pieceAbility != PieceAbility.CaptureLover)
+            {
+                continue;
+            }
+            
+            List<ValidMove> validMoves = levPlayerController.GetAllValidMovesOfPiece();
+            foreach (ValidMove validMove in validMoves)
+            {
+                if ((Vector3)validMove.position == position)
+                {
+                    playerController = levPlayerController;
+                    return true;
+                }
+            }
+        }
+
+        playerController = null;
+        return false;
+    }
+
+    public void SetStateForAllPieces(PieceState state)
+    {
+        foreach (AIController enemyController in _pieceControllers)
+        {
+            enemyController.SetState(state);
+        }
+    }
+
+    /// <summary>
+    /// This just helps tick the enemy piece that's going to capture the player
+    /// </summary>
+    public void SelectCaptureLoverPiece(AIController pieceController, float3 movePosition)
+    {
+        _pieceControllerSelected = pieceController;
+        pieceController.ForceMove(movePosition);
+        pieceController.PlayEnlargeAnimation();
+    }
+
+    public void DeselectPiece()
+    {
+        if (_pieceControllerSelected is { } pieceController)
+        {
+            if (pieceController.state is PieceState.Blocked or PieceState.Moving)
+            {
+                return;
+            }
+            
+            pieceController.SetState(PieceState.WaitingForTurn);
+        }
+        
+        _pieceControllerSelected = null;
+    }
+
+    public bool IsPieceMoving()
+    {
+        foreach (AIController pieceController in _pieceControllers)
+        {
+            if (pieceController.state == PieceState.Moving)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool IsPieceAtPosition(Vector3 position)
+    {
+        foreach (AIController pieceController in _pieceControllers)
+        {
+            float d1 = math.distance(pieceController.piecePos, position);
+            float d2 = math.distance(pieceController.jumpPos, position);
+            
+            if (d1 < 0.01f && d2 < 0.01f)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    public void PieceBlocked(AIController pieceController)
+    {
+        _alwaysMovers.Remove(pieceController);
+        
+        _pieceControllers.Remove(pieceController);
+        
+        if (_pieceControllers.Count == 0)
+        {
+            Lose(GameOverReason.Locked, 0);
+        }
+        else if(pieceController.pieceAbility != PieceAbility.AlwaysMove)
+        {
+            PieceFinished(pieceController);
+        }
+        
+        pieceController.Destroy();
+    }
+
+    public void Lose(GameOverReason gameOverReason, float delayTimer)
+    {
+        _whiteSystem.playerController.SetState(PieceState.EndGame);
+        SetStateForAllPieces(PieceState.Blocked);
+        _endGameSystem.SetEndGame(PieceColour.White, gameOverReason, delayTimer);
+        _validMovesSystem.HideAllValidMoves();
+    }
+
+    public void PieceFinished(AIController pieceController)
+    {
+        _piecesToMoveThisTurn.Remove(pieceController);
+
+        if (_piecesToMoveThisTurn.Count == 0)
+        {
+            _turnSystem.SwitchTurn(PieceColour.White);
+        }
+        else
+        {
+            _pieceControllerSelected = _piecesToMoveThisTurn[0];
+            
+            _pieceControllerSelected.PlayEnlargeAnimation();
+            _pieceControllerSelected.SetState(PieceState.FindingMove);
+        }
     }
 }

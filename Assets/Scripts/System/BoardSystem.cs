@@ -11,16 +11,6 @@ public class BoardSystem : Dependency
     private SettingsUISystem _settingsUISystem;
     private LevelSelectUISystem _levelSelectUISystem;
     private EndGameSystem _endGameSystem;
-
-    public SideSystem activeSideSystem =>_turnSystem.CurrentTurn() == PieceColour.White 
-        ? _whiteSystem 
-        : _blackSystem;
-    public SideSystem inactiveSideSystem =>_turnSystem.CurrentTurn() == PieceColour.White 
-        ? _blackSystem 
-        : _whiteSystem;
-
-    public BlackSystem blackSystem => _blackSystem;
-    public WhiteSystem whiteSystem => _whiteSystem;
     
     private List<float3> _validTiles;
     
@@ -91,24 +81,6 @@ public class BoardSystem : Dependency
         }
         
         return false;
-    }
-
-    public bool IsAllyAtPosition(Vector3 piecePos, PieceColour allyColour)
-    {
-        List<Vector3> enemyPositions = allyColour == PieceColour.White 
-            ? _whiteSystem.PiecePositions() 
-            : _blackSystem.PiecePositions();
-
-        return enemyPositions.Contains(piecePos);
-    }
-
-    public bool IsEnemyAtPosition(Vector3 piecePos, PieceColour enemyColour)
-    {
-        List<Vector3> enemyPositions = enemyColour == PieceColour.White 
-            ? _whiteSystem.PiecePositions() 
-            : _blackSystem.PiecePositions();
-        
-        return enemyPositions.Contains(piecePos);
     }
     
     public void ShowTapPoint(float3 position)

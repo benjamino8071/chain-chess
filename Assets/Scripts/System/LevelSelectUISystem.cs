@@ -34,8 +34,6 @@ public class LevelSelectUISystem : Dependency
     
     private Transform _pivot;
     
-    private PieceController _pieceControllerSelected;
-    
     private float3 _desiredPivotLocalPosition;
 
     private float _pivotLowerBoundY;
@@ -110,21 +108,8 @@ public class LevelSelectUISystem : Dependency
         {
             _settingsUISystem.Hide();
             
-            if (_boardSystem.activeSideSystem.pieceControllerSelected is { } pieceController
-                && (pieceController.state == PieceController.States.Blocked 
-                    || pieceController.state == PieceController.States.NotInUse
-                    || pieceController.state == PieceController.States.EndGame))
-            {
-                return;
-            }
-            
             if (!_levelSelectUI.gameObject.activeSelf)
             {
-                if (_boardSystem.activeSideSystem.pieceControllerSelected is { } pieceControllerSelected)
-                {
-                    _pieceControllerSelected = pieceControllerSelected;
-                    pieceControllerSelected.SetState(PieceController.States.Paused);
-                }
                 Show();
                 _audioSystem.PlayPauseOpenSfx();
             }
@@ -132,11 +117,6 @@ public class LevelSelectUISystem : Dependency
             {
                 Hide();
                 
-                if (_pieceControllerSelected != null)
-                {
-                    _pieceControllerSelected.SetState(PieceController.States.FindingMove);
-                    _pieceControllerSelected = null;
-                }
                 _audioSystem.PlayPauseCloseSfx();
             }
         });

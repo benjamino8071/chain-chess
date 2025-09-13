@@ -23,6 +23,13 @@ public class GameOver_SO : ScriptableObject
     }
 }
 
+public enum GameOverReason
+{
+    Captured,
+    NoTurns,
+    Locked
+}
+
 [Serializable]
 public struct Quote
 {
