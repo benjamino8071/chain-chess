@@ -521,7 +521,7 @@ public class PieceController : Controller
 
     public void PlayEnlargeAnimation()
     {
-        _animator.SetTrigger("enlarge");
+        _animator?.SetTrigger("enlarge");
     }
 
     public virtual void ForceMove(float3 movePosition)

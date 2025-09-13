@@ -6,11 +6,13 @@ public class PlayerController : PieceController
 {
     private Vector3 _positionRequested;
     
+    private float _pitchAmount = 1;
+
     protected override void FindingMove(float dt)
     {
         //The player will find the move when they are ready
         Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
-        if (Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame() && CanMove(positionRequested))
+        if (Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame() && CanMove(positionRequested) && !_enemySideSystem.IsPieceMoving())
         {
             if (Creator.settingsSo.doubleTap)
             {
@@ -45,8 +47,6 @@ public class PlayerController : PieceController
         }
     }
     
-    private float _pitchAmount = 1;
-
     protected override void Moving(float dt)
     {
         if (_pieceInstance.position == _jumpPosition)

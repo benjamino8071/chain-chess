@@ -44,13 +44,14 @@ public class BlackSystem : SideSystem
             if (_endTurnFrameCount == 0)
             {
                 _turnSystem.SwitchTurn(_enemyPieceColour);
-                return;
             }
+            
+            return;
         }
-        
-        foreach (PieceController pieceController in _alwaysMovers)
+
+        for (int i = 0; i < _alwaysMovers.Count; i++)
         {
-            pieceController.GameUpdate(dt);
+            _alwaysMovers[i].GameUpdate(dt);
         }
         
         _pieceControllerSelected?.GameUpdate(dt);
@@ -71,6 +72,13 @@ public class BlackSystem : SideSystem
         _alwaysMovers.Remove(capturedPieceController);
         
         return base.PieceCaptured(capturedPieceController);
+    }
+
+    public override void PieceBlocked(PieceController pieceController)
+    {
+        _alwaysMovers.Remove(pieceController);
+        
+        base.PieceBlocked(pieceController);
     }
 
     public void AiSetup()

@@ -193,17 +193,31 @@ public class SideSystem : Dependency
     {
         _frozen = false;
     }
+
+    public bool IsPieceMoving()
+    {
+        foreach (PieceController pieceController in _pieceControllers)
+        {
+            if (pieceController.state == PieceController.States.Moving)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
     
     /// <returns>True = all ally pieces captured</returns>
     public virtual bool PieceCaptured(PieceController capturedPieceController)
     {
         _pieceControllers.Remove(capturedPieceController);
         capturedPieceController.SetState(PieceController.States.NotInUse);
-
+        capturedPieceController.Destroy();
+        
         return _pieceControllers.Count == 0;
     }
 
-    public void PieceBlocked(PieceController pieceController)
+    public virtual void PieceBlocked(PieceController pieceController)
     {
         _pieceControllers.Remove(pieceController);
         
@@ -215,6 +229,8 @@ public class SideSystem : Dependency
         {
             PieceFinished(pieceController);
         }
+        
+        pieceController.Destroy();
     }
 
     public void Lose(GameOverReason gameOverReason, float delayTimer)

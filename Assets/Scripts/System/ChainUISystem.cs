@@ -39,7 +39,7 @@ public class ChainUISystem : Dependency
         Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
         _pivot = creator.GetChildObjectByName(guiBottom.gameObject, AllTagNames.Pivot);
 
-        int chainImagesAmount = 64;
+        int chainImagesAmount = 130;
         float xPos = 0;
         for (int i = 0; i < chainImagesAmount; i++)
         {

@@ -1834,65 +1834,65 @@ MonoBehaviour:
       colour: 1
       ability: 0
       position: {x: 7, y: 2}
-    - piece: 1
+    - piece: 2
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 3, y: 7}
-    - piece: 1
+    - piece: 4
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 4, y: 7}
-    - piece: 1
+    - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 6}
-    - piece: 1
+    - piece: 5
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 3, y: 6}
-    - piece: 1
+    - piece: 6
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 4, y: 6}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 5, y: 6}
-    - piece: 1
+    - piece: 3
       colour: 0
       ability: 0
       position: {x: 2, y: 5}
-    - piece: 1
+    - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 5}
-    - piece: 1
+    - piece: 5
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 4, y: 5}
-    - piece: 1
+    - piece: 2
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 5}
-    - piece: 1
+    - piece: 6
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 4}
-    - piece: 1
+    - piece: 2
       colour: 0
       ability: 0
       position: {x: 3, y: 4}
-    - piece: 1
+    - piece: 3
       colour: 0
       ability: 0
       position: {x: 4, y: 4}
-    - piece: 1
+    - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 5, y: 4}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 3}
     - piece: 1
       colour: 0
@@ -1910,7 +1910,7 @@ MonoBehaviour:
       position: {x: 7, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 5}
     - piece: 6
       colour: 0
@@ -1918,31 +1918,31 @@ MonoBehaviour:
       position: {x: 3, y: 4}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 4, y: 6}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 4, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 4, y: 4}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 4, y: 3}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 5, y: 7}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 6}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 5, y: 5}
     - piece: 3
       colour: 0
@@ -1950,11 +1950,11 @@ MonoBehaviour:
       position: {x: 5, y: 4}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 3}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 5, y: 2}
   - level: 46
     turns: 18
@@ -1968,15 +1968,15 @@ MonoBehaviour:
       position: {x: 6, y: 2}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 7}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 3, y: 7}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 4, y: 7}
     - piece: 3
       colour: 0
@@ -1984,15 +1984,15 @@ MonoBehaviour:
       position: {x: 5, y: 7}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 2, y: 6}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 3, y: 6}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 4, y: 6}
     - piece: 1
       colour: 0
@@ -2000,51 +2000,51 @@ MonoBehaviour:
       position: {x: 5, y: 6}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 2, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 5}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 4, y: 5}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 5, y: 5}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 4}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 3, y: 4}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 4, y: 4}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 4}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 6, y: 5}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 6, y: 6}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 7, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 7, y: 6}
   - level: 47
     turns: 19
@@ -2162,67 +2162,67 @@ MonoBehaviour:
       position: {x: 4, y: 2}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 1}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 4, y: 1}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 8, y: 1}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 1, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 2, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 3, y: 2}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 7, y: 2}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 5, y: 4}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 4, y: 4}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 6}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 6, y: 6}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 7, y: 8}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 6, y: 8}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 1, y: 7}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 8}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 1, y: 8}
   sectionSix:
   - level: 50
@@ -2345,23 +2345,23 @@ MonoBehaviour:
       position: {x: 5, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 2, y: 8}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 2, y: 7}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 6}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 2, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 4}
     - piece: 6
       colour: 0
@@ -2373,7 +2373,7 @@ MonoBehaviour:
       position: {x: 2, y: 2}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 1}
     - piece: 1
       colour: 0
@@ -2381,11 +2381,11 @@ MonoBehaviour:
       position: {x: 7, y: 8}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 7, y: 7}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 7, y: 6}
     - piece: 3
       colour: 0
@@ -2397,11 +2397,11 @@ MonoBehaviour:
       position: {x: 7, y: 4}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 7, y: 3}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 7, y: 2}
     - piece: 3
       colour: 0
@@ -2417,11 +2417,11 @@ MonoBehaviour:
       position: {x: 4, y: 4}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 5, y: 4}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 6, y: 4}
   - level: 55
     turns: 27
@@ -2435,11 +2435,11 @@ MonoBehaviour:
       position: {x: 4, y: 8}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 3, y: 8}
-    - piece: 3
+    - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 7}
     - piece: 2
       colour: 0
@@ -2447,55 +2447,55 @@ MonoBehaviour:
       position: {x: 3, y: 6}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 5}
     - piece: 5
       colour: 0
       ability: 0
       position: {x: 6, y: 8}
-    - piece: 2
+    - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 6, y: 7}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 6, y: 6}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 6, y: 5}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 1, y: 3}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 2, y: 2}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 3, y: 1}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 4, y: 1}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 1}
-    - piece: 4
+    - piece: 3
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 6, y: 1}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 7, y: 2}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 8, y: 3}
   - level: 56
     turns: 30
@@ -2503,57 +2503,57 @@ MonoBehaviour:
     star2Score: 530
     star3Score: 330
     positions:
-    - piece: 3
+    - piece: 6
       colour: 1
       ability: 0
-      position: {x: 3, y: 4}
-    - piece: 6
+      position: {x: 4, y: 4}
+    - piece: 3
       colour: 0
       ability: 0
-      position: {x: 4, y: 4}
+      position: {x: 3, y: 4}
     - piece: 5
       colour: 0
       ability: 0
       position: {x: 5, y: 4}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 4, y: 5}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 5, y: 5}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 6}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 4, y: 6}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 6}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 6, y: 6}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 3, y: 3}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 4, y: 3}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 5, y: 3}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 6, y: 3}
     - piece: 1
       colour: 0
@@ -2565,11 +2565,11 @@ MonoBehaviour:
       position: {x: 2, y: 4}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 7, y: 5}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 7, y: 4}
   - level: 57
     turns: 27
@@ -2794,19 +2794,19 @@ MonoBehaviour:
       position: {x: 6, y: 3}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 3, y: 7}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 4, y: 7}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 7}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 2, y: 6}
     - piece: 4
       colour: 0
@@ -2830,7 +2830,7 @@ MonoBehaviour:
       position: {x: 1, y: 5}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 2, y: 5}
     - piece: 6
       colour: 0
@@ -2838,19 +2838,19 @@ MonoBehaviour:
       position: {x: 3, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 4, y: 5}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 5, y: 5}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 6, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 7, y: 5}
     - piece: 3
       colour: 0
@@ -2862,7 +2862,7 @@ MonoBehaviour:
       position: {x: 3, y: 4}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 4, y: 4}
     - piece: 3
       colour: 0
@@ -2870,7 +2870,7 @@ MonoBehaviour:
       position: {x: 5, y: 4}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 6, y: 4}
     - piece: 2
       colour: 0
@@ -2878,7 +2878,7 @@ MonoBehaviour:
       position: {x: 3, y: 3}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 4, y: 3}
     - piece: 3
       colour: 0
@@ -2896,31 +2896,31 @@ MonoBehaviour:
       position: {x: 6, y: 5}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 2, y: 7}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 3, y: 6}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 7, y: 7}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 6, y: 6}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 2, y: 2}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 3, y: 3}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 7, y: 2}
     - piece: 6
       colour: 0
@@ -2928,19 +2928,19 @@ MonoBehaviour:
       position: {x: 6, y: 3}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 4, y: 4}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 5, y: 4}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 4, y: 5}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 5, y: 5}
   - level: 66
     turns: 20
@@ -2954,71 +2954,71 @@ MonoBehaviour:
       position: {x: 6, y: 6}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 4, y: 8}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 3, y: 7}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 4, y: 7}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 7}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 3, y: 6}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 4, y: 6}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 5, y: 6}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 2, y: 5}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 5}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 4, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 5, y: 5}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 6, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 4}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 3, y: 4}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 4, y: 4}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 4}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 6, y: 4}
     - piece: 3
       colour: 0
@@ -3026,7 +3026,7 @@ MonoBehaviour:
       position: {x: 3, y: 3}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 4, y: 3}
     - piece: 5
       colour: 0
@@ -3038,15 +3038,15 @@ MonoBehaviour:
       position: {x: 3, y: 2}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 4, y: 2}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 2}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 4, y: 1}
   - level: 67
     turns: 20
@@ -3064,55 +3064,55 @@ MonoBehaviour:
       position: {x: 4, y: 1}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 1, y: 1}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 4, y: 3}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 5, y: 4}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 3, y: 3}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 4}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 2, y: 5}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 6}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 6, y: 3}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 7, y: 4}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 7, y: 5}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 6, y: 6}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 5, y: 7}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 4, y: 8}
   - level: 68
     turns: 20
@@ -3126,7 +3126,7 @@ MonoBehaviour:
       position: {x: 5, y: 4}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 4, y: 5}
     - piece: 3
       colour: 0
@@ -3138,43 +3138,43 @@ MonoBehaviour:
       position: {x: 5, y: 6}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 3, y: 4}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 3}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 1, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 7, y: 5}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 6, y: 4}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 5, y: 5}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 3, y: 8}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 7, y: 2}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 6, y: 7}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 5, y: 1}
   - level: 69
     turns: 20
@@ -3188,59 +3188,59 @@ MonoBehaviour:
       position: {x: 4, y: 1}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 2, y: 3}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 4}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 4, y: 4}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 4, y: 6}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 2, y: 5}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 2, y: 7}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 6, y: 5}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 7, y: 5}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 8, y: 6}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 6, y: 1}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 6, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 7, y: 3}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 8, y: 3}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 7, y: 8}
   sectionEight:
   - level: 70
@@ -3351,123 +3351,57 @@ MonoBehaviour:
     star2Score: 0
     star3Score: 0
     positions:
-    - piece: 3
-      colour: 1
-      ability: 0
-      position: {x: 4, y: 5}
-    - piece: 1
-      colour: 0
-      ability: 0
-      position: {x: 1, y: 3}
-    - piece: 1
-      colour: 0
-      ability: 0
-      position: {x: 2, y: 4}
-    - piece: 6
-      colour: 0
-      ability: 0
-      position: {x: 3, y: 3}
-    - piece: 5
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 3}
-    - piece: 3
-      colour: 0
-      ability: 0
-      position: {x: 6, y: 4}
-    - piece: 5
-      colour: 0
-      ability: 0
-      position: {x: 6, y: 6}
-    - piece: 6
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 7}
-    - piece: 2
-      colour: 0
-      ability: 0
-      position: {x: 3, y: 7}
-    - piece: 5
-      colour: 0
-      ability: 0
-      position: {x: 2, y: 6}
-    - piece: 1
-      colour: 0
-      ability: 0
-      position: {x: 7, y: 8}
-    - piece: 2
-      colour: 0
-      ability: 0
-      position: {x: 1, y: 8}
-    - piece: 4
-      colour: 0
-      ability: 0
-      position: {x: 7, y: 2}
-    - piece: 2
-      colour: 0
-      ability: 0
-      position: {x: 7, y: 1}
-    - piece: 3
-      colour: 0
-      ability: 0
-      position: {x: 6, y: 1}
-  - level: 74
-    turns: 29
-    star1Score: 0
-    star2Score: 0
-    star3Score: 0
-    positions:
     - piece: 4
       colour: 1
       ability: 0
       position: {x: 1, y: 8}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 1, y: 3}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 2, y: 3}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 3, y: 3}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 4, y: 3}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 5, y: 3}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 6, y: 3}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 7, y: 3}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 8, y: 3}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 2, y: 4}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 4}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 4, y: 4}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 5, y: 4}
     - piece: 3
       colour: 0
@@ -3475,7 +3409,7 @@ MonoBehaviour:
       position: {x: 6, y: 4}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 7, y: 4}
     - piece: 4
       colour: 0
@@ -3487,36 +3421,122 @@ MonoBehaviour:
       position: {x: 3, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 4, y: 5}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 5, y: 5}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 6, y: 5}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 7, y: 5}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 6}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 4, y: 6}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 5, y: 6}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 6, y: 6}
+  - level: 74
+    turns: 29
+    star1Score: 0
+    star2Score: 0
+    star3Score: 0
+    positions:
+    - piece: 5
+      colour: 1
+      ability: 0
+      position: {x: 1, y: 8}
+    - piece: 4
+      colour: 0
+      ability: 5
+      position: {x: 2, y: 1}
+    - piece: 5
+      colour: 0
+      ability: 5
+      position: {x: 3, y: 2}
+    - piece: 4
+      colour: 0
+      ability: 8
+      position: {x: 4, y: 3}
+    - piece: 2
+      colour: 0
+      ability: 5
+      position: {x: 5, y: 2}
+    - piece: 2
+      colour: 0
+      ability: 1
+      position: {x: 6, y: 1}
+    - piece: 6
+      colour: 0
+      ability: 9
+      position: {x: 3, y: 4}
+    - piece: 4
+      colour: 0
+      ability: 9
+      position: {x: 4, y: 4}
+    - piece: 6
+      colour: 0
+      ability: 5
+      position: {x: 5, y: 4}
+    - piece: 1
+      colour: 0
+      ability: 3
+      position: {x: 1, y: 5}
+    - piece: 3
+      colour: 0
+      ability: 9
+      position: {x: 2, y: 5}
+    - piece: 5
+      colour: 0
+      ability: 1
+      position: {x: 3, y: 5}
+    - piece: 3
+      colour: 0
+      ability: 5
+      position: {x: 4, y: 5}
+    - piece: 6
+      colour: 0
+      ability: 1
+      position: {x: 5, y: 5}
+    - piece: 3
+      colour: 0
+      ability: 5
+      position: {x: 6, y: 5}
+    - piece: 2
+      colour: 0
+      ability: 8
+      position: {x: 7, y: 5}
+    - piece: 5
+      colour: 0
+      ability: 5
+      position: {x: 3, y: 6}
+    - piece: 2
+      colour: 0
+      ability: 9
+      position: {x: 4, y: 6}
+    - piece: 4
+      colour: 0
+      ability: 7
+      position: {x: 5, y: 6}
+    - piece: 3
+      colour: 0
+      ability: 7
+      position: {x: 4, y: 7}
   - level: 75
     turns: 29
     star1Score: 0
@@ -3526,83 +3546,99 @@ MonoBehaviour:
     - piece: 5
       colour: 1
       ability: 0
-      position: {x: 1, y: 8}
-    - piece: 4
+      position: {x: 1, y: 1}
+    - piece: 2
       colour: 0
-      ability: 0
-      position: {x: 2, y: 1}
+      ability: 7
+      position: {x: 5, y: 3}
     - piece: 5
       colour: 0
-      ability: 0
-      position: {x: 3, y: 2}
-    - piece: 4
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 3}
-    - piece: 2
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 2}
-    - piece: 2
-      colour: 0
-      ability: 0
-      position: {x: 6, y: 1}
-    - piece: 6
-      colour: 0
-      ability: 0
-      position: {x: 3, y: 4}
-    - piece: 4
-      colour: 0
-      ability: 0
+      ability: 3
       position: {x: 4, y: 4}
+    - piece: 3
+      colour: 0
+      ability: 1
+      position: {x: 5, y: 4}
     - piece: 6
       colour: 0
-      ability: 0
-      position: {x: 5, y: 4}
+      ability: 5
+      position: {x: 6, y: 4}
+    - piece: 4
+      colour: 0
+      ability: 1
+      position: {x: 3, y: 5}
+    - piece: 5
+      colour: 0
+      ability: 9
+      position: {x: 4, y: 5}
+    - piece: 2
+      colour: 0
+      ability: 5
+      position: {x: 5, y: 5}
     - piece: 1
       colour: 0
-      ability: 0
-      position: {x: 1, y: 5}
-    - piece: 3
-      colour: 0
-      ability: 0
-      position: {x: 2, y: 5}
-    - piece: 5
-      colour: 0
-      ability: 0
-      position: {x: 3, y: 5}
-    - piece: 3
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 5}
-    - piece: 6
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 5}
-    - piece: 3
-      colour: 0
-      ability: 0
+      ability: 7
       position: {x: 6, y: 5}
-    - piece: 2
+    - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 7, y: 5}
     - piece: 5
       colour: 0
-      ability: 0
-      position: {x: 3, y: 6}
+      ability: 5
+      position: {x: 2, y: 6}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 1
+      position: {x: 3, y: 6}
+    - piece: 6
+      colour: 0
+      ability: 3
       position: {x: 4, y: 6}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 5, y: 6}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 3
+      position: {x: 6, y: 6}
+    - piece: 2
+      colour: 0
+      ability: 9
+      position: {x: 7, y: 6}
+    - piece: 4
+      colour: 0
+      ability: 5
+      position: {x: 8, y: 6}
+    - piece: 4
+      colour: 0
+      ability: 8
+      position: {x: 3, y: 7}
+    - piece: 2
+      colour: 0
+      ability: 7
       position: {x: 4, y: 7}
+    - piece: 5
+      colour: 0
+      ability: 5
+      position: {x: 5, y: 7}
+    - piece: 2
+      colour: 0
+      ability: 3
+      position: {x: 6, y: 7}
+    - piece: 3
+      colour: 0
+      ability: 8
+      position: {x: 7, y: 7}
+    - piece: 6
+      colour: 0
+      ability: 5
+      position: {x: 4, y: 8}
+    - piece: 3
+      colour: 0
+      ability: 8
+      position: {x: 6, y: 8}
   - level: 76
     turns: 29
     star1Score: 0
@@ -3612,221 +3648,185 @@ MonoBehaviour:
     - piece: 5
       colour: 1
       ability: 0
-      position: {x: 1, y: 1}
-    - piece: 2
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 3}
-    - piece: 5
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 4}
+      position: {x: 7, y: 2}
     - piece: 3
       colour: 0
-      ability: 0
-      position: {x: 5, y: 4}
-    - piece: 6
+      ability: 5
+      position: {x: 3, y: 3}
+    - piece: 3
       colour: 0
-      ability: 0
-      position: {x: 6, y: 4}
-    - piece: 4
-      colour: 0
-      ability: 0
-      position: {x: 3, y: 5}
-    - piece: 5
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 5}
+      ability: 5
+      position: {x: 4, y: 3}
     - piece: 2
       colour: 0
-      ability: 0
-      position: {x: 5, y: 5}
+      ability: 7
+      position: {x: 5, y: 3}
+    - piece: 4
+      colour: 0
+      ability: 5
+      position: {x: 6, y: 3}
+    - piece: 5
+      colour: 0
+      ability: 5
+      position: {x: 3, y: 4}
+    - piece: 6
+      colour: 0
+      ability: 8
+      position: {x: 4, y: 4}
+    - piece: 2
+      colour: 0
+      ability: 8
+      position: {x: 5, y: 4}
+    - piece: 4
+      colour: 0
+      ability: 7
+      position: {x: 6, y: 4}
+    - piece: 6
+      colour: 0
+      ability: 9
+      position: {x: 3, y: 5}
+    - piece: 3
+      colour: 0
+      ability: 5
+      position: {x: 4, y: 5}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 9
+      position: {x: 5, y: 5}
+    - piece: 5
+      colour: 0
+      ability: 7
       position: {x: 6, y: 5}
-    - piece: 4
+    - piece: 1
       colour: 0
-      ability: 0
-      position: {x: 7, y: 5}
-    - piece: 5
-      colour: 0
-      ability: 0
-      position: {x: 2, y: 6}
-    - piece: 2
-      colour: 0
-      ability: 0
+      ability: 5
       position: {x: 3, y: 6}
-    - piece: 6
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 6}
     - piece: 4
       colour: 0
-      ability: 0
-      position: {x: 5, y: 6}
+      ability: 1
+      position: {x: 4, y: 6}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 1
+      position: {x: 5, y: 6}
+    - piece: 2
+      colour: 0
+      ability: 8
       position: {x: 6, y: 6}
-    - piece: 2
+    - piece: 3
       colour: 0
-      ability: 0
-      position: {x: 7, y: 6}
+      ability: 1
+      position: {x: 1, y: 1}
     - piece: 4
       colour: 0
-      ability: 0
-      position: {x: 8, y: 6}
-    - piece: 4
-      colour: 0
-      ability: 0
-      position: {x: 3, y: 7}
-    - piece: 2
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 7}
+      ability: 5
+      position: {x: 1, y: 2}
     - piece: 5
       colour: 0
-      ability: 0
-      position: {x: 5, y: 7}
+      ability: 8
+      position: {x: 2, y: 1}
     - piece: 2
       colour: 0
-      ability: 0
-      position: {x: 6, y: 7}
+      ability: 3
+      position: {x: 8, y: 1}
+    - piece: 1
+      colour: 0
+      ability: 8
+      position: {x: 7, y: 1}
     - piece: 3
       colour: 0
-      ability: 0
-      position: {x: 7, y: 7}
+      ability: 3
+      position: {x: 8, y: 3}
+    - piece: 5
+      colour: 0
+      ability: 8
+      position: {x: 1, y: 8}
     - piece: 6
       colour: 0
-      ability: 0
-      position: {x: 4, y: 8}
+      ability: 5
+      position: {x: 1, y: 7}
+    - piece: 6
+      colour: 0
+      ability: 3
+      position: {x: 2, y: 8}
     - piece: 3
       colour: 0
-      ability: 0
-      position: {x: 6, y: 8}
+      ability: 9
+      position: {x: 8, y: 8}
+    - piece: 6
+      colour: 0
+      ability: 5
+      position: {x: 7, y: 8}
+    - piece: 2
+      colour: 0
+      ability: 3
+      position: {x: 8, y: 7}
   - level: 77
     turns: 29
     star1Score: 0
     star2Score: 0
     star3Score: 0
     positions:
-    - piece: 5
+    - piece: 3
       colour: 1
-      ability: 0
-      position: {x: 1, y: 5}
-    - piece: 3
-      colour: 0
-      ability: 0
-      position: {x: 3, y: 3}
-    - piece: 3
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 3}
-    - piece: 2
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 3}
-    - piece: 4
-      colour: 0
-      ability: 0
-      position: {x: 6, y: 3}
-    - piece: 5
-      colour: 0
-      ability: 0
-      position: {x: 3, y: 4}
-    - piece: 6
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 4}
-    - piece: 2
-      colour: 0
-      ability: 0
-      position: {x: 5, y: 4}
-    - piece: 4
-      colour: 0
-      ability: 0
-      position: {x: 6, y: 4}
-    - piece: 6
-      colour: 0
-      ability: 0
-      position: {x: 3, y: 5}
-    - piece: 3
-      colour: 0
       ability: 0
       position: {x: 4, y: 5}
     - piece: 1
       colour: 0
-      ability: 0
-      position: {x: 5, y: 5}
-    - piece: 5
-      colour: 0
-      ability: 0
-      position: {x: 6, y: 5}
+      ability: 5
+      position: {x: 1, y: 3}
     - piece: 1
       colour: 0
-      ability: 0
-      position: {x: 3, y: 6}
-    - piece: 4
+      ability: 8
+      position: {x: 2, y: 4}
+    - piece: 6
       colour: 0
-      ability: 0
-      position: {x: 4, y: 6}
+      ability: 5
+      position: {x: 3, y: 3}
+    - piece: 5
+      colour: 0
+      ability: 8
+      position: {x: 5, y: 3}
     - piece: 3
       colour: 0
-      ability: 0
-      position: {x: 5, y: 6}
-    - piece: 2
+      ability: 5
+      position: {x: 6, y: 4}
+    - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 6, y: 6}
-    - piece: 3
+    - piece: 6
       colour: 0
-      ability: 0
-      position: {x: 1, y: 1}
-    - piece: 4
-      colour: 0
-      ability: 0
-      position: {x: 1, y: 2}
-    - piece: 5
-      colour: 0
-      ability: 0
-      position: {x: 2, y: 1}
+      ability: 5
+      position: {x: 5, y: 7}
     - piece: 2
       colour: 0
-      ability: 0
-      position: {x: 8, y: 1}
+      ability: 1
+      position: {x: 3, y: 7}
+    - piece: 5
+      colour: 0
+      ability: 5
+      position: {x: 2, y: 6}
     - piece: 1
       colour: 0
-      ability: 0
-      position: {x: 7, y: 1}
-    - piece: 3
-      colour: 0
-      ability: 0
-      position: {x: 8, y: 2}
-    - piece: 5
-      colour: 0
-      ability: 0
-      position: {x: 1, y: 8}
-    - piece: 2
-      colour: 0
-      ability: 0
-      position: {x: 1, y: 7}
-    - piece: 6
-      colour: 0
-      ability: 0
-      position: {x: 2, y: 8}
-    - piece: 3
-      colour: 0
-      ability: 0
-      position: {x: 8, y: 8}
-    - piece: 6
-      colour: 0
-      ability: 0
+      ability: 3
       position: {x: 7, y: 8}
     - piece: 2
       colour: 0
-      ability: 0
-      position: {x: 8, y: 7}
+      ability: 9
+      position: {x: 1, y: 8}
+    - piece: 4
+      colour: 0
+      ability: 1
+      position: {x: 7, y: 2}
+    - piece: 2
+      colour: 0
+      ability: 5
+      position: {x: 7, y: 1}
+    - piece: 3
+      colour: 0
+      ability: 3
+      position: {x: 6, y: 1}
   - level: 78
     turns: 29
     star1Score: 0
@@ -3839,71 +3839,71 @@ MonoBehaviour:
       position: {x: 3, y: 6}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 2, y: 8}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 7}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 2, y: 6}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 3, y: 7}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 4, y: 7}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 4, y: 6}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 1, y: 4}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 2, y: 4}
     - piece: 4
       colour: 0
-      ability: 0
-      position: {x: 3, y: 3}
+      ability: 3
+      position: {x: 2, y: 2}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 4, y: 1}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 5, y: 2}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 3}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 5, y: 4}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 6, y: 3}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 7, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 8, y: 2}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 7, y: 7}
   - level: 79
     turns: 29
@@ -3917,27 +3917,27 @@ MonoBehaviour:
       position: {x: 4, y: 4}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 1, y: 8}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 3, y: 8}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 3, y: 6}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 4, y: 5}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 6, y: 7}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 8, y: 5}
     - piece: 3
       colour: 0
@@ -3945,35 +3945,35 @@ MonoBehaviour:
       position: {x: 1, y: 1}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 2, y: 3}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 4, y: 2}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 7, y: 3}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 6, y: 2}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 8, y: 2}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 7, y: 1}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 1, y: 4}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 8, y: 8}
     - piece: 1
       colour: 0
@@ -3981,23 +3981,23 @@ MonoBehaviour:
       position: {x: 7, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 6, y: 5}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 5, y: 8}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 2}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 8, y: 6}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 2, y: 7}
   finalLevel:
     level: 80
@@ -4009,134 +4009,130 @@ MonoBehaviour:
     - piece: 5
       colour: 1
       ability: 0
-      position: {x: 4, y: 5}
+      position: {x: 4, y: 1}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 1, y: 8}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 2, y: 8}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 3, y: 8}
     - piece: 5
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 4, y: 8}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 5, y: 8}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 6, y: 8}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 7, y: 8}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 8, y: 8}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 1, y: 1}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 2, y: 1}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 3, y: 1}
-    - piece: 5
-      colour: 0
-      ability: 0
-      position: {x: 4, y: 1}
     - piece: 6
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 1}
     - piece: 4
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 6, y: 1}
     - piece: 3
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 7, y: 1}
     - piece: 2
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 8, y: 1}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 1, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 2, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 3, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 4, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 5, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 6, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 7, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 3
       position: {x: 8, y: 2}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 1, y: 7}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 2, y: 7}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 3, y: 7}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 9
       position: {x: 4, y: 7}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 1
       position: {x: 5, y: 7}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 5
       position: {x: 6, y: 7}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 7
       position: {x: 7, y: 7}
     - piece: 1
       colour: 0
-      ability: 0
+      ability: 8
       position: {x: 8, y: 7}
   reservedLevels:
   - level: 39
