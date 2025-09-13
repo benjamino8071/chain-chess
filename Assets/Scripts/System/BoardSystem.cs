@@ -56,8 +56,6 @@ public class BoardSystem : Dependency
 
     public override void GameUpdate(float dt)
     {
-        Creator.statsTime += dt;
-        
         float3 gridPoint = GetGridPointNearMouse();
         
         if (!Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame()

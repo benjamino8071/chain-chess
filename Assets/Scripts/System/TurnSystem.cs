@@ -13,12 +13,8 @@ public class TurnSystem : Dependency
     private BoardSystem _boardSystem;
     private LevelSelectUISystem _levelSelectUISystem;
     private InvalidMovesSystem _invalidMovesSystem;
-
-    private TextMeshProUGUI _turnsRemainingText;
     
     private PieceColour _currentTurn; //Will always start with White
-    
-    private int _turnsRemaining;
     
     public override void GameStart(Creator creator)
     {
@@ -34,15 +30,6 @@ public class TurnSystem : Dependency
         _levelSelectUISystem = creator.GetDependency<LevelSelectUISystem>();
         _invalidMovesSystem = creator.GetDependency<InvalidMovesSystem>();
         
-        Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
-        
-        _turnsRemainingText = creator.GetChildComponentByName<TextMeshProUGUI>(guiBottom.gameObject, AllTagNames.TurnsRemaining);
-        
-        //Add 1 because we will lose 1 when the player 
-        _turnsRemaining = creator.levelsSo.GetLevelOnLoad().turns;
-        
-        UpdateTurnsRemainingText(_turnsRemaining);
-        
         LoadLevelRuntime();
     }
     
@@ -52,12 +39,6 @@ public class TurnSystem : Dependency
         switch (nextTurn)
         {
             case PieceColour.White:
-                if (DecrementTurnsRemaining())
-                {
-                    _blackSystem.Lose(GameOverReason.NoTurns, 1.1f);
-                    return;
-                }
-                
                 Creator.statsTurns++;
                 
                 _blackSystem.DeselectPiece();
@@ -90,9 +71,6 @@ public class TurnSystem : Dependency
         
         _levelSelectUISystem.UpdateLevelText(Creator.levelsSo.levelOnLoad);
         
-        _turnsRemaining = Creator.levelsSo.GetLevelOnLoad().turns;
-        UpdateTurnsRemainingText(_turnsRemaining);
-        
         _whiteSystem.SpawnPieces();
         _blackSystem.SpawnPieces();
         _chainUISystem.ShowChain(_whiteSystem.pieceControllerSelected, true);
@@ -103,23 +81,8 @@ public class TurnSystem : Dependency
 
         Creator.statsTurns = 0;
         Creator.statsMoves = 0;
-        Creator.statsTime = 0;
         
         SwitchTurn(PieceColour.White);
-    }
-
-    private void UpdateTurnsRemainingText(int turnsRemaining)
-    {
-        string plural = turnsRemaining == 1 ? "" : "s";
-        
-        _turnsRemainingText.text = $"{turnsRemaining} Turn{plural}";
-    }
-
-    private bool DecrementTurnsRemaining()
-    {
-        //_turnsRemaining--;
-        UpdateTurnsRemainingText(_turnsRemaining);
-        return _turnsRemaining == 0;
     }
 
     public PieceColour CurrentTurn()

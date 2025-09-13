@@ -34,7 +34,6 @@ public class Creator : MonoBehaviour
 
     [HideInInspector] public int statsTurns;
     [HideInInspector] public int statsMoves;
-    [HideInInspector] public float statsTime;
     
     private List<Dependency> _dependencies = new();
     
