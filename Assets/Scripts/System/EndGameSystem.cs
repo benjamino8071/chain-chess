@@ -2,7 +2,6 @@ public class EndGameSystem : Dependency
 {
     private GameOverUISystem _gameOverUISystem;
     private LevelCompleteUISystem _levelCompleteUISystem;
-    private SideWinsUISystem _sideWinsUISystem;
     private SettingsUISystem _settingsUISystem;
     private ChainUISystem _chainUISystem;
     private ValidMovesSystem _validMovesSystem;
@@ -18,7 +17,6 @@ public class EndGameSystem : Dependency
         
         _gameOverUISystem = creator.GetDependency<GameOverUISystem>();
         _levelCompleteUISystem = creator.GetDependency<LevelCompleteUISystem>();
-        _sideWinsUISystem = creator.GetDependency<SideWinsUISystem>();
         _settingsUISystem = creator.GetDependency<SettingsUISystem>();
         _chainUISystem = creator.GetDependency<ChainUISystem>();
         _validMovesSystem = creator.GetDependency<ValidMovesSystem>();

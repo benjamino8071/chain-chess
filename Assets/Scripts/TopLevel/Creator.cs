@@ -89,7 +89,6 @@ public class Creator : MonoBehaviour
         _dependencies.Add(new WhiteSystem());
         _dependencies.Add(new BlackSystem());
         _dependencies.Add(new GameOverUISystem());
-        _dependencies.Add(new SideWinsUISystem());
         _dependencies.Add(new EndGameSystem());
         _dependencies.Add(new TurnSystem());
     }
