@@ -18,7 +18,6 @@ public enum AllTagNames
     AuthorText = 74,
     Settings = 80,
     SettingsButton = 81,
-    DoubleTapSwitch = 82,
     AudioSwitch = 83,
     SideWins = 89,
     AllValidMovesParent = 90,

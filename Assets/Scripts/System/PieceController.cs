@@ -17,7 +17,6 @@ public class PieceController : Controller
     {
         WaitingForTurn,
         FindingMove,
-        ConfirmingMove,
         Moving,
         NotInUse,
         Paused,
@@ -165,9 +164,6 @@ public class PieceController : Controller
             case States.FindingMove:
                 FindingMove(dt);
                 break;
-            case States.ConfirmingMove:
-                ConfirmingMove(dt);
-                break;
             case States.Moving:
                 Moving(dt);
                 break;
@@ -182,11 +178,6 @@ public class PieceController : Controller
     }
 
     protected virtual void FindingMove(float dt)
-    {
-        
-    }
-
-    protected virtual void ConfirmingMove(float dt)
     {
         
     }
@@ -458,7 +449,6 @@ public class PieceController : Controller
         {
             case States.WaitingForTurn:
             case States.FindingMove:
-            case States.ConfirmingMove:
             case States.Moving:
             case States.Paused:
             {

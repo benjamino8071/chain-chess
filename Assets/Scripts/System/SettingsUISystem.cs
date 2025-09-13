@@ -106,21 +106,6 @@ public class SettingsUISystem : Dependency
             _audioSystem.PlayUIClickSfx();
             SceneManager.LoadScene("Main_Menu_Scene");
         });
-
-        Transform doubleTapSwitchTf = creator.GetChildObjectByName(_settingsGui.gameObject, AllTagNames.DoubleTapSwitch);
-        SwitchManager doubleTapSwitch = doubleTapSwitchTf.GetComponent<SwitchManager>();
-        if (creator.settingsSo.doubleTap)
-        {
-            doubleTapSwitch.SetOn();
-        }
-        else
-        {
-            doubleTapSwitch.SetOff();
-        }
-        doubleTapSwitch.onValueChanged.AddListener((isOn) =>
-        {
-            creator.settingsSo.doubleTap = isOn;
-        });
         
         Transform audioSwitchTf = creator.GetChildObjectByName(_settingsGui.gameObject, AllTagNames.AudioSwitch);
         SwitchManager audioSwitch = audioSwitchTf.GetComponent<SwitchManager>();

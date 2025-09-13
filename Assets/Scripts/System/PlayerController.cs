@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerController : PieceController
 {
-    private Vector3 _positionRequested;
-    
     private float _pitchAmount = 1;
 
     protected override void FindingMove(float dt)
@@ -14,36 +12,7 @@ public class PlayerController : PieceController
         Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
         if (Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame() && CanMove(positionRequested) && !_enemySideSystem.IsPieceMoving())
         {
-            if (Creator.settingsSo.doubleTap)
-            {
-                SetState(States.ConfirmingMove);
-                _validMovesSystem.ShowSingleValidMove(positionRequested);
-                _positionRequested = positionRequested;
-                _audioSystem.PlayPieceDoubleTapSelectedSfx(0.8f);
-            }
-            else
-            {
-                MovePiece(positionRequested);
-            }
-        }
-    }
-
-    protected override void ConfirmingMove(float dt)
-    {
-        //The player will find the move when they are ready
-        Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
-        if (Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame())
-        {
-            if (_positionRequested == positionRequested)
-            {
-                MovePiece(positionRequested);
-            }
-            else
-            {
-                _allySideSystem.SelectPiece(this);
-            }
-            
-            _positionRequested = Vector3.zero; //For next time the player double taps
+            MovePiece(positionRequested);
         }
     }
     
