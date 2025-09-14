@@ -75,6 +75,8 @@ public class PlayerController : Dependency
         
         _animator = _model.GetComponentInChildren<Animator>();
         
+        UpdateSprite(startingPiece);
+        
         _jumpPosition = _model.position;
         
         _capturedPieces.Add(startingPiece);
@@ -232,7 +234,7 @@ public class PlayerController : Dependency
         float d1 = math.distance(_model.position, position);
         float d2 = math.distance(_jumpPosition, position);
         
-        return d1 < 0.01f && d2 < 0.01f;
+        return d1 < 0.01f || d2 < 0.01f;
     }
 
     private void MovePiece(Vector3 positionRequested)
@@ -364,7 +366,7 @@ public class PlayerController : Dependency
         return validMoves;
     }
 
-    public List<ValidMove> AllValidMovesOfFirstPiece()
+    public List<ValidMove> GetAllValidMovesOfFirstPiece()
     {
         return GetAllValidMovesOfPiece(_capturedPieces[0]); 
     }

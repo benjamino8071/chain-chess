@@ -269,7 +269,6 @@ public class AIController : Dependency
 
     private void Blocked(float dt)
     {
-        Debug.Log("AI IN BLOCKED STATE");
         _timer -= dt;
         if (_timer <= 0)
         {

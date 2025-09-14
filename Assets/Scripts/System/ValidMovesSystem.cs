@@ -4,60 +4,41 @@ using UnityEngine;
 
 public class ValidMovesSystem : Dependency
 {
-    private class ValidPositionVisuals
+    private class ValidPositionVisual
     {
-        public GameObject visual;
-        
         public GameObject enemyHere;
         public GameObject enemyNotHere;
     }
 
-    private WhiteSystem _whiteSystem;
-    
-    private List<ValidPositionVisuals> _validMovesVisuals = new(64);
+    private Dictionary<Vector2, ValidPositionVisual> validPositions;
     
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
 
-        _whiteSystem = creator.GetDependency<WhiteSystem>();
-        
-        _validMovesVisuals = new(64);
+        validPositions = new(64);
 
         Transform allValidMovesParent = Creator.GetFirstObjectWithName(AllTagNames.AllValidMovesParent);
         
-        for (int i = 0; i < _validMovesVisuals.Capacity; i++)
+        for (int x = 1; x < 9; x++)
         {
-            GameObject visual = Creator.InstantiateGameObjectWithParent(Creator.validPositionPrefab, allValidMovesParent);
-
-            Transform enemyHere = Creator.GetChildObjectByName(visual, AllTagNames.EnemyHere);
-            Transform enemyNotHere = Creator.GetChildObjectByName(visual, AllTagNames.EnemyNotHere);
-            
-            _validMovesVisuals.Add(new()
+            for (int y = 1; y < 9; y++)
             {
-                visual = visual,
-                enemyHere = enemyHere.gameObject,
-                enemyNotHere = enemyNotHere.gameObject
-            });
-        }
-        
-        HideAllValidMoves();
-    }
+                GameObject visual = Creator.InstantiateGameObjectWithParent(Creator.validPositionPrefab, allValidMovesParent);
 
-    public void ShowSingleValidMove(Vector3 validMove)
-    {
-        //HideAllValidMoves();
-
-        foreach (ValidPositionVisuals validPositionVisual in _validMovesVisuals)
-        {
-            if (validPositionVisual.visual.transform.position == validMove)
-            {
-                continue;
+                Transform enemyHere = Creator.GetChildObjectByName(visual, AllTagNames.EnemyHere);
+                Transform enemyNotHere = Creator.GetChildObjectByName(visual, AllTagNames.EnemyNotHere);
+                
+                visual.transform.position = new(x, y, 0);
+                enemyHere.gameObject.SetActive(false);
+                enemyNotHere.gameObject.SetActive(false);
+                
+                validPositions[new Vector2(x, y)] = new()
+                {
+                    enemyHere = enemyHere.gameObject,
+                    enemyNotHere = enemyNotHere.gameObject
+                };
             }
-            
-            validPositionVisual.visual.transform.position = Vector3.zero;
-            validPositionVisual.enemyHere.SetActive(false);
-            validPositionVisual.enemyNotHere.SetActive(false);
         }
     }
 
@@ -69,19 +50,20 @@ public class ValidMovesSystem : Dependency
         {
             ValidMove valid = validMoves[i];
             
-            _validMovesVisuals[i].visual.transform.position = valid.position;
-            _validMovesVisuals[i].enemyHere.SetActive(valid.enemyHere);
-            _validMovesVisuals[i].enemyNotHere.SetActive(!valid.enemyHere);
+            if (validPositions.TryGetValue(new(valid.position.x, valid.position.y), out ValidPositionVisual validPosition))
+            {
+                validPosition.enemyHere.SetActive(valid.enemyHere);
+                validPosition.enemyNotHere.SetActive(!valid.enemyHere);
+            }
         }
     }
     
     public void HideAllValidMoves()
     {
-        foreach (ValidPositionVisuals validPositionsVisual in _validMovesVisuals)
+        foreach (ValidPositionVisual validPositionVisual in validPositions.Values)
         {
-            validPositionsVisual.visual.transform.position = Vector3.zero;
-            validPositionsVisual.enemyHere.SetActive(false);
-            validPositionsVisual.enemyNotHere.SetActive(false);
+            validPositionVisual.enemyHere.SetActive(false);
+            validPositionVisual.enemyNotHere.SetActive(false);
         }
     }
 }

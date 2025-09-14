@@ -41,8 +41,7 @@ public class TurnSystem : Dependency
             case PieceColour.White:
                 Creator.statsTurns++;
                 
-                _blackSystem.DeselectPiece();
-                _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfCurrentPiece());
+                _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfFirstPiece());
                 
                 _whiteSystem.playerController.SetState(PieceState.FindingMove);
                 _blackSystem.SetStateForAllPieces(PieceState.WaitingForTurn);

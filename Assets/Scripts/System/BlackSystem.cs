@@ -12,9 +12,6 @@ public class BlackSystem : Dependency
     
     private List<AIController> _pieceControllers = new ();
     private List<AIController> _piecesToMoveThisTurn = new();
-    private List<AIController> _alwaysMovers = new();
-
-    private AIController _pieceControllerSelected;
     
     private int _endTurnFrameCount;
     
@@ -36,9 +33,6 @@ public class BlackSystem : Dependency
         }
         
         _pieceControllers.Clear();
-        _alwaysMovers.Clear();
-        
-        _pieceControllerSelected = null;
     }
 
     public void CreatePiece(Vector2 position, Piece startingPiece, PieceAbility ability)
@@ -46,11 +40,6 @@ public class BlackSystem : Dependency
         AIController pieceController = new AIController();
         pieceController.GameStart(Creator);
         pieceController.Init(position, startingPiece, ability);
-        
-        if (ability == PieceAbility.AlwaysMove)
-        {
-            _alwaysMovers.Add(pieceController);
-        }
         
         _pieceControllers.Add(pieceController);
     }
@@ -68,28 +57,29 @@ public class BlackSystem : Dependency
             return;
         }
 
-        for (int i = 0; i < _alwaysMovers.Count; i++)
+        for (int i = 0; i < _pieceControllers.Count; i++)
         {
-            _alwaysMovers[i].GameUpdate(dt);
+            _pieceControllers[i].GameUpdate(dt);
         }
-        
-        _pieceControllerSelected?.GameUpdate(dt);
     }
     
     public bool TickAlwaysMovers()
     {
-        foreach (AIController pieceController in _alwaysMovers)
+        bool found = false;
+        foreach (AIController aiController in _pieceControllers)
         {
-            pieceController.SetState(PieceState.FindingMove);
+            if (aiController.pieceAbility == PieceAbility.AlwaysMove)
+            {
+                aiController.SetState(PieceState.FindingMove);
+                found = true;
+            }
         }
 
-        return _alwaysMovers.Count > 0;
+        return found;
     }
 
     public bool PieceCaptured(AIController capturedPieceController)
     {
-        _alwaysMovers.Remove(capturedPieceController);
-        
         _pieceControllers.Remove(capturedPieceController);
         capturedPieceController.SetState(PieceState.NotInUse);
         capturedPieceController.Destroy();
@@ -115,7 +105,8 @@ public class BlackSystem : Dependency
 
         foreach (AIController pieceController in _pieceControllers)
         {
-            if (pieceController.pieceAbility == PieceAbility.MustMove)
+            if (pieceController.pieceAbility == PieceAbility.MustMove
+                || pieceController.pieceAbility == PieceAbility.AlwaysMove)
             {
                 _piecesToMoveThisTurn.Add(pieceController);
             }
@@ -123,21 +114,19 @@ public class BlackSystem : Dependency
         
         if (_piecesToMoveThisTurn.Count == 0)
         {
-            if (_alwaysMovers.Count > 0)
-            {
-                _endTurnFrameCount = 2;
-            }
-            else
-            {
-                Lose(GameOverReason.Captured, 1.1f);
-            }
+            Lose(GameOverReason.Captured, 1.1f);
         }
         else
         {
-            _pieceControllerSelected = _piecesToMoveThisTurn[0];
-
-            _pieceControllerSelected.PlayEnlargeAnimation();
-            _pieceControllerSelected.SetState(PieceState.FindingMove);
+            foreach (AIController aiController in _piecesToMoveThisTurn)
+            {
+                if (aiController.pieceAbility != PieceAbility.AlwaysMove)
+                {
+                    aiController.PlayEnlargeAnimation();
+                }
+                
+                aiController.SetState(PieceState.FindingMove);
+            }
         }
     }
     
@@ -270,24 +259,8 @@ public class BlackSystem : Dependency
     /// </summary>
     public void SelectCaptureLoverPiece(AIController pieceController, float3 movePosition)
     {
-        _pieceControllerSelected = pieceController;
         pieceController.ForceMove(movePosition);
         pieceController.PlayEnlargeAnimation();
-    }
-
-    public void DeselectPiece()
-    {
-        if (_pieceControllerSelected is { } pieceController)
-        {
-            if (pieceController.state is PieceState.Blocked or PieceState.Moving)
-            {
-                return;
-            }
-            
-            pieceController.SetState(PieceState.WaitingForTurn);
-        }
-        
-        _pieceControllerSelected = null;
     }
 
     public bool IsPieceMoving()
@@ -310,7 +283,7 @@ public class BlackSystem : Dependency
             float d1 = math.distance(pieceController.piecePos, position);
             float d2 = math.distance(pieceController.jumpPos, position);
             
-            if (d1 < 0.01f && d2 < 0.01f)
+            if (d1 < 0.01f || d2 < 0.01f)
             {
                 return true;
             }
@@ -321,8 +294,6 @@ public class BlackSystem : Dependency
 
     public void PieceBlocked(AIController pieceController)
     {
-        _alwaysMovers.Remove(pieceController);
-        
         _pieceControllers.Remove(pieceController);
         
         if (_pieceControllers.Count == 0)
@@ -352,13 +323,6 @@ public class BlackSystem : Dependency
         if (_piecesToMoveThisTurn.Count == 0)
         {
             _turnSystem.SwitchTurn(PieceColour.White);
-        }
-        else
-        {
-            _pieceControllerSelected = _piecesToMoveThisTurn[0];
-            
-            _pieceControllerSelected.PlayEnlargeAnimation();
-            _pieceControllerSelected.SetState(PieceState.FindingMove);
         }
     }
 }
