@@ -77,6 +77,7 @@ public class Creator : MonoBehaviour
     
     private void CreateDependencies()
     {
+        _dependencies.Add(new UISystem());
         _dependencies.Add(new LevelSelectUISystem());
         _dependencies.Add(new ValidMovesSystem());
         _dependencies.Add(new PlayerSetTilesSystem());

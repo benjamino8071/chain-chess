@@ -36,6 +36,8 @@ public class Pieces_SO : ScriptableObject
 
     public float aiThinkingTime;
     public float alwaysMoveThinkingTime;
+    
+    public List<PieceAbilityDescription> abilityDescriptions;
 }
 
 public enum Piece
@@ -96,4 +98,13 @@ public struct StartingPieceSpawnData
     public PieceColour colour;
     public PieceAbility ability;
     public Vector2 position;
+}
+
+[Serializable]
+public struct PieceAbilityDescription
+{
+    public PieceAbility ability;
+    
+    [TextArea(5, 15)]
+    public string description;
 }
