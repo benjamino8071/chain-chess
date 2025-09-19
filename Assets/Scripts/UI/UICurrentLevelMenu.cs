@@ -24,13 +24,21 @@ public class UICurrentLevelMenu : UIPanel
         {
             _audioSystem.PlayUIClickSfx();
             
-            Hide();
-            
             _turnSystem.LoadLevelRuntime();
         });
         
         ButtonManager levelsButton =
             Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
-        
+        levelsButton.onClick.AddListener(() =>
+        {
+            if (_uiSystem.leftSidePanelOpen == AllTagNames.UISections)
+            {
+                _uiSystem.HideLeftSideUI();
+            }
+            else
+            {
+                _uiSystem.ShowLeftSideUI(AllTagNames.UISections);
+            }
+        });
     }
 }

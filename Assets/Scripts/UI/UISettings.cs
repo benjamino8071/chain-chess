@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class UISettings : UIPanel
 {
     private AudioSystem _audioSystem;
-    private UISystem _uiSystem;
     private TurnSystem _turnSystem;
     private BoardSystem _boardSystem;
     

@@ -17,7 +17,8 @@ public class Creator : MonoBehaviour
     public LevelComplete_SO levelCompleteSo;
     public GameOver_SO gameOverSo;
     public LevelSelect_SO levelSelectSo;
-    
+    public MiscUI_SO miscUiSo;
+
     [Header("Prefabs")]
     public GameObject piecePrefab;
     public GameObject validPositionPrefab;

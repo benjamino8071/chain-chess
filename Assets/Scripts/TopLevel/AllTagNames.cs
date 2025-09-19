@@ -1,5 +1,6 @@
 public enum AllTagNames
 {
+    None = 0,
     GameOver = 18,
     LevelComplete = 37,
     Retry = 38,
@@ -42,4 +43,6 @@ public enum AllTagNames
     UILevelComplete = 121,
     UIGameOver = 122,
     ButtonNextLevel = 123,
+    SectionText,
+    LevelText
 }

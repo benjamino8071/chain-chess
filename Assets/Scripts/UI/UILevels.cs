@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Michsky.MUIP;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,14 +13,14 @@ public class UILevels : UIPanel
     private List<LevelInfo> _levelInfos;
     private class LevelInfo
     {
-        public GameObject go;
-        public RectTransform rect;
-        public Level level;
         public ButtonManager levelButton;
         public Image starOneImage;
         public Image starTwoImage;
         public Image starThreeImage;
+        public int levelNumber;
     }
+
+    private TextMeshProUGUI _sectionText;
     
     public override void GameStart(Creator creator)
     {
@@ -33,8 +34,26 @@ public class UILevels : UIPanel
     {
         base.Create(uiTag);
         
-        _levelInfos = new(Creator.levelsSo.AllLevels().Count);
+        _levelInfos = new(10);
+        
+        LevelButtons buttons = _panel.GetComponent<LevelButtons>();
 
+        foreach (LevelButton levelButton in buttons.buttons)
+        {
+            LevelInfo levelInfo = new()
+            {
+                levelButton = levelButton.button,
+                starOneImage = levelButton.starOneImage,
+                starTwoImage = levelButton.starTwoImage,
+                starThreeImage = levelButton.starThreeImage
+            };
+            levelInfo.starOneImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starTwoImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starThreeImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+
+            _levelInfos.Add(levelInfo);
+        }
+        
         float yPosition = 400 + Creator.levelSelectSo.gap;
         
         /*foreach (Level level in Creator.levelsSo.AllLevels())
@@ -70,9 +89,23 @@ public class UILevels : UIPanel
             
             _levelInfos.Add(levelInfo);
         }*/
-        
-        Transform guiBottom = Creator.GetFirstObjectWithName(AllTagNames.UILevels);
+
+        _sectionText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.SectionText);
         
         Hide();
+    }
+
+    public void SetLevels(int section)
+    {
+        _sectionText.text = $"Section {section}";
+        
+        SectionData sectionData = Creator.levelsSo.GetSection(section);
+
+        for (int i = 0; i < sectionData.levels.Count; i++)
+        {
+            Level level = sectionData.levels[i];
+            _levelInfos[i].levelNumber = level.level;
+            _levelInfos[i].levelButton.SetText($"{level.level}");
+        }
     }
 }

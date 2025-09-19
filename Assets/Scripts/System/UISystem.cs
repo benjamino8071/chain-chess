@@ -57,6 +57,27 @@ public class UISystem : Dependency
             UIPanel = new UIGameOver()
         },
     };
+
+    private List<AllTagNames> _leftSideTags = new()
+    {
+        AllTagNames.UIRulebook,
+        AllTagNames.UISettings,
+        AllTagNames.UISections,
+    };
+    
+    private List<AllTagNames> _rightSideTags = new()
+    {
+        AllTagNames.UIChain,
+        AllTagNames.UILevelComplete,
+        AllTagNames.UIGameOver,
+        AllTagNames.UILevels,
+    };
+
+    public AllTagNames leftSidePanelOpen => _leftSidePanelOpen;
+    public AllTagNames rightSidePanelOpen => _rightSidePanelOpen;
+    
+    private AllTagNames _leftSidePanelOpen;
+    private AllTagNames _rightSidePanelOpen;
     
     public override void GameStart(Creator creator)
     {
@@ -68,10 +89,87 @@ public class UISystem : Dependency
             panel.UIPanel.Create(panel.TagName);
         }
     }
-    
-    public virtual void ShowUI(AllTagNames uiTag)
+
+    public override void GameUpdate(float dt)
     {
+        foreach (Panel panel in _uiPanels)
+        {
+            panel.UIPanel.GameUpdate(dt);
+        }
+    }
+
+    public void ShowLeftSideUI(AllTagNames uiTag)
+    {
+        foreach (Panel panel in _uiPanels)
+        {
+            if (!_leftSideTags.Contains(panel.TagName))
+            {
+                continue;
+            }
+            
+            if (panel.TagName == uiTag)
+            {
+                panel.UIPanel.Show();
+            }
+            else
+            {
+                panel.UIPanel.Hide();
+            }
+        }
         
+        _leftSidePanelOpen = uiTag;
+    }
+    
+    public void HideLeftSideUI()
+    {
+        foreach (Panel panel in _uiPanels)
+        {
+            if (!_leftSideTags.Contains(panel.TagName))
+            {
+                continue;
+            }
+            
+            panel.UIPanel.Hide();
+        }
+        
+        _leftSidePanelOpen = AllTagNames.None;
+    }
+    
+    public void ShowRightSideUI(AllTagNames uiTag)
+    {
+        foreach (Panel panel in _uiPanels)
+        {
+            if (!_rightSideTags.Contains(panel.TagName))
+            {
+                continue;
+            }
+            
+            if (panel.TagName == uiTag)
+            {
+                panel.UIPanel.Show();
+            }
+            else
+            {
+                panel.UIPanel.Hide();
+            }
+        }
+
+        _rightSidePanelOpen = uiTag;
+    }
+    
+    public void HideRightSideUI()
+    {
+        foreach (Panel panel in _uiPanels)
+        {
+            if (!_rightSideTags.Contains(panel.TagName))
+            {
+                continue;
+            }
+            
+            panel.UIPanel.Hide();
+        }
+        
+        _rightSidePanelOpen = AllTagNames.None;
     }
 
     public T GetUI<T>() where T : UIPanel

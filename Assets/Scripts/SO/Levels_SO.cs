@@ -9,6 +9,11 @@ public class Levels_SO : ScriptableObject
 {
     public int levelOnLoad;
 
+    public List<SectionData> sections;
+    public Level finalLevel;
+
+    public int finalLevelStarsRequirement;
+    
     public List<Level> sectionOne;
     public List<Level> sectionTwo;
     public List<Level> sectionThree;
@@ -17,7 +22,6 @@ public class Levels_SO : ScriptableObject
     public List<Level> sectionSix;
     public List<Level> sectionSeven;
     public List<Level> sectionEight;
-    public Level finalLevel;
     
     [Title("Level Numbers")]
     [Button]
@@ -34,6 +38,32 @@ public class Levels_SO : ScriptableObject
         levelNumber = SetLevelNumber(sectionSeven, levelNumber);
         levelNumber = SetLevelNumber(sectionEight, levelNumber);
         finalLevel.level = levelNumber;
+    }
+
+    public SectionData GetSection(int section)
+    {
+        foreach (SectionData sectionData in sections)
+        {
+            if (sectionData.section == section)
+            {
+                return sectionData;
+            }
+        }
+
+        return default;
+    }
+    
+    public int GetSectionStarsRequirement(int section)
+    {
+        foreach (SectionData sectionData in sections)
+        {
+            if (sectionData.section == section)
+            {
+                return sectionData.starsRequiredToUnlock;
+            }
+        }
+
+        return -1;
     }
 
     private int SetLevelNumber(List<Level> section, int levelNumber)
@@ -56,13 +86,11 @@ public class Levels_SO : ScriptableObject
     public List<Level> AllLevels()
     {
         List<Level> levels = sectionOne;
-        levels = levels.Concat(sectionTwo)
-            .Concat(sectionThree)
-            .Concat(sectionFour)
-            .Concat(sectionFive)
-            .Concat(sectionSix)
-            .Concat(sectionSeven)
-            .Concat(sectionEight).ToList();
+
+        foreach (SectionData section in sections)
+        {
+            levels = levels.Concat(section.levels).ToList();
+        }
         levels.Add(finalLevel);
 
         return levels;
@@ -82,4 +110,19 @@ public class Levels_SO : ScriptableObject
         
         return default;
     }
+}
+
+[Serializable]
+public struct SectionData
+{
+    public int section;
+    public int starsRequiredToUnlock;
+    public List<Level> levels;
+}
+
+[Serializable]
+public struct SectionStarsRequirement
+{
+    public int section;
+    public int stars;
 }

@@ -44,14 +44,13 @@ public class BoardSystem : Dependency
     {
         float3 gridPoint = GetGridPointNearMouse();
         
-        Debug.Log(Creator.inputSo.leftMouseButton.action.WasPressedThisFrame());
         if (!Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame()
             || _endGameSystem.isEndGame
             || !IsPositionValid(gridPoint))
         {
             return;
         }
-        Debug.Log("HELLO");
+
         Creator.boardSo.hideMainMenuTrigger = true;
         
         bool samePoint = math.distance(gridPoint, _tapPoint.position) < 0.001f;
