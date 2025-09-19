@@ -78,22 +78,17 @@ public class Creator : MonoBehaviour
     private void CreateDependencies()
     {
         _dependencies.Add(new UISystem());
-        _dependencies.Add(new LevelSelectUISystem());
         _dependencies.Add(new ValidMovesSystem());
         _dependencies.Add(new PlayerSetTilesSystem());
         _dependencies.Add(new AudioSystem());
-        _dependencies.Add(new ChainUISystem());
-        _dependencies.Add(new LevelCompleteUISystem());
-        _dependencies.Add(new SettingsUISystem());
         _dependencies.Add(new BoardSystem());
         _dependencies.Add(new WhiteSystem());
         _dependencies.Add(new BlackSystem());
-        _dependencies.Add(new GameOverUISystem());
         _dependencies.Add(new EndGameSystem());
         _dependencies.Add(new TurnSystem());
     }
     
-        public GameObject InstantiateGameObject(GameObject creatorGridPrefab, Vector3 position, Quaternion rotation)
+    public GameObject InstantiateGameObject(GameObject creatorGridPrefab, Vector3 position, Quaternion rotation)
     {
         return Instantiate(creatorGridPrefab, position, rotation);
     }

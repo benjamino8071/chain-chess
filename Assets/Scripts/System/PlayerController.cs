@@ -8,7 +8,8 @@ public class PlayerController : Dependency
 {
     private ValidMovesSystem _validMovesSystem;
     private BoardSystem _boardSystem;
-    private ChainUISystem _chainUISystem;
+    private UISystem _uiSystem;
+    private UIChain _uiChain;
     private AudioSystem _audioSystem;
     private BlackSystem _blackSystem;
     private WhiteSystem _whiteSystem;
@@ -56,7 +57,8 @@ public class PlayerController : Dependency
         
         _validMovesSystem = creator.GetDependency<ValidMovesSystem>();
         _boardSystem = creator.GetDependency<BoardSystem>();
-        _chainUISystem = creator.GetDependency<ChainUISystem>();
+        _uiSystem = creator.GetDependency<UISystem>();
+        _uiChain = _uiSystem.GetUI<UIChain>();
         _audioSystem = creator.GetDependency<AudioSystem>();
         _blackSystem = creator.GetDependency<BlackSystem>();
         _whiteSystem = creator.GetDependency<WhiteSystem>();
@@ -140,7 +142,7 @@ public class PlayerController : Dependency
                     
                         AddCapturedPiece(enemyPieceController.piece);
                     
-                        _chainUISystem.ShowChain(this, true);
+                        _uiChain.ShowChain(this, true);
                         break;
                     case PieceAbility.Multiplier:
                         List<float3> spawnPositions = new()
@@ -159,21 +161,21 @@ public class PlayerController : Dependency
                         }
                         
                         AddCapturedPiece(enemyPieceController.piece);
-                        _chainUISystem.AddToChain(enemyPieceController, movesUsed, _capturedPieces.Count);
+                        _uiChain.AddToChain(enemyPieceController, movesUsed, _capturedPieces.Count);
                         
                         _movesInThisTurn.RemoveAt(0);
                         break;
                     case PieceAbility.StopTurn:
                     {
                         AddCapturedPiece(enemyPieceController.piece);
-                        _chainUISystem.AddToChain(enemyPieceController, movesUsed, _capturedPieces.Count);
+                        _uiChain.AddToChain(enemyPieceController, movesUsed, _capturedPieces.Count);
                         
                         _movesInThisTurn.Clear();
                         break;
                     }
                     default:
                         AddCapturedPiece(enemyPieceController.piece);
-                        _chainUISystem.AddToChain(enemyPieceController, movesUsed, _capturedPieces.Count);
+                        _uiChain.AddToChain(enemyPieceController, movesUsed, _capturedPieces.Count);
                     
                         _movesInThisTurn.RemoveAt(0);
                         break;
@@ -259,7 +261,7 @@ public class PlayerController : Dependency
             
             if (validMoves.Count > 0)
             {
-                _chainUISystem.HighlightNextPiece(this);
+                _uiChain.HighlightNextPiece(this);
                 SetState(PieceState.FindingMove);
 
                 if (!_blackSystem.TickAlwaysMovers())
@@ -277,7 +279,7 @@ public class PlayerController : Dependency
         {
             _blackSystem.TickAlwaysMovers();
             
-            _chainUISystem.HideAllPieces();
+            _uiChain.HideAllPieces();
             Finish();
         }
     }

@@ -6,10 +6,8 @@ public class BoardSystem : Dependency
 {
     private WhiteSystem _whiteSystem;
     private BlackSystem _blackSystem;
-    private ChainUISystem _chainUISystem;
     private TurnSystem _turnSystem;
-    private SettingsUISystem _settingsUISystem;
-    private LevelSelectUISystem _levelSelectUISystem;
+    private UISystem _uiSystem;
     private EndGameSystem _endGameSystem;
     
     private List<float3> _validTiles;
@@ -22,10 +20,8 @@ public class BoardSystem : Dependency
 
         _whiteSystem = creator.GetDependency<WhiteSystem>();
         _blackSystem = creator.GetDependency<BlackSystem>();
-        _chainUISystem = creator.GetDependency<ChainUISystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
-        _settingsUISystem = creator.GetDependency<SettingsUISystem>();
-        _levelSelectUISystem = creator.GetDependency<LevelSelectUISystem>();
+        _uiSystem = creator.GetDependency<UISystem>();
         _endGameSystem = creator.GetDependency<EndGameSystem>();
 
         int validTilesCapacity = 64;
@@ -48,15 +44,14 @@ public class BoardSystem : Dependency
     {
         float3 gridPoint = GetGridPointNearMouse();
         
+        Debug.Log(Creator.inputSo.leftMouseButton.action.WasPressedThisFrame());
         if (!Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame()
-            || _settingsUISystem.IsShowing
-            || _levelSelectUISystem.IsShowing
             || _endGameSystem.isEndGame
             || !IsPositionValid(gridPoint))
         {
             return;
         }
-
+        Debug.Log("HELLO");
         Creator.boardSo.hideMainMenuTrigger = true;
         
         bool samePoint = math.distance(gridPoint, _tapPoint.position) < 0.001f;

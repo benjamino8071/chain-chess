@@ -1,12 +1,11 @@
 public class EndGameSystem : Dependency
 {
-    private GameOverUISystem _gameOverUISystem;
-    private LevelCompleteUISystem _levelCompleteUISystem;
-    private SettingsUISystem _settingsUISystem;
-    private ChainUISystem _chainUISystem;
     private ValidMovesSystem _validMovesSystem;
     private BoardSystem _boardSystem;
-
+    private UISystem _uiSystem;
+    private UILevelComplete _uiLevelComplete;
+    private UIGameOver _uiGameOver;
+    
     public bool isEndGame => _isEndGame;
     
     private bool _isEndGame;
@@ -15,26 +14,24 @@ public class EndGameSystem : Dependency
     {
         base.GameStart(creator);
         
-        _gameOverUISystem = creator.GetDependency<GameOverUISystem>();
-        _levelCompleteUISystem = creator.GetDependency<LevelCompleteUISystem>();
-        _settingsUISystem = creator.GetDependency<SettingsUISystem>();
-        _chainUISystem = creator.GetDependency<ChainUISystem>();
         _validMovesSystem = creator.GetDependency<ValidMovesSystem>();
         _boardSystem = creator.GetDependency<BoardSystem>();
+        _uiSystem = creator.GetDependency<UISystem>();
+        _uiLevelComplete = _uiSystem.GetUI<UILevelComplete>();
+        _uiGameOver = _uiSystem.GetUI<UIGameOver>();
     }
 
     public void SetEndGame(PieceColour winningColour, GameOverReason gameOverReason, float delayTimer)
     {
         if (winningColour == PieceColour.White)
         {
-            _levelCompleteUISystem.Show(delayTimer);
+            _uiLevelComplete.Show();
         }
         else
         {
-            _gameOverUISystem.Show(gameOverReason);
+            _uiGameOver.Show(gameOverReason);
         }
         
-        _settingsUISystem.HideButton();
         _boardSystem.HideTapPoint();
         _validMovesSystem.HideAllValidMoves();
         _isEndGame = true;

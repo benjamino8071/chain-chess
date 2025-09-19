@@ -7,10 +7,8 @@ public class WhiteSystem : Dependency
     private AudioSystem _audioSystem;
     private ValidMovesSystem _validMovesSystem;
     private TurnSystem _turnSystem;
-    private ChainUISystem _chainUISystem;
     private EndGameSystem _endGameSystem;
     private BlackSystem _blackSystem;
-    private SettingsUISystem _settingsUISystem;
     
     public PlayerController playerController => _playerController;
     
@@ -26,9 +24,7 @@ public class WhiteSystem : Dependency
         _audioSystem = creator.GetDependency<AudioSystem>();
         _validMovesSystem = creator.GetDependency<ValidMovesSystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
-        _chainUISystem = creator.GetDependency<ChainUISystem>();
         _endGameSystem = creator.GetDependency<EndGameSystem>();
-        _settingsUISystem = creator.GetDependency<SettingsUISystem>();
     }
 
     public void CreatePiece(Vector2 position, Piece startingPiece)

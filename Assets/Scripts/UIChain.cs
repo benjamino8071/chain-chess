@@ -2,10 +2,9 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class ChainUISystem : Dependency
+public class UIChain : UIPanel
 {
     private BoardSystem _boardSystem;
     private AudioSystem _audioSystem;
@@ -28,22 +27,29 @@ public class ChainUISystem : Dependency
     
     private float _mousePosXLastFrame = -1;
     private float _mouseOffTimer;
+
+    private bool _move;
     
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
-
+        
         _boardSystem = creator.GetDependency<BoardSystem>();
         _audioSystem = creator.GetDependency<AudioSystem>();
+    }
 
-        Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
-        _pivot = creator.GetChildObjectByName(guiBottom.gameObject, AllTagNames.Pivot);
+    public override void Create(AllTagNames uiTag)
+    {
+        base.Create(uiTag);
+        
+        Transform uiChain = Creator.GetFirstObjectWithName(AllTagNames.UIChain);
+        _pivot = Creator.GetChildObjectByName(uiChain.gameObject, AllTagNames.Pivot);
 
         int chainImagesAmount = 130;
         float xPos = 0;
         for (int i = 0; i < chainImagesAmount; i++)
         {
-            GameObject chainPieceImage = creator.InstantiateGameObjectWithParent(Creator.imagePrefab, _pivot);
+            GameObject chainPieceImage = Creator.InstantiateGameObjectWithParent(Creator.imagePrefab, _pivot);
             //Every odd image will be the arrow, which we want to be a smaller than the piece images
             if (i % 2 != 0)
             {
@@ -64,13 +70,13 @@ public class ChainUISystem : Dependency
             chainPieceImage.SetActive(false);
         }
 
-        Transform movesRemainingText = creator.GetFirstObjectWithName(AllTagNames.MovesRemaining);
+        Transform movesRemainingText = Creator.GetFirstObjectWithName(AllTagNames.MovesRemaining);
         _movesRemainingText = movesRemainingText.GetComponentInChildren<TextMeshProUGUI>();
         
         _chainParentInitialPos = _pivot.localPosition;
         _chainParentNewPos = _pivot.localPosition;
     }
-
+    
     public override void GameUpdate(float dt)
     {
         if (ProcessSlider(dt) || _chainParentNewPos == _pivot.localPosition)
@@ -81,9 +87,7 @@ public class ChainUISystem : Dependency
         Vector3 lerpPos = math.lerp(_pivot.localPosition, _chainParentNewPos, dt * Creator.chainSo.addPieceLerpSpeed);
         _pivot.localPosition = lerpPos;
     }
-
-    private bool _move;
-
+    
     private bool ProcessSlider(float dt)
     {
         if(Creator.inputSo.leftMouseButton.action.WasPressedThisFrame() && (_boardSystem.GetGridPointNearMouse().y < Creator.boardSo.minY || _mousePosXLastFrame > 0))
@@ -213,68 +217,6 @@ public class ChainUISystem : Dependency
     public void HideAllPieces()
     {
         UpdateAlphaValue(0.1f, _chainPieceImages.Count);
-    }
-
-    public void PawnPromoted(int index, Piece promotedPiece)
-    {
-        int tempIndex = 0;
-        while (tempIndex < _chainPieceImages.Count)
-        {
-            PieceImage pieceImage = _chainPieceImages[tempIndex];
-            if (index == tempIndex)
-            {
-                pieceImage.piece = promotedPiece;
-                pieceImage.image.sprite = GetSprite(promotedPiece);
-                break;
-            }
-
-            tempIndex++;
-        }
-    }
-
-    public void PieceSandwiched(int index, Piece pieceToSandwich)
-    {
-        //On reflection, this kind of goes against the idea of the chain
-        //May confuse players
-        /*int tempIndex = 0;
-        int numOfImagesActive = GetNumOfImagesActive();
-        
-        List<Piece> piecesInOrder = new();
-        
-        while (tempIndex < _chainPieceImages.Count && tempIndex <= numOfImagesActive)
-        {
-            PieceImage pieceImage = _chainPieceImages[tempIndex];
-            if (index == tempIndex)
-            {
-                piecesInOrder.Add(pieceToSandwich);
-            }
-            else if (pieceImage.piece != Piece.NotChosen)
-            {
-                piecesInOrder.Add(pieceImage.piece);
-            }
-            
-            tempIndex++;
-        }
-
-        tempIndex = 0;
-        while (tempIndex < _chainPieceImages.Count)
-        {
-            PieceImage pieceImage = _chainPieceImages[tempIndex];
-            ShowNewPiece(pieceImage.piece, 0, tempIndex == 0);
-
-            tempIndex++;
-        }*/
-    }
-
-    private int GetNumOfImagesActive()
-    {
-        int count = 0;
-        foreach (PieceImage chainPiecesImage in _chainPieceImages)
-        {
-            if (chainPiecesImage.image.gameObject.activeSelf)
-                count++;
-        }
-        return count;
     }
 
     private Sprite GetSprite(Piece piece)

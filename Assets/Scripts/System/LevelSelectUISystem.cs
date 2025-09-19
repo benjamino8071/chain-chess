@@ -9,10 +9,7 @@ public class LevelSelectUISystem : Dependency
 {
     private AudioSystem _audioSystem;
     private BoardSystem _boardSystem;
-    private SettingsUISystem _settingsUISystem;
     private TurnSystem _turnSystem;
-    private LevelCompleteUISystem _levelCompleteUISystem;
-    private GameOverUISystem _gameOverUISystem;
     
     public bool IsShowing => _levelSelectUI.gameObject.activeSelf;
     
@@ -46,10 +43,7 @@ public class LevelSelectUISystem : Dependency
 
         _audioSystem = creator.GetDependency<AudioSystem>();
         _boardSystem = creator.GetDependency<BoardSystem>();
-        _settingsUISystem = creator.GetDependency<SettingsUISystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
-        _levelCompleteUISystem = creator.GetDependency<LevelCompleteUISystem>();
-        _gameOverUISystem = creator.GetDependency<GameOverUISystem>();
         
         _levelSelectUI = creator.GetFirstObjectWithName(AllTagNames.LevelSelect);
 
@@ -70,7 +64,7 @@ public class LevelSelectUISystem : Dependency
                 go = levelInfoGo,
                 rect = levelInfoGo.GetComponent<RectTransform>(),
                 level = level,
-                levelButton = creator.GetChildComponentByName<ButtonManager>(levelInfoGo, AllTagNames.LevelButton),
+                levelButton = creator.GetChildComponentByName<ButtonManager>(levelInfoGo, AllTagNames.ButtonLevels),
                 starOneImage = creator.GetChildComponentByName<Image>(levelInfoGo, AllTagNames.Star1Image),
                 starTwoImage = creator.GetChildComponentByName<Image>(levelInfoGo, AllTagNames.Star2Image),
                 starThreeImage = creator.GetChildComponentByName<Image>(levelInfoGo, AllTagNames.Star3Image)
@@ -84,8 +78,6 @@ public class LevelSelectUISystem : Dependency
             {
                 Creator.levelsSo.levelOnLoad = levelInfo.level.level;
                 _turnSystem.LoadLevelRuntime();
-                _levelCompleteUISystem.Hide();
-                _gameOverUISystem.Hide();
                 
                 Hide();
             });
@@ -101,13 +93,11 @@ public class LevelSelectUISystem : Dependency
         _pivot.localPosition = new(0, startingYPos);
         _desiredPivotLocalPosition = _pivot.localPosition;
         
-        Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.GUIBottom);
+        Transform guiBottom = creator.GetFirstObjectWithName(AllTagNames.UILevels);
         
-        _levelSelectButton = creator.GetChildComponentByName<ButtonManager>(guiBottom.gameObject, AllTagNames.LevelButton);
+        _levelSelectButton = creator.GetChildComponentByName<ButtonManager>(guiBottom.gameObject, AllTagNames.ButtonLevels);
         _levelSelectButton.onClick.AddListener(() =>
         {
-            _settingsUISystem.Hide();
-            
             if (!_levelSelectUI.gameObject.activeSelf)
             {
                 Show();
