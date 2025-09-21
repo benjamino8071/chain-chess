@@ -143,7 +143,15 @@ public class UILevels : UIPanel
         
         for (int i = 0; i < sectionData.levels.Count; i++)
         {
-            _levelInfos[i].level = sectionData.levels[i];
+            if (i > sectionData.levels.Count - 1)
+            {
+                _levelInfos[i].levelButton.transform.parent.gameObject.SetActive(false);
+            }
+            else
+            {
+                _levelInfos[i].level = sectionData.levels[i];
+                _levelInfos[i].levelButton.transform.parent.gameObject.SetActive(true);
+            }
         }
     }
 

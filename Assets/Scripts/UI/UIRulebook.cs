@@ -55,7 +55,6 @@ public class UIRulebook : UIPanel
 
         _image.sprite = page.sprite;
         _image.material = page.material;
-        _image.color = page.color;
         
         _text.text = page.description;
     }

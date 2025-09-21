@@ -13,7 +13,6 @@ public struct Page
 {
     public Sprite sprite;
     public Material material;
-    public Color color;
     
     [TextArea(5, 15)]
     public string description;

@@ -47,6 +47,12 @@ public class UILevelComplete : UIPanel
             Level nextLevel = Creator.levelsSo.GetLevel(_turnSystem.currentLevel.section, _turnSystem.currentLevel.level + 1);
             _turnSystem.LoadLevelRuntime(nextLevel);
         });
+
+        ButtonManager levelSelect = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
+        levelSelect.onClick.AddListener(() =>
+        {
+            _uiSystem.ShowRightSideUI(AllTagNames.UILevels);
+        });
         
         Hide();
     }
