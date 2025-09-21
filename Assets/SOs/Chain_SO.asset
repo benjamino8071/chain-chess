@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36bdb98efe7c29641abfe171ff74881f, type: 3}
   m_Name: Chain_SO
   m_EditorClassIdentifier: 
-  arrowPointingToNextPiece: {fileID: 21300000, guid: 0db74eaedc5768049b3b62b9e6149b09, type: 3}
+  arrowPointingToNextPiece: {fileID: 21300000, guid: a75ddb2acfe03174c87f41bd9fc3f406, type: 3}
   addPieceLerpSpeed: 3.5
-  slideChainUIMinY: 0.8

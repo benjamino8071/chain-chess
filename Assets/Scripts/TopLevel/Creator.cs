@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Michsky.MUIP;
 using TMPro;
@@ -77,7 +78,7 @@ public class Creator : MonoBehaviour
             dependency.GameLateUpdate(Time.deltaTime);
         }
     }
-    
+
     private void CreateDependencies()
     {
         _dependencies.Add(new UISystem());

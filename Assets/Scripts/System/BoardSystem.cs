@@ -101,16 +101,4 @@ public class BoardSystem : Dependency
 
         return new(x, y, 0);
     }
-
-    public float3 GetFloatPointOnBoard()
-    {
-        Vector3 screenPos = Input.mousePosition;
-        screenPos.z = 10;
-        
-        float3 screenToWorldPoint = Creator.mainCam.ScreenToWorldPoint(screenPos);
-
-        screenToWorldPoint.y = math.clamp(screenToWorldPoint.y, Creator.boardSo.minY, Creator.boardSo.maxY);
-
-        return screenToWorldPoint;
-    }
 }

@@ -71,6 +71,8 @@ public class Levels_SO : ScriptableObject
                 level.section = section.section;
                 level.level = j + 1;
 
+                level.isLastInSection = j == sections[i].levels.Count - 1;
+                
                 section.levels[j] = level;
             }
 
@@ -88,6 +90,7 @@ public struct Level
     public int section;
     public int level;
     public int turns;
+    public bool isLastInSection;
     public int star1Score;
     public int star2Score;
     public int star3Score;

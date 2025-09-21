@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UISystem : Dependency
 {
@@ -73,11 +74,15 @@ public class UISystem : Dependency
         AllTagNames.UILevels,
     };
 
+    public List<RaycastResult> objectsUnderMouse => _objectsUnderMouse;
+
     public AllTagNames leftSidePanelOpen => _leftSidePanelOpen;
     public AllTagNames rightSidePanelOpen => _rightSidePanelOpen;
     
     private AllTagNames _leftSidePanelOpen;
     private AllTagNames _rightSidePanelOpen;
+
+    private List<RaycastResult> _objectsUnderMouse;
     
     public override void GameStart(Creator creator)
     {
@@ -92,6 +97,8 @@ public class UISystem : Dependency
 
     public override void GameUpdate(float dt)
     {
+        _objectsUnderMouse = GetEventSystemRaycastResults();
+        
         foreach (Panel panel in _uiPanels)
         {
             panel.UIPanel.GameUpdate(dt);
@@ -184,5 +191,15 @@ public class UISystem : Dependency
         
         Debug.LogError("Could not find UI Panel");
         return null;
+    }
+    
+    //Gets all event system raycast results of current mouse or touch position.
+    static List<RaycastResult> GetEventSystemRaycastResults()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> raysastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raysastResults);
+        return raysastResults;
     }
 }

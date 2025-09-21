@@ -9,8 +9,6 @@ public class UILevelComplete : UIPanel
     private AudioSystem _audioSystem;
     private TurnSystem _turnSystem;
     
-    private Transform _endOfLevelsMessage;
-    
     private ButtonManager _nextLevelButton;
 
     private Image _starOneImage;
@@ -32,8 +30,6 @@ public class UILevelComplete : UIPanel
     {
         base.Create(uiTag);
         
-        _endOfLevelsMessage = Creator.GetChildObjectByName(_panel.gameObject, AllTagNames.EndOfLevelsMessage);
-        
         _turnsText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.StatsTurns);
         _movesText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.StatsMoves);
         
@@ -47,8 +43,9 @@ public class UILevelComplete : UIPanel
             _audioSystem.PlayUIClickSfx();
             
             Hide();
-            
-            _turnSystem.LoadLevelRuntime(_turnSystem.currentLevel);
+
+            Level nextLevel = Creator.levelsSo.GetLevel(_turnSystem.currentLevel.section, _turnSystem.currentLevel.level + 1);
+            _turnSystem.LoadLevelRuntime(nextLevel);
         });
         
         Hide();
@@ -56,7 +53,7 @@ public class UILevelComplete : UIPanel
 
     public override void Show()
     {
-        Level levelOnLoad = Creator.levelsSo.GetLevel(_turnSystem.currentLevel.section, _turnSystem.currentLevel.level);
+        Level levelOnLoad = _turnSystem.currentLevel;
         _turnsText.text = $"{Creator.statsTurns}";
         _movesText.text = $"{Creator.statsMoves}";
         int score = Creator.statsTurns * Creator.statsMoves;
@@ -75,9 +72,8 @@ public class UILevelComplete : UIPanel
 
         _starThreeImage.sprite = threeStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
         _starThreeImage.color = threeStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
-
-        //_nextLevelButton.gameObject.SetActive(levelOnLoad < Creator.levelsSo.AllLevels().Count);
-        //_endOfLevelsMessage.gameObject.SetActive(Creator.levelsSo.levelOnLoad == Creator.levelsSo.AllLevels().Count);
+        
+        _nextLevelButton.gameObject.SetActive(!levelOnLoad.isLastInSection);
         
         _panel.gameObject.SetActive(true);
         _audioSystem.PlayLevelCompleteSfx();

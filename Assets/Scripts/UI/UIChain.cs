@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UIChain : UIPanel
@@ -25,7 +26,7 @@ public class UIChain : UIPanel
     private List<PieceImage> _chainPieceImages = new ();
     private int _nextFreeIndex;
     
-    private float _mousePosXLastFrame = -1;
+    private float _mousePosYLastFrame;
     private float _mouseOffTimer;
 
     private bool _move;
@@ -41,25 +42,24 @@ public class UIChain : UIPanel
     public override void Create(AllTagNames uiTag)
     {
         base.Create(uiTag);
-        
-        Transform uiChain = Creator.GetFirstObjectWithName(AllTagNames.UIChain);
-        _pivot = Creator.GetChildObjectByName(uiChain.gameObject, AllTagNames.Pivot);
 
+        _pivot = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.Pivot);
+        
         int chainImagesAmount = 130;
-        float xPos = 0;
+        float yPos = 0;
         for (int i = 0; i < chainImagesAmount; i++)
         {
-            GameObject chainPieceImage = Creator.InstantiateGameObjectWithParent(Creator.imagePrefab, _pivot);
+            GameObject chainPieceImageGo = Creator.InstantiateGameObjectWithParent(Creator.imagePrefab, _pivot);
+            Image image = chainPieceImageGo.GetComponent<Image>();
+            
             //Every odd image will be the arrow, which we want to be a smaller than the piece images
             if (i % 2 != 0)
             {
-                chainPieceImage.transform.localScale = new(0.7f, 0.7f);
+                chainPieceImageGo.transform.localScale = new(0.7f, 0.7f);
             }
             
-            Image image = chainPieceImage.GetComponent<Image>();
-            
-            chainPieceImage.transform.localPosition = new(xPos, 0, 0);
-            xPos += image.rectTransform.sizeDelta.x;
+            chainPieceImageGo.transform.localPosition = new(0, yPos, 0);
+            yPos -= image.rectTransform.sizeDelta.y;
             
             _chainPieceImages.Add(new()
             {
@@ -67,60 +67,63 @@ public class UIChain : UIPanel
                 image = image
             });
             
-            chainPieceImage.SetActive(false);
+            chainPieceImageGo.SetActive(false);
         }
 
-        Transform movesRemainingText = Creator.GetFirstObjectWithName(AllTagNames.MovesRemaining);
-        _movesRemainingText = movesRemainingText.GetComponentInChildren<TextMeshProUGUI>();
+        _movesRemainingText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.MovesRemaining);
         
         _chainParentInitialPos = _pivot.localPosition;
         _chainParentNewPos = _pivot.localPosition;
+        
+        _mousePosYLastFrame = Input.mousePosition.y;
     }
     
     public override void GameUpdate(float dt)
     {
-        if (ProcessSlider(dt) || _chainParentNewPos == _pivot.localPosition)
-        {
-            return;
-        }
+        bool overPanel = false;
         
-        Vector3 lerpPos = math.lerp(_pivot.localPosition, _chainParentNewPos, dt * Creator.chainSo.addPieceLerpSpeed);
-        _pivot.localPosition = lerpPos;
-    }
-    
-    private bool ProcessSlider(float dt)
-    {
-        if(Creator.inputSo.leftMouseButton.action.WasPressedThisFrame() && (_boardSystem.GetGridPointNearMouse().y < Creator.boardSo.minY || _mousePosXLastFrame > 0))
+        List<RaycastResult> objectsUnderMouse = _uiSystem.objectsUnderMouse;
+        foreach (RaycastResult objectUnderMouse in objectsUnderMouse)
         {
-            _move = true;
+            if (objectUnderMouse.gameObject == _panel.gameObject)
+            {
+                overPanel = true;
+                break;
+            }
         }
-        else if (Creator.inputSo.leftMouseButton.action.WasReleasedThisFrame())
-        {
-            _move = false;
-        }
+
+        Vector2 scrollWheelValue = Creator.inputSo.scrollWheel.action.ReadValue<Vector2>();
         
-        if (_move)
+        if (overPanel && Creator.inputSo.leftMouseButton.action.IsPressed())
         {
             float3 mousePos = Input.mousePosition;
-            if (_mousePosXLastFrame > 0)
-            {
-                float mousePosXChange = mousePos.x - _mousePosXLastFrame;
-                float3 chainParentLocalPos = _pivot.localPosition;
-                chainParentLocalPos.x += mousePosXChange;
-                _pivot.localPosition = chainParentLocalPos;
-            }
-            _mousePosXLastFrame = mousePos.x;
-            _mouseOffTimer = 1f;
-            return true;
+            float mousePosYChange = mousePos.y - _mousePosYLastFrame;
+            float3 chainParentLocalPos = _pivot.localPosition;
+            chainParentLocalPos.y += mousePosYChange;
+            _pivot.localPosition = chainParentLocalPos;
+            
+            _mouseOffTimer = 1;
         }
-        else if (_mouseOffTimer > 0)
+        else if (overPanel && scrollWheelValue.y != 0)
+        {
+            float positionChange = scrollWheelValue.y * Creator.inputSo.scrollPositionChange;
+            float3 chainParentLocalPos = _pivot.localPosition;
+            chainParentLocalPos.y += positionChange;
+            _pivot.localPosition = chainParentLocalPos;
+            
+            _mouseOffTimer = 1;
+        }
+        else if(_mouseOffTimer > 0)
         {
             _mouseOffTimer -= dt;
-            _mousePosXLastFrame = -1;
-            return _mouseOffTimer > 0;
         }
-        _mousePosXLastFrame = -1;
-        return false;
+        else if(_chainParentNewPos != _pivot.localPosition)
+        {
+            Vector3 lerpPos = math.lerp(_pivot.localPosition, _chainParentNewPos, dt * Creator.chainSo.addPieceLerpSpeed);
+            _pivot.localPosition = lerpPos;
+        }
+        
+        _mousePosYLastFrame = Input.mousePosition.y;
     }
 
     public void ShowChain(PlayerController pieceController, bool setMovesRemainingText)
@@ -149,13 +152,11 @@ public class UIChain : UIPanel
     
     private void ShowNewPiece(Piece piece, int movesUsed, bool isFirstPiece = false)
     {
-        Color pieceColor = Creator.piecesSo.whiteColor;
-        
         //For every other piece we first want to add an arrow indicating the order for the chain
         if (!isFirstPiece)
         {
             _chainPieceImages[_nextFreeIndex].image.sprite = Creator.chainSo.arrowPointingToNextPiece;
-            _chainPieceImages[_nextFreeIndex].image.color = pieceColor;
+            _chainPieceImages[_nextFreeIndex].image.color = Creator.piecesSo.whiteColor;
             _chainPieceImages[_nextFreeIndex].image.rectTransform.sizeDelta = new(50, 50);
             _chainPieceImages[_nextFreeIndex].image.gameObject.SetActive(true);
             _chainPieceImages[_nextFreeIndex].piece = Piece.NotChosen;
@@ -168,7 +169,7 @@ public class UIChain : UIPanel
         UpdateAlphaValue(0.1f, movesUsed);
         
         _chainPieceImages[_nextFreeIndex].image.sprite = GetSprite(piece);
-        _chainPieceImages[_nextFreeIndex].image.color = pieceColor;
+        _chainPieceImages[_nextFreeIndex].image.color = Creator.piecesSo.whiteColor;
         _chainPieceImages[_nextFreeIndex].image.rectTransform.sizeDelta = new(100, 100);
         _chainPieceImages[_nextFreeIndex].image.gameObject.SetActive(true);
         _chainPieceImages[_nextFreeIndex].piece  = piece;
@@ -209,7 +210,7 @@ public class UIChain : UIPanel
 
     public void HighlightNextPiece(PlayerController pieceController)
     {
-        _chainParentNewPos.x = -150 * pieceController.movesUsed;
+        _chainParentNewPos.y = 150 * pieceController.movesUsed;
         
         UpdateAlphaValue(0.1f, pieceController.movesUsed * 2);
     }

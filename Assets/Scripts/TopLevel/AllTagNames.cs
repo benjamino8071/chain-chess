@@ -49,5 +49,6 @@ public enum AllTagNames
     ButtonLeft = 127,
     ButtonRight = 128,
     Image = 129,
-    Text = 130
+    Text = 130,
+    HoverOverPanel = 131
 }
