@@ -54,4 +54,5 @@ public enum AllTagNames
     ColourVariantsParent = 132,
     Tiles = 133,
     Edge = 134,
+    ButtonAudio = 135
 }

@@ -35,6 +35,17 @@ public class UISettings : UIPanel
         Transform edge = Creator.GetFirstObjectWithName(AllTagNames.Edge);
         _edge = edge.GetComponent<SpriteRenderer>();
 
+        ButtonManager audioButton =
+            Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonAudio);
+        audioButton.onClick.AddListener(() =>
+        {
+            Creator.settingsSo.sound = !Creator.settingsSo.sound;
+            
+            UpdateSoundSetting();
+            
+            audioButton.SetIcon(Creator.settingsSo.sound ? Creator.miscUiSo.audioOnSprite : Creator.miscUiSo.audioOffSprite);
+        });
+
         Transform buttonsParent = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.ColourVariantsParent);
         foreach (BoardVariant boardVariant in Creator.boardSo.boardVariants)
         {
