@@ -43,6 +43,11 @@ public enum AllTagNames
     UILevelComplete = 121,
     UIGameOver = 122,
     ButtonNextLevel = 123,
-    SectionText,
-    LevelText
+    SectionText = 124,
+    LevelText = 125,
+    ButtonPlay = 126,
+    ButtonLeft = 127,
+    ButtonRight = 128,
+    Image = 129,
+    Text = 130
 }

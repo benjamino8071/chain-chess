@@ -6,6 +6,8 @@ public class UICurrentLevelMenu : UIPanel
     private AudioSystem _audioSystem;
     private TurnSystem _turnSystem;
 
+    private ButtonManager _levelsButton;
+    
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
@@ -23,13 +25,12 @@ public class UICurrentLevelMenu : UIPanel
         resetButton.onClick.AddListener(() =>
         {
             _audioSystem.PlayUIClickSfx();
-            
-            _turnSystem.LoadLevelRuntime();
+
+            _turnSystem.ReloadCurrentLevel();
         });
         
-        ButtonManager levelsButton =
-            Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
-        levelsButton.onClick.AddListener(() =>
+        _levelsButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
+        _levelsButton.onClick.AddListener(() =>
         {
             if (_uiSystem.leftSidePanelOpen == AllTagNames.UISections)
             {
@@ -40,5 +41,10 @@ public class UICurrentLevelMenu : UIPanel
                 _uiSystem.ShowLeftSideUI(AllTagNames.UISections);
             }
         });
+    }
+
+    public void SetLevelsButtonText(Level level)
+    {
+        _levelsButton.SetText($"{level.section} - {level.level}");
     }
 }

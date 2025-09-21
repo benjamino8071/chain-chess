@@ -30,7 +30,7 @@ public class UIGameOver : UIPanel
             
             Hide();
             
-            _turnSystem.LoadLevelRuntime();
+            _turnSystem.ReloadCurrentLevel();
         });
 
         _reasonText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.ReasonText);

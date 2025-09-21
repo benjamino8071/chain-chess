@@ -14,8 +14,12 @@ public class TurnSystem : Dependency
     private EndGameSystem _endGameSystem;
     private BoardSystem _boardSystem;
     private PlayerSetTilesSystem _playerSetTilesSystem;
+
+    public Level currentLevel => _currentLevel;
     
     private PieceColour _currentTurn; //Will always start with White
+
+    private Level _currentLevel;
     
     public override void GameStart(Creator creator)
     {
@@ -31,8 +35,6 @@ public class TurnSystem : Dependency
         _endGameSystem = creator.GetDependency<EndGameSystem>();
         _boardSystem = creator.GetDependency<BoardSystem>();
         _playerSetTilesSystem = creator.GetDependency<PlayerSetTilesSystem>();
-        
-        LoadLevelRuntime();
     }
     
     public void SwitchTurn(PieceColour nextTurn)
@@ -58,8 +60,13 @@ public class TurnSystem : Dependency
                 break;
         }
     }
+
+    public void ReloadCurrentLevel()
+    {
+        LoadLevelRuntime(_currentLevel);
+    }
     
-    public void LoadLevelRuntime()
+    public void LoadLevelRuntime(Level level)
     {
         Random.InitState(42);
        
@@ -69,10 +76,10 @@ public class TurnSystem : Dependency
         _validMovesSystem.HideAllValidMoves();
         _playerSetTilesSystem.HideAll();
         
-        //_levelSelectUISystem.UpdateLevelText(Creator.levelsSo.levelOnLoad);
+        _uiCurrentLevelMenu.SetLevelsButtonText(level);
         
-        _whiteSystem.SpawnPieces();
-        _blackSystem.SpawnPieces();
+        _whiteSystem.SpawnPieces(level);
+        _blackSystem.SpawnPieces(level);
         _uiChain.ShowChain(_whiteSystem.playerController, true);
         _boardSystem.ShowTapPoint(_whiteSystem.playerController.piecePos);
         _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfCurrentPiece());
@@ -81,6 +88,8 @@ public class TurnSystem : Dependency
 
         Creator.statsTurns = 0;
         Creator.statsMoves = 0;
+    
+        _currentLevel = level;
         
         SwitchTurn(PieceColour.White);
     }

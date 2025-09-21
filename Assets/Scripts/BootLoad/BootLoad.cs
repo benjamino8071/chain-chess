@@ -20,8 +20,6 @@ public class BootLoad : MonoBehaviour
 
     private void Start()
     {
-        levelsSo.levelOnLoad = 1;
-
         boardSo.hideMainMenuTrigger = false;
         
         tempCam.backgroundColor = Color.black;

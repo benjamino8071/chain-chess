@@ -184,9 +184,8 @@ public class BlackSystem : Dependency
         return validPieceControllers;
     }
     
-    public void SpawnPieces()
+    public void SpawnPieces(Level levelOnLoad)
     {
-        Level levelOnLoad = Creator.levelsSo.GetLevelOnLoad();
         foreach (StartingPieceSpawnData pieceSpawnData in levelOnLoad.positions)
         {
             if (pieceSpawnData.colour == PieceColour.Black)

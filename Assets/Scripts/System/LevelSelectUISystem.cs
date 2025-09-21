@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class LevelSelectUISystem : Dependency
 {
-    private AudioSystem _audioSystem;
+    /*private AudioSystem _audioSystem;
     private BoardSystem _boardSystem;
     private TurnSystem _turnSystem;
     
@@ -174,5 +174,5 @@ public class LevelSelectUISystem : Dependency
     public void Hide()
     {
         _levelSelectUI.gameObject.SetActive(false);
-    }
+    }*/
 }

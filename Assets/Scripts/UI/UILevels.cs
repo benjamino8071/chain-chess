@@ -17,10 +17,15 @@ public class UILevels : UIPanel
         public Image starOneImage;
         public Image starTwoImage;
         public Image starThreeImage;
-        public int levelNumber;
+        public Level level;
     }
 
+    private ButtonManager _playButton;
+    
     private TextMeshProUGUI _sectionText;
+    private TextMeshProUGUI _levelText;
+
+    private Level _levelToLoad;
     
     public override void GameStart(Creator creator)
     {
@@ -36,8 +41,13 @@ public class UILevels : UIPanel
         
         _levelInfos = new(10);
         
+        _sectionText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.SectionText);
+        _levelText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.LevelText);
+        
+        _playButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonPlay);
+        _playButton.onClick.AddListener(LoadLevel);
+        
         LevelButtons buttons = _panel.GetComponent<LevelButtons>();
-
         foreach (LevelButton levelButton in buttons.buttons)
         {
             LevelInfo levelInfo = new()
@@ -47,52 +57,31 @@ public class UILevels : UIPanel
                 starTwoImage = levelButton.starTwoImage,
                 starThreeImage = levelButton.starThreeImage
             };
+            
+            levelInfo.levelButton.onClick.AddListener(() =>
+            {
+                _levelToLoad = levelInfo.level;
+                _levelText.text = $"Level {_levelToLoad.section} - {_levelToLoad.level}";
+                _levelText.gameObject.SetActive(true);
+                _playButton.gameObject.SetActive(true);
+            });
+            
             levelInfo.starOneImage.sprite = Creator.levelCompleteSo.starHollowSprite;
             levelInfo.starTwoImage.sprite = Creator.levelCompleteSo.starHollowSprite;
             levelInfo.starThreeImage.sprite = Creator.levelCompleteSo.starHollowSprite;
-
+            
             _levelInfos.Add(levelInfo);
         }
         
-        float yPosition = 400 + Creator.levelSelectSo.gap;
-        
-        /*foreach (Level level in Creator.levelsSo.AllLevels())
-        {
-            GameObject levelInfoGo = Creator.InstantiateGameObjectWithParent(Creator.levelInfoPrefab, _pivot);
-            
-            levelInfoGo.name = $"Level {level.level} Info";
-            
-            LevelInfo levelInfo = new()
-            {
-                go = levelInfoGo,
-                rect = levelInfoGo.GetComponent<RectTransform>(),
-                level = level,
-                levelButton = Creator.GetChildComponentByName<ButtonManager>(levelInfoGo, AllTagNames.ButtonLevels),
-                starOneImage = Creator.GetChildComponentByName<Image>(levelInfoGo, AllTagNames.Star1Image),
-                starTwoImage = Creator.GetChildComponentByName<Image>(levelInfoGo, AllTagNames.Star2Image),
-                starThreeImage = Creator.GetChildComponentByName<Image>(levelInfoGo, AllTagNames.Star3Image)
-            };
-            
-            yPosition -= Creator.levelSelectSo.gap;
-            levelInfo.rect.anchoredPosition = new(0, yPosition);
-
-            levelInfo.levelButton.SetText($"Level {level.level}");
-            levelInfo.levelButton.onClick.AddListener(() =>
-            {
-                Creator.levelsSo.levelOnLoad = levelInfo.level.level;
-                _turnSystem.LoadLevelRuntime();
-                _levelCompleteUISystem.Hide();
-                _gameOverUISystem.Hide();
-                
-                Hide();
-            });
-            
-            _levelInfos.Add(levelInfo);
-        }*/
-
-        _sectionText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.SectionText);
-        
         Hide();
+    }
+
+    public override void Show()
+    {
+        _playButton.gameObject.SetActive(false);
+        _levelText.gameObject.SetActive(false);
+        
+        base.Show();
     }
 
     public void SetLevels(int section)
@@ -100,12 +89,18 @@ public class UILevels : UIPanel
         _sectionText.text = $"Section {section}";
         
         SectionData sectionData = Creator.levelsSo.GetSection(section);
-
+        
         for (int i = 0; i < sectionData.levels.Count; i++)
         {
-            Level level = sectionData.levels[i];
-            _levelInfos[i].levelNumber = level.level;
-            _levelInfos[i].levelButton.SetText($"{level.level}");
+            _levelInfos[i].level = sectionData.levels[i];
         }
+    }
+
+    private void LoadLevel()
+    {
+        _turnSystem.LoadLevelRuntime(_levelToLoad);
+        
+        _uiSystem.HideLeftSideUI();
+        _uiSystem.ShowRightSideUI(AllTagNames.UIChain);
     }
 }

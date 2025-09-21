@@ -36,8 +36,6 @@ public class Pieces_SO : ScriptableObject
 
     public float aiThinkingTime;
     public float alwaysMoveThinkingTime;
-    
-    public List<PieceAbilityDescription> abilityDescriptions;
 }
 
 public enum Piece
@@ -80,31 +78,10 @@ public enum PieceState
 }
 
 [Serializable]
-public struct Level
-{
-    public int level;
-    public int turns;
-    public int star1Score;
-    public int star2Score;
-    public int star3Score;
-    
-    public List<StartingPieceSpawnData> positions;
-}
-
-[Serializable]
 public struct StartingPieceSpawnData
 {
     public Piece piece;
     public PieceColour colour;
     public PieceAbility ability;
     public Vector2 position;
-}
-
-[Serializable]
-public struct PieceAbilityDescription
-{
-    public PieceAbility ability;
-    
-    [TextArea(5, 15)]
-    public string description;
 }

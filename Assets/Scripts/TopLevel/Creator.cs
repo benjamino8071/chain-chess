@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 public class Creator : MonoBehaviour
 {
     [Header("SOs")]
+    public SaveData_SO saveDataSo;
     public Input_SO inputSo;
     public Chain_SO chainSo;
     public Board_SO boardSo;
@@ -18,6 +19,7 @@ public class Creator : MonoBehaviour
     public GameOver_SO gameOverSo;
     public LevelSelect_SO levelSelectSo;
     public MiscUI_SO miscUiSo;
+    public Rulebook_SO rulebookSo;
 
     [Header("Prefabs")]
     public GameObject piecePrefab;

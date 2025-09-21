@@ -7,39 +7,8 @@ using UnityEngine;
 [CreateAssetMenu]
 public class Levels_SO : ScriptableObject
 {
-    public int levelOnLoad;
-
     public List<SectionData> sections;
-    public Level finalLevel;
-
-    public int finalLevelStarsRequirement;
     
-    public List<Level> sectionOne;
-    public List<Level> sectionTwo;
-    public List<Level> sectionThree;
-    public List<Level> sectionFour;
-    public List<Level> sectionFive;
-    public List<Level> sectionSix;
-    public List<Level> sectionSeven;
-    public List<Level> sectionEight;
-    
-    [Title("Level Numbers")]
-    [Button]
-    public void SetAllLevelNumbers()
-    {
-        int levelNumber = 1;
-
-        levelNumber = SetLevelNumber(sectionOne, levelNumber);
-        levelNumber = SetLevelNumber(sectionTwo, levelNumber);
-        levelNumber = SetLevelNumber(sectionThree, levelNumber);
-        levelNumber = SetLevelNumber(sectionFour, levelNumber);
-        levelNumber = SetLevelNumber(sectionFive, levelNumber);
-        levelNumber = SetLevelNumber(sectionSix, levelNumber);
-        levelNumber = SetLevelNumber(sectionSeven, levelNumber);
-        levelNumber = SetLevelNumber(sectionEight, levelNumber);
-        finalLevel.level = levelNumber;
-    }
-
     public SectionData GetSection(int section)
     {
         foreach (SectionData sectionData in sections)
@@ -65,51 +34,65 @@ public class Levels_SO : ScriptableObject
 
         return -1;
     }
-
-    private int SetLevelNumber(List<Level> section, int levelNumber)
-    {
-        for (int i = 0; i < section.Count; i++)
-        {
-            Level level = section[i];
-            level.level = levelNumber;
-            section[i] = level;
-            
-            levelNumber++;
-        }
-
-        return levelNumber;
-    }
     
-    [Title("Reserved Levels")]
-    public List<Level> reservedLevels;
-    
-    public List<Level> AllLevels()
+    public Level GetLevel(int sectionNumber, int levelNumber)
     {
-        List<Level> levels = sectionOne;
-
         foreach (SectionData section in sections)
         {
-            levels = levels.Concat(section.levels).ToList();
-        }
-        levels.Add(finalLevel);
-
-        return levels;
-    }
-    
-    public Level GetLevelOnLoad()
-    {
-        List<Level> allLevels = AllLevels();
-        for (int i = 0; i < allLevels.Count; i++)
-        {
-            if (i + 1 == levelOnLoad)
+            if (section.section != sectionNumber)
             {
-                Level level = allLevels[i];
-                return level;
+                continue;
+            }
+            
+            foreach (Level level in section.levels)
+            {
+                if (level.level == levelNumber)
+                {
+                    return level;
+                }
             }
         }
         
         return default;
     }
+
+    [Button]
+    public void SetSectionAndLevelNumbers()
+    {
+        for (int i = 0; i < sections.Count; i++)
+        {
+            SectionData section = sections[i];
+            section.section = i + 1;
+            
+            for (int j = 0; j < sections[i].levels.Count; j++)
+            {
+                Level level = section.levels[j];
+
+                level.section = section.section;
+                level.level = j + 1;
+
+                section.levels[j] = level;
+            }
+
+            sections[i] = section;
+        }
+    }
+    
+    [Title("Reserved Levels")]
+    public List<Level> reservedLevels;
+}
+
+[Serializable]
+public struct Level
+{
+    public int section;
+    public int level;
+    public int turns;
+    public int star1Score;
+    public int star2Score;
+    public int star3Score;
+    
+    public List<StartingPieceSpawnData> positions;
 }
 
 [Serializable]
@@ -118,11 +101,4 @@ public struct SectionData
     public int section;
     public int starsRequiredToUnlock;
     public List<Level> levels;
-}
-
-[Serializable]
-public struct SectionStarsRequirement
-{
-    public int section;
-    public int stars;
 }

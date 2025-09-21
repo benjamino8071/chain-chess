@@ -45,12 +45,10 @@ public class UILevelComplete : UIPanel
         _nextLevelButton.onClick.AddListener(() =>
         {
             _audioSystem.PlayUIClickSfx();
-
-            Creator.levelsSo.levelOnLoad++;
             
             Hide();
             
-            _turnSystem.LoadLevelRuntime();
+            _turnSystem.LoadLevelRuntime(_turnSystem.currentLevel);
         });
         
         Hide();
@@ -58,7 +56,7 @@ public class UILevelComplete : UIPanel
 
     public override void Show()
     {
-        Level levelOnLoad = Creator.levelsSo.GetLevelOnLoad();
+        Level levelOnLoad = Creator.levelsSo.GetLevel(_turnSystem.currentLevel.section, _turnSystem.currentLevel.level);
         _turnsText.text = $"{Creator.statsTurns}";
         _movesText.text = $"{Creator.statsMoves}";
         int score = Creator.statsTurns * Creator.statsMoves;
@@ -78,8 +76,8 @@ public class UILevelComplete : UIPanel
         _starThreeImage.sprite = threeStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
         _starThreeImage.color = threeStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
 
-        _nextLevelButton.gameObject.SetActive(Creator.levelsSo.levelOnLoad < Creator.levelsSo.AllLevels().Count);
-        _endOfLevelsMessage.gameObject.SetActive(Creator.levelsSo.levelOnLoad == Creator.levelsSo.AllLevels().Count);
+        //_nextLevelButton.gameObject.SetActive(levelOnLoad < Creator.levelsSo.AllLevels().Count);
+        //_endOfLevelsMessage.gameObject.SetActive(Creator.levelsSo.levelOnLoad == Creator.levelsSo.AllLevels().Count);
         
         _panel.gameObject.SetActive(true);
         _audioSystem.PlayLevelCompleteSfx();
