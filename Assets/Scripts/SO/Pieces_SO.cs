@@ -36,6 +36,71 @@ public class Pieces_SO : ScriptableObject
 
     public float aiThinkingTime;
     public float alwaysMoveThinkingTime;
+
+    public Sprite GetSprite(Piece piece)
+    {
+        switch (piece)
+        {
+            case Piece.Pawn:
+                return pawn;
+            case Piece.Rook:
+                return rook;
+            case Piece.Knight:
+                return knight;
+            case Piece.Bishop:
+                return bishop;
+            case Piece.Queen:
+                return queen;
+            case Piece.King:
+                return king;
+        }
+
+        return null;
+    }
+
+    public Material GetMaterial(PieceAbility piece)
+    {
+        switch (piece)
+        {
+            case PieceAbility.MustMove:
+                return mustMoveMat;
+            case PieceAbility.CaptureLover:
+                return captureLoverMat;
+            case PieceAbility.AlwaysMove:
+                return alwaysMoveMat;
+            case PieceAbility.Resetter:
+                return resetterMat;
+            case PieceAbility.Multiplier:
+                return multiplierMat;
+            case PieceAbility.StopTurn:
+                return stopTurnMat;
+        }
+
+        return null;
+    }
+    
+    public Color GetColour(PieceAbility piece, PieceColour pieceColour)
+    {
+        switch (piece)
+        {
+            case PieceAbility.None:
+                return pieceColour == PieceColour.White ? whiteColor : blackColor;
+            case PieceAbility.MustMove:
+                return mustMoveColor;
+            case PieceAbility.CaptureLover:
+                return captureLoverColor;
+            case PieceAbility.AlwaysMove:
+                return alwaysMoveColor;
+            case PieceAbility.Resetter:
+                return resetterColor;
+            case PieceAbility.Multiplier:
+                return multiplierColor;
+            case PieceAbility.StopTurn:
+                return stopTurnColor;
+        }
+
+        return blackColor;
+    }
 }
 
 public enum Piece

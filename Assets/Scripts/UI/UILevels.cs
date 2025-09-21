@@ -21,6 +21,8 @@ public class UILevels : UIPanel
         public Level level;
     }
 
+    private Dictionary<Vector2Int, Image> _previewPieceImages = new(64);
+
     private ButtonManager _playButton;
     
     private TextMeshProUGUI _sectionText;
@@ -29,10 +31,14 @@ public class UILevels : UIPanel
     private GameObject _levelScrollWheel;
 
     private Transform _pivot;
+
+    private Transform _levelPreviewParent;
     
     private Level _levelToLoad;
     
     private float _mousePosYLastFrame;
+    
+    private int _upperBoundScroll;
     
     public override void GameStart(Creator creator)
     {
@@ -56,6 +62,33 @@ public class UILevels : UIPanel
         
         _playButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonPlay);
         _playButton.onClick.AddListener(LoadLevel);
+
+        _levelPreviewParent = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.LevelPreviewParent);
+        RectTransform levelPreviewBoard =
+            Creator.GetChildComponentByName<RectTransform>(_levelPreviewParent.gameObject, AllTagNames.LevelPreviewBoard);
+        float halfWidth = levelPreviewBoard.rect.width / 2;
+        float halfHeight = levelPreviewBoard.rect.height / 2;
+        float singleTileWidth = levelPreviewBoard.rect.width / 8;
+        float singleTileHeight = levelPreviewBoard.rect.height / 8;
+        
+        for (int x = 1; x < 9; x++)
+        {
+            float xValue = -halfWidth + (singleTileWidth / 2) + (singleTileWidth * (x - 1));
+            
+            for (int y = 1; y < 9; y++)
+            {
+                float yValue = -halfHeight + (singleTileHeight / 2) + (singleTileHeight * (y - 1));
+                
+                GameObject previewPieceGo = Creator.InstantiateGameObjectWithParent(Creator.imagePrefab, _levelPreviewParent);
+                RectTransform previewPiece = previewPieceGo.GetComponent<RectTransform>();
+                previewPiece.sizeDelta = new(singleTileWidth, singleTileHeight);
+                previewPiece.localPosition = new(xValue, yValue);
+                previewPiece.localScale = new float3(0.75f);
+                Image previewPieceImage = previewPieceGo.GetComponent<Image>();
+                
+                _previewPieceImages.Add(new(x, y), previewPieceImage);
+            }
+        }
         
         LevelButtons buttons = _panel.GetComponent<LevelButtons>();
         foreach (LevelButton levelButton in buttons.buttons)
@@ -71,15 +104,22 @@ public class UILevels : UIPanel
             levelInfo.levelButton.onClick.AddListener(() =>
             {
                 _levelToLoad = levelInfo.level;
+                
+                LoadLevelPreview(_levelToLoad);
                 _levelText.text = $"Level {_levelToLoad.section} - {_levelToLoad.level}";
                 _levelText.gameObject.SetActive(true);
                 _playButton.gameObject.SetActive(true);
             });
             
             levelInfo.starOneImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starOneImage.color = Creator.levelCompleteSo.starHollowColor;
+
             levelInfo.starTwoImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starTwoImage.color = Creator.levelCompleteSo.starHollowColor;
+
             levelInfo.starThreeImage.sprite = Creator.levelCompleteSo.starHollowSprite;
-            
+            levelInfo.starThreeImage.color = Creator.levelCompleteSo.starHollowColor;
+
             _levelInfos.Add(levelInfo);
         }
         
@@ -90,6 +130,11 @@ public class UILevels : UIPanel
 
     public override void GameUpdate(float dt)
     {
+        if (!_panel.gameObject.activeSelf)
+        {
+            return;
+        }
+        
         bool overScrollWheel = false;
         
         List<RaycastResult> objectsUnderMouse = _uiSystem.objectsUnderMouse;
@@ -111,7 +156,7 @@ public class UILevels : UIPanel
             float3 chainParentLocalPos = _pivot.localPosition;
             chainParentLocalPos.y += mousePosYChange;
             
-            chainParentLocalPos.y = math.clamp(chainParentLocalPos.y, 0, 420);
+            chainParentLocalPos.y = math.clamp(chainParentLocalPos.y, 0, _upperBoundScroll);
             
             _pivot.localPosition = chainParentLocalPos;
         }
@@ -120,7 +165,7 @@ public class UILevels : UIPanel
             float positionChange = -scrollWheelValue.y * Creator.inputSo.scrollPositionChange;
             float3 chainParentLocalPos = _pivot.localPosition;
             chainParentLocalPos.y += positionChange;
-            chainParentLocalPos.y = math.clamp(chainParentLocalPos.y, 0, 420);
+            chainParentLocalPos.y = math.clamp(chainParentLocalPos.y, 0, _upperBoundScroll);
             _pivot.localPosition = chainParentLocalPos;
         }
         
@@ -131,28 +176,89 @@ public class UILevels : UIPanel
     {
         _playButton.gameObject.SetActive(false);
         _levelText.gameObject.SetActive(false);
+        _levelPreviewParent.gameObject.SetActive(false);
         
         base.Show();
     }
-
+    
     public void SetLevels(int section)
     {
         _sectionText.text = $"Section {section}";
         
         SectionData sectionData = Creator.levelsSo.GetSection(section);
+
+        _upperBoundScroll = 0;
         
-        for (int i = 0; i < sectionData.levels.Count; i++)
+        for (int i = 0; i < _levelInfos.Count; i++)
         {
+            LevelInfo levelInfo = _levelInfos[i];
+
+            levelInfo.starOneImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starOneImage.color = Creator.levelCompleteSo.starHollowColor;
+            
+            levelInfo.starTwoImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starTwoImage.color = Creator.levelCompleteSo.starHollowColor;
+            
+            levelInfo.starThreeImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starThreeImage.color = Creator.levelCompleteSo.starHollowColor;
+            
             if (i > sectionData.levels.Count - 1)
             {
-                _levelInfos[i].levelButton.transform.parent.gameObject.SetActive(false);
+                levelInfo.levelButton.transform.parent.gameObject.SetActive(false);
             }
             else
             {
-                _levelInfos[i].level = sectionData.levels[i];
-                _levelInfos[i].levelButton.transform.parent.gameObject.SetActive(true);
+                Level level = sectionData.levels[i];
+                
+                levelInfo.level = level;
+                levelInfo.levelButton.transform.parent.gameObject.SetActive(true);
+
+                foreach (LevelSaveData levelSaveData in Creator.saveDataSo.levels)
+                {
+                    if (levelSaveData.section != level.section || levelSaveData.level != level.level)
+                    {
+                        continue;
+                    }
+                    
+                    bool oneStar = levelSaveData.score <= level.star1Score;
+                    bool twoStar = levelSaveData.score <= level.star2Score;
+                    bool threeStar = levelSaveData.score <= level.star3Score;
+                    
+                    levelInfo.starOneImage.sprite = oneStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+                    levelInfo.starOneImage.color = oneStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+        
+                    levelInfo.starTwoImage.sprite = twoStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+                    levelInfo.starTwoImage.color = twoStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+
+                    levelInfo.starThreeImage.sprite = threeStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+                    levelInfo.starThreeImage.color = threeStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+                    
+                    break;
+                }
+
+                _upperBoundScroll += (int)Creator.inputSo.scrollPositionChange;
             }
         }
+    }
+
+    private void LoadLevelPreview(Level level)
+    {
+        foreach (Image image in _previewPieceImages.Values)
+        {
+            image.gameObject.SetActive(false);
+            image.sprite = null;
+        }
+        
+        foreach (StartingPieceSpawnData startingPieceSpawnData in level.positions)
+        {
+            Vector2Int position = new((int)startingPieceSpawnData.position.x, (int)startingPieceSpawnData.position.y);
+            _previewPieceImages[position].sprite = Creator.piecesSo.GetSprite(startingPieceSpawnData.piece);
+            _previewPieceImages[position].material = Creator.piecesSo.GetMaterial(startingPieceSpawnData.ability);
+            _previewPieceImages[position].color = Creator.piecesSo.GetColour(startingPieceSpawnData.ability, startingPieceSpawnData.colour);
+            _previewPieceImages[position].gameObject.SetActive(true);
+        }
+        
+        _levelPreviewParent.gameObject.SetActive(true);
     }
 
     private void LoadLevel()

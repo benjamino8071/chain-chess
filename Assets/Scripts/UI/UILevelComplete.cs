@@ -62,16 +62,18 @@ public class UILevelComplete : UIPanel
 
     public override void Show()
     {
-        Level levelOnLoad = _turnSystem.currentLevel;
+        Level levelCompleted = _turnSystem.currentLevel;
         _turnsText.text = $"{Creator.statsTurns}";
         _movesText.text = $"{Creator.statsMoves}";
         int score = Creator.statsTurns * Creator.statsMoves;
         
-        Debug.Log($"Score for level {levelOnLoad.level}: {score}");
+        Debug.Log($"Score for level {levelCompleted.level}: {score}");
+
+        SaveLatestLevelScore(levelCompleted, score);
         
-        bool oneStar = score <= levelOnLoad.star1Score;
-        bool twoStar = score <= levelOnLoad.star2Score;
-        bool threeStar = score <= levelOnLoad.star3Score;
+        bool oneStar = score <= levelCompleted.star1Score;
+        bool twoStar = score <= levelCompleted.star2Score;
+        bool threeStar = score <= levelCompleted.star3Score;
         
         _starOneImage.sprite = oneStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
         _starOneImage.color = oneStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
@@ -82,9 +84,43 @@ public class UILevelComplete : UIPanel
         _starThreeImage.sprite = threeStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
         _starThreeImage.color = threeStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
         
-        _nextLevelButton.gameObject.SetActive(!levelOnLoad.isLastInSection);
+        _nextLevelButton.gameObject.SetActive(!levelCompleted.isLastInSection);
         
         _panel.gameObject.SetActive(true);
         _audioSystem.PlayLevelCompleteSfx();
+    }
+
+    private void SaveLatestLevelScore(Level level, int score)
+    {
+        bool found = false;
+        for (int i = 0; i < Creator.saveDataSo.levels.Count; i++)
+        {
+            LevelSaveData levelSaveData = Creator.saveDataSo.levels[i];
+            
+            if (levelSaveData.section != level.section || levelSaveData.level != level.level)
+            {
+                continue;
+            }
+
+            if (score < levelSaveData.score)
+            {
+                levelSaveData.score = score;
+                Creator.saveDataSo.levels[i] = levelSaveData;
+                found = true;
+            }
+            break;
+        }
+
+        if (!found)
+        {
+            Creator.saveDataSo.levels.Add(new()
+            {
+                section = level.section,
+                level = level.level,
+                score = score
+            });
+        }
+        
+        Creator.SaveToDisk();
     }
 }

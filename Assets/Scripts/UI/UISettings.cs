@@ -34,16 +34,28 @@ public class UISettings : UIPanel
 
         Transform edge = Creator.GetFirstObjectWithName(AllTagNames.Edge);
         _edge = edge.GetComponent<SpriteRenderer>();
-
-        ButtonManager audioButton =
-            Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonAudio);
+        
+        SetBoardColour(Creator.saveDataSo.boardVariant);
+        
+        ButtonManager audioButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonAudio);
         audioButton.onClick.AddListener(() =>
         {
-            Creator.settingsSo.sound = !Creator.settingsSo.sound;
+            Creator.saveDataSo.audio = !Creator.saveDataSo.audio;
             
-            UpdateSoundSetting();
+            UpdateSoundSetting(Creator.saveDataSo.audio);
             
-            audioButton.SetIcon(Creator.settingsSo.sound ? Creator.miscUiSo.audioOnSprite : Creator.miscUiSo.audioOffSprite);
+            audioButton.SetIcon(Creator.saveDataSo.audio ? Creator.miscUiSo.audioOnSprite : Creator.miscUiSo.audioOffSprite);
+            
+            Creator.SaveToDisk();
+        });
+        UpdateSoundSetting(Creator.saveDataSo.audio);
+        audioButton.SetIcon(Creator.saveDataSo.audio ? Creator.miscUiSo.audioOnSprite : Creator.miscUiSo.audioOffSprite);
+
+        ButtonManager deleteButton =
+            Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonDelete);
+        deleteButton.onClick.AddListener(() =>
+        {
+            Creator.DeleteOnDisk();
         });
 
         Transform buttonsParent = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.ColourVariantsParent);
@@ -60,18 +72,24 @@ public class UISettings : UIPanel
             }
             buttonManager.onClick.AddListener(() =>
             {
-                _tiles.sprite = boardVariant.board;
-                _edge.color = boardVariant.edgeColur;
+                SetBoardColour(boardVariant);
+
+                Creator.saveDataSo.boardVariant = boardVariant;
+                Creator.SaveToDisk();
             });
         }
         
-        UpdateSoundSetting();
-        
         Hide();
     }
-    
-    private void UpdateSoundSetting()
+
+    private void SetBoardColour(BoardVariant boardVariant)
     {
-        MMSoundManager.Instance.SetVolumeMaster(Creator.settingsSo.sound ? 1 : 0);
+        _tiles.sprite = boardVariant.board;
+        _edge.color = boardVariant.edgeColur;
+    }
+    
+    private void UpdateSoundSetting(bool audioOn)
+    {
+        MMSoundManager.Instance.SetVolumeMaster(audioOn ? 1 : 0);
     }
 }

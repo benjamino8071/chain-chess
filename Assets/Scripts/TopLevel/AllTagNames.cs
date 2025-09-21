@@ -1,27 +1,15 @@
 public enum AllTagNames
 {
     None = 0,
-    GameOver = 18,
-    LevelComplete = 37,
-    Retry = 38,
-    Exit = 40,
     MovesRemaining = 57,
-    TitleText = 72,
     QuoteText = 73,
-    AuthorText = 74,
     ReasonText = 75,
-    Settings = 80,
-    SettingsButton = 81,
-    AudioSwitch = 83,
     AllValidMovesParent = 90,
     StatsTurns = 93,
     StatsMoves = 94,
-    EndOfLevelsMessage = 96,
-    FOVSlider = 97,
     Star1Image = 98,
     Star2Image = 99,
     Star3Image = 100,
-    LevelSelect = 101,
     Pivot = 103,
     PlayerSetTilesParent = 104,
     EnemyHere = 105,
@@ -54,5 +42,8 @@ public enum AllTagNames
     ColourVariantsParent = 132,
     Tiles = 133,
     Edge = 134,
-    ButtonAudio = 135
+    ButtonAudio = 135,
+    ButtonDelete = 136,
+    LevelPreviewParent = 137,
+    LevelPreviewBoard = 138
 }

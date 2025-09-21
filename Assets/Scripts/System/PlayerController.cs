@@ -501,30 +501,7 @@ public class PlayerController : Dependency
 
     private void UpdateSprite(Piece piece)
     {
-        switch (piece)
-        {
-            case Piece.NotChosen:
-                _spriteRenderer.sprite = null;
-                break;
-            case Piece.Pawn:
-                _spriteRenderer.sprite = Creator.piecesSo.pawn;
-                break;
-            case Piece.Rook:
-                _spriteRenderer.sprite = Creator.piecesSo.rook;
-                break;
-            case Piece.Knight:
-                _spriteRenderer.sprite = Creator.piecesSo.knight;
-                break;
-            case Piece.Bishop:
-                _spriteRenderer.sprite = Creator.piecesSo.bishop;
-                break;
-            case Piece.Queen:
-                _spriteRenderer.sprite = Creator.piecesSo.queen;
-                break;
-            case Piece.King:
-                _spriteRenderer.sprite = Creator.piecesSo.king;
-                break;
-        }
+        _spriteRenderer.sprite = Creator.piecesSo.GetSprite(piece);
         _currentPiece = piece;
     }
 

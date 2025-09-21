@@ -70,52 +70,12 @@ public class AIController : Dependency
 
         _piece = piece;
         
-        UpdateSprite(piece);
-        switch (pieceAbility)
+        _spriteRenderer.sprite = Creator.piecesSo.GetSprite(piece);
+        if (Creator.piecesSo.GetMaterial(pieceAbility) is { } material)
         {
-            case PieceAbility.None:
-            {
-                _spriteRenderer.material = Creator.piecesSo.noneMat;
-                _spriteRenderer.material.color = Creator.piecesSo.blackColor;
-                break;
-            }
-            case PieceAbility.Resetter:
-            {
-                _spriteRenderer.material = Creator.piecesSo.resetterMat;
-                _spriteRenderer.material.color = Creator.piecesSo.resetterColor;
-                break;
-            }
-            case PieceAbility.MustMove:
-            {
-                _spriteRenderer.material = Creator.piecesSo.mustMoveMat;
-                _spriteRenderer.material.color = Creator.piecesSo.mustMoveColor;
-                break;
-            }
-            case PieceAbility.Multiplier:
-            {
-                _spriteRenderer.material = Creator.piecesSo.multiplierMat;
-                _spriteRenderer.material.color = Creator.piecesSo.multiplierColor;
-                break;
-            }
-            case PieceAbility.CaptureLover:
-            {
-                _spriteRenderer.material = Creator.piecesSo.captureLoverMat;
-                _spriteRenderer.material.color = Creator.piecesSo.captureLoverColor;
-                break;
-            }
-            case PieceAbility.StopTurn:
-            {
-                _spriteRenderer.material = Creator.piecesSo.stopTurnMat;
-                _spriteRenderer.material.color = Creator.piecesSo.stopTurnColor;
-                break;
-            }
-            case PieceAbility.AlwaysMove:
-            {
-                _spriteRenderer.material = Creator.piecesSo.alwaysMoveMat;
-                _spriteRenderer.material.color = Creator.piecesSo.alwaysMoveColor;
-                break;
-            }
+            _spriteRenderer.material = material;
         }
+        _spriteRenderer.color = Creator.piecesSo.GetColour(pieceAbility, PieceColour.Black);
 
         background.SetActive(false);
         
@@ -482,34 +442,6 @@ public class AIController : Dependency
         }
 
         return validMoves;
-    }
-
-    private void UpdateSprite(Piece piece)
-    {
-        switch (piece)
-        {
-            case Piece.NotChosen:
-                _spriteRenderer.sprite = null;
-                break;
-            case Piece.Pawn:
-                _spriteRenderer.sprite = Creator.piecesSo.pawn;
-                break;
-            case Piece.Rook:
-                _spriteRenderer.sprite = Creator.piecesSo.rook;
-                break;
-            case Piece.Knight:
-                _spriteRenderer.sprite = Creator.piecesSo.knight;
-                break;
-            case Piece.Bishop:
-                _spriteRenderer.sprite = Creator.piecesSo.bishop;
-                break;
-            case Piece.Queen:
-                _spriteRenderer.sprite = Creator.piecesSo.queen;
-                break;
-            case Piece.King:
-                _spriteRenderer.sprite = Creator.piecesSo.king;
-                break;
-        }
     }
 
     public void SetState(PieceState state)

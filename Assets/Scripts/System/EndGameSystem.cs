@@ -3,8 +3,6 @@ public class EndGameSystem : Dependency
     private ValidMovesSystem _validMovesSystem;
     private BoardSystem _boardSystem;
     private UISystem _uiSystem;
-    private UILevelComplete _uiLevelComplete;
-    private UIGameOver _uiGameOver;
     
     public bool isEndGame => _isEndGame;
     
@@ -17,19 +15,20 @@ public class EndGameSystem : Dependency
         _validMovesSystem = creator.GetDependency<ValidMovesSystem>();
         _boardSystem = creator.GetDependency<BoardSystem>();
         _uiSystem = creator.GetDependency<UISystem>();
-        _uiLevelComplete = _uiSystem.GetUI<UILevelComplete>();
-        _uiGameOver = _uiSystem.GetUI<UIGameOver>();
     }
 
     public void SetEndGame(PieceColour winningColour, GameOverReason gameOverReason, float delayTimer)
     {
         if (winningColour == PieceColour.White)
         {
-            _uiLevelComplete.Show();
+            _uiSystem.ShowRightSideUI(AllTagNames.UILevelComplete);
         }
         else
         {
-            _uiGameOver.Show(gameOverReason);
+            UIGameOver uiGameOver =_uiSystem.GetUI<UIGameOver>();
+            uiGameOver.SetUI(gameOverReason);
+            
+            _uiSystem.ShowRightSideUI(AllTagNames.UIGameOver);
         }
         
         _boardSystem.HideTapPoint();

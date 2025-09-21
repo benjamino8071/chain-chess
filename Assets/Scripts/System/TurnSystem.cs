@@ -35,6 +35,9 @@ public class TurnSystem : Dependency
         _endGameSystem = creator.GetDependency<EndGameSystem>();
         _boardSystem = creator.GetDependency<BoardSystem>();
         _playerSetTilesSystem = creator.GetDependency<PlayerSetTilesSystem>();
+
+        Level level = Creator.saveDataSo.levelLastLoaded;
+        LoadLevelRuntime(level);
     }
     
     public void SwitchTurn(PieceColour nextTurn)
@@ -90,6 +93,9 @@ public class TurnSystem : Dependency
         Creator.statsMoves = 0;
     
         _currentLevel = level;
+        
+        Creator.saveDataSo.levelLastLoaded = level;
+        Creator.SaveToDisk();
         
         SwitchTurn(PieceColour.White);
     }

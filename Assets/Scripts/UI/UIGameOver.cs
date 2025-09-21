@@ -47,8 +47,8 @@ public class UIGameOver : UIPanel
         
         Hide();
     }
-    
-    public void Show(GameOverReason gameOverReason)
+
+    public void SetUI(GameOverReason gameOverReason)
     {
         Quote quote = Creator.gameOverSo.GetRandomQuote();
         
@@ -72,8 +72,12 @@ public class UIGameOver : UIPanel
         }
 
         _quoteText.text = '"'+quote.quote+'"'+"\n\n<b>"+quote.name+"</b>";
+    }
+    
+    public override void Show()
+    {
+        base.Show();
         
-        _panel.gameObject.SetActive(true);
         _audioSystem.PlayerGameOverSfx();
     }
 }
