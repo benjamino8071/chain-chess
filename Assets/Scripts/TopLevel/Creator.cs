@@ -29,6 +29,7 @@ public class Creator : MonoBehaviour
     public GameObject selectedBackgroundPrefab;
     public GameObject levelInfoPrefab;
     public GameObject imagePrefab;
+    public GameObject colourVariantButtonPrefab;
 
     [Header("Camera")]
     public Camera mainCam;
@@ -155,26 +156,6 @@ public class Creator : MonoBehaviour
         return objs;
     }
 
-    public List<Transform> GetChildObjectsByName(GameObject parent, AllTagNames gameObjectName)
-    {
-        List<Transform> objs = new();
-        
-        Transform[] objects = parent.GetComponentsInChildren<Transform>(true);
-
-        foreach (Transform obj in objects)
-        {
-            if (obj.TryGetComponent(out TagName objName))
-            {
-                if (objName.tagName == gameObjectName)
-                {
-                    objs.Add(obj);
-                }
-            }
-        }
-        
-        return objs;
-    }
-
     public T GetChildComponentByName<T>(GameObject parent, AllTagNames gameObjectName)
     {
         Transform[] objects = parent.GetComponentsInChildren<Transform>(true);
@@ -192,6 +173,26 @@ public class Creator : MonoBehaviour
         
         Debug.LogError("Could not find object");
         return default;
+    }
+    
+    public List<T> GetChildComponentsByName<T>(GameObject parent, AllTagNames gameObjectName)
+    {
+        Transform[] objects = parent.GetComponentsInChildren<Transform>(true);
+
+        List<T> objectsWithComponent = new(objects.Length);
+        
+        foreach (Transform obj in objects)
+        {
+            if (obj.TryGetComponent(out TagName objName))
+            {
+                if (objName.tagName == gameObjectName)
+                {
+                    objectsWithComponent.Add(obj.GetComponent<T>());
+                }
+            }
+        }
+        
+        return objectsWithComponent;
     }
     
     public Transform GetChildObjectByName(GameObject parent, AllTagNames gameObjectName)

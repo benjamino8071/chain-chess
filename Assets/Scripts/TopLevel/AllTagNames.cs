@@ -50,5 +50,8 @@ public enum AllTagNames
     ButtonRight = 128,
     Image = 129,
     Text = 130,
-    HoverOverPanel = 131
+    HoverOverPanel = 131,
+    ColourVariantsParent = 132,
+    Tiles = 133,
+    Edge = 134,
 }

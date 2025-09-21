@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Michsky.MUIP;
 using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,9 +14,12 @@ public class UISettings : UIPanel
 
     private Button _uiBottomResetButton;
     private Button _settingsButton;
+
+    private SpriteRenderer _tiles;
+    private SpriteRenderer _edge;
     
     private bool _canShow;
-
+    
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
@@ -23,6 +28,31 @@ public class UISettings : UIPanel
     public override void Create(AllTagNames uiTag)
     {
         base.Create(uiTag);
+
+        Transform tiles = Creator.GetFirstObjectWithName(AllTagNames.Tiles);
+        _tiles = tiles.GetComponent<SpriteRenderer>();
+
+        Transform edge = Creator.GetFirstObjectWithName(AllTagNames.Edge);
+        _edge = edge.GetComponent<SpriteRenderer>();
+
+        Transform buttonsParent = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.ColourVariantsParent);
+        foreach (BoardVariant boardVariant in Creator.boardSo.boardVariants)
+        {
+            GameObject buttonGo = Creator.InstantiateGameObjectWithParent(Creator.colourVariantButtonPrefab, buttonsParent);
+            
+            ButtonManager buttonManager = buttonGo.GetComponent<ButtonManager>();
+            UIGradient[] uiGradients = buttonGo.GetComponentsInChildren<UIGradient>();
+            foreach (UIGradient uiGradient in uiGradients)
+            {
+                uiGradient.EffectGradient = boardVariant.swappedColourGradient;
+                uiGradient.GradientType = UIGradient.Type.Horizontal;
+            }
+            buttonManager.onClick.AddListener(() =>
+            {
+                _tiles.sprite = boardVariant.board;
+                _edge.color = boardVariant.edgeColur;
+            });
+        }
         
         UpdateSoundSetting();
         
