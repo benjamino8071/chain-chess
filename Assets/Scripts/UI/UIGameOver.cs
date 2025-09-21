@@ -1,3 +1,4 @@
+using Michsky.MUIP;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,15 +23,23 @@ public class UIGameOver : UIPanel
     {
         base.Create(uiTag);
         
-        Transform resetButtonTf = Creator.GetChildObjectByName(_panel.gameObject, AllTagNames.ButtonReset);
-        Button resetButton = resetButtonTf.GetComponent<Button>();
-        resetButton.onClick.AddListener(() =>
+        ButtonManager tryAgainButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonReset);
+        tryAgainButton.onClick.AddListener(() =>
         {
             _audioSystem.PlayUIClickSfx();
             
             Hide();
             
             _turnSystem.ReloadCurrentLevel();
+        });
+        
+        ButtonManager levelSelect = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
+        levelSelect.onClick.AddListener(() =>
+        {
+            UILevels uiLevels = _uiSystem.GetUI<UILevels>();
+            uiLevels.SetLevels(_turnSystem.currentLevel.section);
+            
+            _uiSystem.ShowRightSideUI(AllTagNames.UILevels);
         });
 
         _reasonText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.ReasonText);

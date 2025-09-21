@@ -51,6 +51,9 @@ public class UILevelComplete : UIPanel
         ButtonManager levelSelect = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
         levelSelect.onClick.AddListener(() =>
         {
+            UILevels uiLevels = _uiSystem.GetUI<UILevels>();
+            uiLevels.SetLevels(_turnSystem.currentLevel.section);
+            
             _uiSystem.ShowRightSideUI(AllTagNames.UILevels);
         });
         
