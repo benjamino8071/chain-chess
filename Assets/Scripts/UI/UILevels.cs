@@ -20,6 +20,8 @@ public class UILevels : UIPanel
         public Image starThreeImage;
         public Level level;
     }
+    
+    private Dictionary<Vector2Int, Image> _previewPieceImages = new(64);
 
     private ButtonManager _playButton;
     
@@ -28,11 +30,15 @@ public class UILevels : UIPanel
     
     private GameObject _levelScrollWheel;
 
+    private Transform _levelPreviewParent;
+    
     private Transform _pivot;
     
     private Level _levelToLoad;
     
     private float _mousePosYLastFrame;
+    
+    private int _upperBoundScroll;
     
     public override void GameStart(Creator creator)
     {
@@ -57,6 +63,33 @@ public class UILevels : UIPanel
         _playButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonPlay);
         _playButton.onClick.AddListener(LoadLevel);
         
+        _levelPreviewParent = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.LevelPreviewParent);
+        RectTransform levelPreviewBoard = Creator.GetChildComponentByName<RectTransform>(_levelPreviewParent.gameObject, AllTagNames.LevelPreviewBoard);
+
+        float halfWidth = levelPreviewBoard.rect.width / 2;
+        float halfHeight = levelPreviewBoard.rect.height / 2;
+        float singleTileWidth = levelPreviewBoard.rect.width / 8;
+        float singleTileHeight = levelPreviewBoard.rect.height / 8;
+        
+        for (int x = 1; x < 9; x++)
+        {
+            float xValue = -halfWidth + (singleTileWidth / 2) + (singleTileWidth * (x - 1));
+            
+            for (int y = 1; y < 9; y++)
+            {
+                float yValue = -halfHeight + (singleTileHeight / 2) + (singleTileHeight * (y - 1));
+                
+                GameObject previewPieceGo = Creator.InstantiateGameObjectWithParent(Creator.imagePrefab, _levelPreviewParent);
+                RectTransform previewPiece = previewPieceGo.GetComponent<RectTransform>();
+                previewPiece.sizeDelta = new(singleTileWidth, singleTileHeight);
+                previewPiece.localPosition = new(xValue, yValue);
+                previewPiece.localScale = new float3(0.75f);
+                Image previewPieceImage = previewPieceGo.GetComponent<Image>();
+                
+                _previewPieceImages.Add(new(x, y), previewPieceImage);
+            }
+        }
+        
         LevelButtons buttons = _panel.GetComponent<LevelButtons>();
         foreach (LevelButton levelButton in buttons.buttons)
         {
@@ -71,14 +104,21 @@ public class UILevels : UIPanel
             levelInfo.levelButton.onClick.AddListener(() =>
             {
                 _levelToLoad = levelInfo.level;
+                
+                LoadLevelPreview(_levelToLoad);
                 _levelText.text = $"Level {_levelToLoad.section} - {_levelToLoad.level}";
                 _levelText.gameObject.SetActive(true);
                 _playButton.gameObject.SetActive(true);
             });
             
             levelInfo.starOneImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starOneImage.color = Creator.levelCompleteSo.starHollowColor;
+
             levelInfo.starTwoImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starTwoImage.color = Creator.levelCompleteSo.starHollowColor;
+
             levelInfo.starThreeImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starThreeImage.color = Creator.levelCompleteSo.starHollowColor;
             
             _levelInfos.Add(levelInfo);
         }
@@ -141,18 +181,81 @@ public class UILevels : UIPanel
         
         SectionData sectionData = Creator.levelsSo.GetSection(section);
         
-        for (int i = 0; i < sectionData.levels.Count; i++)
+        _upperBoundScroll = 0;
+
+        for (int i = 0; i < _levelInfos.Count; i++)
         {
+            LevelInfo levelInfo = _levelInfos[i];
+
+            levelInfo.starOneImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starOneImage.color = Creator.levelCompleteSo.starHollowColor;
+            
+            levelInfo.starTwoImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starTwoImage.color = Creator.levelCompleteSo.starHollowColor;
+            
+            levelInfo.starThreeImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starThreeImage.color = Creator.levelCompleteSo.starHollowColor;
+            
             if (i > sectionData.levels.Count - 1)
             {
+                levelInfo.levelButton.transform.parent.gameObject.SetActive(false);
                 _levelInfos[i].levelButton.transform.parent.gameObject.SetActive(false);
             }
             else
             {
+                Level level = sectionData.levels[i];
+                
+                levelInfo.level = level;
+                levelInfo.levelButton.transform.parent.gameObject.SetActive(true);
+
+                foreach (LevelSaveData levelSaveData in Creator.saveDataSo.levels)
+                {
+                    if (levelSaveData.section != level.section || levelSaveData.level != level.level)
+                    {
+                        continue;
+                    }
+                    
+                    bool oneStar = levelSaveData.score <= level.star1Score;
+                    bool twoStar = levelSaveData.score <= level.star2Score;
+                    bool threeStar = levelSaveData.score <= level.star3Score;
+                    
+                    levelInfo.starOneImage.sprite = oneStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+                    levelInfo.starOneImage.color = oneStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+        
+                    levelInfo.starTwoImage.sprite = twoStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+                    levelInfo.starTwoImage.color = twoStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+
+                    levelInfo.starThreeImage.sprite = threeStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+                    levelInfo.starThreeImage.color = threeStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+                    
+                    break;
+                }
+
+                _upperBoundScroll += (int)Creator.inputSo.scrollPositionChange;
                 _levelInfos[i].level = sectionData.levels[i];
                 _levelInfos[i].levelButton.transform.parent.gameObject.SetActive(true);
             }
         }
+    }
+
+    private void LoadLevelPreview(Level level)
+    {
+        foreach (Image image in _previewPieceImages.Values)
+        {
+            image.gameObject.SetActive(false);
+            image.sprite = null;
+        }
+        
+        foreach (StartingPieceSpawnData startingPieceSpawnData in level.positions)
+        {
+            Vector2Int position = new((int)startingPieceSpawnData.position.x, (int)startingPieceSpawnData.position.y);
+            _previewPieceImages[position].sprite = GetSprite(startingPieceSpawnData.piece);
+            _previewPieceImages[position].material = GetMaterial(startingPieceSpawnData.ability);
+            //_previewPieceImages[position].color = GetColour(startingPieceSpawnData.ability, startingPieceSpawnData.colour);
+            _previewPieceImages[position].gameObject.SetActive(true);
+        }
+        
+        _levelPreviewParent.gameObject.SetActive(true);
     }
 
     private void LoadLevel()
@@ -161,5 +264,102 @@ public class UILevels : UIPanel
         
         _uiSystem.HideLeftSideUI();
         _uiSystem.ShowRightSideUI(AllTagNames.UIChain);
+    }
+    
+    private Sprite GetSprite(Piece piece)
+    {
+        switch (piece)
+        {
+            case Piece.Pawn:
+                return Creator.piecesSo.pawn;
+            case Piece.Rook:
+                return Creator.piecesSo.rook;
+            case Piece.Knight:
+                return Creator.piecesSo.knight;
+            case Piece.Bishop:
+                return Creator.piecesSo.bishop;
+            case Piece.Queen:
+                return Creator.piecesSo.queen;
+            case Piece.King:
+                return Creator.piecesSo.king;
+        }
+
+        return null;
+    }
+
+    private Material GetMaterial(PieceAbility ability)
+    {
+        switch (ability)
+        {
+            case PieceAbility.None:
+            {
+                return Creator.piecesSo.noneMat;
+            }
+            case PieceAbility.Resetter:
+            {
+                return Creator.piecesSo.resetterMat;
+            }
+            case PieceAbility.MustMove:
+            {
+                return Creator.piecesSo.mustMoveMat;
+            }
+            case PieceAbility.Multiplier:
+            {
+                return Creator.piecesSo.multiplierMat;
+
+            }
+            case PieceAbility.CaptureLover:
+            {
+                return Creator.piecesSo.captureLoverMat;
+            }
+            case PieceAbility.StopTurn:
+            {
+                return Creator.piecesSo.stopTurnMat;
+            }
+            case PieceAbility.AlwaysMove:
+            {
+                return Creator.piecesSo.alwaysMoveMat;
+            }
+        }
+
+        return null;
+    }
+
+    private Color GetColour(PieceAbility ability, PieceColour pieceColour)
+    {
+        switch (ability)
+        {
+            case PieceAbility.None:
+            {
+                return pieceColour == PieceColour.White ? Creator.piecesSo.whiteColor : Creator.piecesSo.blackColor;
+            }
+            case PieceAbility.Resetter:
+            {
+                return Creator.piecesSo.resetterColor;
+            }
+            case PieceAbility.MustMove:
+            {
+                return Creator.piecesSo.mustMoveColor;
+            }
+            case PieceAbility.Multiplier:
+            {
+                return Creator.piecesSo.multiplierColor;
+
+            }
+            case PieceAbility.CaptureLover:
+            {
+                return Creator.piecesSo.captureLoverColor;
+            }
+            case PieceAbility.StopTurn:
+            {
+                return Creator.piecesSo.stopTurnColor;
+            }
+            case PieceAbility.AlwaysMove:
+            {
+                return Creator.piecesSo.alwaysMoveColor;
+            }
+        }
+
+        return default;
     }
 }

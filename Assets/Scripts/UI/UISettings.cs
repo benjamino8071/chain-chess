@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Michsky.MUIP;
 using MoreMountains.Tools;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UISettings : UIPanel
@@ -39,11 +40,17 @@ public class UISettings : UIPanel
             Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonAudio);
         audioButton.onClick.AddListener(() =>
         {
-            Creator.settingsSo.sound = !Creator.settingsSo.sound;
+            Creator.saveDataSo.audio = !Creator.saveDataSo.audio;
             
-            UpdateSoundSetting();
+            UpdateSoundSetting(Creator.saveDataSo.audio);
             
-            audioButton.SetIcon(Creator.settingsSo.sound ? Creator.miscUiSo.audioOnSprite : Creator.miscUiSo.audioOffSprite);
+            audioButton.SetIcon(Creator.saveDataSo.audio ? Creator.miscUiSo.audioOnSprite : Creator.miscUiSo.audioOffSprite);
+        });
+        
+        ButtonManager deleteButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonDelete);
+        deleteButton.onClick.AddListener(() =>
+        {
+            Creator.DeleteOnDisk();
         });
 
         Transform buttonsParent = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.ColourVariantsParent);
@@ -65,13 +72,13 @@ public class UISettings : UIPanel
             });
         }
         
-        UpdateSoundSetting();
+        UpdateSoundSetting(Creator.saveDataSo.audio);
         
         Hide();
     }
     
-    private void UpdateSoundSetting()
+    private void UpdateSoundSetting(bool audioOn)
     {
-        MMSoundManager.Instance.SetVolumeMaster(Creator.settingsSo.sound ? 1 : 0);
+        MMSoundManager.Instance.SetVolumeMaster(audioOn ? 1 : 0);
     }
 }

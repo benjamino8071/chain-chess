@@ -93,6 +93,11 @@ public class UISystem : Dependency
             panel.UIPanel.GameStart(creator);
             panel.UIPanel.Create(panel.TagName);
         }
+        
+        if (Creator.saveDataSo.isFirstTime)
+        {
+            ShowLeftSideUI(AllTagNames.UIRulebook);
+        }
     }
 
     public override void GameUpdate(float dt)

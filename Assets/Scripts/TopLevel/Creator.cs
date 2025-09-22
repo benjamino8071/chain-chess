@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Michsky.MUIP;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class Creator : MonoBehaviour
 {
-    [Header("SOs")]
+    [Title("SOs")]
     public SaveData_SO saveDataSo;
     public Input_SO inputSo;
     public Chain_SO chainSo;
@@ -22,7 +25,7 @@ public class Creator : MonoBehaviour
     public MiscUI_SO miscUiSo;
     public Rulebook_SO rulebookSo;
 
-    [Header("Prefabs")]
+    [Title("Prefabs")]
     public GameObject piecePrefab;
     public GameObject validPositionPrefab;
     public GameObject playerSetTilePrefab;
@@ -31,10 +34,10 @@ public class Creator : MonoBehaviour
     public GameObject imagePrefab;
     public GameObject colourVariantButtonPrefab;
 
-    [Header("Camera")]
+    [Title("Camera")]
     public Camera mainCam;
     
-    [Header("Frame Rate")]
+    [Title("Frame Rate")]
     public int frameRate = 120;
 
     [HideInInspector] public int statsTurns;
@@ -42,8 +45,12 @@ public class Creator : MonoBehaviour
     
     private List<Dependency> _dependencies = new();
     
+    private const string _saveDataKey = "saveDataSo";
+    
     private void Awake()
     {
+        LoadFromDisk();
+        
         Application.targetFrameRate = frameRate;
         
         CreateDependencies();
@@ -91,6 +98,54 @@ public class Creator : MonoBehaviour
         _dependencies.Add(new BlackSystem());
         _dependencies.Add(new EndGameSystem());
         _dependencies.Add(new TurnSystem());
+    }
+
+    public void SaveToDisk()
+    {
+        ES3.Save(_saveDataKey, saveDataSo);
+        
+        Debug.Log("LATEST SAVE DATA SAVED TO DISK");
+    }
+
+    private void LoadFromDisk()
+    {
+        if (ES3.KeyExists(_saveDataKey))
+        {
+            SaveData_SO diskSaveDataSo = ES3.Load(_saveDataKey, saveDataSo);
+            saveDataSo.levels = diskSaveDataSo.levels.ToList();
+            saveDataSo.audio = diskSaveDataSo.audio;
+            saveDataSo.boardVariant = diskSaveDataSo.boardVariant;
+            saveDataSo.levelLastLoaded = diskSaveDataSo.levelLastLoaded;
+            saveDataSo.isFirstTime = false;
+            
+            Debug.Log("LATEST SAVE DATA LOADED FROM DISK");
+        }
+        else
+        {
+            saveDataSo.levels = new();
+            saveDataSo.audio = true;
+            saveDataSo.boardVariant = boardSo.boardVariants[0];
+            saveDataSo.levelLastLoaded = levelsSo.GetLevel(1, 1);
+            saveDataSo.isFirstTime = true;
+            
+            Debug.Log("SAVE DATA INITIALISED");
+        }
+    }
+
+    public void DeleteOnDisk()
+    {
+        ES3.DeleteKey(_saveDataKey);
+        
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        
+        Debug.Log("SAVE DATA DELETED");
+    }
+    
+    [Button]
+    public void DeleteOnDiskExposed()
+    {
+        ES3.DeleteKey(_saveDataKey);
+        Debug.Log("SAVE DATA DELETED");
     }
     
     public GameObject InstantiateGameObject(GameObject creatorGridPrefab, Vector3 position, Quaternion rotation)

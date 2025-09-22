@@ -80,6 +80,11 @@ public class UIChain : UIPanel
     
     public override void GameUpdate(float dt)
     {
+        if (!_panel.gameObject.activeSelf)
+        {
+            return;
+        }
+        
         bool overPanel = false;
         
         List<RaycastResult> objectsUnderMouse = _uiSystem.objectsUnderMouse;

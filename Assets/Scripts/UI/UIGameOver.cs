@@ -48,10 +48,8 @@ public class UIGameOver : UIPanel
         Hide();
     }
     
-    public void Show(GameOverReason gameOverReason)
-    {
-        Quote quote = Creator.gameOverSo.GetRandomQuote();
-        
+    public void SetUI(GameOverReason gameOverReason)
+    {        
         switch (gameOverReason)
         {
             case GameOverReason.Captured:
@@ -70,7 +68,8 @@ public class UIGameOver : UIPanel
                 break;
             }
         }
-
+        
+        Quote quote = Creator.gameOverSo.GetRandomQuote();
         _quoteText.text = '"'+quote.quote+'"'+"\n\n<b>"+quote.name+"</b>";
         
         _panel.gameObject.SetActive(true);
