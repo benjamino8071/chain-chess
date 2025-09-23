@@ -7,9 +7,6 @@ public class TurnSystem : Dependency
     private WhiteSystem _whiteSystem;
     private BlackSystem _blackSystem;
     private UISystem _uiSystem;
-    private UIChain _uiChain;
-    private UISettings _uiSettings;
-    private UICurrentLevelMenu _uiCurrentLevelMenu;
     private ValidMovesSystem _validMovesSystem;
     private EndGameSystem _endGameSystem;
     private BoardSystem _boardSystem;
@@ -28,9 +25,6 @@ public class TurnSystem : Dependency
         _whiteSystem = creator.GetDependency<WhiteSystem>();
         _blackSystem = creator.GetDependency<BlackSystem>();
         _uiSystem = creator.GetDependency<UISystem>();
-        _uiChain = _uiSystem.GetUI<UIChain>();
-        _uiSettings = _uiSystem.GetUI<UISettings>();
-        _uiCurrentLevelMenu = _uiSystem.GetUI<UICurrentLevelMenu>();
         _validMovesSystem = creator.GetDependency<ValidMovesSystem>();
         _endGameSystem = creator.GetDependency<EndGameSystem>();
         _boardSystem = creator.GetDependency<BoardSystem>();
@@ -52,8 +46,9 @@ public class TurnSystem : Dependency
                 
                 _whiteSystem.playerController.SetState(PieceState.FindingMove);
                 _blackSystem.SetStateForAllPieces(PieceState.WaitingForTurn);
-                
-                _uiChain.ShowChain(_whiteSystem.playerController, false);
+
+                UIChain uiChain = _uiSystem.GetUI<UIChain>();
+                uiChain.ShowChain(_whiteSystem.playerController, false);
                 break;
             case PieceColour.Black:
                 _validMovesSystem.HideAllValidMoves();
@@ -79,13 +74,20 @@ public class TurnSystem : Dependency
         _validMovesSystem.HideAllValidMoves();
         _playerSetTilesSystem.HideAll();
         
-        _uiCurrentLevelMenu.SetLevelsButtonText(level);
+        UICurrentLevelMenu uiCurrentLevelMenu = _uiSystem.GetUI<UICurrentLevelMenu>();
+        uiCurrentLevelMenu.SetLevelsButtonText(level);
         
         _whiteSystem.SpawnPieces(level);
+        _whiteSystem.SetLost(false);
+        
         _blackSystem.SpawnPieces(level);
-        _uiChain.ShowChain(_whiteSystem.playerController, true);
-        _boardSystem.ShowTapPoint(_whiteSystem.playerController.piecePos);
+        _blackSystem.SetLost(false);
+        
+        UIChain uiChain = _uiSystem.GetUI<UIChain>();
+        uiChain.ShowChain(_whiteSystem.playerController, true);
         _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfCurrentPiece());
+
+        _boardSystem.ShowTapPoint(_whiteSystem.playerController.piecePos);
         
         _endGameSystem.ResetEndGame();
 
@@ -96,6 +98,8 @@ public class TurnSystem : Dependency
         
         Creator.saveDataSo.levelLastLoaded = level;
         Creator.SaveToDisk();
+        
+        _uiSystem.ShowRightSideUI(AllTagNames.UIChain);
         
         SwitchTurn(PieceColour.White);
     }

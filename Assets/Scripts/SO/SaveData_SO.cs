@@ -14,7 +14,6 @@ public class SaveData_SO : ScriptableObject
     public BoardVariant boardVariant;
 
     public bool audio;
-    public List<LevelSaveData> levelsSaveData;
 }
 
 [Serializable]
@@ -24,4 +23,5 @@ public struct LevelSaveData
     public int level;
     
     public int score;
+    public int starsScored;
 }

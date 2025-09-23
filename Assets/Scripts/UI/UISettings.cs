@@ -73,8 +73,6 @@ public class UISettings : UIPanel
         }
         
         UpdateSoundSetting(Creator.saveDataSo.audio);
-        
-        Hide();
     }
     
     private void UpdateSoundSetting(bool audioOn)

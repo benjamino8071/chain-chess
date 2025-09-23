@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
+  totalStars: 240
   sections:
   - section: 1
     starsRequiredToUnlock: 0
@@ -349,7 +350,7 @@ MonoBehaviour:
         ability: 0
         position: {x: 5, y: 5}
   - section: 2
-    starsRequiredToUnlock: 27
+    starsRequiredToUnlock: 21
     levels:
     - section: 2
       level: 1

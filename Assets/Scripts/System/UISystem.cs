@@ -98,6 +98,10 @@ public class UISystem : Dependency
         {
             ShowLeftSideUI(AllTagNames.UIRulebook);
         }
+        else
+        {
+            HideLeftSideUI();
+        }
     }
 
     public override void GameUpdate(float dt)

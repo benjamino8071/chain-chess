@@ -13,6 +13,8 @@ public class BlackSystem : Dependency
     private List<AIController> _pieceControllers = new ();
     private List<AIController> _piecesToMoveThisTurn = new();
     
+    private bool _lost;
+    
     private int _endTurnFrameCount;
     
     public override void GameStart(Creator creator)
@@ -306,13 +308,25 @@ public class BlackSystem : Dependency
         
         pieceController.Destroy();
     }
-
+    
     public void Lose(GameOverReason gameOverReason, float delayTimer)
     {
+        if (_lost)
+        {
+            return;
+        }
+        
         _whiteSystem.playerController.SetState(PieceState.EndGame);
         SetStateForAllPieces(PieceState.Blocked);
         _endGameSystem.SetEndGame(PieceColour.White, gameOverReason, delayTimer);
         _validMovesSystem.HideAllValidMoves();
+        
+        SetLost(true);
+    }
+    
+    public void SetLost(bool lost)
+    {
+        _lost = lost;
     }
 
     public void PieceFinished(AIController pieceController)

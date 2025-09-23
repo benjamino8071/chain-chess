@@ -85,6 +85,7 @@ public class UILevels : UIPanel
                 previewPiece.localPosition = new(xValue, yValue);
                 previewPiece.localScale = new float3(0.75f);
                 Image previewPieceImage = previewPieceGo.GetComponent<Image>();
+                previewPieceGo.SetActive(false);
                 
                 _previewPieceImages.Add(new(x, y), previewPieceImage);
             }
@@ -122,8 +123,6 @@ public class UILevels : UIPanel
             
             _levelInfos.Add(levelInfo);
         }
-        
-        Hide();
         
         _mousePosYLastFrame = Input.mousePosition.y;
     }
@@ -171,6 +170,7 @@ public class UILevels : UIPanel
     {
         _playButton.gameObject.SetActive(false);
         _levelText.gameObject.SetActive(false);
+        ResetLevelPreview();
         
         base.Show();
     }
@@ -240,22 +240,30 @@ public class UILevels : UIPanel
 
     private void LoadLevelPreview(Level level)
     {
-        foreach (Image image in _previewPieceImages.Values)
-        {
-            image.gameObject.SetActive(false);
-            image.sprite = null;
-        }
+        ResetLevelPreview();
         
         foreach (StartingPieceSpawnData startingPieceSpawnData in level.positions)
         {
             Vector2Int position = new((int)startingPieceSpawnData.position.x, (int)startingPieceSpawnData.position.y);
             _previewPieceImages[position].sprite = GetSprite(startingPieceSpawnData.piece);
             _previewPieceImages[position].material = GetMaterial(startingPieceSpawnData.ability);
-            //_previewPieceImages[position].color = GetColour(startingPieceSpawnData.ability, startingPieceSpawnData.colour);
+            if (startingPieceSpawnData.ability == PieceAbility.None)
+            {
+                _previewPieceImages[position].color = startingPieceSpawnData.colour == PieceColour.White ? Creator.piecesSo.whiteColor : Creator.piecesSo.blackColor;
+            }
             _previewPieceImages[position].gameObject.SetActive(true);
         }
         
         _levelPreviewParent.gameObject.SetActive(true);
+    }
+
+    private void ResetLevelPreview()
+    {
+        foreach (Image image in _previewPieceImages.Values)
+        {
+            image.gameObject.SetActive(false);
+            image.sprite = null;
+        }
     }
 
     private void LoadLevel()

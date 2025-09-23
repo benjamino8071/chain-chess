@@ -14,5 +14,4 @@ public class Section
 {
     public int section;
     public ButtonManager button;
-    public TextMeshProUGUI starsAmountText;
 }

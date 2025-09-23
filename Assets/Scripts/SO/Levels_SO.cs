@@ -7,6 +7,8 @@ using UnityEngine;
 [CreateAssetMenu]
 public class Levels_SO : ScriptableObject
 {
+    public int totalStars;
+    
     public List<SectionData> sections;
     
     public SectionData GetSection(int section)
@@ -56,6 +58,21 @@ public class Levels_SO : ScriptableObject
         return default;
     }
 
+    [Button]
+    public void CalculateTotalStars()
+    {
+        int starCount = 0;
+        foreach (SectionData section in sections)
+        {
+            foreach (Level level in section.levels)
+            {
+                starCount += 3;
+            }
+        }
+        
+        totalStars = starCount;
+    }
+    
     [Button]
     public void SetSectionAndLevelNumbers()
     {

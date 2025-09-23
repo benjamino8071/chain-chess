@@ -58,5 +58,7 @@ public enum AllTagNames
     ButtonDelete = 136,
     LevelPreviewParent = 137,
     LevelPreviewBoard = 138,
-    Parent = 139
+    Parent = 139,
+    ProgressBar = 140,
+    TextStars = 141
 }

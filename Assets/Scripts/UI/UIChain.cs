@@ -113,7 +113,7 @@ public class UIChain : UIPanel
         {
             float positionChange = scrollWheelValue.y * Creator.inputSo.scrollPositionChange;
             float3 chainParentLocalPos = _pivot.localPosition;
-            chainParentLocalPos.y += positionChange;
+            chainParentLocalPos.y -= positionChange;
             _pivot.localPosition = chainParentLocalPos;
             
             _mouseOffTimer = 1;

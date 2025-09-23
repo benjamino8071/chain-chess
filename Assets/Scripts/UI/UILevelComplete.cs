@@ -42,8 +42,6 @@ public class UILevelComplete : UIPanel
         {
             _audioSystem.PlayUIClickSfx();
             
-            Hide();
-
             Level nextLevel = Creator.levelsSo.GetLevel(_turnSystem.currentLevel.section, _turnSystem.currentLevel.level + 1);
             _turnSystem.LoadLevelRuntime(nextLevel);
         });
@@ -55,9 +53,8 @@ public class UILevelComplete : UIPanel
             uiLevels.SetLevels(_turnSystem.currentLevel.section);
             
             _uiSystem.ShowRightSideUI(AllTagNames.UILevels);
+            _uiSystem.ShowLeftSideUI(AllTagNames.UISections);
         });
-        
-        Hide();
     }
 
     public override void Show()
@@ -68,6 +65,8 @@ public class UILevelComplete : UIPanel
         int score = Creator.statsTurns * Creator.statsMoves;
         
         SaveLatestLevelScore(levelCompleted, score);
+        UISections uiSections = _uiSystem.GetUI<UISections>();
+        uiSections.UpdateStarCount();
         
         Debug.Log($"Score for level {levelCompleted.level}: {score}");
         
@@ -93,6 +92,11 @@ public class UILevelComplete : UIPanel
     private void SaveLatestLevelScore(Level level, int score)
     {
         bool found = false;
+        int starsScored = 0;
+        starsScored += score <= level.star1Score ? 1 : 0;
+        starsScored += score <= level.star2Score ? 1 : 0;
+        starsScored += score <= level.star3Score ? 1 : 0;
+        
         for (int i = 0; i < Creator.saveDataSo.levels.Count; i++)
         {
             LevelSaveData levelSaveData = Creator.saveDataSo.levels[i];
@@ -104,10 +108,13 @@ public class UILevelComplete : UIPanel
 
             if (score < levelSaveData.score)
             {
+                levelSaveData.starsScored = starsScored;
                 levelSaveData.score = score;
+
                 Creator.saveDataSo.levels[i] = levelSaveData;
-                found = true;
             }
+            
+            found = true;
             break;
         }
 
@@ -117,7 +124,8 @@ public class UILevelComplete : UIPanel
             {
                 section = level.section,
                 level = level.level,
-                score = score
+                score = score,
+                starsScored = starsScored,
             });
         }
         

@@ -28,8 +28,6 @@ public class UIGameOver : UIPanel
         {
             _audioSystem.PlayUIClickSfx();
             
-            Hide();
-            
             _turnSystem.ReloadCurrentLevel();
         });
         
@@ -40,12 +38,11 @@ public class UIGameOver : UIPanel
             uiLevels.SetLevels(_turnSystem.currentLevel.section);
             
             _uiSystem.ShowRightSideUI(AllTagNames.UILevels);
+            _uiSystem.ShowLeftSideUI(AllTagNames.UISections);
         });
 
         _reasonText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.ReasonText);
         _quoteText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.QuoteText);
-        
-        Hide();
     }
     
     public void SetUI(GameOverReason gameOverReason)

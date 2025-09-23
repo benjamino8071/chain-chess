@@ -35,10 +35,16 @@ public class UICurrentLevelMenu : UIPanel
             if (_uiSystem.leftSidePanelOpen == AllTagNames.UISections)
             {
                 _uiSystem.HideLeftSideUI();
+                _uiSystem.ShowRightSideUI(AllTagNames.UIChain);
             }
             else
             {
                 _uiSystem.ShowLeftSideUI(AllTagNames.UISections);
+
+                UILevels uiLevels = _uiSystem.GetUI<UILevels>();
+                uiLevels.SetLevels(_turnSystem.currentLevel.section);
+                
+                _uiSystem.ShowRightSideUI(AllTagNames.UILevels);
             }
         });
     }

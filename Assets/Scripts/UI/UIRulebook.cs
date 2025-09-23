@@ -74,8 +74,6 @@ public class UIRulebook : UIPanel
         });
 
         SetCurrentPage(0);
-        
-        Hide();
     }
 
     private void SetCurrentPage(int index)

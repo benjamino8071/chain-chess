@@ -14,6 +14,8 @@ public class WhiteSystem : Dependency
     
     private PlayerController _playerController;
     
+    private bool _lost;
+    
     private bool _frozen;
     
     public override void GameStart(Creator creator)
@@ -89,6 +91,11 @@ public class WhiteSystem : Dependency
 
     public void Lose(GameOverReason gameOverReason, float delayTimer)
     {
+        if (_lost)
+        {
+            return;
+        }
+        
         _blackSystem.SetStateForAllPieces(PieceState.EndGame);
         _playerController.SetState(PieceState.EndGame);
         _playerController.Destroy();
@@ -96,5 +103,12 @@ public class WhiteSystem : Dependency
         
         _endGameSystem.SetEndGame(PieceColour.Black, gameOverReason, delayTimer);
         _validMovesSystem.HideAllValidMoves();
+        
+        SetLost(true);
+    }
+    
+    public void SetLost(bool lost)
+    {
+        _lost = lost;
     }
 }
