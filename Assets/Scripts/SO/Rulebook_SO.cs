@@ -6,6 +6,9 @@ using UnityEngine;
 public class Rulebook_SO : ScriptableObject
 {
     public List<Page> pages;
+
+    public Color highlightedColour;
+    public Color notHighlightedColour;
 }
 
 [Serializable]

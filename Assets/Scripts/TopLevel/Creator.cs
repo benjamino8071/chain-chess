@@ -32,6 +32,7 @@ public class Creator : MonoBehaviour
     public GameObject selectedBackgroundPrefab;
     public GameObject levelInfoPrefab;
     public GameObject imagePrefab;
+    public GameObject rulebookHighlightImagePrefab;
     public GameObject colourVariantButtonPrefab;
 
     [Title("Camera")]

@@ -57,5 +57,6 @@ public enum AllTagNames
     ButtonAudio = 135,
     ButtonDelete = 136,
     LevelPreviewParent = 137,
-    LevelPreviewBoard = 138
+    LevelPreviewBoard = 138,
+    Parent = 139
 }

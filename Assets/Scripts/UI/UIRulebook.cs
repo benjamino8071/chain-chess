@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Michsky.MUIP;
 using TMPro;
 using UnityEngine;
@@ -9,6 +10,13 @@ public class UIRulebook : UIPanel
     private TextMeshProUGUI _text;
 
     private int _currentIndex;
+
+    private class HighlightImage
+    {
+        public int index;
+        public Image image;
+    }
+    private List<HighlightImage> _highlightImages;
     
     public override void Create(AllTagNames uiTag)
     {
@@ -16,6 +24,32 @@ public class UIRulebook : UIPanel
 
         _image = Creator.GetChildComponentByName<Image>(_panel.gameObject, AllTagNames.Image);
         _text = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.Text);
+
+        Transform highlightImagesParent =
+            Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.Parent);
+        
+        _highlightImages = new(Creator.rulebookSo.pages.Count);
+        for (int i = 0; i < Creator.rulebookSo.pages.Count; i++)
+        {
+            GameObject highlightImageGo = Creator.InstantiateGameObjectWithParent(Creator.rulebookHighlightImagePrefab, highlightImagesParent);
+            
+            Image highlightImage = highlightImageGo.GetComponent<Image>();
+            highlightImage.color = Creator.rulebookSo.notHighlightedColour;
+            
+            Button highlightButton = highlightImageGo.GetComponent<Button>();
+
+            int index = i;
+            highlightButton.onClick.AddListener(() =>
+            {
+                SetCurrentPage(index);
+            });
+            
+            _highlightImages.Add(new()
+            {
+                index = index,
+                image = highlightImage,
+            });
+        }
         
         ButtonManager leftButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLeft);
         leftButton.onClick.AddListener(() =>
@@ -44,11 +78,6 @@ public class UIRulebook : UIPanel
         Hide();
     }
 
-    public override void Show()
-    {
-        base.Show();
-    }
-
     private void SetCurrentPage(int index)
     {
         Page page = Creator.rulebookSo.pages[index];
@@ -57,5 +86,10 @@ public class UIRulebook : UIPanel
         _image.material = page.material;
         
         _text.text = page.description;
+
+        foreach (HighlightImage highlightImage in _highlightImages)
+        {
+            highlightImage.image.color = highlightImage.index == index ? Creator.rulebookSo.highlightedColour : Creator.rulebookSo.notHighlightedColour;
+        }
     }
 }
