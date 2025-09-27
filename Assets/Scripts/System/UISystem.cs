@@ -83,11 +83,17 @@ public class UISystem : Dependency
     private AllTagNames _rightSidePanelOpen;
 
     private List<RaycastResult> _objectsUnderMouse;
+
+    private GameObject _leftBackground;
+    private GameObject _rightBackground;
     
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
 
+        _leftBackground = creator.GetFirstObjectWithName(AllTagNames.LeftBackground).gameObject;
+        _rightBackground = creator.GetFirstObjectWithName(AllTagNames.RightBackground).gameObject;
+        
         foreach (Panel panel in _uiPanels)
         {
             panel.UIPanel.GameStart(creator);
@@ -134,6 +140,7 @@ public class UISystem : Dependency
         }
         
         _leftSidePanelOpen = uiTag;
+        _leftBackground.SetActive(true);
     }
     
     public void HideLeftSideUI()
@@ -149,6 +156,7 @@ public class UISystem : Dependency
         }
         
         _leftSidePanelOpen = AllTagNames.None;
+        _leftBackground.SetActive(false);
     }
     
     public void ShowRightSideUI(AllTagNames uiTag)
@@ -171,6 +179,7 @@ public class UISystem : Dependency
         }
 
         _rightSidePanelOpen = uiTag;
+        _rightBackground.SetActive(true);
     }
     
     public void HideRightSideUI()
@@ -186,6 +195,7 @@ public class UISystem : Dependency
         }
         
         _rightSidePanelOpen = AllTagNames.None;
+        _rightBackground.SetActive(false);
     }
 
     public T GetUI<T>() where T : UIPanel

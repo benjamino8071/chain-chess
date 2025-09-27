@@ -5,7 +5,7 @@ public enum AllTagNames
     LevelComplete = 37,
     Retry = 38,
     Exit = 40,
-    MovesRemaining = 57,
+    MovesRemainingText = 57,
     TitleText = 72,
     QuoteText = 73,
     AuthorText = 74,
@@ -60,5 +60,10 @@ public enum AllTagNames
     LevelPreviewBoard = 138,
     Parent = 139,
     ProgressBar = 140,
-    TextStars = 141
+    TextStars = 141,
+    ButtonColourVariants = 142,
+    ButtonFinalLevel = 143,
+    LeftBackground = 144,
+    RightBackground = 145,
+    LevelButtonRefs = 146,
 }

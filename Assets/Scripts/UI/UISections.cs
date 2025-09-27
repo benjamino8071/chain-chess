@@ -14,6 +14,8 @@ public class UISections : UIPanel
         public ButtonManager button;
     }
 
+    private ButtonManager _finalLevelButton;
+    
     private List<SectionButton> _sectionButtons;
     
     private TMP_Text _starsScoredText;
@@ -27,6 +29,9 @@ public class UISections : UIPanel
         
         _starsScoredProgressBar =
             Creator.GetChildComponentByName<MMProgressBar>(_panel.gameObject, AllTagNames.ProgressBar);
+
+        _finalLevelButton =
+            Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonFinalLevel);
         
         SectionButtons sectionButtonsDirect = _panel.GetComponent<SectionButtons>();
         _sectionButtons = new(sectionButtonsDirect.buttons.Count);
@@ -69,7 +74,7 @@ public class UISections : UIPanel
 
     public void UpdateStarCount()
     {
-        float starCount = 0;
+        int starCount = 0;
         foreach (LevelSaveData levelSaveData in Creator.saveDataSo.levels)
         {
             starCount += levelSaveData.starsScored;
@@ -95,11 +100,13 @@ public class UISections : UIPanel
                 sectionButton.button.SetText($"{sectionButton.starsRequiredToUnlock}");
             }
         }
+
+        int totalStarsNoFl = Creator.levelsSo.totalStars - 3;
+        _finalLevelButton.gameObject.SetActive(starCount >= totalStarsNoFl);
         
         //Take away 3 because we don't want to include the very last level
-        float t = starCount / (Creator.levelsSo.totalStars - 3);
+        float t = starCount / (float)totalStarsNoFl;
         _starsScoredProgressBar.SetBar01(t);
-        
-        _starsScoredText.text = $"{(int)starCount}";
+        _starsScoredText.text = $"{starCount}";
     }
 }

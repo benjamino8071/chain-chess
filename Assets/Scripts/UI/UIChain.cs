@@ -55,10 +55,17 @@ public class UIChain : UIPanel
             //Every odd image will be the arrow, which we want to be a smaller than the piece images
             if (i % 2 != 0)
             {
-                chainPieceImageGo.transform.localScale = new(0.7f, 0.7f);
+                RectTransform rectTransform = chainPieceImageGo.GetComponent<RectTransform>();
+                rectTransform.sizeDelta = new(37.5f,37.5f);
+                //chainPieceImageGo.transform.localScale = new(0.7f, 0.7f);
+            }
+            else
+            {
+                RectTransform rectTransform = chainPieceImageGo.GetComponent<RectTransform>();
+                rectTransform.sizeDelta = new(75,75);
             }
             
-            chainPieceImageGo.transform.localPosition = new(0, yPos, 0);
+            //chainPieceImageGo.transform.localPosition = new(0, yPos, 0);
             yPos -= image.rectTransform.sizeDelta.y;
             
             _chainPieceImages.Add(new()
@@ -70,7 +77,7 @@ public class UIChain : UIPanel
             chainPieceImageGo.SetActive(false);
         }
 
-        _movesRemainingText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.MovesRemaining);
+        _movesRemainingText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.MovesRemainingText);
         
         _chainParentInitialPos = _pivot.localPosition;
         _chainParentNewPos = _pivot.localPosition;
@@ -162,7 +169,7 @@ public class UIChain : UIPanel
         {
             _chainPieceImages[_nextFreeIndex].image.sprite = Creator.chainSo.arrowPointingToNextPiece;
             _chainPieceImages[_nextFreeIndex].image.color = Creator.piecesSo.whiteColor;
-            _chainPieceImages[_nextFreeIndex].image.rectTransform.sizeDelta = new(50, 50);
+            //_chainPieceImages[_nextFreeIndex].image.rectTransform.sizeDelta = new(50, 50);
             _chainPieceImages[_nextFreeIndex].image.gameObject.SetActive(true);
             _chainPieceImages[_nextFreeIndex].piece = Piece.NotChosen;
 
@@ -175,7 +182,7 @@ public class UIChain : UIPanel
         
         _chainPieceImages[_nextFreeIndex].image.sprite = GetSprite(piece);
         _chainPieceImages[_nextFreeIndex].image.color = Creator.piecesSo.whiteColor;
-        _chainPieceImages[_nextFreeIndex].image.rectTransform.sizeDelta = new(100, 100);
+        //_chainPieceImages[_nextFreeIndex].image.rectTransform.sizeDelta = new(100, 100);
         _chainPieceImages[_nextFreeIndex].image.gameObject.SetActive(true);
         _chainPieceImages[_nextFreeIndex].piece  = piece;
 
@@ -215,7 +222,7 @@ public class UIChain : UIPanel
 
     public void HighlightNextPiece(PlayerController pieceController)
     {
-        _chainParentNewPos.y = 150 * pieceController.movesUsed;
+        _chainParentNewPos.y = (75 + 37.5f) * pieceController.movesUsed;
         
         UpdateAlphaValue(0.1f, pieceController.movesUsed * 2);
     }

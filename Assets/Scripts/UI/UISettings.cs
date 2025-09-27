@@ -53,7 +53,33 @@ public class UISettings : UIPanel
             Creator.DeleteOnDisk();
         });
 
-        Transform buttonsParent = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.ColourVariantsParent);
+        List<ButtonManager> colourVariants =
+            Creator.GetChildComponentsByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonColourVariants);
+        if (colourVariants.Count != Creator.boardSo.boardVariants.Count)
+        {
+            Debug.LogError("Colour Variants button count must equal board variant count.");
+            return;
+        }
+
+        for (int i = 0; i < colourVariants.Count; i++)
+        {
+            ButtonManager button = colourVariants[i];
+            BoardVariant boardVariant = Creator.boardSo.boardVariants[i];
+            
+            UIGradient[] uiGradients = button.GetComponentsInChildren<UIGradient>();
+            foreach (UIGradient uiGradient in uiGradients)
+            {
+                uiGradient.EffectGradient = boardVariant.swappedColourGradient;
+                uiGradient.GradientType = UIGradient.Type.Horizontal;
+            }
+            button.onClick.AddListener(() =>
+            {
+                _tiles.sprite = boardVariant.board;
+                _edge.color = boardVariant.edgeColur;
+            });
+        }
+        
+        /*Transform buttonsParent = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.ColourVariantsParent);
         foreach (BoardVariant boardVariant in Creator.boardSo.boardVariants)
         {
             GameObject buttonGo = Creator.InstantiateGameObjectWithParent(Creator.colourVariantButtonPrefab, buttonsParent);
@@ -70,7 +96,7 @@ public class UISettings : UIPanel
                 _tiles.sprite = boardVariant.board;
                 _edge.color = boardVariant.edgeColur;
             });
-        }
+        }*/
         
         UpdateSoundSetting(Creator.saveDataSo.audio);
     }

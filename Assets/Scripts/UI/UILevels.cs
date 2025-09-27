@@ -32,7 +32,7 @@ public class UILevels : UIPanel
 
     private Transform _levelPreviewParent;
     
-    private Transform _pivot;
+    private RectTransform _pivot;
     
     private Level _levelToLoad;
     
@@ -53,7 +53,7 @@ public class UILevels : UIPanel
         base.Create(uiTag);
         
         _levelScrollWheel = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.HoverOverPanel).gameObject;
-        _pivot = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.Pivot);
+        _pivot = Creator.GetChildComponentByName<RectTransform>(_panel.gameObject, AllTagNames.Pivot);
         
         _levelInfos = new(10);
         
@@ -90,17 +90,20 @@ public class UILevels : UIPanel
                 _previewPieceImages.Add(new(x, y), previewPieceImage);
             }
         }
-        
-        LevelButtons buttons = _panel.GetComponent<LevelButtons>();
-        foreach (LevelButton levelButton in buttons.buttons)
+
+        int levelNumber = 1;
+        List<LevelButtonRefs> levelButtonRefs = Creator.GetChildComponentsByName<LevelButtonRefs>(_panel.gameObject, AllTagNames.LevelButtonRefs);
+        foreach (LevelButtonRefs levelButtonRef in levelButtonRefs)
         {
             LevelInfo levelInfo = new()
             {
-                levelButton = levelButton.button,
-                starOneImage = levelButton.starOneImage,
-                starTwoImage = levelButton.starTwoImage,
-                starThreeImage = levelButton.starThreeImage
+                levelButton = levelButtonRef.button,
+                starOneImage = levelButtonRef.star1Image,
+                starTwoImage = levelButtonRef.star2Image,
+                starThreeImage = levelButtonRef.star3Image,
             };
+            levelInfo.levelButton.SetText($"{levelNumber}");
+            levelNumber++;
             
             levelInfo.levelButton.onClick.AddListener(() =>
             {
@@ -147,20 +150,20 @@ public class UILevels : UIPanel
         if (overScrollWheel && Creator.inputSo.leftMouseButton.action.IsPressed())
         {
             float mousePosYChange = mousePos.y - _mousePosYLastFrame;
-            float3 chainParentLocalPos = _pivot.localPosition;
+            float2 chainParentLocalPos = _pivot.anchoredPosition;
             chainParentLocalPos.y += mousePosYChange;
             
-            chainParentLocalPos.y = math.clamp(chainParentLocalPos.y, 0, 420);
+            chainParentLocalPos.y = math.clamp(chainParentLocalPos.y, 0, _upperBoundScroll);
             
-            _pivot.localPosition = chainParentLocalPos;
+            _pivot.anchoredPosition = chainParentLocalPos;
         }
         else if (overScrollWheel && scrollWheelValue.y != 0)
         {
             float positionChange = -scrollWheelValue.y * Creator.inputSo.scrollPositionChange;
-            float3 chainParentLocalPos = _pivot.localPosition;
+            float2 chainParentLocalPos = _pivot.anchoredPosition;
             chainParentLocalPos.y += positionChange;
-            chainParentLocalPos.y = math.clamp(chainParentLocalPos.y, 0, 420);
-            _pivot.localPosition = chainParentLocalPos;
+            chainParentLocalPos.y = math.clamp(chainParentLocalPos.y, 0, _upperBoundScroll);
+            _pivot.anchoredPosition = chainParentLocalPos;
         }
         
         _mousePosYLastFrame = mousePos.y;
@@ -231,7 +234,7 @@ public class UILevels : UIPanel
                     break;
                 }
 
-                _upperBoundScroll += (int)Creator.inputSo.scrollPositionChange;
+                _upperBoundScroll += (int)Creator.inputSo.scrollPositionChange / 2;
                 _levelInfos[i].level = sectionData.levels[i];
                 _levelInfos[i].levelButton.transform.parent.gameObject.SetActive(true);
             }
