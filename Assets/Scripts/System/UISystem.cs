@@ -79,20 +79,27 @@ public class UISystem : Dependency
     public AllTagNames leftSidePanelOpen => _leftSidePanelOpen;
     public AllTagNames rightSidePanelOpen => _rightSidePanelOpen;
     
+    public GameObject leftBackground => _leftBackground;
+    public GameObject rightBackground => _rightBackground;
+    
     private AllTagNames _leftSidePanelOpen;
     private AllTagNames _rightSidePanelOpen;
 
     private List<RaycastResult> _objectsUnderMouse;
-
+    
     private GameObject _leftBackground;
+    private ScaleTween _leftBackgroundTween;
     private GameObject _rightBackground;
+    private ScaleTween _rightBackgroundTween;
     
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
 
         _leftBackground = creator.GetFirstObjectWithName(AllTagNames.LeftBackground).gameObject;
+        _leftBackgroundTween = _leftBackground.GetComponent<ScaleTween>();
         _rightBackground = creator.GetFirstObjectWithName(AllTagNames.RightBackground).gameObject;
+        _rightBackgroundTween = _rightBackground.GetComponent<ScaleTween>();
         
         foreach (Panel panel in _uiPanels)
         {
@@ -106,7 +113,7 @@ public class UISystem : Dependency
         }
         else
         {
-            HideLeftSideUI();
+            HideLeftSideUINoTween();
         }
     }
 
@@ -131,6 +138,7 @@ public class UISystem : Dependency
             
             if (panel.TagName == uiTag)
             {
+                _leftBackgroundTween.PhaseIn();
                 panel.UIPanel.Show();
             }
             else
@@ -144,6 +152,23 @@ public class UISystem : Dependency
     }
     
     public void HideLeftSideUI()
+    {
+        _leftBackgroundTween.PhaseOut();
+        
+        // foreach (Panel panel in _uiPanels)
+        // {
+        //     if (!_leftSideTags.Contains(panel.TagName))
+        //     {
+        //         continue;
+        //     }
+        //     
+        //     panel.UIPanel.Hide();
+        // }
+        
+        _leftSidePanelOpen = AllTagNames.None;
+    }
+
+    private void HideLeftSideUINoTween()
     {
         foreach (Panel panel in _uiPanels)
         {
@@ -170,6 +195,7 @@ public class UISystem : Dependency
             
             if (panel.TagName == uiTag)
             {
+                _rightBackgroundTween.PhaseIn();
                 panel.UIPanel.Show();
             }
             else

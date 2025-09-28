@@ -100,7 +100,7 @@ public class UISections : UIPanel
                 sectionButton.button.SetText($"{sectionButton.starsRequiredToUnlock}");
             }
         }
-
+        
         int totalStarsNoFl = Creator.levelsSo.totalStars - 3;
         _finalLevelButton.gameObject.SetActive(starCount >= totalStarsNoFl);
         

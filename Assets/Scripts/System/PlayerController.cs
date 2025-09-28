@@ -133,6 +133,8 @@ public class PlayerController : Dependency
             AIController enemyPieceController = _blackSystem.GetPieceAtPosition(_model.position);
             if (enemyPieceController is not null)
             {
+                _boardSystem.FlickerEdge();
+                
                 switch (enemyPieceController.pieceAbility)
                 {
                     case PieceAbility.Resetter:
@@ -183,10 +185,12 @@ public class PlayerController : Dependency
                 
                 won = _blackSystem.PieceCaptured(enemyPieceController);
 
-                _pitchAmount += 0.02f;
-
-                // float pitchAmount = 1 + 0.02f * _piecesCapturedInThisTurn;
-                _audioSystem.PlayPieceCapturedSfx(_pitchAmount);
+                if (!won)
+                {
+                    //On win we play the 'win' sfx
+                    _pitchAmount += 0.02f;
+                    _audioSystem.PlayPieceCapturedSfx(_pitchAmount);   
+                }
             }
             else
             {

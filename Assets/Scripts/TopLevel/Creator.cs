@@ -70,8 +70,17 @@ public class Creator : MonoBehaviour
         }
     }
 
+    [HideInInspector] private bool _allUnlocked;
+    
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.S) && !_allUnlocked)
+        {
+            UnlockAll();
+            _allUnlocked = true;
+            Debug.Log("ALL STARS UNLOCKED!");
+        }
+        
         foreach (Dependency dependency in _dependencies)
         {
             dependency.GameEarlyUpdate(Time.deltaTime);
@@ -85,6 +94,24 @@ public class Creator : MonoBehaviour
         foreach (Dependency dependency in _dependencies)
         {
             dependency.GameLateUpdate(Time.deltaTime);
+        }
+    }
+
+    private void UnlockAll()
+    {
+        saveDataSo.levels.Clear();
+        foreach (SectionData sectionData in levelsSo.sections)
+        {
+            foreach (Level level in sectionData.levels)
+            {
+                saveDataSo.levels.Add(new()
+                {
+                    level = level.level,
+                    score = 0,
+                    section = level.section,
+                    starsScored = 3
+                });
+            }
         }
     }
 

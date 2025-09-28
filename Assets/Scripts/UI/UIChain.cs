@@ -97,7 +97,7 @@ public class UIChain : UIPanel
         List<RaycastResult> objectsUnderMouse = _uiSystem.objectsUnderMouse;
         foreach (RaycastResult objectUnderMouse in objectsUnderMouse)
         {
-            if (objectUnderMouse.gameObject == _panel.gameObject)
+            if (objectUnderMouse.gameObject == _uiSystem.rightBackground)
             {
                 overPanel = true;
                 break;
@@ -113,7 +113,6 @@ public class UIChain : UIPanel
             float3 chainParentLocalPos = _pivot.localPosition;
             chainParentLocalPos.y += mousePosYChange;
             _pivot.localPosition = chainParentLocalPos;
-            
             _mouseOffTimer = 1;
         }
         else if (overPanel && scrollWheelValue.y != 0)
@@ -169,7 +168,6 @@ public class UIChain : UIPanel
         {
             _chainPieceImages[_nextFreeIndex].image.sprite = Creator.chainSo.arrowPointingToNextPiece;
             _chainPieceImages[_nextFreeIndex].image.color = Creator.piecesSo.whiteColor;
-            //_chainPieceImages[_nextFreeIndex].image.rectTransform.sizeDelta = new(50, 50);
             _chainPieceImages[_nextFreeIndex].image.gameObject.SetActive(true);
             _chainPieceImages[_nextFreeIndex].piece = Piece.NotChosen;
 
@@ -182,7 +180,6 @@ public class UIChain : UIPanel
         
         _chainPieceImages[_nextFreeIndex].image.sprite = GetSprite(piece);
         _chainPieceImages[_nextFreeIndex].image.color = Creator.piecesSo.whiteColor;
-        //_chainPieceImages[_nextFreeIndex].image.rectTransform.sizeDelta = new(100, 100);
         _chainPieceImages[_nextFreeIndex].image.gameObject.SetActive(true);
         _chainPieceImages[_nextFreeIndex].piece  = piece;
 

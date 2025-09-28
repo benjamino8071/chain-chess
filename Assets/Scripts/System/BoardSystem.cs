@@ -14,6 +14,8 @@ public class BoardSystem : Dependency
     
     private Transform _tapPoint;
     
+    private ColourFlicker _edgeColourFlicker;
+    
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
@@ -23,6 +25,9 @@ public class BoardSystem : Dependency
         _turnSystem = creator.GetDependency<TurnSystem>();
         _uiSystem = creator.GetDependency<UISystem>();
         _endGameSystem = creator.GetDependency<EndGameSystem>();
+        
+        Transform edge = Creator.GetFirstObjectWithName(AllTagNames.Edge);
+        _edgeColourFlicker = edge.GetComponent<ColourFlicker>();
 
         int validTilesCapacity = 64;
         _validTiles = new(validTilesCapacity);
@@ -51,6 +56,16 @@ public class BoardSystem : Dependency
             return;
         }
 
+        if (_uiSystem.leftSidePanelOpen == AllTagNames.UISections)
+        {
+            _uiSystem.HideLeftSideUI();
+        }
+
+        if (_uiSystem.rightSidePanelOpen == AllTagNames.UILevels)
+        {
+            _uiSystem.ShowRightSideUI(AllTagNames.UIChain);
+        }
+        
         Creator.boardSo.hideMainMenuTrigger = true;
         
         bool samePoint = math.distance(gridPoint, _tapPoint.position) < 0.001f;
@@ -100,5 +115,10 @@ public class BoardSystem : Dependency
         float y = (int)screenToWorldPoint.y;
 
         return new(x, y, 0);
+    }
+    
+    public void FlickerEdge()
+    {
+        _edgeColourFlicker.ChangeColour();
     }
 }
