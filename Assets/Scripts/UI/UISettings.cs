@@ -46,6 +46,15 @@ public class UISettings : UIPanel
             
             audioButton.SetIcon(Creator.saveDataSo.audio ? Creator.miscUiSo.audioOnSprite : Creator.miscUiSo.audioOffSprite);
         });
+
+        ButtonManager fullscreenButton =
+            Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonFullscreen);
+        fullscreenButton.onClick.AddListener(() =>
+        {
+            Creator.saveDataSo.isFullscreen = !Creator.saveDataSo.isFullscreen;
+
+            Screen.fullScreen = Creator.saveDataSo.isFullscreen;
+        });
         
         ButtonManager deleteButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonDelete);
         deleteButton.onClick.AddListener(() =>

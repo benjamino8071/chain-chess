@@ -29,11 +29,11 @@ MonoBehaviour:
   stopTurnColor: {r: 0.60784316, g: 0.74509805, b: 0.8, a: 1}
   alwaysMoveColor: {r: 0.2924528, g: 0.15479228, b: 0.09242612, a: 1}
   noneMat: {fileID: 2100000, guid: cc460e5b1c6c0bd498b44195a0c3da99, type: 2}
-  resetterMat: {fileID: 2100000, guid: b42d490520beb6846bc23a1aab35ad35, type: 2}
+  resetterMat: {fileID: 2100000, guid: 2fc5c6c79c1ad5b47bada41338c43793, type: 2}
   mustMoveMat: {fileID: 2100000, guid: e76cfe5e58629f449af696ed6f57501e, type: 2}
   multiplierMat: {fileID: 2100000, guid: a348d79dc36725941b281d5550586c07, type: 2}
   captureLoverMat: {fileID: 2100000, guid: 1e155935f67404c4b87a00eebdc7a534, type: 2}
-  stopTurnMat: {fileID: 2100000, guid: 2fc5c6c79c1ad5b47bada41338c43793, type: 2}
+  stopTurnMat: {fileID: 2100000, guid: b42d490520beb6846bc23a1aab35ad35, type: 2}
   alwaysMoveMat: {fileID: 2100000, guid: 27ef043654ed6284cb47eea4e8ecc6f5, type: 2}
   aiThinkingTime: 0.6
   alwaysMoveThinkingTime: 0

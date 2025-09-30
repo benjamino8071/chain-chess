@@ -3,6 +3,7 @@ using Michsky.MUIP;
 using MoreMountains.Tools;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UISections : UIPanel
 {
@@ -12,6 +13,7 @@ public class UISections : UIPanel
         public int starsRequiredToUnlock;
         public bool unlocked;
         public ButtonManager button;
+        public List<Image> buttonBackgroundImages;
     }
 
     private ButtonManager _finalLevelButton;
@@ -40,6 +42,7 @@ public class UISections : UIPanel
             SectionButton sectionButton = new()
             {
                 button = section.button,
+                buttonBackgroundImages = Creator.GetChildComponentsByName<Image>(section.button.gameObject, AllTagNames.BackgroundImage),
                 section = section.section,
                 starsRequiredToUnlock = Creator.levelsSo.GetSectionStarsRequirement(section.section),
                 unlocked = false,
@@ -82,7 +85,38 @@ public class UISections : UIPanel
         
         foreach (SectionButton sectionButton in _sectionButtons)
         {
-            if (starCount >= sectionButton.starsRequiredToUnlock)
+            int starCountInSection = 0;
+            foreach (LevelSaveData levelSaveData in Creator.saveDataSo.levels)
+            {
+                if (levelSaveData.section != sectionButton.section)
+                {
+                    continue;
+                }
+                
+                starCountInSection += levelSaveData.starsScored;
+            }
+
+            SectionData section = Creator.levelsSo.GetSection(sectionButton.section);
+            int totalStarsInSection = 3 * section.levels.Count;
+
+            if (starCountInSection == totalStarsInSection)
+            {
+                sectionButton.button.enableIcon = true;
+                sectionButton.button.enableText = true;
+                
+                sectionButton.button.normalText.color = Color.white;
+                sectionButton.button.SetIcon(Creator.miscUiSo.tickSprite);
+                foreach (Image image in sectionButton.buttonBackgroundImages)
+                {
+                    image.color = Creator.miscUiSo.sectionCompleteColour;
+                }
+                sectionButton.button.normalImage.color = Creator.miscUiSo.sectionCompleteColour;
+                sectionButton.button.highlightImage.color = Color.black;
+                sectionButton.button.SetText($"{sectionButton.section}");
+                
+                sectionButton.unlocked = true;
+            }
+            else if (starCount >= sectionButton.starsRequiredToUnlock)
             {
                 sectionButton.button.enableIcon = false;
                 sectionButton.button.enableText = true;

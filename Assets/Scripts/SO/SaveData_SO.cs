@@ -14,6 +14,8 @@ public class SaveData_SO : ScriptableObject
     public BoardVariant boardVariant;
 
     public bool audio;
+
+    public bool isFullscreen;
 }
 
 [Serializable]

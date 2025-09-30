@@ -66,4 +66,11 @@ public enum AllTagNames
     LeftBackground = 144,
     RightBackground = 145,
     LevelButtonRefs = 146,
+    StatsScore = 147,
+    Star1ScoreRequired = 148,
+    Star2ScoreRequired = 149,
+    Star3ScoreRequired = 150,
+    BackgroundImage = 151,
+    ImageTick = 152,
+    ButtonFullscreen = 153,
 }

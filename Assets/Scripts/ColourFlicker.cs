@@ -24,10 +24,10 @@ public class ColourFlicker : MonoBehaviour
         mmfPlayer.PlayFeedbacks();
         
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        StartCoroutine(PrintHelloWorld());
+        StartCoroutine(FlickerColour());
     }
     
-    private IEnumerator PrintHelloWorld()
+    private IEnumerator FlickerColour()
     {
         Color originalColor = _spriteRenderer.color;
         
@@ -64,5 +64,9 @@ public class ColourFlicker : MonoBehaviour
             
             elapsedTime += Time.deltaTime; 
         }
+        
+        _spriteRenderer.color = originalColor;
+        
+        Debug.Log("COLOUR FLICKERED");
     }
 }

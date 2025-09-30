@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UISystem : Dependency
 {
@@ -79,26 +80,26 @@ public class UISystem : Dependency
     public AllTagNames leftSidePanelOpen => _leftSidePanelOpen;
     public AllTagNames rightSidePanelOpen => _rightSidePanelOpen;
     
-    public GameObject leftBackground => _leftBackground;
-    public GameObject rightBackground => _rightBackground;
+    public Image leftBackground => _leftBackground;
+    public Image rightBackground => _rightBackground;
     
     private AllTagNames _leftSidePanelOpen;
     private AllTagNames _rightSidePanelOpen;
 
     private List<RaycastResult> _objectsUnderMouse;
     
-    private GameObject _leftBackground;
+    private Image _leftBackground;
     private ScaleTween _leftBackgroundTween;
-    private GameObject _rightBackground;
+    private Image _rightBackground;
     private ScaleTween _rightBackgroundTween;
     
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
 
-        _leftBackground = creator.GetFirstObjectWithName(AllTagNames.LeftBackground).gameObject;
+        _leftBackground = creator.GetFirstObjectWithName(AllTagNames.LeftBackground).GetComponent<Image>();
         _leftBackgroundTween = _leftBackground.GetComponent<ScaleTween>();
-        _rightBackground = creator.GetFirstObjectWithName(AllTagNames.RightBackground).gameObject;
+        _rightBackground = creator.GetFirstObjectWithName(AllTagNames.RightBackground).GetComponent<Image>();
         _rightBackgroundTween = _rightBackground.GetComponent<ScaleTween>();
         
         foreach (Panel panel in _uiPanels)
@@ -139,6 +140,7 @@ public class UISystem : Dependency
             if (panel.TagName == uiTag)
             {
                 _leftBackgroundTween.PhaseIn();
+                
                 panel.UIPanel.Show();
             }
             else
@@ -148,22 +150,12 @@ public class UISystem : Dependency
         }
         
         _leftSidePanelOpen = uiTag;
-        _leftBackground.SetActive(true);
+        _leftBackground.gameObject.SetActive(true);
     }
     
     public void HideLeftSideUI()
     {
         _leftBackgroundTween.PhaseOut();
-        
-        // foreach (Panel panel in _uiPanels)
-        // {
-        //     if (!_leftSideTags.Contains(panel.TagName))
-        //     {
-        //         continue;
-        //     }
-        //     
-        //     panel.UIPanel.Hide();
-        // }
         
         _leftSidePanelOpen = AllTagNames.None;
     }
@@ -181,7 +173,7 @@ public class UISystem : Dependency
         }
         
         _leftSidePanelOpen = AllTagNames.None;
-        _leftBackground.SetActive(false);
+        _leftBackground.gameObject.SetActive(false);
     }
     
     public void ShowRightSideUI(AllTagNames uiTag)
@@ -196,6 +188,9 @@ public class UISystem : Dependency
             if (panel.TagName == uiTag)
             {
                 _rightBackgroundTween.PhaseIn();
+                
+                SetBackgroundColour(_rightBackground, uiTag);
+                
                 panel.UIPanel.Show();
             }
             else
@@ -205,7 +200,7 @@ public class UISystem : Dependency
         }
 
         _rightSidePanelOpen = uiTag;
-        _rightBackground.SetActive(true);
+        _rightBackground.gameObject.SetActive(true);
     }
     
     public void HideRightSideUI()
@@ -221,7 +216,7 @@ public class UISystem : Dependency
         }
         
         _rightSidePanelOpen = AllTagNames.None;
-        _rightBackground.SetActive(false);
+        _rightBackground.gameObject.SetActive(false);
     }
 
     public T GetUI<T>() where T : UIPanel
@@ -246,5 +241,27 @@ public class UISystem : Dependency
         List<RaycastResult> raysastResults = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, raysastResults);
         return raysastResults;
+    }
+    
+    private void SetBackgroundColour(Image background, AllTagNames uiTag)
+    {
+        switch (uiTag)
+        {
+            case AllTagNames.UILevelComplete:
+            {
+                background.color = Creator.miscUiSo.levelCompleteBackgroundColour;
+                break;
+            }
+            case AllTagNames.UIGameOver:
+            {
+                background.color = Creator.miscUiSo.gameOverBackgroundColour;
+                break;
+            }
+            default:
+            {
+                background.color = Creator.miscUiSo.normalBackgroundColour;
+                break;
+            }
+        }
     }
 }

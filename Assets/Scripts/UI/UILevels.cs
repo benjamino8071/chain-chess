@@ -31,6 +31,8 @@ public class UILevels : UIPanel
     private GameObject _levelScrollWheel;
 
     private Transform _levelPreviewParent;
+
+    private Image _tickImage;
     
     private RectTransform _pivot;
     
@@ -54,6 +56,7 @@ public class UILevels : UIPanel
         
         _levelScrollWheel = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.HoverOverPanel).gameObject;
         _pivot = Creator.GetChildComponentByName<RectTransform>(_panel.gameObject, AllTagNames.Pivot);
+        _tickImage = Creator.GetChildComponentByName<Image>(_panel.gameObject, AllTagNames.ImageTick);
         
         _levelInfos = new(10);
         
@@ -182,7 +185,21 @@ public class UILevels : UIPanel
     {
         _sectionText.text = $"Section {section}";
         
+        int starCountInSection = 0;
+        foreach (LevelSaveData levelSaveData in Creator.saveDataSo.levels)
+        {
+            if (levelSaveData.section != section)
+            {
+                continue;
+            }
+                
+            starCountInSection += levelSaveData.starsScored;
+        }
+
         SectionData sectionData = Creator.levelsSo.GetSection(section);
+        int totalStarsInSection = 3 * sectionData.levels.Count;
+        
+        _tickImage.gameObject.SetActive(starCountInSection == totalStarsInSection);
         
         _upperBoundScroll = 0;
 
@@ -250,6 +267,7 @@ public class UILevels : UIPanel
             Vector2Int position = new((int)startingPieceSpawnData.position.x, (int)startingPieceSpawnData.position.y);
             _previewPieceImages[position].sprite = GetSprite(startingPieceSpawnData.piece);
             _previewPieceImages[position].material = GetMaterial(startingPieceSpawnData.ability);
+            Debug.Log($"MATERIAL AT {position} FOR ABILITY {startingPieceSpawnData.ability}: "+_previewPieceImages[position].material);
             if (startingPieceSpawnData.ability == PieceAbility.None)
             {
                 _previewPieceImages[position].color = startingPieceSpawnData.colour == PieceColour.White ? Creator.piecesSo.whiteColor : Creator.piecesSo.blackColor;
