@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Michsky.MUIP;
 using MoreMountains.Tools;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -52,8 +53,8 @@ public class UISettings : UIPanel
         fullscreenButton.onClick.AddListener(() =>
         {
             Creator.saveDataSo.isFullscreen = !Creator.saveDataSo.isFullscreen;
-
-            Screen.fullScreen = Creator.saveDataSo.isFullscreen;
+            
+            UpdateFullscreen(Creator.saveDataSo.isFullscreen);
         });
         
         ButtonManager deleteButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonDelete);
@@ -88,26 +89,41 @@ public class UISettings : UIPanel
             });
         }
         
-        /*Transform buttonsParent = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.ColourVariantsParent);
-        foreach (BoardVariant boardVariant in Creator.boardSo.boardVariants)
-        {
-            GameObject buttonGo = Creator.InstantiateGameObjectWithParent(Creator.colourVariantButtonPrefab, buttonsParent);
-            
-            ButtonManager buttonManager = buttonGo.GetComponent<ButtonManager>();
-            UIGradient[] uiGradients = buttonGo.GetComponentsInChildren<UIGradient>();
-            foreach (UIGradient uiGradient in uiGradients)
-            {
-                uiGradient.EffectGradient = boardVariant.swappedColourGradient;
-                uiGradient.GradientType = UIGradient.Type.Horizontal;
-            }
-            buttonManager.onClick.AddListener(() =>
-            {
-                _tiles.sprite = boardVariant.board;
-                _edge.color = boardVariant.edgeColur;
-            });
-        }*/
+        UpdateFullscreen(Creator.saveDataSo.isFullscreen);
         
         UpdateSoundSetting(Creator.saveDataSo.audio);
+        
+        Creator.inputSo.exitFullscreen.action.performed += ExitFullscreen_Performed;
+    }
+
+    private void ExitFullscreen_Performed(InputAction.CallbackContext obj)
+    {
+        if (!Creator.saveDataSo.isFullscreen)
+        {
+            return;
+        }
+
+        Creator.saveDataSo.isFullscreen = false;
+        UpdateFullscreen(false);
+    }
+
+    private int _width = 640;
+    private int _height = 480;
+    
+    private void UpdateFullscreen(bool isFullscreen)
+    {
+        if (isFullscreen)
+        {
+            _width = Screen.width;
+            _height = Screen.height;
+            
+            Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.FullScreenWindow);
+        }
+        else
+        {
+            Screen.SetResolution(_width, _height, FullScreenMode.Windowed);
+        }
+        Screen.fullScreen = isFullscreen;
     }
     
     private void UpdateSoundSetting(bool audioOn)

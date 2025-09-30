@@ -7,5 +7,7 @@ public class Input_SO : ScriptableObject
     public InputActionReference leftMouseButton;
     public InputActionReference rightMouseButton;
     public InputActionReference scrollWheel;
+    public InputActionReference exitFullscreen;
+    
     public float scrollPositionChange;
 }
