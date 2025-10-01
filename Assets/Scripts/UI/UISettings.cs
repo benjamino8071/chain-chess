@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class UISettings : UIPanel
 {
-    private AudioSystem _audioSystem;
     private TurnSystem _turnSystem;
     private BoardSystem _boardSystem;
     
@@ -19,13 +18,9 @@ public class UISettings : UIPanel
 
     private SpriteRenderer _tiles;
     private SpriteRenderer _edge;
+    private SpriteRenderer _background;
     
     private bool _canShow;
-    
-    public override void GameStart(Creator creator)
-    {
-        base.GameStart(creator);
-    }
 
     public override void Create(AllTagNames uiTag)
     {
@@ -36,6 +31,8 @@ public class UISettings : UIPanel
 
         Transform edge = Creator.GetFirstObjectWithName(AllTagNames.Edge);
         _edge = edge.GetComponent<SpriteRenderer>();
+        
+        _background = Creator.GetChildComponentByName<SpriteRenderer>(Creator.mainCam.gameObject, AllTagNames.BackgroundImage);
 
         ButtonManager audioButton =
             Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonAudio);
@@ -46,20 +43,30 @@ public class UISettings : UIPanel
             UpdateSoundSetting(Creator.saveDataSo.audio);
             
             audioButton.SetIcon(Creator.saveDataSo.audio ? Creator.miscUiSo.audioOnSprite : Creator.miscUiSo.audioOffSprite);
+            
+            _audioSystem.PlayUIClickSfx();
+            
+            Creator.SaveToDisk();
         });
 
         ButtonManager fullscreenButton =
             Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonFullscreen);
         fullscreenButton.onClick.AddListener(() =>
         {
+            _audioSystem.PlayUIClickSfx();
+            
             Creator.saveDataSo.isFullscreen = !Creator.saveDataSo.isFullscreen;
             
             UpdateFullscreen(Creator.saveDataSo.isFullscreen);
+            
+            Creator.SaveToDisk();
         });
         
         ButtonManager deleteButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonDelete);
         deleteButton.onClick.AddListener(() =>
         {
+            _audioSystem.PlayUIClickSfx();
+            
             Creator.DeleteOnDisk();
         });
 
@@ -84,8 +91,13 @@ public class UISettings : UIPanel
             }
             button.onClick.AddListener(() =>
             {
-                _tiles.sprite = boardVariant.board;
-                _edge.color = boardVariant.edgeColur;
+                _audioSystem.PlayUIClickSfx();
+                
+                Creator.saveDataSo.boardVariant = boardVariant;
+                
+                UpdateBoardVariant(boardVariant);
+                
+                Creator.SaveToDisk();
             });
         }
         
@@ -93,7 +105,16 @@ public class UISettings : UIPanel
         
         UpdateSoundSetting(Creator.saveDataSo.audio);
         
+        UpdateBoardVariant(Creator.saveDataSo.boardVariant);
+        
         Creator.inputSo.exitFullscreen.action.performed += ExitFullscreen_Performed;
+    }
+
+    private void UpdateBoardVariant(BoardVariant boardVariant)
+    {
+        _tiles.sprite = boardVariant.board;
+        _edge.color = boardVariant.edgeColur;
+        _background.color = boardVariant.backgroundColour;
     }
 
     private void ExitFullscreen_Performed(InputAction.CallbackContext obj)

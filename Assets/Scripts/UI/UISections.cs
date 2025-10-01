@@ -50,6 +50,8 @@ public class UISections : UIPanel
             
             sectionButton.button.onClick.AddListener(() =>
             {
+                _audioSystem.PlayUIAltClickSfx(.95f);
+                
                 if (sectionButton.unlocked)
                 {
                     ShowSection(sectionButton.section);

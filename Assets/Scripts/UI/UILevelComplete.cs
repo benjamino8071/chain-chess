@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class UILevelComplete : UIPanel
 {
-    private AudioSystem _audioSystem;
     private TurnSystem _turnSystem;
     
     private ButtonManager _nextLevelButton;
@@ -22,18 +21,21 @@ public class UILevelComplete : UIPanel
     private TextMeshProUGUI _star1ScoreRequiredText;
     private TextMeshProUGUI _star2ScoreRequiredText;
     private TextMeshProUGUI _star3ScoreRequiredText;
+
+    private ParticleSystem _confetti;
     
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
         
-        _audioSystem = creator.GetDependency<AudioSystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
     }
 
     public override void Create(AllTagNames uiTag)
     {
         base.Create(uiTag);
+
+        _confetti = Creator.GetFirstObjectWithName(AllTagNames.Confetti).GetComponent<ParticleSystem>();
         
         _turnsText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.StatsTurns);
         _movesText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.StatsMoves);
@@ -53,7 +55,7 @@ public class UILevelComplete : UIPanel
         _nextLevelButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonNextLevel);
         _nextLevelButton.onClick.AddListener(() =>
         {
-            _audioSystem.PlayUIClickSfx();
+            _audioSystem.PlayUISignificantClickSfx();
             
             Level nextLevel = Creator.levelsSo.GetLevel(_turnSystem.currentLevel.section, _turnSystem.currentLevel.level + 1);
             _turnSystem.LoadLevelRuntime(nextLevel);
@@ -62,6 +64,8 @@ public class UILevelComplete : UIPanel
         ButtonManager levelSelect = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
         levelSelect.onClick.AddListener(() =>
         {
+            _audioSystem.PlayMenuOpenSfx();
+            
             UILevels uiLevels = _uiSystem.GetUI<UILevels>();
             uiLevels.SetLevels(_turnSystem.currentLevel.section);
             
@@ -102,9 +106,36 @@ public class UILevelComplete : UIPanel
         _starThreeImage.color = threeStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
         
         _nextLevelButton.gameObject.SetActive(!levelCompleted.isLastInSection);
+
+        int emissionRate = 0;
+        if (threeStar)
+        {
+            emissionRate = Creator.boardSo.threeStarConfettiEmissionRate;
+        }
+        else if (twoStar)
+        {
+            emissionRate = Creator.boardSo.twoStarConfettiEmissionRate;
+        }
+        else if (oneStar)
+        {
+            emissionRate = Creator.boardSo.oneStarConfettiEmissionRate;
+        }
+
+        var emission = _confetti.emission;
+        emission.rateOverTime = emissionRate;
+        
+        _confetti.Play();
         
         _panel.gameObject.SetActive(true);
-        _audioSystem.PlayLevelCompleteSfx();
+
+        if (oneStar || twoStar || threeStar)
+        {
+            _audioSystem.PlayLevelCompleteSfx();
+        }
+        else
+        {
+            _audioSystem.PlayerGameOverSfx();
+        }
     }
     
     private void SaveLatestLevelScore(Level level, int score)

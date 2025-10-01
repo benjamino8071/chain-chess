@@ -10,6 +10,10 @@ public class Board_SO : ScriptableObject
 
     public List<BoardVariant> boardVariants;
 
+    public int oneStarConfettiEmissionRate;
+    public int twoStarConfettiEmissionRate;
+    public int threeStarConfettiEmissionRate;
+    
     [Button]
     public void SetSwapColor()
     {
@@ -37,4 +41,5 @@ public struct BoardVariant
     public Gradient colourGradient;
     public Gradient swappedColourGradient;
     public Color edgeColur;
+    public Color backgroundColour;
 }

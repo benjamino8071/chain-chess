@@ -3,6 +3,7 @@ using UnityEngine;
 public class UIPanel : Dependency
 {
     protected UISystem _uiSystem;
+    protected AudioSystem _audioSystem;
     
     public bool IsShowing => _panel.gameObject.activeSelf;
     
@@ -13,6 +14,7 @@ public class UIPanel : Dependency
         base.GameStart(creator);
 
         _uiSystem = creator.GetDependency<UISystem>();
+        _audioSystem = creator.GetDependency<AudioSystem>();
     }
 
     public virtual void Create(AllTagNames uiTag)

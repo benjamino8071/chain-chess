@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class UILevels : UIPanel
 {
-    private AudioSystem _audioSystem;
     private TurnSystem _turnSystem;
     
     private List<LevelInfo> _levelInfos;
@@ -46,7 +45,6 @@ public class UILevels : UIPanel
     {
         base.GameStart(creator);
         
-        _audioSystem = creator.GetDependency<AudioSystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
     }
 
@@ -64,7 +62,12 @@ public class UILevels : UIPanel
         _levelText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.LevelText);
         
         _playButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonPlay);
-        _playButton.onClick.AddListener(LoadLevel);
+        _playButton.onClick.AddListener(() =>
+        {
+            _audioSystem.PlayUISignificantClickSfx();
+            
+            LoadLevel();
+        });
         
         _levelPreviewParent = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.LevelPreviewParent);
         RectTransform levelPreviewBoard = Creator.GetChildComponentByName<RectTransform>(_levelPreviewParent.gameObject, AllTagNames.LevelPreviewBoard);
@@ -110,6 +113,8 @@ public class UILevels : UIPanel
             
             levelInfo.levelButton.onClick.AddListener(() =>
             {
+                _audioSystem.PlayUIAltClickSfx();
+                
                 _levelToLoad = levelInfo.level;
                 
                 LoadLevelPreview(_levelToLoad);

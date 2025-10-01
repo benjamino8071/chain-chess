@@ -17,10 +17,11 @@ public class UIBasicMenu : UIPanel
         _powerButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonPower);
         _powerButton.onClick.AddListener(() =>
         {
+            _audioSystem.PlayUIClickSfx();
+            
             if (_powerButtonPressed)
             {
                 Application.Quit();
-                Debug.Log("APPLICATION QUIT");
             }
             else
             {
@@ -37,10 +38,14 @@ public class UIBasicMenu : UIPanel
             if (_uiSystem.leftSidePanelOpen == AllTagNames.UIRulebook)
             {
                 _uiSystem.HideLeftSideUI();
+                
+                _audioSystem.PlayMenuCloseSfx();
             }
             else
             {
                 _uiSystem.ShowLeftSideUI(AllTagNames.UIRulebook);
+                
+                _audioSystem.PlayMenuOpenSfx();
             }
         });
         
@@ -51,10 +56,14 @@ public class UIBasicMenu : UIPanel
             if (_uiSystem.leftSidePanelOpen == AllTagNames.UISettings)
             {
                 _uiSystem.HideLeftSideUI();
+                
+                _audioSystem.PlayMenuCloseSfx();
             }
             else
             {
                 _uiSystem.ShowLeftSideUI(AllTagNames.UISettings);
+                
+                _audioSystem.PlayMenuOpenSfx();
             }
         });
     }

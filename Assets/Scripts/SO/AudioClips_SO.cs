@@ -14,4 +14,7 @@ public class AudioClips_SO : ScriptableObject
     public AudioClip uiOpen;
     public AudioClip uiClose;
     public AudioClip uiClick;
+    public AudioClip uiAltClick;
+    public AudioClip uiSignificantClick;
+    public AudioClip uiRulebookTurnClick;
 }

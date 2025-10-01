@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c50ee34ef51e74bac161b5dcc4e260, type: 3}
   m_Name: Board_SO
   m_EditorClassIdentifier: 
-  hideMainMenuTrigger: 0
+  hideMainMenuTrigger: 1
   boardVariants:
   - board: {fileID: -3729668142088327615, guid: 1745f589de0526c4783e3526b0daa630, type: 3}
     colourGradient:
@@ -76,11 +76,12 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     edgeColur: {r: 0.5647059, g: 0.39607844, b: 0.15686275, a: 1}
+    backgroundColour: {r: 0.7176471, g: 0.49019608, b: 0.29411766, a: 1}
   - board: {fileID: -3729668142088327615, guid: 9bad5a80faf83544daecf1d680a5e8ce, type: 3}
     colourGradient:
       serializedVersion: 2
-      key0: {r: 0, g: 0, b: 0, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 0.1981132, g: 0.1981132, b: 0.1981132, a: 1}
+      key1: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -109,8 +110,8 @@ MonoBehaviour:
       m_NumAlphaKeys: 2
     swappedColourGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 0, g: 0, b: 0, a: 1}
+      key0: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
+      key1: {r: 0.2, g: 0.2, b: 0.2, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -134,10 +135,11 @@ MonoBehaviour:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    edgeColur: {r: 1, g: 1, b: 1, a: 1}
+    edgeColur: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
+    backgroundColour: {r: 0.67058825, g: 0.67058825, b: 0.67058825, a: 1}
   - board: {fileID: -3729668142088327615, guid: feec709108c57ee428b721688b9d4298, type: 3}
     colourGradient:
       serializedVersion: 2
@@ -200,6 +202,7 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     edgeColur: {r: 0.3019608, g: 0.5019608, b: 0.70980394, a: 1}
+    backgroundColour: {r: 0.54901963, g: 0.74509805, b: 0.8862745, a: 1}
   - board: {fileID: -3729668142088327615, guid: 307fc7aacd273c64383a0e82bc7543fb, type: 3}
     colourGradient:
       serializedVersion: 2
@@ -262,6 +265,7 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     edgeColur: {r: 0.5137255, g: 0.65882355, b: 0.38431373, a: 1}
+    backgroundColour: {r: 0.5137255, g: 0.65882355, b: 0.38431373, a: 1}
   - board: {fileID: -3729668142088327615, guid: 775d5f708a0424f48958e7fbefdddd34, type: 3}
     colourGradient:
       serializedVersion: 2
@@ -323,7 +327,8 @@ MonoBehaviour:
       m_ColorSpace: -1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    edgeColur: {r: 0.7490196, g: 0.54509807, b: 0.11764706, a: 1}
+    edgeColur: {r: 0.7254902, g: 0.61960787, b: 0.25882354, a: 1}
+    backgroundColour: {r: 0.7254902, g: 0.61960787, b: 0.25882354, a: 1}
   - board: {fileID: -3729668142088327615, guid: 25e4ec4d10c2ce442acee53871bab255, type: 3}
     colourGradient:
       serializedVersion: 2
@@ -386,6 +391,7 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     edgeColur: {r: 0.59607846, g: 0.49019608, b: 0.7058824, a: 1}
+    backgroundColour: {r: 0.8901961, g: 0.80784315, b: 0.9254902, a: 1}
   - board: {fileID: -3729668142088327615, guid: 46dd687de2fa30947acbde75322e9184, type: 3}
     colourGradient:
       serializedVersion: 2
@@ -448,6 +454,7 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     edgeColur: {r: 0.94509804, g: 0.47843137, b: 0.4862745, a: 1}
+    backgroundColour: {r: 0.94509804, g: 0.47843137, b: 0.4862745, a: 1}
   - board: {fileID: -3729668142088327615, guid: b056fdd207f7ea646b0b2381ce66c4f6, type: 3}
     colourGradient:
       serializedVersion: 2
@@ -510,3 +517,7 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     edgeColur: {r: 0.5372549, g: 0.6392157, b: 0.69803923, a: 1}
+    backgroundColour: {r: 0.5372549, g: 0.6392157, b: 0.69803923, a: 1}
+  oneStarConfettiEmissionRate: 30
+  twoStarConfettiEmissionRate: 50
+  threeStarConfettiEmissionRate: 500

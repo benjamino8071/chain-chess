@@ -7,9 +7,6 @@ using UnityEngine.UI;
 
 public class UIChain : UIPanel
 {
-    private BoardSystem _boardSystem;
-    private AudioSystem _audioSystem;
-
     private Transform _pivot;
 
     private TextMeshProUGUI _movesRemainingText;
@@ -30,14 +27,6 @@ public class UIChain : UIPanel
     private float _mouseOffTimer;
 
     private bool _move;
-    
-    public override void GameStart(Creator creator)
-    {
-        base.GameStart(creator);
-        
-        _boardSystem = creator.GetDependency<BoardSystem>();
-        _audioSystem = creator.GetDependency<AudioSystem>();
-    }
 
     public override void Create(AllTagNames uiTag)
     {

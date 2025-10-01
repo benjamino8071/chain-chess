@@ -3,16 +3,14 @@ using UnityEngine;
 
 public class UICurrentLevelMenu : UIPanel
 {
-    private AudioSystem _audioSystem;
     private TurnSystem _turnSystem;
 
-    private ButtonManager _levelsButton;
+    private ButtonManager _sectionsButton;
     
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
         
-        _audioSystem = creator.GetDependency<AudioSystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
     }
 
@@ -29,13 +27,15 @@ public class UICurrentLevelMenu : UIPanel
             _turnSystem.ReloadCurrentLevel();
         });
         
-        _levelsButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
-        _levelsButton.onClick.AddListener(() =>
+        _sectionsButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
+        _sectionsButton.onClick.AddListener(() =>
         {
             if (_uiSystem.leftSidePanelOpen == AllTagNames.UISections)
             {
                 _uiSystem.HideLeftSideUI();
                 _uiSystem.ShowRightSideUI(AllTagNames.UIChain);
+                
+                _audioSystem.PlayMenuCloseSfx();
             }
             else
             {
@@ -45,12 +45,14 @@ public class UICurrentLevelMenu : UIPanel
                 uiLevels.SetLevels(_turnSystem.currentLevel.section);
                 
                 _uiSystem.ShowRightSideUI(AllTagNames.UILevels);
+                
+                _audioSystem.PlayMenuOpenSfx();
             }
         });
     }
 
     public void SetLevelsButtonText(Level level)
     {
-        _levelsButton.SetText($"{level.section} - {level.level}");
+        _sectionsButton.SetText($"{level.section} - {level.level}");
     }
 }

@@ -21,5 +21,8 @@ MonoBehaviour:
   levelUp: {fileID: 8300000, guid: 58ee6d7d441010140b1c356cd79db905, type: 3}
   roomComplete: {fileID: 8300000, guid: 4a1670bc367564e4db825093be0b7f9e, type: 3}
   uiOpen: {fileID: 8300000, guid: 19536e2c533a449c7baf2c304e072426, type: 3}
-  uiClose: {fileID: 8300000, guid: 19536e2c533a449c7baf2c304e072426, type: 3}
+  uiClose: {fileID: 8300000, guid: 4ce482aef6335499aa71500406610c1f, type: 3}
   uiClick: {fileID: 8300000, guid: 5ae86940e1dc84a4ba6a475f30b48236, type: 3}
+  uiAltClick: {fileID: 8300000, guid: df9c44f0c7ba24a1abdd074bcca8b92f, type: 3}
+  uiSignificantClick: {fileID: 8300000, guid: dc951f763a5aa4d93b1d18da891fed52, type: 3}
+  uiRulebookTurnClick: {fileID: 8300000, guid: 98743322818e54812925bba08fa0c62b, type: 3}

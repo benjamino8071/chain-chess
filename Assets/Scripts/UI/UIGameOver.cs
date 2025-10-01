@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class UIGameOver : UIPanel
 {
-    private AudioSystem _audioSystem;
     private TurnSystem _turnSystem;
     
     private TextMeshProUGUI _quoteText;
@@ -15,7 +14,6 @@ public class UIGameOver : UIPanel
     {
         base.GameStart(creator);
         
-        _audioSystem = creator.GetDependency<AudioSystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
     }
 
@@ -34,6 +32,8 @@ public class UIGameOver : UIPanel
         ButtonManager levelSelect = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
         levelSelect.onClick.AddListener(() =>
         {
+            _audioSystem.PlayMenuOpenSfx();
+            
             UILevels uiLevels = _uiSystem.GetUI<UILevels>();
             uiLevels.SetLevels(_turnSystem.currentLevel.section);
             

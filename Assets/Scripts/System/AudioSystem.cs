@@ -42,12 +42,12 @@ public class AudioSystem : Dependency
         PlaySfx(Creator.audioClipsSo.gameOver);
     }
 
-    public void PlayPauseOpenSfx()
+    public void PlayMenuOpenSfx()
     {
         PlaySfx(Creator.audioClipsSo.uiOpen);
     }
 
-    public void PlayPauseCloseSfx()
+    public void PlayMenuCloseSfx()
     {
         PlaySfx(Creator.audioClipsSo.uiClose);
     }
@@ -55,6 +55,21 @@ public class AudioSystem : Dependency
     public void PlayUIClickSfx()
     {
         PlaySfx(Creator.audioClipsSo.uiClick);
+    }
+    
+    public void PlayUIAltClickSfx(float pitch = 1)
+    {
+        PlaySfx(Creator.audioClipsSo.uiAltClick, pitch);
+    }
+    
+    public void PlayUISignificantClickSfx()
+    {
+        PlaySfx(Creator.audioClipsSo.uiSignificantClick);
+    }
+
+    public void PlayUIRulebookTurnClickSfx()
+    {
+        PlaySfx(Creator.audioClipsSo.uiRulebookTurnClick);
     }
 
     private void PlayMusic(AudioClip clip, float thePitch = 1)

@@ -73,4 +73,5 @@ public enum AllTagNames
     BackgroundImage = 151,
     ImageTick = 152,
     ButtonFullscreen = 153,
+    Confetti = 154,
 }

@@ -66,7 +66,5 @@ public class ColourFlicker : MonoBehaviour
         }
         
         _spriteRenderer.color = originalColor;
-        
-        Debug.Log("COLOUR FLICKERED");
     }
 }

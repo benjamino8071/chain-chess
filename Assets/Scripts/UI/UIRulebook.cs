@@ -54,6 +54,8 @@ public class UIRulebook : UIPanel
         ButtonManager leftButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLeft);
         leftButton.onClick.AddListener(() =>
         {
+            _audioSystem.PlayUIRulebookTurnClickSfx();
+
             _currentIndex--;
             if (_currentIndex < 0)
             {
@@ -65,6 +67,8 @@ public class UIRulebook : UIPanel
         ButtonManager rightButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonRight);
         rightButton.onClick.AddListener(() =>
         {
+            _audioSystem.PlayUIRulebookTurnClickSfx();
+            
             _currentIndex++;
             if (_currentIndex >= Creator.rulebookSo.pages.Count)
             {
