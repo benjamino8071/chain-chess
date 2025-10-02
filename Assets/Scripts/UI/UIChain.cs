@@ -83,10 +83,10 @@ public class UIChain : UIPanel
         
         bool overPanel = false;
         
-        List<RaycastResult> objectsUnderMouse = _uiSystem.objectsUnderMouse;
+        List<RaycastResult> objectsUnderMouse = _parentCanvas.objectsUnderMouse;
         foreach (RaycastResult objectUnderMouse in objectsUnderMouse)
         {
-            if (objectUnderMouse.gameObject == _uiSystem.rightBackground)
+            if (objectUnderMouse.gameObject == _parentCanvas.rightTopBackground)
             {
                 overPanel = true;
                 break;

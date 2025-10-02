@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Michsky.MUIP;
 using TMPro;
 using UnityEngine;
@@ -66,11 +67,15 @@ public class UILevelComplete : UIPanel
         {
             _audioSystem.PlayMenuOpenSfx();
             
-            UILevels uiLevels = _uiSystem.GetUI<UILevels>();
-            uiLevels.SetLevels(_turnSystem.currentLevel.section);
+            List<UILevels> uiLevelss = _uiSystem.GetUI<UILevels>();
+            foreach (UILevels uiLevels in uiLevelss)
+            {
+                uiLevels.SetLevels(_turnSystem.currentLevel.section);
+            }
             
-            _uiSystem.ShowRightSideUI(AllTagNames.UILevels);
-            _uiSystem.ShowLeftSideUI(AllTagNames.UISections);
+            _uiSystem.ShowRightTopSideUI(AllTagNames.UILevels);
+            
+            _uiSystem.ShowLeftBotSideUI(AllTagNames.UISections);
         });
     }
 
@@ -87,8 +92,12 @@ public class UILevelComplete : UIPanel
         _star3ScoreRequiredText.text = $"{levelCompleted.star3Score}";
 
         SaveLatestLevelScore(levelCompleted, score);
-        UISections uiSections = _uiSystem.GetUI<UISections>();
-        uiSections.UpdateStarCount();
+        
+        List<UISections> uiSectionss = _uiSystem.GetUI<UISections>();
+        foreach (UISections uiSections in uiSectionss)
+        {
+            uiSections.UpdateStarCount();
+        }
         
         Debug.Log($"Score for level {levelCompleted.level}: {score}");
         

@@ -142,7 +142,7 @@ public class UILevels : UIPanel
     {
         bool overScrollWheel = false;
         
-        List<RaycastResult> objectsUnderMouse = _uiSystem.objectsUnderMouse;
+        List<RaycastResult> objectsUnderMouse = _parentCanvas.objectsUnderMouse;
         foreach (RaycastResult objectUnderMouse in objectsUnderMouse)
         {
             if (objectUnderMouse.gameObject == _levelScrollWheel.gameObject)
@@ -272,7 +272,6 @@ public class UILevels : UIPanel
             Vector2Int position = new((int)startingPieceSpawnData.position.x, (int)startingPieceSpawnData.position.y);
             _previewPieceImages[position].sprite = GetSprite(startingPieceSpawnData.piece);
             _previewPieceImages[position].material = GetMaterial(startingPieceSpawnData.ability);
-            Debug.Log($"MATERIAL AT {position} FOR ABILITY {startingPieceSpawnData.ability}: "+_previewPieceImages[position].material);
             if (startingPieceSpawnData.ability == PieceAbility.None)
             {
                 _previewPieceImages[position].color = startingPieceSpawnData.colour == PieceColour.White ? Creator.piecesSo.whiteColor : Creator.piecesSo.blackColor;
@@ -296,8 +295,8 @@ public class UILevels : UIPanel
     {
         _turnSystem.LoadLevelRuntime(_levelToLoad);
         
-        _uiSystem.HideLeftSideUI();
-        _uiSystem.ShowRightSideUI(AllTagNames.UIChain);
+        _uiSystem.HideLeftBotSideUI();
+        _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);
     }
     
     private Sprite GetSprite(Piece piece)

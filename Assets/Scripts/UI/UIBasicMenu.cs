@@ -35,15 +35,15 @@ public class UIBasicMenu : UIPanel
             Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonRulebook);
         rulebookButton.onClick.AddListener(() =>
         {
-            if (_uiSystem.leftSidePanelOpen == AllTagNames.UIRulebook)
+            if (_parentCanvas.leftBotSidePanelOpen == AllTagNames.UIRulebook)
             {
-                _uiSystem.HideLeftSideUI();
+                _uiSystem.HideLeftBotSideUI();
                 
                 _audioSystem.PlayMenuCloseSfx();
             }
             else
             {
-                _uiSystem.ShowLeftSideUI(AllTagNames.UIRulebook);
+                _uiSystem.ShowLeftBotSideUI(AllTagNames.UIRulebook);
                 
                 _audioSystem.PlayMenuOpenSfx();
             }
@@ -53,15 +53,15 @@ public class UIBasicMenu : UIPanel
             Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonSettings);
         settingsButton.onClick.AddListener(() =>
         {
-            if (_uiSystem.leftSidePanelOpen == AllTagNames.UISettings)
+            if (_parentCanvas.leftBotSidePanelOpen == AllTagNames.UISettings)
             {
-                _uiSystem.HideLeftSideUI();
+                _uiSystem.HideLeftBotSideUI();
                 
                 _audioSystem.PlayMenuCloseSfx();
             }
             else
             {
-                _uiSystem.ShowLeftSideUI(AllTagNames.UISettings);
+                _uiSystem.ShowLeftBotSideUI(AllTagNames.UISettings);
                 
                 _audioSystem.PlayMenuOpenSfx();
             }

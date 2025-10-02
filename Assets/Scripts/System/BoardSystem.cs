@@ -56,14 +56,14 @@ public class BoardSystem : Dependency
             return;
         }
 
-        if (_uiSystem.leftSidePanelOpen == AllTagNames.UISections)
+        if (_uiSystem.leftBotSidePanelOpen == AllTagNames.UISections)
         {
-            _uiSystem.HideLeftSideUI();
+            _uiSystem.HideLeftBotSideUI();
         }
 
-        if (_uiSystem.rightSidePanelOpen == AllTagNames.UILevels)
+        if (_uiSystem.rightTopSidePanelOpen == AllTagNames.UILevels)
         {
-            _uiSystem.ShowRightSideUI(AllTagNames.UIChain);
+            _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);
         }
         
         Creator.boardSo.hideMainMenuTrigger = true;

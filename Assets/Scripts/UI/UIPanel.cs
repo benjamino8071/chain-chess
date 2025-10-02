@@ -9,6 +9,13 @@ public class UIPanel : Dependency
     
     protected Transform _panel;
 
+    protected UICanvas _parentCanvas;
+
+    public void AssignCanvas(UICanvas canvas)
+    {
+        _parentCanvas = canvas;
+    }
+    
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
@@ -16,19 +23,21 @@ public class UIPanel : Dependency
         _uiSystem = creator.GetDependency<UISystem>();
         _audioSystem = creator.GetDependency<AudioSystem>();
     }
-
+    
     public virtual void Create(AllTagNames uiTag)
     {
-        _panel = Creator.GetFirstObjectWithName(uiTag);
+        _panel = Creator.GetChildComponentByName<Transform>(_parentCanvas.canvas.gameObject, uiTag);
     }
 
     public virtual void Show()
     {
+        Debug.Log("Showing: "+_panel.name);
         _panel.gameObject.SetActive(true);
     }
 
     public virtual void Hide()
     {
+        Debug.Log("Hiding: "+_panel.name);
         _panel.gameObject.SetActive(false);
     }
 }

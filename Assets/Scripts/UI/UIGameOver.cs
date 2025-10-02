@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Michsky.MUIP;
 using TMPro;
 using UnityEngine;
@@ -34,11 +35,14 @@ public class UIGameOver : UIPanel
         {
             _audioSystem.PlayMenuOpenSfx();
             
-            UILevels uiLevels = _uiSystem.GetUI<UILevels>();
-            uiLevels.SetLevels(_turnSystem.currentLevel.section);
+            List<UILevels> uiLevelss = _uiSystem.GetUI<UILevels>();
+            foreach (UILevels uiLevels in uiLevelss)
+            {
+                uiLevels.SetLevels(_turnSystem.currentLevel.section);
+            }
             
-            _uiSystem.ShowRightSideUI(AllTagNames.UILevels);
-            _uiSystem.ShowLeftSideUI(AllTagNames.UISections);
+            _uiSystem.ShowRightTopSideUI(AllTagNames.UILevels);
+            _uiSystem.ShowLeftBotSideUI(AllTagNames.UISections);
         });
 
         _reasonText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.ReasonText);

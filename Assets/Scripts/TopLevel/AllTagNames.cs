@@ -63,8 +63,8 @@ public enum AllTagNames
     TextStars = 141,
     ButtonColourVariants = 142,
     ButtonFinalLevel = 143,
-    LeftBackground = 144,
-    RightBackground = 145,
+    LeftBottomBackground = 144,
+    RightTopBackground = 145,
     LevelButtonRefs = 146,
     StatsScore = 147,
     Star1ScoreRequired = 148,
@@ -74,4 +74,6 @@ public enum AllTagNames
     ImageTick = 152,
     ButtonFullscreen = 153,
     Confetti = 154,
+    LandscapeMode = 155,
+    PortraitMode = 156,
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Michsky.MUIP;
 using UnityEngine;
 
@@ -30,21 +31,24 @@ public class UICurrentLevelMenu : UIPanel
         _sectionsButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
         _sectionsButton.onClick.AddListener(() =>
         {
-            if (_uiSystem.leftSidePanelOpen == AllTagNames.UISections)
+            if (_parentCanvas.leftBotSidePanelOpen == AllTagNames.UISections)
             {
-                _uiSystem.HideLeftSideUI();
-                _uiSystem.ShowRightSideUI(AllTagNames.UIChain);
+                _uiSystem.HideLeftBotSideUI();
+                _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);
                 
                 _audioSystem.PlayMenuCloseSfx();
             }
             else
             {
-                _uiSystem.ShowLeftSideUI(AllTagNames.UISections);
+                _uiSystem.ShowLeftBotSideUI(AllTagNames.UISections);
 
-                UILevels uiLevels = _uiSystem.GetUI<UILevels>();
-                uiLevels.SetLevels(_turnSystem.currentLevel.section);
+                List<UILevels> uiLevelss = _uiSystem.GetUI<UILevels>();
+                foreach (UILevels uiLevels in uiLevelss)
+                {
+                    uiLevels.SetLevels(_turnSystem.currentLevel.section);
+                }
                 
-                _uiSystem.ShowRightSideUI(AllTagNames.UILevels);
+                _uiSystem.ShowRightTopSideUI(AllTagNames.UILevels);
                 
                 _audioSystem.PlayMenuOpenSfx();
             }

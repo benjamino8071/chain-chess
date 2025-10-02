@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public class EndGameSystem : Dependency
 {
     private ValidMovesSystem _validMovesSystem;
@@ -21,14 +23,17 @@ public class EndGameSystem : Dependency
     {
         if (winningColour == PieceColour.White)
         {
-            _uiSystem.ShowRightSideUI(AllTagNames.UILevelComplete);
+            _uiSystem.ShowRightTopSideUI(AllTagNames.UILevelComplete);
         }
         else
         {
-            UIGameOver uiGameOver =_uiSystem.GetUI<UIGameOver>();
-            uiGameOver.SetUI(gameOverReason);
+            List<UIGameOver> uiGameOver =_uiSystem.GetUI<UIGameOver>();
+            foreach (UIGameOver gameOver in uiGameOver)
+            {
+                gameOver.SetUI(gameOverReason);
+            }
             
-            _uiSystem.ShowRightSideUI(AllTagNames.UIGameOver);
+            _uiSystem.ShowRightTopSideUI(AllTagNames.UIGameOver);
         }
         
         _boardSystem.HideTapPoint();
