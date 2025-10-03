@@ -21,6 +21,9 @@ public class UISettings : UIPanel
     private SpriteRenderer _background;
     
     private bool _canShow;
+    
+    private int _width;
+    private int _height;
 
     public override void Create(AllTagNames uiTag)
     {
@@ -100,6 +103,9 @@ public class UISettings : UIPanel
                 Creator.SaveToDisk();
             });
         }
+
+        _width = Creator.saveDataSo.windowWidth;
+        _height = Creator.saveDataSo.windowHeight;
         
         UpdateFullscreen(Creator.saveDataSo.isFullscreen);
         
@@ -115,6 +121,7 @@ public class UISettings : UIPanel
         _tiles.sprite = boardVariant.board;
         _edge.color = boardVariant.edgeColur;
         _background.color = boardVariant.backgroundColour;
+        _uiSystem.SetBadAspectRatioColour(boardVariant.backgroundColour);
     }
 
     private void ExitFullscreen_Performed(InputAction.CallbackContext obj)
@@ -127,9 +134,6 @@ public class UISettings : UIPanel
         Creator.saveDataSo.isFullscreen = false;
         UpdateFullscreen(false);
     }
-
-    private int _width = 640;
-    private int _height = 480;
     
     private void UpdateFullscreen(bool isFullscreen)
     {

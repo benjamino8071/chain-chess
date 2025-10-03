@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9293f41daf5771740a576d95e8399663, type: 3}
   m_Name: Settings_SO
   m_EditorClassIdentifier: 
-  aspectRatioToChangeValue: 1.3333334
+  aspectRatioToChangeValue: 1.2
+  absoluteMinimumAspectRatio: 0.36
+  defaultWidth: 640
+  defaultHeight: 480
   landscapeModeSettings:
     cameraSize: 6
   portraitModeSettings:
-    cameraSize: 9.36
+    cameraSize: 11.65

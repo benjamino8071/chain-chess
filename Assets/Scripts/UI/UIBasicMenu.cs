@@ -21,7 +21,7 @@ public class UIBasicMenu : UIPanel
             
             if (_powerButtonPressed)
             {
-                Application.Quit();
+                Application.Quit(); //Will call OnApplicationQuit which saves to disk
             }
             else
             {

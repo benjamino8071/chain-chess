@@ -145,6 +145,8 @@ public class Creator : MonoBehaviour
             saveDataSo.boardVariant = diskSaveDataSo.boardVariant;
             saveDataSo.levelLastLoaded = diskSaveDataSo.levelLastLoaded;
             saveDataSo.isFirstTime = false;
+            saveDataSo.windowWidth = diskSaveDataSo.windowWidth;
+            saveDataSo.windowHeight = diskSaveDataSo.windowHeight;
             
             Debug.Log("LATEST SAVE DATA LOADED FROM DISK");
         }
@@ -156,6 +158,8 @@ public class Creator : MonoBehaviour
             saveDataSo.boardVariant = boardSo.boardVariants[0];
             saveDataSo.levelLastLoaded = levelsSo.GetLevel(1, 1);
             saveDataSo.isFirstTime = true;
+            saveDataSo.windowWidth = settingsSo.defaultWidth;
+            saveDataSo.windowHeight = settingsSo.defaultHeight;
             
             Debug.Log("SAVE DATA INITIALISED");
         }
@@ -304,5 +308,13 @@ public class Creator : MonoBehaviour
         {
             dependency.Destroy();
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        saveDataSo.windowWidth = Screen.width;
+        saveDataSo.windowHeight = Screen.height;
+        
+        SaveToDisk();
     }
 }

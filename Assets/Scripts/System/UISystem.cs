@@ -5,11 +5,6 @@ using UnityEngine.UI;
 
 public class UISystem : Dependency
 {
-    private UICanvas _landscapeCanvas;
-    private UICanvas _portraitCanvas;
-
-    private UICanvas _currentCanvas;
-
     public List<RaycastResult> objectsUnderMouse => _currentCanvas.objectsUnderMouse;
 
     public AllTagNames leftBotSidePanelOpen => _currentCanvas.leftBotSidePanelOpen;
@@ -18,10 +13,26 @@ public class UISystem : Dependency
     public Image leftBotBackground => _currentCanvas.leftBotBackground;
     public Image rightTopBackground => _currentCanvas.rightTopBackground;
     
+    public AllTagNames canvasType => _canvasType;
+    
+    private UICanvas _landscapeCanvas;
+    private UICanvas _portraitCanvas;
+
+    private UICanvas _currentCanvas;
+
+    private Transform _badAspectRatioCanvas;
+    private Image _badAspectRatioBackground;
+    
+    private AllTagNames _canvasType;
+    
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
 
+        _badAspectRatioCanvas = creator.GetFirstObjectWithName(AllTagNames.BadAspectRatio);
+        _badAspectRatioBackground =
+            creator.GetChildComponentByName<Image>(_badAspectRatioCanvas.gameObject, AllTagNames.Image);
+        
         _landscapeCanvas = new();
         _landscapeCanvas.AssignCanvas(AllTagNames.LandscapeMode);
         _landscapeCanvas.GameStart(creator);
@@ -43,6 +54,8 @@ public class UISystem : Dependency
             HideLeftBotSideUINoTween();
         }
         
+        _badAspectRatioCanvas.gameObject.SetActive(false);
+        
         //Turn system handles showing chain
     }
     
@@ -60,22 +73,39 @@ public class UISystem : Dependency
         float height = Screen.height;
         
         float aspect = width / height;
-
-        if (aspect < Creator.settingsSo.aspectRatioToChangeValue && _currentCanvas != _portraitCanvas)
+        
+        if (aspect < Creator.settingsSo.absoluteMinimumAspectRatio)
         {
+            _badAspectRatioCanvas.gameObject.SetActive(true);
+            
+            _landscapeCanvas.SetVisibility(false);
+            _portraitCanvas.SetVisibility(false);
+
+            _canvasType = AllTagNames.BadAspectRatio;
+        }
+        else if (aspect < Creator.settingsSo.aspectRatioToChangeValue && _canvasType != AllTagNames.PortraitMode)
+        {
+            _badAspectRatioCanvas.gameObject.SetActive(false);
+            
             _landscapeCanvas.SetVisibility(false);
             _portraitCanvas.SetVisibility(true);
             
             _currentCanvas = _portraitCanvas;
             Creator.mainCam.orthographicSize = Creator.settingsSo.portraitModeSettings.cameraSize;
+            
+            _canvasType = AllTagNames.PortraitMode;
         }
-        else if (aspect >= Creator.settingsSo.aspectRatioToChangeValue && _currentCanvas != _landscapeCanvas)
+        else if (aspect >= Creator.settingsSo.aspectRatioToChangeValue && _canvasType != AllTagNames.LandscapeMode)
         {
+            _badAspectRatioCanvas.gameObject.SetActive(false);
+            
             _portraitCanvas.SetVisibility(false);
             _landscapeCanvas.SetVisibility(true);
             
             _currentCanvas = _landscapeCanvas;
             Creator.mainCam.orthographicSize = Creator.settingsSo.landscapeModeSettings.cameraSize;
+            
+            _canvasType = AllTagNames.LandscapeMode;
         }
     }
 
@@ -118,5 +148,11 @@ public class UISystem : Dependency
         };
 
         return list;
+    }
+
+    public void SetBadAspectRatioColour(Color color)
+    {
+        color.a = 0.2f;
+        _badAspectRatioBackground.color = color;
     }
 }

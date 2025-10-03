@@ -15,6 +15,9 @@ public class SaveData_SO : ScriptableObject
 
     public bool audio;
 
+    public int windowWidth;
+    public int windowHeight;
+    
     public bool isFullscreen;
 }
 

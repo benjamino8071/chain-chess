@@ -22,7 +22,8 @@ public class UIChain : UIPanel
 
     private List<PieceImage> _chainPieceImages = new ();
     private int _nextFreeIndex;
-    
+
+    private float _mousePosXLastFrame;
     private float _mousePosYLastFrame;
     private float _mouseOffTimer;
 
@@ -35,7 +36,6 @@ public class UIChain : UIPanel
         _pivot = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.Pivot);
         
         int chainImagesAmount = 130;
-        float yPos = 0;
         for (int i = 0; i < chainImagesAmount; i++)
         {
             GameObject chainPieceImageGo = Creator.InstantiateGameObjectWithParent(Creator.imagePrefab, _pivot);
@@ -46,16 +46,12 @@ public class UIChain : UIPanel
             {
                 RectTransform rectTransform = chainPieceImageGo.GetComponent<RectTransform>();
                 rectTransform.sizeDelta = new(37.5f,37.5f);
-                //chainPieceImageGo.transform.localScale = new(0.7f, 0.7f);
             }
             else
             {
                 RectTransform rectTransform = chainPieceImageGo.GetComponent<RectTransform>();
                 rectTransform.sizeDelta = new(75,75);
             }
-            
-            //chainPieceImageGo.transform.localPosition = new(0, yPos, 0);
-            yPos -= image.rectTransform.sizeDelta.y;
             
             _chainPieceImages.Add(new()
             {
@@ -70,7 +66,8 @@ public class UIChain : UIPanel
         
         _chainParentInitialPos = _pivot.localPosition;
         _chainParentNewPos = _pivot.localPosition;
-        
+     
+        _mousePosXLastFrame = Input.mousePosition.x;
         _mousePosYLastFrame = Input.mousePosition.y;
     }
     
@@ -86,7 +83,7 @@ public class UIChain : UIPanel
         List<RaycastResult> objectsUnderMouse = _parentCanvas.objectsUnderMouse;
         foreach (RaycastResult objectUnderMouse in objectsUnderMouse)
         {
-            if (objectUnderMouse.gameObject == _parentCanvas.rightTopBackground)
+            if (objectUnderMouse.gameObject == _parentCanvas.rightTopBackground.gameObject)
             {
                 overPanel = true;
                 break;
@@ -98,19 +95,46 @@ public class UIChain : UIPanel
         if (overPanel && Creator.inputSo.leftMouseButton.action.IsPressed())
         {
             float3 mousePos = Input.mousePosition;
-            float mousePosYChange = mousePos.y - _mousePosYLastFrame;
             float3 chainParentLocalPos = _pivot.localPosition;
-            chainParentLocalPos.y += mousePosYChange;
+            switch (_uiSystem.canvasType)
+            {
+                case AllTagNames.LandscapeMode:
+                {
+                    float mousePosChange = mousePos.y - _mousePosYLastFrame;
+                    chainParentLocalPos.y += mousePosChange;
+                    break;
+                }
+                case AllTagNames.PortraitMode:
+                {
+                    float mousePosChange = mousePos.x - _mousePosXLastFrame;
+                    chainParentLocalPos.x += mousePosChange;
+                    break;
+                }
+            }
+            
             _pivot.localPosition = chainParentLocalPos;
             _mouseOffTimer = 1;
         }
         else if (overPanel && scrollWheelValue.y != 0)
         {
-            float positionChange = scrollWheelValue.y * Creator.inputSo.scrollPositionChange;
             float3 chainParentLocalPos = _pivot.localPosition;
-            chainParentLocalPos.y -= positionChange;
-            _pivot.localPosition = chainParentLocalPos;
+            switch (_uiSystem.canvasType)
+            {
+                case AllTagNames.LandscapeMode:
+                {
+                    float positionChange = scrollWheelValue.y * Creator.inputSo.scrollPositionChange;
+                    chainParentLocalPos.y -= positionChange;
+                    break;
+                }
+                case AllTagNames.PortraitMode:
+                {
+                    float positionChange = scrollWheelValue.y * Creator.inputSo.scrollPositionChange;
+                    chainParentLocalPos.x -= positionChange;
+                    break;
+                }
+            }
             
+            _pivot.localPosition = chainParentLocalPos;
             _mouseOffTimer = 1;
         }
         else if(_mouseOffTimer > 0)
@@ -123,6 +147,7 @@ public class UIChain : UIPanel
             _pivot.localPosition = lerpPos;
         }
         
+        _mousePosXLastFrame = Input.mousePosition.x;
         _mousePosYLastFrame = Input.mousePosition.y;
     }
 
@@ -208,7 +233,22 @@ public class UIChain : UIPanel
 
     public void HighlightNextPiece(PlayerController pieceController)
     {
-        _chainParentNewPos.y = (75 + 37.5f) * pieceController.movesUsed;
+        float newPosition = (75 + 37.5f) * pieceController.movesUsed;
+
+        switch (_uiSystem.canvasType)
+        {
+            case AllTagNames.LandscapeMode:
+            {
+                _chainParentNewPos.y = newPosition;
+                break;
+            }
+            case AllTagNames.PortraitMode:
+            {
+                _chainParentNewPos.x = newPosition;
+                break;
+            }
+        }
+        
         
         UpdateAlphaValue(0.1f, pieceController.movesUsed * 2);
     }

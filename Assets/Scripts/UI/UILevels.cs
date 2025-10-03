@@ -206,7 +206,7 @@ public class UILevels : UIPanel
         
         _tickImage.gameObject.SetActive(starCountInSection == totalStarsInSection);
         
-        _upperBoundScroll = 0;
+        _upperBoundScroll = (int)Creator.inputSo.scrollPositionChange;
 
         for (int i = 0; i < _levelInfos.Count; i++)
         {

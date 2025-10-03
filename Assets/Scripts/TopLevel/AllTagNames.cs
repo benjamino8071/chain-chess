@@ -76,4 +76,5 @@ public enum AllTagNames
     Confetti = 154,
     LandscapeMode = 155,
     PortraitMode = 156,
+    BadAspectRatio = 157,
 }

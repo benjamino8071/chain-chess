@@ -31,13 +31,11 @@ public class UIPanel : Dependency
 
     public virtual void Show()
     {
-        Debug.Log("Showing: "+_panel.name);
         _panel.gameObject.SetActive(true);
     }
 
     public virtual void Hide()
     {
-        Debug.Log("Hiding: "+_panel.name);
         _panel.gameObject.SetActive(false);
     }
 }
