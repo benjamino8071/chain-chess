@@ -21,7 +21,6 @@ public class Creator : MonoBehaviour
     public Levels_SO levelsSo;
     public LevelComplete_SO levelCompleteSo;
     public GameOver_SO gameOverSo;
-    public LevelSelect_SO levelSelectSo;
     public MiscUI_SO miscUiSo;
     public Rulebook_SO rulebookSo;
 
@@ -30,10 +29,8 @@ public class Creator : MonoBehaviour
     public GameObject validPositionPrefab;
     public GameObject playerSetTilePrefab;
     public GameObject selectedBackgroundPrefab;
-    public GameObject levelInfoPrefab;
     public GameObject imagePrefab;
     public GameObject rulebookHighlightImagePrefab;
-    public GameObject colourVariantButtonPrefab;
 
     [Title("Camera")]
     public Camera mainCam;
