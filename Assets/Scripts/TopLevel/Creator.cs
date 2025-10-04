@@ -67,7 +67,7 @@ public class Creator : MonoBehaviour
         }
     }
 
-    [HideInInspector] private bool _allUnlocked;
+    private bool _allUnlocked;
     
     private void Update()
     {
@@ -75,7 +75,6 @@ public class Creator : MonoBehaviour
         {
             UnlockAll();
             _allUnlocked = true;
-            Debug.Log("ALL STARS UNLOCKED!");
         }
         
         foreach (Dependency dependency in _dependencies)
@@ -128,8 +127,6 @@ public class Creator : MonoBehaviour
     public void SaveToDisk()
     {
         ES3.Save(_saveDataKey, saveDataSo);
-        
-        Debug.Log("LATEST SAVE DATA SAVED TO DISK");
     }
 
     private void LoadFromDisk()
@@ -144,8 +141,6 @@ public class Creator : MonoBehaviour
             saveDataSo.isFirstTime = false;
             saveDataSo.windowWidth = diskSaveDataSo.windowWidth;
             saveDataSo.windowHeight = diskSaveDataSo.windowHeight;
-            
-            Debug.Log("LATEST SAVE DATA LOADED FROM DISK");
         }
         else
         {
@@ -157,8 +152,6 @@ public class Creator : MonoBehaviour
             saveDataSo.isFirstTime = true;
             saveDataSo.windowWidth = settingsSo.defaultWidth;
             saveDataSo.windowHeight = settingsSo.defaultHeight;
-            
-            Debug.Log("SAVE DATA INITIALISED");
         }
     }
 
@@ -167,8 +160,6 @@ public class Creator : MonoBehaviour
         ES3.DeleteKey(_saveDataKey);
         
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        
-        Debug.Log("SAVE DATA DELETED");
     }
     
     [Button]

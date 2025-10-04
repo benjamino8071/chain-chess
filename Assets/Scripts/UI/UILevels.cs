@@ -271,10 +271,13 @@ public class UILevels : UIPanel
         {
             Vector2Int position = new((int)startingPieceSpawnData.position.x, (int)startingPieceSpawnData.position.y);
             _previewPieceImages[position].sprite = GetSprite(startingPieceSpawnData.piece);
-            _previewPieceImages[position].material = GetMaterial(startingPieceSpawnData.ability);
             if (startingPieceSpawnData.ability == PieceAbility.None)
             {
                 _previewPieceImages[position].color = startingPieceSpawnData.colour == PieceColour.White ? Creator.piecesSo.whiteColor : Creator.piecesSo.blackColor;
+            }
+            else
+            {
+                _previewPieceImages[position].material = GetMaterial(startingPieceSpawnData.ability);
             }
             _previewPieceImages[position].gameObject.SetActive(true);
         }
