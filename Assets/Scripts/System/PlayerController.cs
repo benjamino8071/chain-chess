@@ -146,7 +146,7 @@ public class PlayerController : Dependency
                         List<UIChain> uiChains = _uiSystem.GetUI<UIChain>();
                         foreach (UIChain uiChain in uiChains)
                         {
-                            uiChain.ShowChain(this, true);
+                            uiChain.ShowChain(this);
                         }
                         break;   
                     }

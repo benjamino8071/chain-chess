@@ -51,7 +51,7 @@ public class TurnSystem : Dependency
                 List<UIChain> uiChains = _uiSystem.GetUI<UIChain>();
                 foreach (UIChain uiChain in uiChains)
                 {
-                    uiChain.ShowChain(_whiteSystem.playerController, false);
+                    uiChain.ShowChain(_whiteSystem.playerController);
                 }
                 break;
             case PieceColour.Black:
@@ -93,7 +93,7 @@ public class TurnSystem : Dependency
         List<UIChain> uiChains = _uiSystem.GetUI<UIChain>();
         foreach (UIChain uiChain in uiChains)
         {
-            uiChain.ShowChain(_whiteSystem.playerController, true);
+            uiChain.ShowChain(_whiteSystem.playerController);
         }
         _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfCurrentPiece());
 

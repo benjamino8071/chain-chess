@@ -8,8 +8,6 @@ using UnityEngine.UI;
 public class UIChain : UIPanel
 {
     private Transform _pivot;
-
-    private TextMeshProUGUI _movesRemainingText;
     
     private Vector3 _chainParentInitialPos;
     private Vector3 _chainParentNewPos;
@@ -61,8 +59,6 @@ public class UIChain : UIPanel
             
             chainPieceImageGo.SetActive(false);
         }
-
-        _movesRemainingText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.MovesRemainingText);
         
         _chainParentInitialPos = _pivot.localPosition;
         _chainParentNewPos = _pivot.localPosition;
@@ -151,7 +147,7 @@ public class UIChain : UIPanel
         _mousePosYLastFrame = Input.mousePosition.y;
     }
 
-    public void ShowChain(PlayerController pieceController, bool setMovesRemainingText)
+    public void ShowChain(PlayerController pieceController)
     {
         ResetChain();
         
@@ -161,18 +157,11 @@ public class UIChain : UIPanel
         }
         
         HighlightNextPiece(pieceController);
-
-        if (setMovesRemainingText)
-        {
-            UpdateMovesRemainingText(pieceController.capturedPieces.Count);
-        }
     }
     
     public void AddToChain(AIController capturedPiece, int movesUsed, int playerPieceCaptureCount)
     {
         ShowNewPiece(capturedPiece.piece, movesUsed);
-        
-        UpdateMovesRemainingText(playerPieceCaptureCount);
     }
     
     private void ShowNewPiece(Piece piece, int movesUsed, bool isFirstPiece = false)
@@ -180,7 +169,8 @@ public class UIChain : UIPanel
         //For every other piece we first want to add an arrow indicating the order for the chain
         if (!isFirstPiece)
         {
-            _chainPieceImages[_nextFreeIndex].image.sprite = Creator.chainSo.arrowPointingToNextPiece;
+            _chainPieceImages[_nextFreeIndex].image.sprite = _parentCanvas.canvasType == AllTagNames.LandscapeMode 
+                ? Creator.chainSo.landscapeArrowSprite : Creator.chainSo.portraitArrowSprite;
             _chainPieceImages[_nextFreeIndex].image.color = Creator.piecesSo.whiteColor;
             _chainPieceImages[_nextFreeIndex].image.gameObject.SetActive(true);
             _chainPieceImages[_nextFreeIndex].piece = Piece.NotChosen;
@@ -244,7 +234,7 @@ public class UIChain : UIPanel
             }
             case AllTagNames.PortraitMode:
             {
-                _chainParentNewPos.x = newPosition;
+                _chainParentNewPos.x = -newPosition;
                 break;
             }
         }
@@ -275,15 +265,10 @@ public class UIChain : UIPanel
             case Piece.King:
                 return Creator.piecesSo.king;
             case Piece.NotChosen:
-                return Creator.chainSo.arrowPointingToNextPiece;
+                return Creator.chainSo.landscapeArrowSprite;
         }
         
         //Given the logic of the code we should never get here but have to add something
         return null;
-    }
-
-    private void UpdateMovesRemainingText(int movesInChain)
-    {
-        _movesRemainingText.text = movesInChain == 0 ? ". . ." : $"{movesInChain}";
     }
 }

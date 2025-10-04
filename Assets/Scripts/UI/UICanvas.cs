@@ -7,6 +7,8 @@ public class UICanvas : Dependency
 {
     public Transform canvas => _canvas;
     
+    public AllTagNames canvasType => _canvasType;
+    
     private AllTagNames _canvasType;
     private Transform _canvas;
     
