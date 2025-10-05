@@ -19,7 +19,6 @@ MonoBehaviour:
     levels:
     - section: 1
       level: 1
-      turns: 3
       isLastInSection: 0
       star1Score: 24
       star2Score: 8
@@ -39,7 +38,6 @@ MonoBehaviour:
         position: {x: 7, y: 7}
     - section: 1
       level: 2
-      turns: 3
       isLastInSection: 0
       star1Score: 30
       star2Score: 16
@@ -71,7 +69,6 @@ MonoBehaviour:
         position: {x: 5, y: 4}
     - section: 1
       level: 3
-      turns: 3
       isLastInSection: 0
       star1Score: 39
       star2Score: 22
@@ -107,7 +104,6 @@ MonoBehaviour:
         position: {x: 2, y: 6}
     - section: 1
       level: 4
-      turns: 2
       isLastInSection: 0
       star1Score: 16
       star2Score: 10
@@ -131,7 +127,6 @@ MonoBehaviour:
         position: {x: 6, y: 6}
     - section: 1
       level: 5
-      turns: 3
       isLastInSection: 0
       star1Score: 39
       star2Score: 18
@@ -163,7 +158,6 @@ MonoBehaviour:
         position: {x: 3, y: 7}
     - section: 1
       level: 6
-      turns: 4
       isLastInSection: 0
       star1Score: 36
       star2Score: 14
@@ -191,7 +185,6 @@ MonoBehaviour:
         position: {x: 5, y: 5}
     - section: 1
       level: 7
-      turns: 4
       isLastInSection: 0
       star1Score: 42
       star2Score: 18
@@ -231,7 +224,6 @@ MonoBehaviour:
         position: {x: 2, y: 7}
     - section: 1
       level: 8
-      turns: 3
       isLastInSection: 0
       star1Score: 35
       star2Score: 24
@@ -279,7 +271,6 @@ MonoBehaviour:
         position: {x: 3, y: 3}
     - section: 1
       level: 9
-      turns: 3
       isLastInSection: 1
       star1Score: 49
       star2Score: 36
@@ -354,7 +345,6 @@ MonoBehaviour:
     levels:
     - section: 2
       level: 1
-      turns: 4
       isLastInSection: 0
       star1Score: 20
       star2Score: 20
@@ -374,7 +364,6 @@ MonoBehaviour:
         position: {x: 4, y: 8}
     - section: 2
       level: 2
-      turns: 2
       isLastInSection: 0
       star1Score: 20
       star2Score: 20
@@ -402,7 +391,6 @@ MonoBehaviour:
         position: {x: 5, y: 7}
     - section: 2
       level: 3
-      turns: 4
       isLastInSection: 0
       star1Score: 50
       star2Score: 50
@@ -458,7 +446,6 @@ MonoBehaviour:
         position: {x: 3, y: 6}
     - section: 2
       level: 4
-      turns: 7
       isLastInSection: 0
       star1Score: 180
       star2Score: 120
@@ -490,7 +477,6 @@ MonoBehaviour:
         position: {x: 7, y: 6}
     - section: 2
       level: 5
-      turns: 5
       isLastInSection: 0
       star1Score: 200
       star2Score: 130
@@ -518,7 +504,6 @@ MonoBehaviour:
         position: {x: 4, y: 4}
     - section: 2
       level: 6
-      turns: 6
       isLastInSection: 0
       star1Score: 360
       star2Score: 260
@@ -570,7 +555,6 @@ MonoBehaviour:
         position: {x: 2, y: 5}
     - section: 2
       level: 7
-      turns: 5
       isLastInSection: 0
       star1Score: 400
       star2Score: 300
@@ -610,7 +594,6 @@ MonoBehaviour:
         position: {x: 3, y: 3}
     - section: 2
       level: 8
-      turns: 8
       isLastInSection: 0
       star1Score: 650
       star2Score: 550
@@ -654,7 +637,6 @@ MonoBehaviour:
         position: {x: 8, y: 8}
     - section: 2
       level: 9
-      turns: 5
       isLastInSection: 0
       star1Score: 460
       star2Score: 360
@@ -702,7 +684,6 @@ MonoBehaviour:
         position: {x: 7, y: 7}
     - section: 2
       level: 10
-      turns: 20
       isLastInSection: 1
       star1Score: 500
       star2Score: 400
@@ -761,7 +742,6 @@ MonoBehaviour:
     levels:
     - section: 3
       level: 1
-      turns: 20
       isLastInSection: 0
       star1Score: 45
       star2Score: 20
@@ -801,7 +781,6 @@ MonoBehaviour:
         position: {x: 2, y: 6}
     - section: 3
       level: 2
-      turns: 20
       isLastInSection: 0
       star1Score: 30
       star2Score: 20
@@ -829,7 +808,6 @@ MonoBehaviour:
         position: {x: 7, y: 7}
     - section: 3
       level: 3
-      turns: 20
       isLastInSection: 0
       star1Score: 800
       star2Score: 600
@@ -873,7 +851,6 @@ MonoBehaviour:
         position: {x: 7, y: 7}
     - section: 3
       level: 4
-      turns: 20
       isLastInSection: 0
       star1Score: 900
       star2Score: 700
@@ -937,7 +914,6 @@ MonoBehaviour:
         position: {x: 2, y: 6}
     - section: 3
       level: 5
-      turns: 20
       isLastInSection: 0
       star1Score: 400
       star2Score: 260
@@ -1001,7 +977,6 @@ MonoBehaviour:
         position: {x: 6, y: 4}
     - section: 3
       level: 6
-      turns: 20
       isLastInSection: 0
       star1Score: 590
       star2Score: 450
@@ -1069,7 +1044,6 @@ MonoBehaviour:
         position: {x: 2, y: 5}
     - section: 3
       level: 7
-      turns: 20
       isLastInSection: 0
       star1Score: 600
       star2Score: 400
@@ -1161,7 +1135,6 @@ MonoBehaviour:
         position: {x: 7, y: 4}
     - section: 3
       level: 8
-      turns: 20
       isLastInSection: 0
       star1Score: 500
       star2Score: 380
@@ -1217,7 +1190,6 @@ MonoBehaviour:
         position: {x: 7, y: 7}
     - section: 3
       level: 9
-      turns: 20
       isLastInSection: 0
       star1Score: 750
       star2Score: 650
@@ -1269,7 +1241,6 @@ MonoBehaviour:
         position: {x: 3, y: 3}
     - section: 3
       level: 10
-      turns: 20
       isLastInSection: 1
       star1Score: 500
       star2Score: 350
@@ -1312,7 +1283,6 @@ MonoBehaviour:
     levels:
     - section: 4
       level: 1
-      turns: 25
       isLastInSection: 0
       star1Score: 320
       star2Score: 220
@@ -1340,7 +1310,6 @@ MonoBehaviour:
         position: {x: 4, y: 3}
     - section: 4
       level: 2
-      turns: 25
       isLastInSection: 0
       star1Score: 160
       star2Score: 120
@@ -1368,7 +1337,6 @@ MonoBehaviour:
         position: {x: 5, y: 7}
     - section: 4
       level: 3
-      turns: 25
       isLastInSection: 0
       star1Score: 430
       star2Score: 330
@@ -1396,7 +1364,6 @@ MonoBehaviour:
         position: {x: 7, y: 7}
     - section: 4
       level: 4
-      turns: 25
       isLastInSection: 0
       star1Score: 440
       star2Score: 340
@@ -1432,7 +1399,6 @@ MonoBehaviour:
         position: {x: 5, y: 4}
     - section: 4
       level: 5
-      turns: 25
       isLastInSection: 0
       star1Score: 420
       star2Score: 320
@@ -1484,7 +1450,6 @@ MonoBehaviour:
         position: {x: 2, y: 6}
     - section: 4
       level: 6
-      turns: 15
       isLastInSection: 0
       star1Score: 500
       star2Score: 400
@@ -1544,7 +1509,6 @@ MonoBehaviour:
         position: {x: 7, y: 5}
     - section: 4
       level: 7
-      turns: 25
       isLastInSection: 0
       star1Score: 860
       star2Score: 760
@@ -1648,7 +1612,6 @@ MonoBehaviour:
         position: {x: 4, y: 4}
     - section: 4
       level: 8
-      turns: 25
       isLastInSection: 0
       star1Score: 620
       star2Score: 520
@@ -1692,7 +1655,6 @@ MonoBehaviour:
         position: {x: 3, y: 6}
     - section: 4
       level: 9
-      turns: 25
       isLastInSection: 0
       star1Score: 800
       star2Score: 700
@@ -1736,7 +1698,6 @@ MonoBehaviour:
         position: {x: 6, y: 8}
     - section: 4
       level: 10
-      turns: 25
       isLastInSection: 1
       star1Score: 450
       star2Score: 320
@@ -1783,7 +1744,6 @@ MonoBehaviour:
     levels:
     - section: 5
       level: 1
-      turns: 10
       isLastInSection: 0
       star1Score: 39
       star2Score: 16
@@ -1799,7 +1759,6 @@ MonoBehaviour:
         position: {x: 5, y: 5}
     - section: 5
       level: 2
-      turns: 30
       isLastInSection: 0
       star1Score: 39
       star2Score: 26
@@ -1839,7 +1798,6 @@ MonoBehaviour:
         position: {x: 8, y: 1}
     - section: 5
       level: 3
-      turns: 13
       isLastInSection: 0
       star1Score: 42
       star2Score: 24
@@ -1871,7 +1829,6 @@ MonoBehaviour:
         position: {x: 4, y: 7}
     - section: 5
       level: 4
-      turns: 14
       isLastInSection: 0
       star1Score: 132
       star2Score: 70
@@ -1923,7 +1880,6 @@ MonoBehaviour:
         position: {x: 7, y: 5}
     - section: 5
       level: 5
-      turns: 30
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -1999,7 +1955,6 @@ MonoBehaviour:
         position: {x: 4, y: 3}
     - section: 5
       level: 6
-      turns: 27
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -2059,7 +2014,6 @@ MonoBehaviour:
         position: {x: 5, y: 2}
     - section: 5
       level: 7
-      turns: 18
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -2151,7 +2105,6 @@ MonoBehaviour:
         position: {x: 7, y: 6}
     - section: 5
       level: 8
-      turns: 19
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -2207,7 +2160,6 @@ MonoBehaviour:
         position: {x: 8, y: 8}
     - section: 5
       level: 9
-      turns: 27
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -2259,7 +2211,6 @@ MonoBehaviour:
         position: {x: 2, y: 2}
     - section: 5
       level: 10
-      turns: 23
       isLastInSection: 1
       star1Score: 0
       star2Score: 0
@@ -2338,7 +2289,6 @@ MonoBehaviour:
     levels:
     - section: 6
       level: 1
-      turns: 10
       isLastInSection: 0
       star1Score: 100
       star2Score: 100
@@ -2362,7 +2312,6 @@ MonoBehaviour:
         position: {x: 2, y: 4}
     - section: 6
       level: 2
-      turns: 30
       isLastInSection: 0
       star1Score: 640
       star2Score: 440
@@ -2390,7 +2339,6 @@ MonoBehaviour:
         position: {x: 4, y: 5}
     - section: 6
       level: 3
-      turns: 14
       isLastInSection: 0
       star1Score: 610
       star2Score: 410
@@ -2418,7 +2366,6 @@ MonoBehaviour:
         position: {x: 7, y: 5}
     - section: 6
       level: 4
-      turns: 13
       isLastInSection: 0
       star1Score: 840
       star2Score: 640
@@ -2454,7 +2401,6 @@ MonoBehaviour:
         position: {x: 4, y: 3}
     - section: 6
       level: 5
-      turns: 19
       isLastInSection: 0
       star1Score: 880
       star2Score: 680
@@ -2546,7 +2492,6 @@ MonoBehaviour:
         position: {x: 6, y: 4}
     - section: 6
       level: 6
-      turns: 27
       isLastInSection: 0
       star1Score: 1650
       star2Score: 1350
@@ -2622,7 +2567,6 @@ MonoBehaviour:
         position: {x: 8, y: 3}
     - section: 6
       level: 7
-      turns: 30
       isLastInSection: 0
       star1Score: 730
       star2Score: 530
@@ -2698,7 +2642,6 @@ MonoBehaviour:
         position: {x: 7, y: 4}
     - section: 6
       level: 8
-      turns: 27
       isLastInSection: 0
       star1Score: 880
       star2Score: 680
@@ -2734,7 +2677,6 @@ MonoBehaviour:
         position: {x: 7, y: 7}
     - section: 6
       level: 9
-      turns: 18
       isLastInSection: 0
       star1Score: 610
       star2Score: 410
@@ -2766,7 +2708,6 @@ MonoBehaviour:
         position: {x: 4, y: 3}
     - section: 6
       level: 10
-      turns: 23
       isLastInSection: 1
       star1Score: 1400
       star2Score: 1100
@@ -2821,7 +2762,6 @@ MonoBehaviour:
     levels:
     - section: 7
       level: 1
-      turns: 20
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -2849,7 +2789,6 @@ MonoBehaviour:
         position: {x: 6, y: 6}
     - section: 7
       level: 2
-      turns: 28
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -2873,7 +2812,6 @@ MonoBehaviour:
         position: {x: 5, y: 6}
     - section: 7
       level: 3
-      turns: 20
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -2893,7 +2831,6 @@ MonoBehaviour:
         position: {x: 8, y: 5}
     - section: 7
       level: 4
-      turns: 20
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -2925,7 +2862,6 @@ MonoBehaviour:
         position: {x: 6, y: 4}
     - section: 7
       level: 5
-      turns: 20
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -3029,7 +2965,6 @@ MonoBehaviour:
         position: {x: 5, y: 3}
     - section: 7
       level: 6
-      turns: 20
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -3089,7 +3024,6 @@ MonoBehaviour:
         position: {x: 5, y: 5}
     - section: 7
       level: 7
-      turns: 20
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -3197,7 +3131,6 @@ MonoBehaviour:
         position: {x: 4, y: 1}
     - section: 7
       level: 8
-      turns: 20
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -3265,7 +3198,6 @@ MonoBehaviour:
         position: {x: 4, y: 8}
     - section: 7
       level: 9
-      turns: 20
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -3329,7 +3261,6 @@ MonoBehaviour:
         position: {x: 5, y: 1}
     - section: 7
       level: 10
-      turns: 20
       isLastInSection: 1
       star1Score: 0
       star2Score: 0
@@ -3400,7 +3331,6 @@ MonoBehaviour:
     levels:
     - section: 8
       level: 1
-      turns: 29
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -3432,7 +3362,6 @@ MonoBehaviour:
         position: {x: 5, y: 4}
     - section: 8
       level: 2
-      turns: 29
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -3472,7 +3401,6 @@ MonoBehaviour:
         position: {x: 4, y: 2}
     - section: 8
       level: 3
-      turns: 29
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -3508,7 +3436,6 @@ MonoBehaviour:
         position: {x: 7, y: 3}
     - section: 8
       level: 4
-      turns: 29
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -3616,7 +3543,6 @@ MonoBehaviour:
         position: {x: 6, y: 6}
     - section: 8
       level: 5
-      turns: 29
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -3704,7 +3630,6 @@ MonoBehaviour:
         position: {x: 4, y: 7}
     - section: 8
       level: 6
-      turns: 29
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -3808,7 +3733,6 @@ MonoBehaviour:
         position: {x: 6, y: 8}
     - section: 8
       level: 7
-      turns: 29
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -3932,7 +3856,6 @@ MonoBehaviour:
         position: {x: 8, y: 7}
     - section: 8
       level: 8
-      turns: 29
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -4000,7 +3923,6 @@ MonoBehaviour:
         position: {x: 6, y: 1}
     - section: 8
       level: 9
-      turns: 29
       isLastInSection: 0
       star1Score: 0
       star2Score: 0
@@ -4080,7 +4002,6 @@ MonoBehaviour:
         position: {x: 7, y: 7}
     - section: 8
       level: 10
-      turns: 29
       isLastInSection: 1
       star1Score: 0
       star2Score: 0
@@ -4179,7 +4100,6 @@ MonoBehaviour:
     levels:
     - section: 9
       level: 1
-      turns: 29
       isLastInSection: 1
       star1Score: 0
       star2Score: 0
@@ -4316,7 +4236,6 @@ MonoBehaviour:
   reservedLevels:
   - section: 0
     level: 39
-    turns: 25
     isLastInSection: 0
     star1Score: 120000
     star2Score: 60000
@@ -4372,7 +4291,6 @@ MonoBehaviour:
       position: {x: 7, y: 8}
   - section: 0
     level: 38
-    turns: 25
     isLastInSection: 0
     star1Score: 160000
     star2Score: 80000
@@ -4432,7 +4350,6 @@ MonoBehaviour:
       position: {x: 1, y: 7}
   - section: 0
     level: 37
-    turns: 25
     isLastInSection: 0
     star1Score: 60000
     star2Score: 30000
@@ -4476,7 +4393,6 @@ MonoBehaviour:
       position: {x: 4, y: 6}
   - section: 0
     level: 36
-    turns: 25
     isLastInSection: 0
     star1Score: 100000
     star2Score: 50000
@@ -4532,7 +4448,6 @@ MonoBehaviour:
       position: {x: 5, y: 7}
   - section: 0
     level: 35
-    turns: 25
     isLastInSection: 0
     star1Score: 20000
     star2Score: 10000
@@ -4560,7 +4475,6 @@ MonoBehaviour:
       position: {x: 3, y: 7}
   - section: 0
     level: 34
-    turns: 25
     isLastInSection: 0
     star1Score: 60000
     star2Score: 30000
@@ -4604,7 +4518,6 @@ MonoBehaviour:
       position: {x: 8, y: 5}
   - section: 0
     level: 33
-    turns: 25
     isLastInSection: 0
     star1Score: 12000
     star2Score: 6000
@@ -4632,7 +4545,6 @@ MonoBehaviour:
       position: {x: 3, y: 4}
   - section: 0
     level: 32
-    turns: 25
     isLastInSection: 0
     star1Score: 24000
     star2Score: 12000
@@ -4656,7 +4568,6 @@ MonoBehaviour:
       position: {x: 8, y: 4}
   - section: 0
     level: 30
-    turns: 5
     isLastInSection: 0
     star1Score: 2400
     star2Score: 1200
@@ -4676,7 +4587,6 @@ MonoBehaviour:
       position: {x: 3, y: 6}
   - section: 0
     level: 31
-    turns: 5
     isLastInSection: 0
     star1Score: 6400
     star2Score: 3200
@@ -4696,7 +4606,6 @@ MonoBehaviour:
       position: {x: 4, y: 6}
   - section: 0
     level: 0
-    turns: 99
     isLastInSection: 0
     star1Score: 0
     star2Score: 0

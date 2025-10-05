@@ -74,11 +74,11 @@ MonoBehaviour:
       type diagonally (OC).'
   - sprite: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
     material: {fileID: 2100000, guid: 1e155935f67404c4b87a00eebdc7a534, type: 2}
-    description: '<u>Capture Lover</u>
+    description: '<u>Pouncer</u>
 
 
-      Will capture you as soon as you enter
-      its line of sight (OM).'
+      Will capture you as soon as you enter its
+      line of sight (OM).'
   - sprite: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
     material: {fileID: 2100000, guid: b42d490520beb6846bc23a1aab35ad35, type: 2}
     description: '<u>Turn Stopper</u>

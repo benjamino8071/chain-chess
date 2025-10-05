@@ -7,7 +7,8 @@ public class SaveData_SO : ScriptableObject
 {
     public List<LevelSaveData> levels;
 
-    public Level levelLastLoaded;
+    public int sectionLastLoaded;
+    public int levelLastLoaded;
 
     public bool isFirstTime;
     

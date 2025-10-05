@@ -148,7 +148,8 @@ public class Creator : MonoBehaviour
             saveDataSo.audio = true;
             saveDataSo.isFullscreen = false;
             saveDataSo.boardVariant = boardSo.boardVariants[0];
-            saveDataSo.levelLastLoaded = levelsSo.GetLevel(1, 1);
+            saveDataSo.sectionLastLoaded = 1;
+            saveDataSo.levelLastLoaded = 1;
             saveDataSo.isFirstTime = true;
             saveDataSo.windowWidth = settingsSo.defaultWidth;
             saveDataSo.windowHeight = settingsSo.defaultHeight;

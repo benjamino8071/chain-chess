@@ -140,6 +140,11 @@ public class UILevelComplete : UIPanel
         if (oneStar || twoStar || threeStar)
         {
             _audioSystem.PlayLevelCompleteSfx();
+            
+            if (levelCompleted.section == Creator.levelsSo.sections.Count)
+            {
+                _uiSystem.ShowThankYouForPlayingUI();
+            }
         }
         else
         {

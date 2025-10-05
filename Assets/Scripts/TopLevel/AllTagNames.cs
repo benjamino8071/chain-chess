@@ -77,4 +77,6 @@ public enum AllTagNames
     LandscapeMode = 155,
     PortraitMode = 156,
     BadAspectRatio = 157,
+    ThankYouForPlaying = 158,
+    ButtonAccept = 159
 }

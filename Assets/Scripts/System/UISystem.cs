@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Michsky.MUIP;
+using MoreMountains.FeedbacksForThirdParty;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -14,6 +16,8 @@ public class UISystem : Dependency
     public Image rightTopBackground => _currentCanvas.rightTopBackground;
     
     public AllTagNames canvasType => _canvasType;
+
+    private AudioSystem _audioSystem;
     
     private UICanvas _landscapeCanvas;
     private UICanvas _portraitCanvas;
@@ -23,15 +27,36 @@ public class UISystem : Dependency
     private Transform _badAspectRatioCanvas;
     private Image _badAspectRatioBackground;
     
+    private Transform _thankYouForPlayingCanvas;
+    private Image _thankYouForPlayingBackground;
+    private ScaleTween _thankYouForPlayingTween;
+    
     private AllTagNames _canvasType;
     
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
 
+        _audioSystem = creator.GetDependency<AudioSystem>();
+        
         _badAspectRatioCanvas = creator.GetFirstObjectWithName(AllTagNames.BadAspectRatio);
         _badAspectRatioBackground =
             creator.GetChildComponentByName<Image>(_badAspectRatioCanvas.gameObject, AllTagNames.Image);
+        
+        _thankYouForPlayingCanvas = creator.GetFirstObjectWithName(AllTagNames.ThankYouForPlaying);
+        _thankYouForPlayingBackground = creator.GetChildComponentByName<Image>(_thankYouForPlayingCanvas.gameObject, AllTagNames.Image);
+        _thankYouForPlayingTween = _thankYouForPlayingCanvas.GetComponentInChildren<ScaleTween>();
+        
+        ButtonManager okButton =
+            creator.GetChildComponentByName<ButtonManager>(_thankYouForPlayingCanvas.gameObject,
+                AllTagNames.ButtonAccept);
+        okButton.onClick.AddListener(() =>
+        {
+            _audioSystem.PlayUISignificantClickSfx();
+
+            _thankYouForPlayingCanvas.gameObject.SetActive(false);
+            _canvasType = AllTagNames.None;
+        });
         
         _landscapeCanvas = new();
         _landscapeCanvas.AssignCanvas(AllTagNames.LandscapeMode);
@@ -55,7 +80,7 @@ public class UISystem : Dependency
         }
         
         _badAspectRatioCanvas.gameObject.SetActive(false);
-        
+        _thankYouForPlayingCanvas.gameObject.SetActive(false);
         //Turn system handles showing chain
     }
     
@@ -73,8 +98,12 @@ public class UISystem : Dependency
         float height = Screen.height;
         
         float aspect = width / height;
-        
-        if (aspect < Creator.settingsSo.absoluteMinimumAspectRatio)
+
+        if (_canvasType == AllTagNames.ThankYouForPlaying)
+        {
+            
+        }
+        else if (aspect < Creator.settingsSo.absoluteMinimumAspectRatio && _canvasType != AllTagNames.BadAspectRatio)
         {
             _badAspectRatioCanvas.gameObject.SetActive(true);
             
@@ -154,5 +183,19 @@ public class UISystem : Dependency
     {
         color.a = 0.2f;
         _badAspectRatioBackground.color = color;
+        _thankYouForPlayingBackground.color = color;
+    }
+
+    public void ShowThankYouForPlayingUI()
+    {
+        _badAspectRatioCanvas.gameObject.SetActive(false);
+            
+        _landscapeCanvas.SetVisibility(false);
+        _portraitCanvas.SetVisibility(false);
+        
+        _thankYouForPlayingCanvas.gameObject.SetActive(true);
+        _thankYouForPlayingTween.PhaseIn();
+        
+        _canvasType = AllTagNames.ThankYouForPlaying;
     }
 }

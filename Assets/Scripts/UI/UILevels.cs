@@ -66,7 +66,7 @@ public class UILevels : UIPanel
         {
             _audioSystem.PlayUISignificantClickSfx();
             
-            LoadLevel();
+            _turnSystem.LoadLevelRuntime(_levelToLoad);
         });
         
         _levelPreviewParent = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.LevelPreviewParent);
@@ -292,14 +292,6 @@ public class UILevels : UIPanel
             image.gameObject.SetActive(false);
             image.sprite = null;
         }
-    }
-
-    private void LoadLevel()
-    {
-        _turnSystem.LoadLevelRuntime(_levelToLoad);
-        
-        _uiSystem.HideLeftBotSideUI();
-        _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);
     }
     
     private Sprite GetSprite(Piece piece)

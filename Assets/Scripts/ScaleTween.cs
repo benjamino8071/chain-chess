@@ -1,3 +1,4 @@
+using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ public class ScaleTween : MonoBehaviour
 {
     public float phaseInTime;
     public float phaseOutTime;
-    
+
     [Button]
     public void PhaseIn()
     {

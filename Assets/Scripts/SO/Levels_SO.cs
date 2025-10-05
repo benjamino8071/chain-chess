@@ -106,7 +106,6 @@ public struct Level
 {
     public int section;
     public int level;
-    public int turns;
     public bool isLastInSection;
     public int star1Score;
     public int star2Score;

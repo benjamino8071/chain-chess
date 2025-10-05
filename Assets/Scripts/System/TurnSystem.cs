@@ -31,7 +31,7 @@ public class TurnSystem : Dependency
         _boardSystem = creator.GetDependency<BoardSystem>();
         _playerSetTilesSystem = creator.GetDependency<PlayerSetTilesSystem>();
         
-        Level level = Creator.saveDataSo.levelLastLoaded;
+        Level level = Creator.levelsSo.GetLevel(Creator.saveDataSo.sectionLastLoaded, Creator.saveDataSo.levelLastLoaded);
         LoadLevelRuntime(level);
     }
     
@@ -105,8 +105,9 @@ public class TurnSystem : Dependency
         Creator.statsMoves = 0;
     
         _currentLevel = level;
-        
-        Creator.saveDataSo.levelLastLoaded = level;
+
+        Creator.saveDataSo.sectionLastLoaded = level.section;
+        Creator.saveDataSo.levelLastLoaded = level.level;
         Creator.SaveToDisk();
         
         _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);

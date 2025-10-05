@@ -12,4 +12,526 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fea4c3bd0494b93469e7006eb6388358, type: 3}
   m_Name: SaveData_SO
   m_EditorClassIdentifier: 
-  levelsSaveData: []
+  levels:
+  - section: 1
+    level: 1
+    score: 0
+    starsScored: 3
+  - section: 1
+    level: 2
+    score: 0
+    starsScored: 3
+  - section: 1
+    level: 3
+    score: 0
+    starsScored: 3
+  - section: 1
+    level: 4
+    score: 0
+    starsScored: 3
+  - section: 1
+    level: 5
+    score: 0
+    starsScored: 3
+  - section: 1
+    level: 6
+    score: 0
+    starsScored: 3
+  - section: 1
+    level: 7
+    score: 0
+    starsScored: 3
+  - section: 1
+    level: 8
+    score: 0
+    starsScored: 3
+  - section: 1
+    level: 9
+    score: 0
+    starsScored: 3
+  - section: 2
+    level: 1
+    score: 0
+    starsScored: 3
+  - section: 2
+    level: 2
+    score: 0
+    starsScored: 3
+  - section: 2
+    level: 3
+    score: 0
+    starsScored: 3
+  - section: 2
+    level: 4
+    score: 0
+    starsScored: 3
+  - section: 2
+    level: 5
+    score: 0
+    starsScored: 3
+  - section: 2
+    level: 6
+    score: 0
+    starsScored: 3
+  - section: 2
+    level: 7
+    score: 0
+    starsScored: 3
+  - section: 2
+    level: 8
+    score: 0
+    starsScored: 3
+  - section: 2
+    level: 9
+    score: 0
+    starsScored: 3
+  - section: 2
+    level: 10
+    score: 0
+    starsScored: 3
+  - section: 3
+    level: 1
+    score: 0
+    starsScored: 3
+  - section: 3
+    level: 2
+    score: 0
+    starsScored: 3
+  - section: 3
+    level: 3
+    score: 0
+    starsScored: 3
+  - section: 3
+    level: 4
+    score: 0
+    starsScored: 3
+  - section: 3
+    level: 5
+    score: 0
+    starsScored: 3
+  - section: 3
+    level: 6
+    score: 0
+    starsScored: 3
+  - section: 3
+    level: 7
+    score: 0
+    starsScored: 3
+  - section: 3
+    level: 8
+    score: 0
+    starsScored: 3
+  - section: 3
+    level: 9
+    score: 0
+    starsScored: 3
+  - section: 3
+    level: 10
+    score: 0
+    starsScored: 3
+  - section: 4
+    level: 1
+    score: 0
+    starsScored: 3
+  - section: 4
+    level: 2
+    score: 0
+    starsScored: 3
+  - section: 4
+    level: 3
+    score: 0
+    starsScored: 3
+  - section: 4
+    level: 4
+    score: 0
+    starsScored: 3
+  - section: 4
+    level: 5
+    score: 0
+    starsScored: 3
+  - section: 4
+    level: 6
+    score: 0
+    starsScored: 3
+  - section: 4
+    level: 7
+    score: 0
+    starsScored: 3
+  - section: 4
+    level: 8
+    score: 0
+    starsScored: 3
+  - section: 4
+    level: 9
+    score: 0
+    starsScored: 3
+  - section: 4
+    level: 10
+    score: 0
+    starsScored: 3
+  - section: 5
+    level: 1
+    score: 0
+    starsScored: 3
+  - section: 5
+    level: 2
+    score: 0
+    starsScored: 3
+  - section: 5
+    level: 3
+    score: 0
+    starsScored: 3
+  - section: 5
+    level: 4
+    score: 0
+    starsScored: 3
+  - section: 5
+    level: 5
+    score: 0
+    starsScored: 3
+  - section: 5
+    level: 6
+    score: 0
+    starsScored: 3
+  - section: 5
+    level: 7
+    score: 0
+    starsScored: 3
+  - section: 5
+    level: 8
+    score: 0
+    starsScored: 3
+  - section: 5
+    level: 9
+    score: 0
+    starsScored: 3
+  - section: 5
+    level: 10
+    score: 0
+    starsScored: 3
+  - section: 6
+    level: 1
+    score: 0
+    starsScored: 3
+  - section: 6
+    level: 2
+    score: 0
+    starsScored: 3
+  - section: 6
+    level: 3
+    score: 0
+    starsScored: 3
+  - section: 6
+    level: 4
+    score: 0
+    starsScored: 3
+  - section: 6
+    level: 5
+    score: 0
+    starsScored: 3
+  - section: 6
+    level: 6
+    score: 0
+    starsScored: 3
+  - section: 6
+    level: 7
+    score: 0
+    starsScored: 3
+  - section: 6
+    level: 8
+    score: 0
+    starsScored: 3
+  - section: 6
+    level: 9
+    score: 0
+    starsScored: 3
+  - section: 6
+    level: 10
+    score: 0
+    starsScored: 3
+  - section: 7
+    level: 1
+    score: 0
+    starsScored: 3
+  - section: 7
+    level: 2
+    score: 0
+    starsScored: 3
+  - section: 7
+    level: 3
+    score: 0
+    starsScored: 3
+  - section: 7
+    level: 4
+    score: 0
+    starsScored: 3
+  - section: 7
+    level: 5
+    score: 0
+    starsScored: 3
+  - section: 7
+    level: 6
+    score: 0
+    starsScored: 3
+  - section: 7
+    level: 7
+    score: 0
+    starsScored: 3
+  - section: 7
+    level: 8
+    score: 0
+    starsScored: 3
+  - section: 7
+    level: 9
+    score: 0
+    starsScored: 3
+  - section: 7
+    level: 10
+    score: 0
+    starsScored: 3
+  - section: 8
+    level: 1
+    score: 0
+    starsScored: 3
+  - section: 8
+    level: 2
+    score: 0
+    starsScored: 3
+  - section: 8
+    level: 3
+    score: 0
+    starsScored: 3
+  - section: 8
+    level: 4
+    score: 0
+    starsScored: 3
+  - section: 8
+    level: 5
+    score: 0
+    starsScored: 3
+  - section: 8
+    level: 6
+    score: 0
+    starsScored: 3
+  - section: 8
+    level: 7
+    score: 0
+    starsScored: 3
+  - section: 8
+    level: 8
+    score: 0
+    starsScored: 3
+  - section: 8
+    level: 9
+    score: 0
+    starsScored: 3
+  - section: 8
+    level: 10
+    score: 0
+    starsScored: 3
+  levelLastLoaded:
+    section: 9
+    level: 1
+    turns: 29
+    isLastInSection: 1
+    star1Score: 0
+    star2Score: 0
+    star3Score: 0
+    positions:
+    - piece: 5
+      colour: 1
+      ability: 0
+      position: {x: 4, y: 1}
+    - piece: 2
+      colour: 0
+      ability: 3
+      position: {x: 1, y: 8}
+    - piece: 3
+      colour: 0
+      ability: 8
+      position: {x: 2, y: 8}
+    - piece: 4
+      colour: 0
+      ability: 7
+      position: {x: 3, y: 8}
+    - piece: 5
+      colour: 0
+      ability: 8
+      position: {x: 4, y: 8}
+    - piece: 6
+      colour: 0
+      ability: 9
+      position: {x: 5, y: 8}
+    - piece: 4
+      colour: 0
+      ability: 1
+      position: {x: 6, y: 8}
+    - piece: 3
+      colour: 0
+      ability: 3
+      position: {x: 7, y: 8}
+    - piece: 2
+      colour: 0
+      ability: 8
+      position: {x: 8, y: 8}
+    - piece: 2
+      colour: 0
+      ability: 8
+      position: {x: 1, y: 1}
+    - piece: 3
+      colour: 0
+      ability: 9
+      position: {x: 2, y: 1}
+    - piece: 4
+      colour: 0
+      ability: 1
+      position: {x: 3, y: 1}
+    - piece: 6
+      colour: 0
+      ability: 1
+      position: {x: 5, y: 1}
+    - piece: 4
+      colour: 0
+      ability: 7
+      position: {x: 6, y: 1}
+    - piece: 3
+      colour: 0
+      ability: 1
+      position: {x: 7, y: 1}
+    - piece: 2
+      colour: 0
+      ability: 9
+      position: {x: 8, y: 1}
+    - piece: 1
+      colour: 0
+      ability: 1
+      position: {x: 1, y: 2}
+    - piece: 1
+      colour: 0
+      ability: 3
+      position: {x: 2, y: 2}
+    - piece: 1
+      colour: 0
+      ability: 3
+      position: {x: 3, y: 2}
+    - piece: 1
+      colour: 0
+      ability: 7
+      position: {x: 4, y: 2}
+    - piece: 1
+      colour: 0
+      ability: 8
+      position: {x: 5, y: 2}
+    - piece: 1
+      colour: 0
+      ability: 9
+      position: {x: 6, y: 2}
+    - piece: 1
+      colour: 0
+      ability: 1
+      position: {x: 7, y: 2}
+    - piece: 1
+      colour: 0
+      ability: 3
+      position: {x: 8, y: 2}
+    - piece: 1
+      colour: 0
+      ability: 5
+      position: {x: 1, y: 7}
+    - piece: 1
+      colour: 0
+      ability: 7
+      position: {x: 2, y: 7}
+    - piece: 1
+      colour: 0
+      ability: 8
+      position: {x: 3, y: 7}
+    - piece: 1
+      colour: 0
+      ability: 9
+      position: {x: 4, y: 7}
+    - piece: 1
+      colour: 0
+      ability: 1
+      position: {x: 5, y: 7}
+    - piece: 1
+      colour: 0
+      ability: 5
+      position: {x: 6, y: 7}
+    - piece: 1
+      colour: 0
+      ability: 7
+      position: {x: 7, y: 7}
+    - piece: 1
+      colour: 0
+      ability: 8
+      position: {x: 8, y: 7}
+  isFirstTime: 0
+  boardVariant:
+    board: {fileID: -3729668142088327615, guid: 25e4ec4d10c2ce442acee53871bab255, type: 3}
+    colourGradient:
+      serializedVersion: 2
+      key0: {r: 0.59607846, g: 0.49019608, b: 0.7058824, a: 1}
+      key1: {r: 0.9098039, g: 0.8627451, b: 0.9490196, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: -1
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    swappedColourGradient:
+      serializedVersion: 2
+      key0: {r: 0.9098039, g: 0.8627451, b: 0.9490196, a: 1}
+      key1: {r: 0.59607846, g: 0.49019608, b: 0.7058824, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: -1
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    edgeColur: {r: 0.59607846, g: 0.49019608, b: 0.7058824, a: 1}
+    backgroundColour: {r: 0.8901961, g: 0.80784315, b: 0.9254902, a: 1}
+  audio: 1
+  windowWidth: 959
+  windowHeight: 719
+  isFullscreen: 0
