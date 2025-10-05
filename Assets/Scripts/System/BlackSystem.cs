@@ -296,12 +296,12 @@ public class BlackSystem : Dependency
     public void PieceBlocked(AIController pieceController)
     {
         _pieceControllers.Remove(pieceController);
-        
+
         if (_pieceControllers.Count == 0)
         {
             Lose(GameOverReason.Locked, 0);
         }
-        else if(pieceController.pieceAbility != PieceAbility.AlwaysMove)
+        else if(_turnSystem.CurrentTurn() == PieceColour.Black)
         {
             PieceFinished(pieceController);
         }

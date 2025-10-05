@@ -274,6 +274,13 @@ public class AIController : Dependency
         {
             _blackSystem.PieceBlocked(this);
             
+            if (_pieceAbility == PieceAbility.AlwaysMove && _turnSystem.CurrentTurn() == PieceColour.White)
+            {
+                _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfCurrentPiece());
+
+                _whiteSystem.UnfreezeSide();
+            }
+            
             SetState(PieceState.NotInUse);
         }
     }
@@ -296,6 +303,7 @@ public class AIController : Dependency
         {
             SetState(PieceState.WaitingForTurn);
             _validMovesSystem.HideAllValidMoves();
+            
             _blackSystem.PieceFinished(this);
         }
     }
