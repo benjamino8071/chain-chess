@@ -9,7 +9,7 @@ public class UIBasicMenu : UIPanel
 
     private const float MaxTime = 3;
     private float _timer;
-    
+
     public override void Create(AllTagNames uiTag)
     {
         base.Create(uiTag);

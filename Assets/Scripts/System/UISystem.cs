@@ -70,19 +70,11 @@ public class UISystem : Dependency
         
         UpdateCurrentCanvas();
         
-        if (Creator.saveDataSo.isFirstTime)
-        {
-            ShowLeftBotSideUI(AllTagNames.UIRulebook);
-        }
-        else
-        {
-            HideLeftBotSideUINoTween();
-        }
-        
         _badAspectRatioCanvas.gameObject.SetActive(false);
         _thankYouForPlayingCanvas.gameObject.SetActive(false);
         
         //Turn system handles showing chain
+        SetHomescreen(true);
     }
     
     public override void GameUpdate(float dt)
@@ -155,6 +147,52 @@ public class UISystem : Dependency
     {
         _landscapeCanvas.HideLeftBotSideUI();
         _portraitCanvas.HideLeftBotSideUI();
+    }
+
+    public void SetHomescreen(bool show)
+    {
+        List<UICurrentLevelMenu> currentLevelMenus = GetUI<UICurrentLevelMenu>();
+        foreach (UICurrentLevelMenu currentLevelMenu in currentLevelMenus)
+        {
+            if (show)
+            {
+                currentLevelMenu.Hide();
+            }
+            else
+            {
+                currentLevelMenu.Show();
+            }
+        }
+        List<UIBasicMenu> basicMenus = GetUI<UIBasicMenu>();
+        foreach (UIBasicMenu basicMenu in basicMenus)
+        {
+            if (show)
+            {
+                basicMenu.Hide();
+            }
+            else
+            {
+                basicMenu.Show();
+            }
+        }
+
+        if (show)
+        {
+            HideLeftBotSideUI();
+            ShowRightTopSideUI(AllTagNames.UITitle);
+        }
+        else
+        {
+            if (Creator.saveDataSo.isFirstTime)
+            {
+                ShowLeftBotSideUI(AllTagNames.UIRulebook);
+            }
+            else
+            {
+                HideLeftBotSideUINoTween();
+            }
+            ShowRightTopSideUI(AllTagNames.UIChain);
+        }
     }
     
     public void ShowRightTopSideUI(AllTagNames uiTag)

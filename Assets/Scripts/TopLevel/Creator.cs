@@ -42,10 +42,9 @@ public class Creator : MonoBehaviour
 
     [HideInInspector] public int statsTurns;
     [HideInInspector] public int statsMoves;
+    [HideInInspector] public bool firstMoveMade;
     
     private List<Dependency> _dependencies = new();
-    
-    private const string _saveDataKey = "saveDataSo";
     
     [Title("Transition")]
     
@@ -98,6 +97,12 @@ public class Creator : MonoBehaviour
         {
             case TransitionState.None:
             {
+                if (!firstMoveMade && inputSo.leftMouseButton.action.WasPressedThisFrame())
+                {
+                    GetDependency<UISystem>().SetHomescreen(false);
+                    firstMoveMade = true;
+                }
+                
                 if (Input.GetKeyDown(KeyCode.S) && !_allUnlocked)
                 {
                     UnlockAll();
@@ -184,14 +189,14 @@ public class Creator : MonoBehaviour
 
     public void SaveToDisk()
     {
-        ES3.Save(_saveDataKey, saveDataSo);
+        ES3.Save(settingsSo.saveDataKey, saveDataSo);
     }
 
     private void LoadFromDisk()
     {
-        if (ES3.KeyExists(_saveDataKey))
+        if (ES3.KeyExists(settingsSo.saveDataKey))
         {
-            SaveData_SO diskSaveDataSo = ES3.Load(_saveDataKey, saveDataSo);
+            SaveData_SO diskSaveDataSo = ES3.Load(settingsSo.saveDataKey, saveDataSo);
             saveDataSo.levels = diskSaveDataSo.levels.ToList();
             saveDataSo.audio = diskSaveDataSo.audio;
             saveDataSo.boardVariant = diskSaveDataSo.boardVariant;
@@ -216,7 +221,7 @@ public class Creator : MonoBehaviour
 
     public void DeleteOnDisk()
     {
-        ES3.DeleteKey(_saveDataKey);
+        ES3.DeleteKey(settingsSo.saveDataKey);
         
         SceneManager.LoadScene(0);
     }
@@ -224,7 +229,7 @@ public class Creator : MonoBehaviour
     [Button]
     public void DeleteOnDiskExposed()
     {
-        ES3.DeleteKey(_saveDataKey);
+        ES3.DeleteKey(settingsSo.saveDataKey);
         Debug.Log("SAVE DATA DELETED");
     }
     

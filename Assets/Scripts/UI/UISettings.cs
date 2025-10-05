@@ -107,8 +107,6 @@ public class UISettings : UIPanel
         _width = Creator.saveDataSo.windowWidth;
         _height = Creator.saveDataSo.windowHeight;
         
-        UpdateFullscreen(Creator.saveDataSo.isFullscreen);
-        
         UpdateSoundSetting(Creator.saveDataSo.audio);
         
         UpdateBoardVariant(Creator.saveDataSo.boardVariant);
@@ -137,6 +135,11 @@ public class UISettings : UIPanel
     
     private void UpdateFullscreen(bool isFullscreen)
     {
+        if (Application.platform == RuntimePlatform.WebGLPlayer || Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            return;
+        }
+        
         if (isFullscreen)
         {
             _width = Screen.width;

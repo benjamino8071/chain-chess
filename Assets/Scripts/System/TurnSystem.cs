@@ -31,8 +31,13 @@ public class TurnSystem : Dependency
         _boardSystem = creator.GetDependency<BoardSystem>();
         _playerSetTilesSystem = creator.GetDependency<PlayerSetTilesSystem>();
         
+        LoadInitialLevel();
+    }
+
+    public void LoadInitialLevel()
+    {
         Level level = Creator.levelsSo.GetLevel(Creator.saveDataSo.sectionLastLoaded, Creator.saveDataSo.levelLastLoaded);
-        LoadLevelRuntime(level);
+        LoadLevelRuntime(level, false);
     }
     
     public void SwitchTurn(PieceColour nextTurn)
@@ -68,7 +73,7 @@ public class TurnSystem : Dependency
         LoadLevelRuntime(_currentLevel);
     }
     
-    public void LoadLevelRuntime(Level level)
+    public void LoadLevelRuntime(Level level, bool showChain = true)
     {
         Random.InitState(42);
        
@@ -109,8 +114,11 @@ public class TurnSystem : Dependency
         Creator.saveDataSo.sectionLastLoaded = level.section;
         Creator.saveDataSo.levelLastLoaded = level.level;
         Creator.SaveToDisk();
-        
-        _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);
+
+        if (showChain)
+        {
+            _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);
+        }
         
         SwitchTurn(PieceColour.White);
     }

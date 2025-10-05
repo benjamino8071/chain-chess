@@ -12,6 +12,8 @@ public class Settings_SO : ScriptableObject
     
     public UIModeSettings landscapeModeSettings;
     public UIModeSettings portraitModeSettings;
+
+    public string saveDataKey = "saveDataSo";
 }
 
 [Serializable]

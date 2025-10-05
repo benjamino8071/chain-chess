@@ -69,6 +69,11 @@ public class UICanvas : Dependency
             TagName = AllTagNames.UILevels,
             UIPanel = new UILevels()
         },
+        new()
+        {
+            TagName = AllTagNames.UITitle,
+            UIPanel = new UITitle()
+        },
     };
 
     public List<RaycastResult> objectsUnderMouse => _objectsUnderMouse;

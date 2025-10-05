@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,25 +11,33 @@ public class BootLoad : MonoBehaviour
     [SerializeField] private RectTransform canvas;
     [SerializeField] private RectTransform transitionImage;
     
-    [SerializeField] private InputActionReference clickInput;
-    [SerializeField] private InputActionReference altClickInput;
-    
     [SerializeField] private float maxTransitionTime;
+
+    [SerializeField] private SaveData_SO saveDataSo;
+    [SerializeField] private Settings_SO settingsSo;
+    [SerializeField] private Board_SO boardSo;
     
     private float _timer;
 
     private enum State
     {
         None,
-        Normal,
         Transitioning,
         Loading
     }
     private State _state;
-    
+
+    private void Awake()
+    {
+        if (Application.platform != RuntimePlatform.WebGLPlayer && Application.platform != RuntimePlatform.IPhonePlayer)
+        {
+            LoadScreenSize();
+        }
+    }
+
     private void Start()
     {
-        _state = State.Normal;
+        _state = State.Transitioning;
         _timer = 0;
      
         SceneManager.sceneLoaded -= SceneManager_SceneLoaded;
@@ -55,14 +64,6 @@ public class BootLoad : MonoBehaviour
     {
         switch (_state)
         {
-            case State.Normal:
-            {
-                if (clickInput.action.WasPressedThisFrame() || altClickInput.action.WasPressedThisFrame())
-                {
-                    _state = State.Transitioning;
-                }
-                break;
-            }
             case State.Transitioning:
             {
                 _timer += Time.deltaTime;
@@ -85,6 +86,21 @@ public class BootLoad : MonoBehaviour
                 _state = State.None;
                 break;
             }
+        }
+    }
+    
+    private void LoadScreenSize()
+    {
+        if (ES3.KeyExists(settingsSo.saveDataKey))
+        {
+            SaveData_SO diskSaveDataSo = ES3.Load(settingsSo.saveDataKey, saveDataSo);
+            Screen.SetResolution(diskSaveDataSo.windowWidth, diskSaveDataSo.windowHeight, diskSaveDataSo.isFullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
+            Screen.fullScreen = diskSaveDataSo.isFullscreen;
+        }
+        else
+        {
+            Screen.SetResolution(settingsSo.defaultWidth, settingsSo.defaultHeight, FullScreenMode.Windowed);
+            Screen.fullScreen = false;
         }
     }
 }
