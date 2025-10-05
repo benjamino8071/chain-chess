@@ -81,6 +81,7 @@ public class UISystem : Dependency
         
         _badAspectRatioCanvas.gameObject.SetActive(false);
         _thankYouForPlayingCanvas.gameObject.SetActive(false);
+        
         //Turn system handles showing chain
     }
     
@@ -99,7 +100,7 @@ public class UISystem : Dependency
         
         float aspect = width / height;
 
-        if (_canvasType == AllTagNames.ThankYouForPlaying)
+        if (_canvasType is AllTagNames.ThankYouForPlaying)
         {
             
         }

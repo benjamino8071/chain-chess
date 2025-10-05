@@ -78,5 +78,5 @@ public enum AllTagNames
     PortraitMode = 156,
     BadAspectRatio = 157,
     ThankYouForPlaying = 158,
-    ButtonAccept = 159
+    ButtonAccept = 159,
 }

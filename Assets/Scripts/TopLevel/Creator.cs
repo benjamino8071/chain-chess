@@ -4,8 +4,10 @@ using System.Linq;
 using Michsky.MUIP;
 using Sirenix.OdinInspector;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class Creator : MonoBehaviour
@@ -45,12 +47,33 @@ public class Creator : MonoBehaviour
     
     private const string _saveDataKey = "saveDataSo";
     
+    [Title("Transition")]
+    
+    [SerializeField] private RectTransform sceneTransitionCanvas;
+    [SerializeField] private RectTransform sceneTransitionImage;
+    [SerializeField] private float delayBeforeTransition;
+    [SerializeField] private float transitionTime;
+    private float _transitionTimer;
+    
+    private bool _allUnlocked;
+    
+    private enum TransitionState
+    {
+        None,
+        Delay,
+        Transition
+    }
+
+    private TransitionState _transitionState;
+    
     private void Awake()
     {
         LoadFromDisk();
         
         Application.targetFrameRate = frameRate;
         
+        sceneTransitionImage.sizeDelta = new Vector2(sceneTransitionCanvas.rect.width, sceneTransitionImage.sizeDelta.y);
+
         CreateDependencies();
     }
     
@@ -65,31 +88,66 @@ public class Creator : MonoBehaviour
             Dependency dependency = dependencyInUse;
             dependency.GameStart(this);
         }
+        
+        _transitionState = TransitionState.Delay;
     }
-
-    private bool _allUnlocked;
     
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S) && !_allUnlocked)
+        switch (_transitionState)
         {
-            UnlockAll();
-            _allUnlocked = true;
-        }
+            case TransitionState.None:
+            {
+                if (Input.GetKeyDown(KeyCode.S) && !_allUnlocked)
+                {
+                    UnlockAll();
+                    _allUnlocked = true;
+                }
         
-        foreach (Dependency dependency in _dependencies)
-        {
-            dependency.GameEarlyUpdate(Time.deltaTime);
-        }
+                foreach (Dependency dependency in _dependencies)
+                {
+                    dependency.GameEarlyUpdate(Time.deltaTime);
+                }
         
-        foreach (Dependency dependency in _dependencies)
-        {
-            dependency.GameUpdate(Time.deltaTime);
-        }
+                foreach (Dependency dependency in _dependencies)
+                {
+                    dependency.GameUpdate(Time.deltaTime);
+                }
         
-        foreach (Dependency dependency in _dependencies)
-        {
-            dependency.GameLateUpdate(Time.deltaTime);
+                foreach (Dependency dependency in _dependencies)
+                {
+                    dependency.GameLateUpdate(Time.deltaTime);
+                }
+                
+                break;
+            }
+            case TransitionState.Delay:
+            {
+                _transitionTimer += Time.deltaTime;
+
+                if (_transitionTimer >= delayBeforeTransition)
+                {
+                    _transitionState = TransitionState.Transition;
+                    _transitionTimer = 0;
+                }
+                break;
+            }
+            case TransitionState.Transition:
+            {
+                _transitionTimer += Time.deltaTime;
+            
+                float t = math.min(1, _transitionTimer / transitionTime);
+                float width = math.lerp(sceneTransitionCanvas.rect.width, 0, t);
+                sceneTransitionImage.sizeDelta = new Vector2(width, sceneTransitionImage.sizeDelta.y);
+
+                if (t >= 1)
+                {
+                    sceneTransitionCanvas.gameObject.SetActive(false);
+                    
+                    _transitionState = TransitionState.None;
+                }
+                break;
+            }
         }
     }
 
@@ -160,7 +218,7 @@ public class Creator : MonoBehaviour
     {
         ES3.DeleteKey(_saveDataKey);
         
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(0);
     }
     
     [Button]

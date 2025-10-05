@@ -1,74 +1,90 @@
+using System;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BootLoad : MonoBehaviour
 {
-    public Camera tempCam;
-
-    public GameObject loadingScreen;
+    [SerializeField] private RectTransform canvas;
+    [SerializeField] private RectTransform transitionImage;
     
-    public Animator topTweenOutAnim;
-
-    public Board_SO boardSo;
-    public Levels_SO levelsSo;
+    [SerializeField] private InputActionReference clickInput;
+    [SerializeField] private InputActionReference altClickInput;
     
-    private static readonly int Play = Animator.StringToHash("play");
-
-    public float animationTime;
+    [SerializeField] private float maxTransitionTime;
     
-    private float _unloadSceneTimer;
+    private float _timer;
 
+    private enum State
+    {
+        None,
+        Normal,
+        Transitioning,
+        Loading
+    }
+    private State _state;
+    
     private void Start()
     {
-        boardSo.hideMainMenuTrigger = false;
+        _state = State.Normal;
+        _timer = 0;
+     
+        SceneManager.sceneLoaded -= SceneManager_SceneLoaded;
+        SceneManager.sceneLoaded += SceneManager_SceneLoaded;
+    }
+    
+    private void SceneManager_SceneLoaded(Scene sceneLoaded, LoadSceneMode arg1)
+    {
+        if (sceneLoaded.buildIndex == 1)
+        {
+            SceneManager.SetActiveScene(sceneLoaded);
+            Unload();
+        }
+    }
+
+    private async void Unload()
+    {
+        await SceneManager.UnloadSceneAsync(0);
         
-        tempCam.backgroundColor = Color.black;
-        
-        SceneManager.sceneLoaded += SceneManagerOnsceneLoaded;
-        SceneManager.sceneUnloaded += SceneManagerOnsceneUnloaded;
-        
-        SceneManager.LoadSceneAsync("Game_Scene", LoadSceneMode.Additive);
+        SceneManager.sceneLoaded -= SceneManager_SceneLoaded;
     }
 
     private void Update()
     {
-        if (_unloadSceneTimer > 0)
+        switch (_state)
         {
-            _unloadSceneTimer += Time.deltaTime;
-            //Animations take one second to complete
-            if (_unloadSceneTimer >= animationTime)
+            case State.Normal:
             {
-                SceneManager.UnloadSceneAsync("Main_Menu_Scene");
+                if (clickInput.action.WasPressedThisFrame() || altClickInput.action.WasPressedThisFrame())
+                {
+                    _state = State.Transitioning;
+                }
+                break;
             }
-        }
-        else if (boardSo.hideMainMenuTrigger)
-        {
-            topTweenOutAnim.SetTrigger(Play);
-            _unloadSceneTimer += Time.deltaTime;
-        }
-    }
+            case State.Transitioning:
+            {
+                _timer += Time.deltaTime;
+            
+                float t = math.min(1, _timer / maxTransitionTime);
+                float width = math.lerp(0, canvas.rect.width, t);
+            
+                transitionImage.sizeDelta = new Vector2(width, transitionImage.sizeDelta.y);
 
-    private void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= SceneManagerOnsceneLoaded;
-        SceneManager.sceneUnloaded -= SceneManagerOnsceneUnloaded;
-    }
-
-    private void SceneManagerOnsceneLoaded(Scene scene, LoadSceneMode arg1)
-    {
-        if (scene.name == "Game_Scene")
-        {
-            loadingScreen.gameObject.SetActive(false);
-            tempCam.gameObject.SetActive(false);
-            SceneManager.SetActiveScene(scene);
-        }
-    }
-    
-    private void SceneManagerOnsceneUnloaded(Scene scene)
-    {
-        if (scene.name == "Game_Scene")
-        {
-            tempCam.gameObject.SetActive(true);
+                if (t >= 1)
+                {
+                    _state = State.Loading;
+                }
+                break;
+            }
+            case State.Loading:
+            {
+                SceneManager.LoadScene(1, LoadSceneMode.Additive);
+                
+                _state = State.None;
+                break;
+            }
         }
     }
 }
