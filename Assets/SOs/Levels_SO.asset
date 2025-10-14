@@ -346,9 +346,9 @@ MonoBehaviour:
     - section: 2
       level: 1
       isLastInSection: 0
-      star1Score: 20
-      star2Score: 20
-      star3Score: 20
+      star1Score: 12
+      star2Score: 6
+      star3Score: 2
       positions:
       - piece: 5
         colour: 1
@@ -365,9 +365,9 @@ MonoBehaviour:
     - section: 2
       level: 2
       isLastInSection: 0
-      star1Score: 20
-      star2Score: 20
-      star3Score: 20
+      star1Score: 2
+      star2Score: 2
+      star3Score: 2
       positions:
       - piece: 1
         colour: 1
@@ -393,8 +393,8 @@ MonoBehaviour:
       level: 3
       isLastInSection: 0
       star1Score: 50
-      star2Score: 50
-      star3Score: 50
+      star2Score: 20
+      star3Score: 5
       positions:
       - piece: 2
         colour: 1
@@ -447,9 +447,9 @@ MonoBehaviour:
     - section: 2
       level: 4
       isLastInSection: 0
-      star1Score: 180
-      star2Score: 120
-      star3Score: 50
+      star1Score: 33
+      star2Score: 14
+      star3Score: 5
       positions:
       - piece: 3
         colour: 1
@@ -478,9 +478,9 @@ MonoBehaviour:
     - section: 2
       level: 5
       isLastInSection: 0
-      star1Score: 200
-      star2Score: 130
-      star3Score: 100
+      star1Score: 44
+      star2Score: 20
+      star3Score: 10
       positions:
       - piece: 6
         colour: 1
@@ -505,9 +505,9 @@ MonoBehaviour:
     - section: 2
       level: 6
       isLastInSection: 0
-      star1Score: 360
-      star2Score: 260
-      star3Score: 100
+      star1Score: 45
+      star2Score: 30
+      star3Score: 10
       positions:
       - piece: 6
         colour: 1
@@ -556,9 +556,9 @@ MonoBehaviour:
     - section: 2
       level: 7
       isLastInSection: 0
-      star1Score: 400
-      star2Score: 300
-      star3Score: 200
+      star1Score: 62
+      star2Score: 39
+      star3Score: 22
       positions:
       - piece: 4
         colour: 1
@@ -595,9 +595,9 @@ MonoBehaviour:
     - section: 2
       level: 8
       isLastInSection: 0
-      star1Score: 650
-      star2Score: 550
-      star3Score: 450
+      star1Score: 78
+      star2Score: 55
+      star3Score: 39
       positions:
       - piece: 5
         colour: 1
@@ -638,9 +638,9 @@ MonoBehaviour:
     - section: 2
       level: 9
       isLastInSection: 0
-      star1Score: 460
-      star2Score: 360
-      star3Score: 260
+      star1Score: 58
+      star2Score: 36
+      star3Score: 24
       positions:
       - piece: 3
         colour: 1
@@ -685,9 +685,9 @@ MonoBehaviour:
     - section: 2
       level: 10
       isLastInSection: 1
-      star1Score: 500
-      star2Score: 400
-      star3Score: 300
+      star1Score: 75
+      star2Score: 51
+      star3Score: 32
       positions:
       - piece: 5
         colour: 1
@@ -744,7 +744,7 @@ MonoBehaviour:
       level: 1
       isLastInSection: 0
       star1Score: 45
-      star2Score: 20
+      star2Score: 27
       star3Score: 7
       positions:
       - piece: 5
@@ -809,9 +809,9 @@ MonoBehaviour:
     - section: 3
       level: 3
       isLastInSection: 0
-      star1Score: 800
-      star2Score: 600
-      star3Score: 400
+      star1Score: 120
+      star2Score: 90
+      star3Score: 60
       positions:
       - piece: 1
         colour: 1
@@ -852,9 +852,9 @@ MonoBehaviour:
     - section: 3
       level: 4
       isLastInSection: 0
-      star1Score: 900
-      star2Score: 700
-      star3Score: 500
+      star1Score: 88
+      star2Score: 64
+      star3Score: 48
       positions:
       - piece: 5
         colour: 1
@@ -915,9 +915,9 @@ MonoBehaviour:
     - section: 3
       level: 5
       isLastInSection: 0
-      star1Score: 400
-      star2Score: 260
-      star3Score: 130
+      star1Score: 64
+      star2Score: 48
+      star3Score: 32
       positions:
       - piece: 4
         colour: 1
