@@ -92,11 +92,11 @@ public class UISystem : Dependency
         
         float aspect = width / height;
 
-        if (_canvasType is AllTagNames.ThankYouForPlaying)
+        if (_canvasType == AllTagNames.ThankYouForPlaying)
         {
-            
+            //nothing here...
         }
-        else if (aspect < Creator.settingsSo.absoluteMinimumAspectRatio && _canvasType != AllTagNames.BadAspectRatio)
+        else if (aspect < Creator.settingsSo.absoluteMinimumAspectRatio)
         {
             _badAspectRatioCanvas.gameObject.SetActive(true);
             

@@ -68,9 +68,9 @@ public class UISettings : UIPanel
         ButtonManager deleteButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonDelete);
         deleteButton.onClick.AddListener(() =>
         {
-            _audioSystem.PlayUIClickSfx();
+            _uiSystem.ShowLeftBotSideUI(AllTagNames.UIConfirmDelete);
             
-            Creator.DeleteOnDisk();
+            _audioSystem.PlayUIClickSfx();
         });
 
         List<ButtonManager> colourVariants =

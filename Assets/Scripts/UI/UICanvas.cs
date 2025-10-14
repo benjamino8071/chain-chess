@@ -35,6 +35,11 @@ public class UICanvas : Dependency
             TagName = AllTagNames.UISections,
             UIPanel = new UISections()
         },
+        new()
+        {
+            TagName = AllTagNames.UIConfirmDelete,
+            UIPanel = new UIConfirmDelete()
+        },
     };
     private Panel _uiCurrentLevel = new()
     {

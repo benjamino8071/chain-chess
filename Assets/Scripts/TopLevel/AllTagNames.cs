@@ -79,5 +79,7 @@ public enum AllTagNames
     BadAspectRatio = 157,
     ThankYouForPlaying = 158,
     ButtonAccept = 159,
-    UITitle = 160
+    UITitle = 160,
+    UIConfirmDelete = 161,
+    ButtonCancel = 162,
 }
