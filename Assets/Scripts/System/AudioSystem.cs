@@ -11,16 +11,6 @@ public class AudioSystem : Dependency
         
         _camera = Camera.main.transform;
     }
-
-    public void PlayPieceSelectedSfx(float pitch)
-    {
-        PlaySfx(Creator.audioClipsSo.pieceSelected, pitch);
-    }
-    
-    public void PlayPieceDoubleTapSelectedSfx(float pitch)
-    {
-        PlaySfx(Creator.audioClipsSo.doubleTapPositionSelected, pitch);
-    }
     
     public void PlayPieceMoveSfx(float pitch)
     {
@@ -34,21 +24,25 @@ public class AudioSystem : Dependency
 
     public void PlayLevelCompleteSfx()
     {
+        Debug.Log("Level Complete sfx");
         PlaySfx(Creator.audioClipsSo.roomComplete);
     }
 
     public void PlayerGameOverSfx()
     {
+        Debug.Log("Game over sfx");
         PlaySfx(Creator.audioClipsSo.gameOver);
     }
 
     public void PlayMenuOpenSfx()
     {
+        Debug.Log("Menu open sfx");
         PlaySfx(Creator.audioClipsSo.uiOpen);
     }
 
     public void PlayMenuCloseSfx()
     {
+        Debug.Log("Menu close sfx");
         PlaySfx(Creator.audioClipsSo.uiClose);
     }
 

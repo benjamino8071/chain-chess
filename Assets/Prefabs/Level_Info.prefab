@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3091524779950436790}
   - component: {fileID: 8568016588230631608}
   m_Layer: 5
-  m_Name: Star (1)
+  m_Name: Star (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 34.1, y: 13.3}
+  m_AnchoredPosition: {x: -34.1, y: 13.3}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3091524779950436790
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 4971795439479872094}
   - component: {fileID: 358469643811157332}
   m_Layer: 5
-  m_Name: Star (2)
+  m_Name: Star (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,7 +109,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 15}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -15.899956, y: 3.3000298}
+  m_AnchoredPosition: {x: 7.3, y: 3.3000298}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4971795439479872094
@@ -182,9 +182,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8592565889332341538}
+  - {fileID: 902545213915569542}
   - {fileID: 6627549423755427304}
   - {fileID: 3499248894923768605}
-  - {fileID: 902545213915569542}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -213,9 +213,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 8482318364629158232}
-  star1Image: {fileID: 8568016588230631608}
-  star2Image: {fileID: 358469643811157332}
-  star3Image: {fileID: 1285713747193670854}
+  star1Image: {fileID: 1285713747193670854}
+  star2Image: {fileID: 8568016588230631608}
+  star3Image: {fileID: 358469643811157332}
 --- !u!114 &1071434888352851951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,7 +241,7 @@ GameObject:
   - component: {fileID: 6876828827403576021}
   - component: {fileID: 1285713747193670854}
   m_Layer: 5
-  m_Name: Star (3)
+  m_Name: Star (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -263,7 +263,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -15}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 84.100044, y: 3.3000298}
+  m_AnchoredPosition: {x: -75.50004, y: 3.3000298}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6876828827403576021
@@ -366,7 +366,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 224732478243287648, guid: 8aaf06c724cd6ca448c319c2137fa057, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224732478243287648, guid: 8aaf06c724cd6ca448c319c2137fa057, type: 3}
       propertyPath: m_AnchorMax.y
@@ -374,7 +374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 224732478243287648, guid: 8aaf06c724cd6ca448c319c2137fa057, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224732478243287648, guid: 8aaf06c724cd6ca448c319c2137fa057, type: 3}
       propertyPath: m_AnchorMin.y
@@ -418,7 +418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 224732478243287648, guid: 8aaf06c724cd6ca448c319c2137fa057, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 41.9
+      value: -41.9
       objectReference: {fileID: 0}
     - target: {fileID: 224732478243287648, guid: 8aaf06c724cd6ca448c319c2137fa057, type: 3}
       propertyPath: m_AnchoredPosition.y

@@ -44,7 +44,7 @@ public class UIBasicMenu : UIPanel
             else
             {
                 _uiSystem.ShowLeftBotSideUI(AllTagNames.UIRulebook);
-                
+
                 _audioSystem.PlayMenuOpenSfx();
             }
         });

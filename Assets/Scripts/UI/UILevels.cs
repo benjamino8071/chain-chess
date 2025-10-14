@@ -27,19 +27,11 @@ public class UILevels : UIPanel
     private TextMeshProUGUI _sectionText;
     private TextMeshProUGUI _levelText;
     
-    private GameObject _levelScrollWheel;
-
     private Transform _levelPreviewParent;
 
     private Image _tickImage;
     
-    private RectTransform _pivot;
-    
     private Level _levelToLoad;
-    
-    private float _mousePosYLastFrame;
-    
-    private int _upperBoundScroll;
     
     public override void GameStart(Creator creator)
     {
@@ -52,8 +44,6 @@ public class UILevels : UIPanel
     {
         base.Create(uiTag);
         
-        _levelScrollWheel = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.HoverOverPanel).gameObject;
-        _pivot = Creator.GetChildComponentByName<RectTransform>(_panel.gameObject, AllTagNames.Pivot);
         _tickImage = Creator.GetChildComponentByName<Image>(_panel.gameObject, AllTagNames.ImageTick);
         
         _levelInfos = new(10);
@@ -134,47 +124,11 @@ public class UILevels : UIPanel
             
             _levelInfos.Add(levelInfo);
         }
-        
-        _mousePosYLastFrame = Input.mousePosition.y;
     }
 
     public override void GameUpdate(float dt)
     {
-        bool overScrollWheel = false;
         
-        List<RaycastResult> objectsUnderMouse = _parentCanvas.objectsUnderMouse;
-        foreach (RaycastResult objectUnderMouse in objectsUnderMouse)
-        {
-            if (objectUnderMouse.gameObject == _levelScrollWheel.gameObject)
-            {
-                overScrollWheel = true;
-                break;
-            }
-        }
-
-        float3 mousePos = Input.mousePosition;
-        Vector2 scrollWheelValue = Creator.inputSo.scrollWheel.action.ReadValue<Vector2>();
-        
-        if (overScrollWheel && Creator.inputSo.leftMouseButton.action.IsPressed())
-        {
-            float mousePosYChange = mousePos.y - _mousePosYLastFrame;
-            float2 chainParentLocalPos = _pivot.anchoredPosition;
-            chainParentLocalPos.y += mousePosYChange;
-            
-            chainParentLocalPos.y = math.clamp(chainParentLocalPos.y, 0, _upperBoundScroll);
-            
-            _pivot.anchoredPosition = chainParentLocalPos;
-        }
-        else if (overScrollWheel && scrollWheelValue.y != 0)
-        {
-            float positionChange = -scrollWheelValue.y * Creator.inputSo.scrollPositionChange;
-            float2 chainParentLocalPos = _pivot.anchoredPosition;
-            chainParentLocalPos.y += positionChange;
-            chainParentLocalPos.y = math.clamp(chainParentLocalPos.y, 0, _upperBoundScroll);
-            _pivot.anchoredPosition = chainParentLocalPos;
-        }
-        
-        _mousePosYLastFrame = mousePos.y;
     }
 
     public override void Show()
@@ -206,8 +160,6 @@ public class UILevels : UIPanel
         
         _tickImage.gameObject.SetActive(starCountInSection == totalStarsInSection);
         
-        _upperBoundScroll = (int)Creator.inputSo.scrollPositionChange;
-
         for (int i = 0; i < _levelInfos.Count; i++)
         {
             LevelInfo levelInfo = _levelInfos[i];
@@ -255,8 +207,7 @@ public class UILevels : UIPanel
                     
                     break;
                 }
-
-                _upperBoundScroll += (int)Creator.inputSo.scrollPositionChange / 2;
+                
                 _levelInfos[i].level = sectionData.levels[i];
                 _levelInfos[i].levelButton.transform.parent.gameObject.SetActive(true);
             }
