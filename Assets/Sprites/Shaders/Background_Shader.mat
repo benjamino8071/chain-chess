@@ -41,7 +41,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Rotation: 134
+    - _Rotation: 166
     - _Speed: 0.0015
     m_Colors:
     - _Colour: {r: 1, g: 1, b: 1, a: 1}
