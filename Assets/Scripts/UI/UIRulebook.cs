@@ -56,12 +56,14 @@ public class UIRulebook : UIPanel
         {
             _audioSystem.PlayUIRulebookTurnClickSfx();
 
-            _currentIndex--;
             if (_currentIndex < 0)
             {
-                _currentIndex = Creator.rulebookSo.pages.Count - 1;
+                SetCurrentPage(Creator.rulebookSo.pages.Count - 1);
             }
-            SetCurrentPage(_currentIndex);
+            else
+            {
+                SetCurrentPage(_currentIndex - 1);
+            }
         });
         
         ButtonManager rightButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonRight);
@@ -69,17 +71,32 @@ public class UIRulebook : UIPanel
         {
             _audioSystem.PlayUIRulebookTurnClickSfx();
             
-            _currentIndex++;
             if (_currentIndex >= Creator.rulebookSo.pages.Count)
             {
-                _currentIndex = 0;
+                SetCurrentPage(0);
             }
-            SetCurrentPage(_currentIndex);
+            else
+            {
+                SetCurrentPage(_currentIndex + 1);
+            }
         });
 
         SetCurrentPage(0);
     }
 
+    public void ShowEnemyAbility(PieceAbility enemyAbility)
+    {
+        for (int i = 0; i < Creator.rulebookSo.pages.Count; i++)
+        {
+            Page page = Creator.rulebookSo.pages[i];
+            if (page.pieceAbility == enemyAbility)
+            {
+                SetCurrentPage(i);
+                return;
+            }
+        }
+    }
+    
     private void SetCurrentPage(int index)
     {
         Page page = Creator.rulebookSo.pages[index];
@@ -93,5 +110,7 @@ public class UIRulebook : UIPanel
         {
             highlightImage.image.color = highlightImage.index == index ? Creator.rulebookSo.highlightedColour : Creator.rulebookSo.notHighlightedColour;
         }
+        
+        _currentIndex = index;
     }
 }

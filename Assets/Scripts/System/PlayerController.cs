@@ -112,7 +112,7 @@ public class PlayerController : Dependency
     {
         //The player will find the move when they are ready
         Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
-        if (Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame() && CanMove(positionRequested) && !_blackSystem.IsPieceMoving())
+        if (Creator.inputSo.leftMouseButton.action.WasPressedThisFrame() && CanMove(positionRequested) && !_blackSystem.IsPieceMoving())
         {
             MovePiece(positionRequested);
         }
@@ -223,7 +223,7 @@ public class PlayerController : Dependency
             if (won)
             {
                 //We win!
-                _blackSystem.Lose(GameOverReason.Captured, 0);
+                _blackSystem.Lose(GameOverReason.Captured);
             }
             else if (_blackSystem.TryGetCaptureLoverMovingToPosition(_model.position, out AIController captureLoverController))
             {
@@ -324,7 +324,7 @@ public class PlayerController : Dependency
         _timer -= dt;
         if (_timer <= 0)
         {
-            _whiteSystem.Lose(GameOverReason.Locked, 0);
+            _whiteSystem.Lose(GameOverReason.Locked);
         }
     }
 

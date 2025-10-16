@@ -15,16 +15,31 @@ MonoBehaviour:
   pages:
   - sprite: {fileID: 21300522, guid: ee1aa8dd1fc49614d89b7eb3f8af788b, type: 3}
     material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    pieceAbility: 0
     description: '<u>How to Play</u>
 
 
-      Complete a level by capturing all pieces
-      on the board.
+      Complete a level by capturing every
+      piece on the board.
 
 
-      Any piece you capture will be added to your move chain.'
+      Any piece you capture will be added to your move
+      chain.'
   - sprite: {fileID: 21300522, guid: ee1aa8dd1fc49614d89b7eb3f8af788b, type: 3}
     material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    pieceAbility: 0
+    description: '<u>How to play (cont''d)</u>
+
+
+      If an enemy can''t move, it
+      is <b>blocked</b>.
+
+
+      Pawn promotions, en pessant and castling are not
+      present in Chain Chess.'
+  - sprite: {fileID: 21300522, guid: ee1aa8dd1fc49614d89b7eb3f8af788b, type: 3}
+    material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    pieceAbility: 0
     description: '<u>How to play (cont''d)</u>
 
 
@@ -34,19 +49,9 @@ MonoBehaviour:
 
       Learn each ability and use it to
       your advantage, or avoid.'
-  - sprite: {fileID: 21300522, guid: ee1aa8dd1fc49614d89b7eb3f8af788b, type: 3}
-    material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-    description: '<u>How to play (cont''d)</u>
-
-
-      If an enemy can''t move, it
-      is <i>blocked</i>.
-
-
-      Pawn promotions, en pessant and castling are not
-      present in Chain Chess.'
   - sprite: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
     material: {fileID: 2100000, guid: cc460e5b1c6c0bd498b44195a0c3da99, type: 2}
+    pieceAbility: 0
     description: '<u>Normal</u>
 
 
@@ -54,12 +59,14 @@ MonoBehaviour:
       and moved per turn.'
   - sprite: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
     material: {fileID: 2100000, guid: 2fc5c6c79c1ad5b47bada41338c43793, type: 2}
+    pieceAbility: 7
     description: '<u>Resetter</u>
 
 
       Destroys your chain (OC).'
   - sprite: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
     material: {fileID: 2100000, guid: e76cfe5e58629f449af696ed6f57501e, type: 2}
+    pieceAbility: 1
     description: '<u>Turn Mover</u>
 
 
@@ -67,6 +74,7 @@ MonoBehaviour:
       turn (OM).'
   - sprite: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
     material: {fileID: 2100000, guid: a348d79dc36725941b281d5550586c07, type: 2}
+    pieceAbility: 8
     description: '<u>Multiplier</u>
 
 
@@ -74,6 +82,7 @@ MonoBehaviour:
       type diagonally (OC).'
   - sprite: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
     material: {fileID: 2100000, guid: 1e155935f67404c4b87a00eebdc7a534, type: 2}
+    pieceAbility: 3
     description: '<u>Pouncer</u>
 
 
@@ -81,6 +90,7 @@ MonoBehaviour:
       line of sight (OM).'
   - sprite: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
     material: {fileID: 2100000, guid: b42d490520beb6846bc23a1aab35ad35, type: 2}
+    pieceAbility: 9
     description: '<u>Turn Stopper</u>
 
 
@@ -88,6 +98,7 @@ MonoBehaviour:
       you are in the chain (OC).'
   - sprite: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
     material: {fileID: 2100000, guid: 27ef043654ed6284cb47eea4e8ecc6f5, type: 2}
+    pieceAbility: 5
     description: '<u>Move Mover</u>
 
 

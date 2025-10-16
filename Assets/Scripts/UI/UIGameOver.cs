@@ -74,6 +74,10 @@ public class UIGameOver : UIPanel
         _quoteText.text = '"'+quote.quote+'"'+"\n\n<b>"+quote.name+"</b>";
         
         _panel.gameObject.SetActive(true);
-        _audioSystem.PlayerGameOverSfx();
+
+        if (_uiSystem.canvasType == _parentCanvas.canvasType)
+        {
+            _audioSystem.PlayerGameOverSfx();
+        }
     }
 }

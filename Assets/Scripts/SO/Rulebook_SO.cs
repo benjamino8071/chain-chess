@@ -16,6 +16,7 @@ public struct Page
 {
     public Sprite sprite;
     public Material material;
+    public PieceAbility pieceAbility;
     
     [TextArea(5, 15)]
     public string description;

@@ -116,7 +116,7 @@ public class BlackSystem : Dependency
         
         if (_piecesToMoveThisTurn.Count == 0)
         {
-            Lose(GameOverReason.Captured, 1.1f);
+            Lose(GameOverReason.Captured);
         }
         else
         {
@@ -299,7 +299,7 @@ public class BlackSystem : Dependency
 
         if (_pieceControllers.Count == 0)
         {
-            Lose(GameOverReason.Locked, 0);
+            Lose(GameOverReason.Locked);
         }
         else if(_turnSystem.CurrentTurn() == PieceColour.Black)
         {
@@ -309,7 +309,7 @@ public class BlackSystem : Dependency
         pieceController.Destroy();
     }
     
-    public void Lose(GameOverReason gameOverReason, float delayTimer)
+    public void Lose(GameOverReason gameOverReason)
     {
         if (_lost)
         {
@@ -318,7 +318,7 @@ public class BlackSystem : Dependency
         
         _whiteSystem.playerController.SetState(PieceState.EndGame);
         SetStateForAllPieces(PieceState.Blocked);
-        _endGameSystem.SetEndGame(PieceColour.White, gameOverReason, delayTimer);
+        _endGameSystem.SetEndGame(PieceColour.White, gameOverReason);
         _validMovesSystem.HideAllValidMoves();
         
         SetLost(true);

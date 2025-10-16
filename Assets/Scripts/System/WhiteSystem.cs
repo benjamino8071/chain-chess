@@ -89,7 +89,7 @@ public class WhiteSystem : Dependency
         _frozen = false;
     }
 
-    public void Lose(GameOverReason gameOverReason, float delayTimer)
+    public void Lose(GameOverReason gameOverReason)
     {
         if (_lost)
         {
@@ -101,7 +101,7 @@ public class WhiteSystem : Dependency
         _playerController.Destroy();
         _playerController = null;
         
-        _endGameSystem.SetEndGame(PieceColour.Black, gameOverReason, delayTimer);
+        _endGameSystem.SetEndGame(PieceColour.Black, gameOverReason);
         _validMovesSystem.HideAllValidMoves();
         
         SetLost(true);

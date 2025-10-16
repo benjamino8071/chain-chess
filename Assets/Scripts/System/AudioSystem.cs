@@ -24,25 +24,21 @@ public class AudioSystem : Dependency
 
     public void PlayLevelCompleteSfx()
     {
-        Debug.Log("Level Complete sfx");
         PlaySfx(Creator.audioClipsSo.roomComplete);
     }
 
     public void PlayerGameOverSfx()
     {
-        Debug.Log("Game over sfx");
         PlaySfx(Creator.audioClipsSo.gameOver);
     }
 
     public void PlayMenuOpenSfx()
     {
-        Debug.Log("Menu open sfx");
         PlaySfx(Creator.audioClipsSo.uiOpen);
     }
 
     public void PlayMenuCloseSfx()
     {
-        Debug.Log("Menu close sfx");
         PlaySfx(Creator.audioClipsSo.uiClose);
     }
 

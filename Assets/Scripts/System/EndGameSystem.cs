@@ -21,7 +21,7 @@ public class EndGameSystem : Dependency
         _uiSystem = creator.GetDependency<UISystem>();
     }
 
-    public void SetEndGame(PieceColour winningColour, GameOverReason gameOverReason, float delayTimer)
+    public void SetEndGame(PieceColour winningColour, GameOverReason gameOverReason)
     {
         if (winningColour == PieceColour.White)
         {

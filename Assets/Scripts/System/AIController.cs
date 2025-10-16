@@ -179,7 +179,7 @@ public class AIController : Dependency
             
             if (math.distance(_whiteSystem.playerController.piecePos, _model.position) < 0.01f)
             {
-                _whiteSystem.Lose(GameOverReason.Captured, 0);
+                _whiteSystem.Lose(GameOverReason.Captured);
             }
             else
             {

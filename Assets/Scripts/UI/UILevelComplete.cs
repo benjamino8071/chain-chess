@@ -99,7 +99,10 @@ public class UILevelComplete : UIPanel
             uiSections.UpdateStarCount();
         }
         
-        Debug.Log($"Score for level {levelCompleted.level}: {score}");
+        if (_uiSystem.canvasType == _parentCanvas.canvasType)
+        {
+            Debug.Log($"Score for level {levelCompleted.level}: {score}");
+        }
         
         bool oneStar = score <= levelCompleted.star1Score;
         bool twoStar = score <= levelCompleted.star2Score;
@@ -139,7 +142,10 @@ public class UILevelComplete : UIPanel
 
         if (oneStar || twoStar || threeStar)
         {
-            _audioSystem.PlayLevelCompleteSfx();
+            if (_uiSystem.canvasType == _parentCanvas.canvasType)
+            {
+                _audioSystem.PlayLevelCompleteSfx();
+            }
             
             if (levelCompleted.section == Creator.levelsSo.sections.Count)
             {

@@ -49,33 +49,48 @@ public class BoardSystem : Dependency
     {
         float3 gridPoint = GetGridPointNearMouse();
         
-        if (!Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame()
-            || _endGameSystem.isEndGame
-            || !IsPositionValid(gridPoint))
+        if (_endGameSystem.isEndGame || !IsPositionValid(gridPoint))
         {
             return;
         }
-
-        if (_uiSystem.leftBotSidePanelOpen == AllTagNames.UISections)
-        {
-            _uiSystem.HideLeftBotSideUI();
-        }
-
-        if (_uiSystem.rightTopSidePanelOpen == AllTagNames.UILevels)
-        {
-            _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);
-        }
         
-        Creator.boardSo.hideMainMenuTrigger = true;
+        ShowTapPoint(gridPoint);
         
-        bool samePoint = math.distance(gridPoint, _tapPoint.position) < 0.001f;
-        if (samePoint)
+        // bool samePoint = math.distance(gridPoint, _tapPoint.position) < 0.001f;
+        //  if (samePoint)
+        //  {
+        //      HideTapPoint();
+        //  }
+        //  else
+        //  {
+        //  }
+        
+        if (Creator.inputSo.leftMouseButton.action.WasPressedThisFrame())
         {
-            HideTapPoint();
+            if (_uiSystem.leftBotSidePanelOpen != AllTagNames.None)
+            {
+                _uiSystem.HideLeftBotSideUI();
+            }
+
+            if (_uiSystem.rightTopSidePanelOpen != AllTagNames.UIChain)
+            {
+                _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);
+            }
+        
+            Creator.boardSo.hideMainMenuTrigger = true;
         }
-        else
+        else if (Creator.inputSo.rightMouseButton.action.WasPressedThisFrame())
         {
-            ShowTapPoint(gridPoint);
+            AIController aiController = _blackSystem.GetPieceAtPosition(gridPoint);
+            if (aiController != null && aiController.pieceAbility != PieceAbility.None)
+            {
+                List<UIRulebook> rulebooks = _uiSystem.GetUI<UIRulebook>();
+                foreach (UIRulebook uiRulebook in rulebooks)
+                {
+                    uiRulebook.ShowEnemyAbility(aiController.pieceAbility);
+                }
+                _uiSystem.ShowLeftBotSideUI(AllTagNames.UIRulebook);
+            }
         }
     }
 

@@ -97,7 +97,8 @@ public class Creator : MonoBehaviour
         {
             case TransitionState.None:
             {
-                if (!firstMoveMade && inputSo.leftMouseButton.action.WasPressedThisFrame())
+                if (!firstMoveMade 
+                    && (inputSo.leftMouseButton.action.WasPressedThisFrame() || inputSo.rightMouseButton.action.WasPressedThisFrame()))
                 {
                     GetDependency<UISystem>().SetHomescreen(false);
                     firstMoveMade = true;

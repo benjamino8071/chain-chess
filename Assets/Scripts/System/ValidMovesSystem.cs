@@ -44,6 +44,8 @@ public class ValidMovesSystem : Dependency
 
     public void UpdateValidMoves(List<ValidMove> validMoves)
     {
+        //Debug.Log("Updating valid moves");
+        
         HideAllValidMoves();
         
         for (int i = 0; i < validMoves.Count; i++)

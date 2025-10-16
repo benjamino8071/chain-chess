@@ -36,7 +36,7 @@ public class PlayerSetTilesSystem : Dependency
         Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
         if (Creator.inputSo.rightMouseButton.action.WasPerformedThisFrame() && _boardSystem.IsPositionValid(positionRequested))
         {
-            AddTile(new Vector2(positionRequested.x, positionRequested.y));
+            ToggleTile(new Vector2(positionRequested.x, positionRequested.y));
         }
         else if (Creator.inputSo.leftMouseButton.action.WasPerformedThisFrame())
         {
@@ -44,11 +44,11 @@ public class PlayerSetTilesSystem : Dependency
         }
     }
 
-    private void AddTile(Vector2 position)
+    private void ToggleTile(Vector2 position)
     {
         if (_tiles.TryGetValue(position, out Transform tile))
         {
-            tile.gameObject.SetActive(true);
+            tile.gameObject.SetActive(!tile.gameObject.activeSelf);
         }
     }
 

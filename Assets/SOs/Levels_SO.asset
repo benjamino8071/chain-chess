@@ -774,10 +774,10 @@ MonoBehaviour:
       - piece: 1
         colour: 0
         ability: 0
-        position: {x: 7, y: 6}
+        position: {x: 6, y: 8}
       - piece: 5
         colour: 0
-        ability: 7
+        ability: 0
         position: {x: 2, y: 6}
     - section: 3
       level: 2

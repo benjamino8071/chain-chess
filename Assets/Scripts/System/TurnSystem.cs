@@ -42,21 +42,34 @@ public class TurnSystem : Dependency
     
     public void SwitchTurn(PieceColour nextTurn)
     {
+        if (_endGameSystem.isEndGame)
+        {
+            return;
+        }
+        
         _currentTurn = nextTurn;
         switch (nextTurn)
         {
             case PieceColour.White:
                 Creator.statsTurns++;
-                
-                _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfFirstPiece());
-                
-                _whiteSystem.playerController.SetState(PieceState.FindingMove);
-                _blackSystem.SetStateForAllPieces(PieceState.WaitingForTurn);
 
-                List<UIChain> uiChains = _uiSystem.GetUI<UIChain>();
-                foreach (UIChain uiChain in uiChains)
+                List<ValidMove> validMoves = _whiteSystem.playerController.GetAllValidMovesOfFirstPiece();
+                if (validMoves.Count == 0)
                 {
-                    uiChain.ShowChain(_whiteSystem.playerController);
+                    _whiteSystem.playerController.SetState(PieceState.Blocked);
+                }
+                else
+                {
+                    _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfFirstPiece());
+                
+                    _whiteSystem.playerController.SetState(PieceState.FindingMove);
+                    _blackSystem.SetStateForAllPieces(PieceState.WaitingForTurn);
+
+                    List<UIChain> uiChains = _uiSystem.GetUI<UIChain>();
+                    foreach (UIChain uiChain in uiChains)
+                    {
+                        uiChain.ShowChain(_whiteSystem.playerController);
+                    }
                 }
                 break;
             case PieceColour.Black:
@@ -94,13 +107,6 @@ public class TurnSystem : Dependency
         
         _blackSystem.SpawnPieces(level);
         _blackSystem.SetLost(false);
-        
-        List<UIChain> uiChains = _uiSystem.GetUI<UIChain>();
-        foreach (UIChain uiChain in uiChains)
-        {
-            uiChain.ShowChain(_whiteSystem.playerController);
-        }
-        _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfCurrentPiece());
 
         _boardSystem.ShowTapPoint(_whiteSystem.playerController.piecePos);
         
