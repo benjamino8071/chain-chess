@@ -63,7 +63,8 @@ public enum PieceAbility
     AlwaysMove = 5,
     Resetter = 7,
     Multiplier = 8,
-    StopTurn = 9
+    StopTurn = 9,
+    Foo = 10
 }
 
 public enum PieceState

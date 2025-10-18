@@ -82,7 +82,7 @@ public class BoardSystem : Dependency
         else if (Creator.inputSo.rightMouseButton.action.WasPressedThisFrame())
         {
             AIController aiController = _blackSystem.GetPieceAtPosition(gridPoint);
-            if (aiController != null && aiController.pieceAbility != PieceAbility.None)
+            if (aiController != null && aiController.pieceAbility != PieceAbility.Foo)
             {
                 List<UIRulebook> rulebooks = _uiSystem.GetUI<UIRulebook>();
                 foreach (UIRulebook uiRulebook in rulebooks)

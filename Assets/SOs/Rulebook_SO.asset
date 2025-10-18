@@ -15,7 +15,7 @@ MonoBehaviour:
   pages:
   - sprite: {fileID: 21300522, guid: ee1aa8dd1fc49614d89b7eb3f8af788b, type: 3}
     material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-    pieceAbility: 0
+    pieceAbility: 10
     description: '<u>How to Play</u>
 
 
@@ -27,7 +27,7 @@ MonoBehaviour:
       chain.'
   - sprite: {fileID: 21300522, guid: ee1aa8dd1fc49614d89b7eb3f8af788b, type: 3}
     material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-    pieceAbility: 0
+    pieceAbility: 10
     description: '<u>How to play (cont''d)</u>
 
 
@@ -39,7 +39,7 @@ MonoBehaviour:
       present in Chain Chess.'
   - sprite: {fileID: 21300522, guid: ee1aa8dd1fc49614d89b7eb3f8af788b, type: 3}
     material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-    pieceAbility: 0
+    pieceAbility: 10
     description: '<u>How to play (cont''d)</u>
 
 
