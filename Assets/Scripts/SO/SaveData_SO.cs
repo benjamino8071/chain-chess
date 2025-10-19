@@ -20,6 +20,10 @@ public class SaveData_SO : ScriptableObject
     public int windowHeight;
     
     public bool isFullscreen;
+
+    public int totalMoves;
+    public int totalTurns;
+    public int totalCaptures;
 }
 
 [Serializable]

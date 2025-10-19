@@ -140,6 +140,13 @@ public class UILevelComplete : UIPanel
         
         _panel.gameObject.SetActive(true);
 
+        if (_uiSystem.canvasType == _parentCanvas.canvasType)
+        {
+            Creator.saveDataSo.totalTurns += Creator.statsTurns;
+            Creator.saveDataSo.totalMoves += Creator.statsMoves;
+            Creator.saveDataSo.totalCaptures += Creator.statsCaptures;
+        }
+        
         if (oneStar || twoStar || threeStar)
         {
             if (_uiSystem.canvasType == _parentCanvas.canvasType)
@@ -152,7 +159,7 @@ public class UILevelComplete : UIPanel
                 _uiSystem.ShowThankYouForPlayingUI();
             }
         }
-        else
+        else if(_uiSystem.canvasType == _parentCanvas.canvasType)
         {
             _audioSystem.PlayerGameOverSfx();
         }

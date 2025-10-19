@@ -123,6 +123,7 @@ public class PlayerController : Dependency
         if (_model.position == _jumpPosition)
         {
             Creator.statsMoves++;
+            //HERE
             
             _model.position = math.round(_model.position);
             _timer = 0;
@@ -205,6 +206,8 @@ public class PlayerController : Dependency
                         break;
                     }
                 }
+
+                Creator.statsCaptures++;
                 
                 won = _blackSystem.PieceCaptured(enemyPieceController);
 

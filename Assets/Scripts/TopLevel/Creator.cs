@@ -42,6 +42,7 @@ public class Creator : MonoBehaviour
 
     [HideInInspector] public int statsTurns;
     [HideInInspector] public int statsMoves;
+    [HideInInspector] public int statsCaptures;
     [HideInInspector] public bool firstMoveMade;
     
     private List<Dependency> _dependencies = new();
@@ -205,6 +206,9 @@ public class Creator : MonoBehaviour
             saveDataSo.isFirstTime = false;
             saveDataSo.windowWidth = diskSaveDataSo.windowWidth;
             saveDataSo.windowHeight = diskSaveDataSo.windowHeight;
+            saveDataSo.totalTurns = diskSaveDataSo.totalTurns;
+            saveDataSo.totalMoves = diskSaveDataSo.totalMoves;
+            saveDataSo.totalCaptures = diskSaveDataSo.totalCaptures;
         }
         else
         {
@@ -217,6 +221,9 @@ public class Creator : MonoBehaviour
             saveDataSo.isFirstTime = true;
             saveDataSo.windowWidth = settingsSo.defaultWidth;
             saveDataSo.windowHeight = settingsSo.defaultHeight;
+            saveDataSo.totalTurns = 0;
+            saveDataSo.totalMoves = 0;
+            saveDataSo.totalCaptures = 0;
         }
     }
 

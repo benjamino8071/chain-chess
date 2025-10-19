@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Michsky.MUIP;
 using MoreMountains.FeedbacksForThirdParty;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -27,9 +28,12 @@ public class UISystem : Dependency
     private Transform _badAspectRatioCanvas;
     private Image _badAspectRatioBackground;
     
-    private Transform _thankYouForPlayingCanvas;
-    private Image _thankYouForPlayingBackground;
-    private ScaleTween _thankYouForPlayingTween;
+    private Transform _tyfpCanvas;
+    private Image _tyfpBackground;
+    private ScaleTween _tyfpTween;
+    private TextMeshProUGUI _tyfpTotalTurnsText;
+    private TextMeshProUGUI _tyfpTotalMovesText;
+    private TextMeshProUGUI _tyfpTotalCapturesText;
     
     private AllTagNames _canvasType;
     
@@ -43,18 +47,24 @@ public class UISystem : Dependency
         _badAspectRatioBackground =
             creator.GetChildComponentByName<Image>(_badAspectRatioCanvas.gameObject, AllTagNames.Image);
         
-        _thankYouForPlayingCanvas = creator.GetFirstObjectWithName(AllTagNames.ThankYouForPlaying);
-        _thankYouForPlayingBackground = creator.GetChildComponentByName<Image>(_thankYouForPlayingCanvas.gameObject, AllTagNames.Image);
-        _thankYouForPlayingTween = _thankYouForPlayingCanvas.GetComponentInChildren<ScaleTween>();
+        _tyfpCanvas = creator.GetFirstObjectWithName(AllTagNames.ThankYouForPlaying);
+        _tyfpBackground = creator.GetChildComponentByName<Image>(_tyfpCanvas.gameObject, AllTagNames.Image);
+        _tyfpTween = _tyfpCanvas.GetComponentInChildren<ScaleTween>();
+        _tyfpTotalTurnsText =
+            creator.GetChildComponentByName<TextMeshProUGUI>(_tyfpCanvas.gameObject, AllTagNames.TurnsText);
+        _tyfpTotalMovesText =
+            creator.GetChildComponentByName<TextMeshProUGUI>(_tyfpCanvas.gameObject, AllTagNames.MovesText);
+        _tyfpTotalCapturesText =
+            creator.GetChildComponentByName<TextMeshProUGUI>(_tyfpCanvas.gameObject, AllTagNames.CapturesText);
         
         ButtonManager okButton =
-            creator.GetChildComponentByName<ButtonManager>(_thankYouForPlayingCanvas.gameObject,
+            creator.GetChildComponentByName<ButtonManager>(_tyfpCanvas.gameObject,
                 AllTagNames.ButtonAccept);
         okButton.onClick.AddListener(() =>
         {
             _audioSystem.PlayUISignificantClickSfx();
 
-            _thankYouForPlayingCanvas.gameObject.SetActive(false);
+            _tyfpCanvas.gameObject.SetActive(false);
             _canvasType = AllTagNames.None;
         });
         
@@ -71,7 +81,7 @@ public class UISystem : Dependency
         UpdateCurrentCanvas();
         
         _badAspectRatioCanvas.gameObject.SetActive(false);
-        _thankYouForPlayingCanvas.gameObject.SetActive(false);
+        _tyfpCanvas.gameObject.SetActive(false);
         
         //Turn system handles showing chain
         SetHomescreen(true);
@@ -222,7 +232,7 @@ public class UISystem : Dependency
     {
         color.a = 0.2f;
         _badAspectRatioBackground.color = color;
-        _thankYouForPlayingBackground.color = color;
+        _tyfpBackground.color = color;
     }
 
     public void ShowThankYouForPlayingUI()
@@ -231,9 +241,13 @@ public class UISystem : Dependency
             
         _landscapeCanvas.SetVisibility(false);
         _portraitCanvas.SetVisibility(false);
+
+        _tyfpTotalTurnsText.text = $"{Creator.saveDataSo.totalTurns}";
+        _tyfpTotalMovesText.text = $"{Creator.saveDataSo.totalMoves}";
+        _tyfpTotalCapturesText.text = $"{Creator.saveDataSo.totalCaptures}";
         
-        _thankYouForPlayingCanvas.gameObject.SetActive(true);
-        _thankYouForPlayingTween.PhaseIn();
+        _tyfpCanvas.gameObject.SetActive(true);
+        _tyfpTween.PhaseIn();
         
         _canvasType = AllTagNames.ThankYouForPlaying;
     }

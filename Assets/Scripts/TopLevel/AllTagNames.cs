@@ -82,4 +82,7 @@ public enum AllTagNames
     UITitle = 160,
     UIConfirmDelete = 161,
     ButtonCancel = 162,
+    TurnsText = 163,
+    MovesText = 164,
+    CapturesText = 165,
 }

@@ -52,7 +52,8 @@ public class TurnSystem : Dependency
         {
             case PieceColour.White:
                 Creator.statsTurns++;
-
+                //HERE
+                
                 List<ValidMove> validMoves = _whiteSystem.playerController.GetAllValidMovesOfFirstPiece();
                 if (validMoves.Count == 0)
                 {
@@ -114,6 +115,7 @@ public class TurnSystem : Dependency
 
         Creator.statsTurns = 0;
         Creator.statsMoves = 0;
+        Creator.statsCaptures = 0;
     
         _currentLevel = level;
 
