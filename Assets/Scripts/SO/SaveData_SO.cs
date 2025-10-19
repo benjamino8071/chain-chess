@@ -24,6 +24,8 @@ public class SaveData_SO : ScriptableObject
     public int totalMoves;
     public int totalTurns;
     public int totalCaptures;
+
+    public double totalSeconds;
 }
 
 [Serializable]

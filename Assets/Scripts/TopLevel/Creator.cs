@@ -44,7 +44,8 @@ public class Creator : MonoBehaviour
     [HideInInspector] public int statsMoves;
     [HideInInspector] public int statsCaptures;
     [HideInInspector] public bool firstMoveMade;
-    
+    private DateTime _dateTimeSinceLastSave;
+
     private List<Dependency> _dependencies = new();
     
     [Title("Transition")]
@@ -79,6 +80,8 @@ public class Creator : MonoBehaviour
     
     private void Start()
     {
+        _dateTimeSinceLastSave = DateTime.Now;
+        
         Random.InitState(42);
         
         mainCam.backgroundColor = Color.black;
@@ -94,6 +97,7 @@ public class Creator : MonoBehaviour
     
     private void Update()
     {
+        float dt = Time.deltaTime;
         switch (_transitionState)
         {
             case TransitionState.None:
@@ -113,24 +117,24 @@ public class Creator : MonoBehaviour
         
                 foreach (Dependency dependency in _dependencies)
                 {
-                    dependency.GameEarlyUpdate(Time.deltaTime);
+                    dependency.GameEarlyUpdate(dt);
                 }
         
                 foreach (Dependency dependency in _dependencies)
                 {
-                    dependency.GameUpdate(Time.deltaTime);
+                    dependency.GameUpdate(dt);
                 }
         
                 foreach (Dependency dependency in _dependencies)
                 {
-                    dependency.GameLateUpdate(Time.deltaTime);
+                    dependency.GameLateUpdate(dt);
                 }
                 
                 break;
             }
             case TransitionState.Delay:
             {
-                _transitionTimer += Time.deltaTime;
+                _transitionTimer += dt;
 
                 if (_transitionTimer >= delayBeforeTransition)
                 {
@@ -141,7 +145,7 @@ public class Creator : MonoBehaviour
             }
             case TransitionState.Transition:
             {
-                _transitionTimer += Time.deltaTime;
+                _transitionTimer += dt;
             
                 float t = math.min(1, _transitionTimer / transitionTime);
                 float width = math.lerp(sceneTransitionCanvas.rect.width, 0, t);
@@ -191,6 +195,10 @@ public class Creator : MonoBehaviour
 
     public void SaveToDisk()
     {
+        TimeSpan elapsed = DateTime.Now - _dateTimeSinceLastSave;
+        saveDataSo.totalSeconds += elapsed.TotalSeconds;
+        _dateTimeSinceLastSave = DateTime.Now;
+        
         ES3.Save(settingsSo.saveDataKey, saveDataSo);
     }
 
@@ -209,6 +217,7 @@ public class Creator : MonoBehaviour
             saveDataSo.totalTurns = diskSaveDataSo.totalTurns;
             saveDataSo.totalMoves = diskSaveDataSo.totalMoves;
             saveDataSo.totalCaptures = diskSaveDataSo.totalCaptures;
+            saveDataSo.totalSeconds = diskSaveDataSo.totalSeconds;
         }
         else
         {
@@ -224,6 +233,7 @@ public class Creator : MonoBehaviour
             saveDataSo.totalTurns = 0;
             saveDataSo.totalMoves = 0;
             saveDataSo.totalCaptures = 0;
+            saveDataSo.totalSeconds = 0;
         }
     }
 

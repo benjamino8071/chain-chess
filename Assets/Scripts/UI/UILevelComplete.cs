@@ -90,8 +90,6 @@ public class UILevelComplete : UIPanel
         _star1ScoreRequiredText.text = $"{levelCompleted.star1Score}";
         _star2ScoreRequiredText.text = $"{levelCompleted.star2Score}";
         _star3ScoreRequiredText.text = $"{levelCompleted.star3Score}";
-
-        SaveLatestLevelScore(levelCompleted, score);
         
         List<UISections> uiSectionss = _uiSystem.GetUI<UISections>();
         foreach (UISections uiSections in uiSectionss)
@@ -142,26 +140,25 @@ public class UILevelComplete : UIPanel
 
         if (_uiSystem.canvasType == _parentCanvas.canvasType)
         {
+            SaveLatestLevelScore(levelCompleted, score);
+            
             Creator.saveDataSo.totalTurns += Creator.statsTurns;
             Creator.saveDataSo.totalMoves += Creator.statsMoves;
             Creator.saveDataSo.totalCaptures += Creator.statsCaptures;
-        }
-        
-        if (oneStar || twoStar || threeStar)
-        {
-            if (_uiSystem.canvasType == _parentCanvas.canvasType)
+            
+            if (oneStar || twoStar || threeStar)
             {
                 _audioSystem.PlayLevelCompleteSfx();
+                
+                if (levelCompleted.section == Creator.levelsSo.sections.Count)
+                {
+                    _uiSystem.ShowThankYouForPlayingUI();
+                }
             }
-            
-            if (levelCompleted.section == Creator.levelsSo.sections.Count)
+            else
             {
-                _uiSystem.ShowThankYouForPlayingUI();
+                _audioSystem.PlayerGameOverSfx();
             }
-        }
-        else if(_uiSystem.canvasType == _parentCanvas.canvasType)
-        {
-            _audioSystem.PlayerGameOverSfx();
         }
     }
     

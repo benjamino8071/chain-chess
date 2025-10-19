@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Michsky.MUIP;
 using MoreMountains.FeedbacksForThirdParty;
@@ -34,6 +35,7 @@ public class UISystem : Dependency
     private TextMeshProUGUI _tyfpTotalTurnsText;
     private TextMeshProUGUI _tyfpTotalMovesText;
     private TextMeshProUGUI _tyfpTotalCapturesText;
+    private TextMeshProUGUI _tyfpTotalTimeText;
     
     private AllTagNames _canvasType;
     
@@ -56,7 +58,9 @@ public class UISystem : Dependency
             creator.GetChildComponentByName<TextMeshProUGUI>(_tyfpCanvas.gameObject, AllTagNames.MovesText);
         _tyfpTotalCapturesText =
             creator.GetChildComponentByName<TextMeshProUGUI>(_tyfpCanvas.gameObject, AllTagNames.CapturesText);
-        
+        _tyfpTotalTimeText =
+            creator.GetChildComponentByName<TextMeshProUGUI>(_tyfpCanvas.gameObject, AllTagNames.TimeText);
+
         ButtonManager okButton =
             creator.GetChildComponentByName<ButtonManager>(_tyfpCanvas.gameObject,
                 AllTagNames.ButtonAccept);
@@ -245,6 +249,14 @@ public class UISystem : Dependency
         _tyfpTotalTurnsText.text = $"{Creator.saveDataSo.totalTurns}";
         _tyfpTotalMovesText.text = $"{Creator.saveDataSo.totalMoves}";
         _tyfpTotalCapturesText.text = $"{Creator.saveDataSo.totalCaptures}";
+
+        TimeSpan elapsed = TimeSpan.FromSeconds(Creator.saveDataSo.totalSeconds);
+
+        string timeSpan = string.Format("{0:D2}h, {1:D2}m, {2:D2}s",
+            (int)elapsed.TotalHours,
+            elapsed.Minutes,
+            elapsed.Seconds);
+        _tyfpTotalTimeText.text = timeSpan;
         
         _tyfpCanvas.gameObject.SetActive(true);
         _tyfpTween.PhaseIn();
