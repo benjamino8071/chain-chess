@@ -17,10 +17,6 @@ public class UISections : UIPanel
     }
 
     private TurnSystem _turnSystem;
-
-    private SectionButton _finalLevelButton;
-    
-    //private ButtonManager _finalLevelButton;
     
     private List<SectionButton> _sectionButtons;
     
@@ -68,26 +64,6 @@ public class UISections : UIPanel
             
             _sectionButtons.Add(sectionButton);
         }
-        
-        ButtonManager finalLevelButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonFinalLevel);
-        _finalLevelButton = new()
-        {
-            button = finalLevelButton,
-            buttonBackgroundImages =
-                Creator.GetChildComponentsByName<Image>(finalLevelButton.gameObject, AllTagNames.BackgroundImage),
-            section = Creator.levelsSo.sections.Count,
-            starsRequiredToUnlock = Creator.levelsSo.totalStars - 3,
-            unlocked = false,
-        };
-        
-        _finalLevelButton.button.onClick.AddListener(() =>
-        {
-            _audioSystem.PlayUISignificantClickSfx();
-            
-            _turnSystem.LoadLevelRuntime(Creator.levelsSo.sections[^1].levels[^1]);
-            
-            _uiSystem.HideLeftBotSideUI();
-        });
     }
 
     private void ShowSection(int section)
@@ -135,47 +111,9 @@ public class UISections : UIPanel
             SetButtonAppearance(sectionButton, starCount, starCountInSection, totalStarsInSection);
         }
         
-        int totalStarsNoFl = Creator.levelsSo.totalStars - 3;
-        
-        _finalLevelButton.button.gameObject.SetActive(starCount >= totalStarsNoFl);
-        if (_finalLevelButton.button.gameObject.activeSelf)
-        {
-            int starCountInSection = 0;
-            foreach (LevelSaveData levelSaveData in Creator.saveDataSo.levels)
-            {
-                if (levelSaveData.section != _finalLevelButton.section)
-                {
-                    continue;
-                }
-                
-                starCountInSection += levelSaveData.starsScored;
-            }
-            
-            if (starCountInSection == 3)
-            {
-                _finalLevelButton.button.enableIcon = true;
-                _finalLevelButton.button.enableText = true;
-                
-                _finalLevelButton.button.normalText.color = Color.white;
-                _finalLevelButton.button.SetIcon(Creator.miscUiSo.tickSprite);
-                foreach (Image image in _finalLevelButton.buttonBackgroundImages)
-                {
-                    image.color = Creator.miscUiSo.sectionCompleteColour;
-                }
-                _finalLevelButton.button.normalImage.color = Creator.miscUiSo.sectionCompleteColour;
-                _finalLevelButton.button.highlightImage.color = Color.black;
-            }
-            else
-            {
-                _finalLevelButton.button.enableIcon = false;
-                _finalLevelButton.button.enableText = true;
-            }
-        }
-        
-        //Take away 3 because we don't want to include the very last level
-        float t = starCount / (float)totalStarsNoFl;
+        float t = starCount / (float)Creator.levelsSo.totalStars;
         _starsScoredProgressBar.SetBar01(t);
-        _starsScoredText.text = $"{starCount}";
+        _starsScoredText.text = $" {starCount} ({(int)(t*100)}%)";
     }
 
     private void SetButtonAppearance(SectionButton sectionButton, int starsScoredInGame, int currentStarCountInSection, int totalStarCountInSection)

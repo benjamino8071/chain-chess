@@ -22,12 +22,13 @@ MonoBehaviour:
       Welcome to Chain Chess!
 
 
-      Complete
-      a level by capturing each piece on the board.
+      Each
+      turn you will step through your move chain. When you capture a piece, it will
+      be added to the chain.
 
 
-      Capture a piece to add
-      it to your move chain.
+      To complete a level, capture all enemy pieces
+      on the board.
 
 
       The chain will reset at the start of your turn.'
@@ -49,7 +50,7 @@ MonoBehaviour:
     description: '<u>How to play (3/3)</u>
 
 
-      Sections 3-8 contain enemies with
+      Sections 3-9 contain enemies with
       abilities.
 
 

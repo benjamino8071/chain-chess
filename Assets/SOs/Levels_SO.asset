@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d95c0e68f1afe40b1e17ff42d33617, type: 3}
   m_Name: Levels_SO
   m_EditorClassIdentifier: 
-  totalStars: 240
+  totalStars: 243
   sections:
   - section: 1
     starsRequiredToUnlock: 0
@@ -271,6 +271,53 @@ MonoBehaviour:
         position: {x: 3, y: 3}
     - section: 1
       level: 9
+      isLastInSection: 0
+      star1Score: 35
+      star2Score: 24
+      star3Score: 9
+      positions:
+      - piece: 5
+        colour: 1
+        ability: 0
+        position: {x: 4, y: 4}
+      - piece: 2
+        colour: 0
+        ability: 0
+        position: {x: 5, y: 7}
+      - piece: 3
+        colour: 0
+        ability: 0
+        position: {x: 6, y: 3}
+      - piece: 5
+        colour: 0
+        ability: 0
+        position: {x: 4, y: 2}
+      - piece: 2
+        colour: 0
+        ability: 0
+        position: {x: 4, y: 6}
+      - piece: 6
+        colour: 0
+        ability: 0
+        position: {x: 3, y: 7}
+      - piece: 3
+        colour: 0
+        ability: 0
+        position: {x: 3, y: 3}
+      - piece: 4
+        colour: 0
+        ability: 0
+        position: {x: 6, y: 6}
+      - piece: 4
+        colour: 0
+        ability: 0
+        position: {x: 5, y: 4}
+      - piece: 2
+        colour: 0
+        ability: 0
+        position: {x: 5, y: 5}
+    - section: 1
+      level: 10
       isLastInSection: 1
       star1Score: 49
       star2Score: 36
@@ -341,7 +388,7 @@ MonoBehaviour:
         ability: 0
         position: {x: 5, y: 5}
   - section: 2
-    starsRequiredToUnlock: 21
+    starsRequiredToUnlock: 20
     levels:
     - section: 2
       level: 1
@@ -4068,14 +4115,14 @@ MonoBehaviour:
         ability: 3
         position: {x: 8, y: 7}
   - section: 9
-    starsRequiredToUnlock: 237
+    starsRequiredToUnlock: 240
     levels:
     - section: 9
       level: 1
       isLastInSection: 1
-      star1Score: 0
-      star2Score: 0
-      star3Score: 0
+      star1Score: 9997
+      star2Score: 9998
+      star3Score: 9999
       positions:
       - piece: 5
         colour: 1
