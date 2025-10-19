@@ -274,7 +274,7 @@ public class AIController : Dependency
         {
             _blackSystem.PieceBlocked(this);
             
-            if (_pieceAbility == PieceAbility.AlwaysMove && _turnSystem.CurrentTurn() == PieceColour.White)
+            if (_whiteSystem.playerController != null && _pieceAbility == PieceAbility.AlwaysMove && _turnSystem.CurrentTurn() == PieceColour.White)
             {
                 _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfCurrentPiece());
 

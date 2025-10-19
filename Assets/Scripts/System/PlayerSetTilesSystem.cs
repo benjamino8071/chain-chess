@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerSetTilesSystem : Dependency
 {
     private BoardSystem _boardSystem;
+    private EndGameSystem _endGameSystem;
 
     private Dictionary<Vector2, Transform> _tiles;
     
@@ -13,7 +14,8 @@ public class PlayerSetTilesSystem : Dependency
         base.GameStart(creator);
 
         _boardSystem = creator.GetDependency<BoardSystem>();
-
+        _endGameSystem = creator.GetDependency<EndGameSystem>();
+        
         int capacity = 64;
         _tiles = new(capacity);
         
@@ -33,6 +35,13 @@ public class PlayerSetTilesSystem : Dependency
 
     public override void GameUpdate(float dt)
     {
+        float3 gridPoint = _boardSystem.GetGridPointNearMouse();
+        
+        if (_endGameSystem.isEndGame || !_boardSystem.IsPositionValid(gridPoint))
+        {
+            return;
+        }
+        
         Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
         if (Creator.inputSo.rightMouseButton.action.WasPerformedThisFrame() && _boardSystem.IsPositionValid(positionRequested))
         {

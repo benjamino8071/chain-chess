@@ -110,7 +110,6 @@ public class UILevels : UIPanel
                 _levelToLoad = levelInfo.level;
                 
                 LoadLevelPreview(_levelToLoad);
-                _levelText.text = $"Level {_levelToLoad.section} - {_levelToLoad.level}";
                 _levelText.gameObject.SetActive(true);
                 _playButton.gameObject.SetActive(true);
             });
@@ -136,8 +135,8 @@ public class UILevels : UIPanel
     public override void Show()
     {
         _playButton.gameObject.SetActive(false);
-        _levelText.gameObject.SetActive(false);
         ResetLevelPreview();
+        LoadLevelPreview(_turnSystem.currentLevel);
         
         base.Show();
     }
@@ -235,6 +234,7 @@ public class UILevels : UIPanel
             _previewPieceImages[position].gameObject.SetActive(true);
         }
         
+        _levelText.text = $"Level {level.section} - {level.level}";
         _levelPreviewParent.gameObject.SetActive(true);
     }
 

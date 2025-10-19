@@ -56,15 +56,6 @@ public class BoardSystem : Dependency
         
         ShowTapPoint(gridPoint);
         
-        // bool samePoint = math.distance(gridPoint, _tapPoint.position) < 0.001f;
-        //  if (samePoint)
-        //  {
-        //      HideTapPoint();
-        //  }
-        //  else
-        //  {
-        //  }
-        
         if (Creator.inputSo.leftMouseButton.action.WasPressedThisFrame())
         {
             if (_uiSystem.leftBotSidePanelOpen != AllTagNames.None)

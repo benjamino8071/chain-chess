@@ -110,7 +110,15 @@ public class BlackSystem : Dependency
             if (pieceController.pieceAbility == PieceAbility.MustMove
                 || pieceController.pieceAbility == PieceAbility.AlwaysMove)
             {
-                _piecesToMoveThisTurn.Add(pieceController);
+                List<ValidMove> validMoves = pieceController.GetAllValidMovesOfPiece();
+                if (validMoves.Count == 0)
+                {
+                    pieceController.SetState(PieceState.Blocked);
+                }
+                else
+                {
+                    _piecesToMoveThisTurn.Add(pieceController);
+                }
             }
         }
         
@@ -122,11 +130,16 @@ public class BlackSystem : Dependency
         {
             foreach (AIController aiController in _piecesToMoveThisTurn)
             {
+                if (aiController.state == PieceState.Blocked)
+                {
+                    continue;
+                }
+                
                 if (aiController.pieceAbility != PieceAbility.AlwaysMove)
                 {
                     aiController.PlayEnlargeAnimation();
                 }
-                
+
                 aiController.SetState(PieceState.FindingMove);
             }
         }
@@ -304,6 +317,10 @@ public class BlackSystem : Dependency
         else if(_turnSystem.CurrentTurn() == PieceColour.Black)
         {
             PieceFinished(pieceController);
+        }
+        else if(_whiteSystem.playerController != null)
+        {
+            _validMovesSystem.UpdateValidMoves(_whiteSystem.playerController.GetAllValidMovesOfCurrentPiece());
         }
         
         pieceController.Destroy();
