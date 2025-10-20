@@ -52,7 +52,11 @@ public class TurnSystem : Dependency
         {
             case PieceColour.White:
                 Creator.statsTurns++;
-                //HERE
+                List<UICurrentScore> currentScores = _uiSystem.GetUI<UICurrentScore>();
+                foreach (UICurrentScore currentScore in currentScores)
+                {
+                    currentScore.SetCurrentScoreText(Creator.statsTurns, Creator.statsMoves);
+                }
                 
                 List<ValidMove> validMoves = _whiteSystem.playerController.GetAllValidMovesOfFirstPiece();
                 if (validMoves.Count == 0)
@@ -123,6 +127,12 @@ public class TurnSystem : Dependency
         Creator.saveDataSo.levelLastLoaded = level.level;
         Creator.SaveToDisk();
 
+        List<UICurrentScore> currentScores = _uiSystem.GetUI<UICurrentScore>();
+        foreach (UICurrentScore currentScore in currentScores)
+        {
+            currentScore.SetNewLevel(level);
+        }
+        
         if (showChain)
         {
             _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);

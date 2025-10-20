@@ -37,7 +37,7 @@ public class UIBasicMenu : UIPanel
         {
             if (_parentCanvas.leftBotSidePanelOpen == AllTagNames.UIRulebook)
             {
-                _uiSystem.HideLeftBotSideUI();
+                _uiSystem.ShowLeftBotSideUI(AllTagNames.UICurrentScore);
                 
                 _audioSystem.PlayMenuCloseSfx();
             }
@@ -55,7 +55,7 @@ public class UIBasicMenu : UIPanel
         {
             if (_parentCanvas.leftBotSidePanelOpen == AllTagNames.UISettings)
             {
-                _uiSystem.HideLeftBotSideUI();
+                _uiSystem.ShowLeftBotSideUI(AllTagNames.UICurrentScore);
                 
                 _audioSystem.PlayMenuCloseSfx();
             }

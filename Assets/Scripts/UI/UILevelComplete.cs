@@ -14,14 +14,6 @@ public class UILevelComplete : UIPanel
     private Image _starOneImage;
     private Image _starTwoImage;
     private Image _starThreeImage;
-    
-    private TextMeshProUGUI _turnsText;
-    private TextMeshProUGUI _movesText;
-    private TextMeshProUGUI _scoreText;
-    
-    private TextMeshProUGUI _star1ScoreRequiredText;
-    private TextMeshProUGUI _star2ScoreRequiredText;
-    private TextMeshProUGUI _star3ScoreRequiredText;
 
     private ParticleSystem _confetti;
     
@@ -38,20 +30,9 @@ public class UILevelComplete : UIPanel
 
         _confetti = Creator.GetFirstObjectWithName(AllTagNames.Confetti).GetComponent<ParticleSystem>();
         
-        _turnsText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.StatsTurns);
-        _movesText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.StatsMoves);
-        _scoreText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.StatsScore);
-        
         _starOneImage = Creator.GetChildComponentByName<Image>(_panel.gameObject, AllTagNames.Star1Image);
         _starTwoImage = Creator.GetChildComponentByName<Image>(_panel.gameObject, AllTagNames.Star2Image);
         _starThreeImage = Creator.GetChildComponentByName<Image>(_panel.gameObject, AllTagNames.Star3Image);
-
-        _star1ScoreRequiredText =
-            Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.Star1ScoreRequired);
-        _star2ScoreRequiredText =
-            Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.Star2ScoreRequired);
-        _star3ScoreRequiredText =
-            Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.Star3ScoreRequired);
         
         _nextLevelButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonNextLevel);
         _nextLevelButton.onClick.AddListener(() =>
@@ -82,15 +63,8 @@ public class UILevelComplete : UIPanel
     public override void Show()
     {
         Level levelCompleted = _turnSystem.currentLevel;
-        _turnsText.text = $"{Creator.statsTurns}";
-        _movesText.text = $"{Creator.statsMoves}";
         int score = Creator.statsTurns * Creator.statsMoves;
-        _scoreText.text = $"{score}";
 
-        _star1ScoreRequiredText.text = $"{levelCompleted.star1Score}";
-        _star2ScoreRequiredText.text = $"{levelCompleted.star2Score}";
-        _star3ScoreRequiredText.text = $"{levelCompleted.star3Score}";
-        
         List<UISections> uiSectionss = _uiSystem.GetUI<UISections>();
         foreach (UISections uiSections in uiSectionss)
         {

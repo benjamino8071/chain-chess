@@ -22,6 +22,11 @@ public class UICanvas : Dependency
     {
         new()
         {
+            TagName = AllTagNames.UICurrentScore,
+            UIPanel = new UICurrentScore()
+        },
+        new()
+        {
             TagName = AllTagNames.UIRulebook,
             UIPanel = new UIRulebook()
         },
@@ -39,6 +44,11 @@ public class UICanvas : Dependency
         {
             TagName = AllTagNames.UIConfirmDelete,
             UIPanel = new UIConfirmDelete()
+        },
+        new()
+        {
+            TagName = AllTagNames.UICredits,
+            UIPanel = new UICredits()
         },
     };
     private Panel _uiCurrentLevel = new()

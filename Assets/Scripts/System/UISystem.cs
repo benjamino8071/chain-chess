@@ -150,18 +150,6 @@ public class UISystem : Dependency
         _landscapeCanvas.ShowLeftBotSideUI(uiTag);
         _portraitCanvas.ShowLeftBotSideUI(uiTag);
     }
-    
-    private void HideLeftBotSideUINoTween()
-    {
-        _landscapeCanvas.HideLeftBotSideUINoTween();
-        _portraitCanvas.HideLeftBotSideUINoTween();
-    }
-    
-    public void HideLeftBotSideUI()
-    {
-        _landscapeCanvas.HideLeftBotSideUI();
-        _portraitCanvas.HideLeftBotSideUI();
-    }
 
     public void SetHomescreen(bool show)
     {
@@ -192,8 +180,8 @@ public class UISystem : Dependency
 
         if (show)
         {
-            HideLeftBotSideUI();
             ShowRightTopSideUI(AllTagNames.UITitle);
+            ShowLeftBotSideUI(AllTagNames.UICredits);
         }
         else
         {
@@ -203,7 +191,7 @@ public class UISystem : Dependency
             }
             else
             {
-                HideLeftBotSideUINoTween();
+                ShowLeftBotSideUI(AllTagNames.UICurrentScore);
             }
             ShowRightTopSideUI(AllTagNames.UIChain);
         }
@@ -213,12 +201,6 @@ public class UISystem : Dependency
     {
         _landscapeCanvas.ShowRightTopSideUI(uiTag);
         _portraitCanvas.ShowRightTopSideUI(uiTag);
-    }
-    
-    public void HideRightTopSideUI()
-    {
-        _landscapeCanvas.HideRightTopSideUI();
-        _portraitCanvas.HideRightTopSideUI();
     }
 
     public List<T> GetUI<T>() where T : UIPanel

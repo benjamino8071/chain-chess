@@ -85,5 +85,7 @@ public enum AllTagNames
     TurnsText = 163,
     MovesText = 164,
     CapturesText = 165,
-    TimeText = 166
+    TimeText = 166,
+    UICurrentScore = 167,
+    UICredits = 168,
 }

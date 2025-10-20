@@ -33,7 +33,7 @@ public class UICurrentLevelMenu : UIPanel
         {
             if (_parentCanvas.leftBotSidePanelOpen == AllTagNames.UISections)
             {
-                _uiSystem.HideLeftBotSideUI();
+                _uiSystem.ShowLeftBotSideUI(AllTagNames.UICurrentScore);
                 _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);
                 
                 _audioSystem.PlayMenuCloseSfx();
