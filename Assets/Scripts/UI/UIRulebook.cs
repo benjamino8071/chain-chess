@@ -56,7 +56,7 @@ public class UIRulebook : UIPanel
         {
             _audioSystem.PlayUIRulebookTurnClickSfx();
 
-            if (_currentIndex < 0)
+            if (_currentIndex == 0)
             {
                 SetCurrentPage(Creator.rulebookSo.pages.Count - 1);
             }
@@ -71,7 +71,7 @@ public class UIRulebook : UIPanel
         {
             _audioSystem.PlayUIRulebookTurnClickSfx();
             
-            if (_currentIndex >= Creator.rulebookSo.pages.Count)
+            if (_currentIndex == Creator.rulebookSo.pages.Count - 1)
             {
                 SetCurrentPage(0);
             }
