@@ -25,8 +25,11 @@ MonoBehaviour:
 
       In normal
       Chess, the pieces you capture are put to one side and never used again. Here,
-      those pieces are added to your chain. You must use each piece in your chain
-      once per turn, in the order you captured them.'
+      those pieces are added to your chain.
+
+
+      You must use each piece in your
+      chain once per turn, in the order you captured them.'
   - sprite: {fileID: 21300522, guid: ee1aa8dd1fc49614d89b7eb3f8af788b, type: 3}
     material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     pieceAbility: 10

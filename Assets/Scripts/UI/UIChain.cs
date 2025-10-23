@@ -7,10 +7,10 @@ using UnityEngine.UI;
 
 public class UIChain : UIPanel
 {
-    private Transform _pivot;
+    private RectTransform _pivot;
     
-    private Vector3 _chainParentInitialPos;
-    private Vector3 _chainParentNewPos;
+    private Vector2 _chainParentInitialPos;
+    private Vector2 _chainParentNewPos;
 
     private class PieceImage
     {
@@ -20,9 +20,7 @@ public class UIChain : UIPanel
 
     private List<PieceImage> _chainPieceImages = new ();
     private int _nextFreeIndex;
-
-    private float _mousePosXLastFrame;
-    private float _mousePosYLastFrame;
+    
     private float _mouseOffTimer;
 
     private bool _move;
@@ -31,7 +29,7 @@ public class UIChain : UIPanel
     {
         base.Create(uiTag);
 
-        _pivot = Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.Pivot);
+        _pivot = Creator.GetChildComponentByName<RectTransform>(_panel.gameObject, AllTagNames.Pivot);
         
         int chainImagesAmount = 130;
         for (int i = 0; i < chainImagesAmount; i++)
@@ -60,11 +58,8 @@ public class UIChain : UIPanel
             chainPieceImageGo.SetActive(false);
         }
         
-        _chainParentInitialPos = _pivot.localPosition;
-        _chainParentNewPos = _pivot.localPosition;
-     
-        _mousePosXLastFrame = Input.mousePosition.x;
-        _mousePosYLastFrame = Input.mousePosition.y;
+        _chainParentInitialPos = _pivot.anchoredPosition;
+        _chainParentNewPos = _pivot.anchoredPosition;
     }
     
     public override void GameUpdate(float dt)
@@ -86,65 +81,28 @@ public class UIChain : UIPanel
             }
         }
 
-        Vector2 scrollWheelValue = Creator.inputSo.scrollWheel.action.ReadValue<Vector2>();
+        bool input = Creator.inputSo.leftMouseButton.action.IsPressed() ||
+                     Creator.inputSo.scrollWheel.action.WasPerformedThisFrame();
+        if (overPanel && input)
+        {
+            _mouseOffTimer = 1;
+            return;
+        }
         
-        if (overPanel && Creator.inputSo.leftMouseButton.action.IsPressed())
-        {
-            float3 mousePos = Input.mousePosition;
-            float3 chainParentLocalPos = _pivot.localPosition;
-            switch (_uiSystem.canvasType)
-            {
-                case AllTagNames.LandscapeMode:
-                {
-                    float mousePosChange = mousePos.y - _mousePosYLastFrame;
-                    chainParentLocalPos.y += mousePosChange;
-                    break;
-                }
-                case AllTagNames.PortraitMode:
-                {
-                    float mousePosChange = mousePos.x - _mousePosXLastFrame;
-                    chainParentLocalPos.x += mousePosChange;
-                    break;
-                }
-            }
-            
-            _pivot.localPosition = chainParentLocalPos;
-            _mouseOffTimer = 1;
-        }
-        else if (overPanel && scrollWheelValue.y != 0)
-        {
-            float3 chainParentLocalPos = _pivot.localPosition;
-            switch (_uiSystem.canvasType)
-            {
-                case AllTagNames.LandscapeMode:
-                {
-                    float positionChange = scrollWheelValue.y * Creator.inputSo.scrollPositionChange;
-                    chainParentLocalPos.y -= positionChange;
-                    break;
-                }
-                case AllTagNames.PortraitMode:
-                {
-                    float positionChange = scrollWheelValue.y * Creator.inputSo.scrollPositionChange;
-                    chainParentLocalPos.x -= positionChange;
-                    break;
-                }
-            }
-            
-            _pivot.localPosition = chainParentLocalPos;
-            _mouseOffTimer = 1;
-        }
-        else if(_mouseOffTimer > 0)
+        if (_mouseOffTimer > 0)
         {
             _mouseOffTimer -= dt;
-        }
-        else if(_chainParentNewPos != _pivot.localPosition)
-        {
-            Vector3 lerpPos = math.lerp(_pivot.localPosition, _chainParentNewPos, dt * Creator.chainSo.addPieceLerpSpeed);
-            _pivot.localPosition = lerpPos;
+            if (_mouseOffTimer > 0)
+            {
+                return;
+            }
         }
         
-        _mousePosXLastFrame = Input.mousePosition.x;
-        _mousePosYLastFrame = Input.mousePosition.y;
+        if(_chainParentNewPos != _pivot.anchoredPosition)
+        {
+            Vector2 lerpPos = math.lerp(_pivot.anchoredPosition, _chainParentNewPos, dt * Creator.chainSo.addPieceLerpSpeed);
+            _pivot.anchoredPosition = lerpPos;
+        }
     }
 
     public void ShowChain(PlayerController pieceController)
@@ -205,7 +163,7 @@ public class UIChain : UIPanel
             capturedPiecesImage.image.color = imageColor;
         }
         
-        _pivot.localPosition = _chainParentInitialPos;
+        _pivot.anchoredPosition = _chainParentInitialPos;
         _chainParentNewPos = _chainParentInitialPos;
         
         _nextFreeIndex = 0;
@@ -225,7 +183,7 @@ public class UIChain : UIPanel
     {
         float newPosition = (75 + 37.5f) * pieceController.movesUsed;
 
-        switch (_uiSystem.canvasType)
+        switch (_parentCanvas.canvasType)
         {
             case AllTagNames.LandscapeMode:
             {
