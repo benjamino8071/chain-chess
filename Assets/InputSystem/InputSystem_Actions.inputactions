@@ -32,24 +32,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "ExitFullscreen",
-                    "type": "Button",
-                    "id": "62d5e884-872f-4004-8047-11a6c75db586",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "ToggleFullscreen",
-                    "type": "Button",
-                    "id": "4b593848-e471-4d2e-a478-6c15ab17e9b5",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -94,28 +76,6 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "MouseRight",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "24960545-d00f-4882-b7e3-e4d60c6c146c",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "ExitFullscreen",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3aa627f3-e250-4d9c-8c54-3e95d6992efb",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ToggleFullscreen",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

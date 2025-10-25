@@ -110,9 +110,30 @@ public class UISettings : UIPanel
         UpdateSoundSetting(Creator.saveDataSo.audio);
         
         UpdateBoardVariant(Creator.saveDataSo.boardVariant);
+    }
+
+    public override void GameUpdate(float dt)
+    {
+        if (_uiSystem.canvasType != _parentCanvas.canvasType)
+        {
+            return;
+        }
         
-        Creator.inputSo.exitFullscreen.action.performed += ExitFullscreen_Performed;
-        Creator.inputSo.toggleFullscreen.action.performed += ToggleFullscreen_Performed;
+        if (Creator.saveDataSo.isFullscreen && Input.GetKeyDown(KeyCode.Escape))
+        {
+            Creator.saveDataSo.isFullscreen = false;
+            
+            UpdateFullscreen(false);
+            
+            Creator.SaveToDisk();
+        }
+        else if (Input.GetKeyDown(KeyCode.F))
+        {
+            Creator.saveDataSo.isFullscreen = !Creator.saveDataSo.isFullscreen;
+            UpdateFullscreen(Creator.saveDataSo.isFullscreen);
+            
+            Creator.SaveToDisk();
+        }
     }
 
     private void UpdateBoardVariant(BoardVariant boardVariant)
@@ -121,23 +142,6 @@ public class UISettings : UIPanel
         _edge.color = boardVariant.edgeColur;
         _background.color = boardVariant.backgroundColour;
         _uiSystem.SetBadAspectRatioColour(boardVariant.backgroundColour);
-    }
-
-    private void ExitFullscreen_Performed(InputAction.CallbackContext obj)
-    {
-        if (!Creator.saveDataSo.isFullscreen)
-        {
-            return;
-        }
-
-        Creator.saveDataSo.isFullscreen = false;
-        UpdateFullscreen(false);
-    }
-    
-    private void ToggleFullscreen_Performed(InputAction.CallbackContext obj)
-    {
-        Creator.saveDataSo.isFullscreen = !Creator.saveDataSo.isFullscreen;
-        UpdateFullscreen(Creator.saveDataSo.isFullscreen);
     }
     
     private void UpdateFullscreen(bool isFullscreen)
