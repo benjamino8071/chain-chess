@@ -107,6 +107,12 @@ public class Creator : MonoBehaviour
                 {
                     GetDependency<UISystem>().SetHomescreen(false);
                     firstMoveMade = true;
+                    return;
+                }
+
+                if (!firstMoveMade)
+                {
+                    return;
                 }
                 
                 if (Input.GetKeyDown(KeyCode.S) && !_allUnlocked)

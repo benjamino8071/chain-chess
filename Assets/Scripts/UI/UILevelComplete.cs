@@ -39,8 +39,11 @@ public class UILevelComplete : UIPanel
         {
             _audioSystem.PlayUISignificantClickSfx();
             
-            Level nextLevel = Creator.levelsSo.GetLevel(_turnSystem.currentLevel.section, _turnSystem.currentLevel.level + 1);
-            _turnSystem.LoadLevelRuntime(nextLevel);
+            Level currentLevel = _turnSystem.currentLevel;
+            SectionData section = Creator.levelsSo.GetSection(currentLevel.section);
+            int nextLevel = currentLevel.level == section.levels.Count ? 1 : currentLevel.level + 1;
+            currentLevel = Creator.levelsSo.GetLevel(currentLevel.section, nextLevel);
+            _turnSystem.LoadLevelRuntime(currentLevel);
         });
 
         ButtonManager resetButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonReset);
@@ -81,8 +84,6 @@ public class UILevelComplete : UIPanel
         _starThreeImage.sprite = threeStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
         _starThreeImage.color = threeStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
         
-        _nextLevelButton.gameObject.SetActive(!levelCompleted.isLastInSection);
-
         int emissionRate = 0;
         if (threeStar)
         {

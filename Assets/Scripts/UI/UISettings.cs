@@ -112,6 +112,7 @@ public class UISettings : UIPanel
         UpdateBoardVariant(Creator.saveDataSo.boardVariant);
         
         Creator.inputSo.exitFullscreen.action.performed += ExitFullscreen_Performed;
+        Creator.inputSo.toggleFullscreen.action.performed += ToggleFullscreen_Performed;
     }
 
     private void UpdateBoardVariant(BoardVariant boardVariant)
@@ -131,6 +132,12 @@ public class UISettings : UIPanel
 
         Creator.saveDataSo.isFullscreen = false;
         UpdateFullscreen(false);
+    }
+    
+    private void ToggleFullscreen_Performed(InputAction.CallbackContext obj)
+    {
+        Creator.saveDataSo.isFullscreen = !Creator.saveDataSo.isFullscreen;
+        UpdateFullscreen(Creator.saveDataSo.isFullscreen);
     }
     
     private void UpdateFullscreen(bool isFullscreen)

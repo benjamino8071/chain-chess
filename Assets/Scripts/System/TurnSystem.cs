@@ -92,7 +92,7 @@ public class TurnSystem : Dependency
         LoadLevelRuntime(_currentLevel);
     }
     
-    public void LoadLevelRuntime(Level level, bool showChain = true)
+    public void LoadLevelRuntime(Level level, bool showUi = true)
     {
         Random.InitState(42);
        
@@ -128,9 +128,17 @@ public class TurnSystem : Dependency
             uiCurrentLevel.SetNewLevel(level);
         }
         
-        if (showChain)
+        if (showUi)
         {
-            _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);
+            if (_uiSystem.rightTopSidePanelOpen != AllTagNames.UIChain)
+            {
+                _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);
+            }
+            
+            if (_uiSystem.leftBotSidePanelOpen != AllTagNames.UICurrentLevel)
+            {
+                _uiSystem.ShowLeftBotSideUI(AllTagNames.UICurrentLevel);
+            }
         }
         
         SwitchTurn(PieceColour.White);

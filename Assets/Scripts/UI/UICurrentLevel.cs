@@ -59,6 +59,8 @@ public class UICurrentLevel : UIPanel
         
         _leftButton.onClick.AddListener(() =>
         {
+            _audioSystem.PlayUISignificantClickSfx();
+            
             Level currentLevel = _turnSystem.currentLevel;
             SectionData section = Creator.levelsSo.GetSection(currentLevel.section);
             int previousLevel = currentLevel.level == 1 ? section.levels.Count : currentLevel.level - 1;
@@ -68,6 +70,8 @@ public class UICurrentLevel : UIPanel
         
         _rightButton.onClick.AddListener(() =>
         {
+            _audioSystem.PlayUISignificantClickSfx();
+            
             Level currentLevel = _turnSystem.currentLevel;
             SectionData section = Creator.levelsSo.GetSection(currentLevel.section);
             int nextLevel = currentLevel.level == section.levels.Count ? 1 : currentLevel.level + 1;
@@ -78,6 +82,8 @@ public class UICurrentLevel : UIPanel
         _sectionsButton.onClick.AddListener(() =>
         {
             _uiSystem.ShowLeftBotSideUI(AllTagNames.UISections);
+            
+            _audioSystem.PlayMenuOpenSfx();
         });
     }
 
