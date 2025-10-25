@@ -22,27 +22,12 @@ public class UIGameOver : UIPanel
     {
         base.Create(uiTag);
         
-        ButtonManager tryAgainButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonReset);
-        tryAgainButton.onClick.AddListener(() =>
+        ButtonManager resetButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonReset);
+        resetButton.onClick.AddListener(() =>
         {
             _audioSystem.PlayUIClickSfx();
-            
+
             _turnSystem.ReloadCurrentLevel();
-        });
-        
-        ButtonManager levelSelect = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
-        levelSelect.onClick.AddListener(() =>
-        {
-            _audioSystem.PlayMenuOpenSfx();
-            
-            List<UILevels> uiLevelss = _uiSystem.GetUI<UILevels>();
-            foreach (UILevels uiLevels in uiLevelss)
-            {
-                uiLevels.SetLevels(_turnSystem.currentLevel.section);
-            }
-            
-            _uiSystem.ShowRightTopSideUI(AllTagNames.UILevels);
-            _uiSystem.ShowLeftBotSideUI(AllTagNames.UISections);
         });
 
         _reasonText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.ReasonText);

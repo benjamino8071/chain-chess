@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Michsky.MUIP;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
@@ -7,29 +8,40 @@ using UnityEngine.UI;
 
 public class UIChain : UIPanel
 {
+    private TurnSystem _turnSystem;
+    
     private RectTransform _pivot;
     
     private Vector2 _chainParentInitialPos;
     private Vector2 _chainParentNewPos;
 
-    private class PieceImage
-    {
-        public Piece piece;
-        public Image image;
-    }
-
-    private List<PieceImage> _chainPieceImages = new ();
+    private List<Image> _chainPieceImages = new ();
     private int _nextFreeIndex;
     
     private float _mouseOffTimer;
 
     private bool _move;
 
+    public override void GameStart(Creator creator)
+    {
+        base.GameStart(creator);
+        
+        _turnSystem = creator.GetDependency<TurnSystem>();
+    }
+
     public override void Create(AllTagNames uiTag)
     {
         base.Create(uiTag);
-
+        
         _pivot = Creator.GetChildComponentByName<RectTransform>(_panel.gameObject, AllTagNames.Pivot);
+        
+        ButtonManager resetButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonReset);
+        resetButton.onClick.AddListener(() =>
+        {
+            _audioSystem.PlayUIClickSfx();
+
+            _turnSystem.ReloadCurrentLevel();
+        });
         
         int chainImagesAmount = 130;
         for (int i = 0; i < chainImagesAmount; i++)
@@ -49,11 +61,7 @@ public class UIChain : UIPanel
                 rectTransform.sizeDelta = new(75,75);
             }
             
-            _chainPieceImages.Add(new()
-            {
-                piece = Piece.NotChosen,
-                image = image
-            });
+            _chainPieceImages.Add(image);
             
             chainPieceImageGo.SetActive(false);
         }
@@ -127,12 +135,11 @@ public class UIChain : UIPanel
         //For every other piece we first want to add an arrow indicating the order for the chain
         if (!isFirstPiece)
         {
-            _chainPieceImages[_nextFreeIndex].image.sprite = _parentCanvas.canvasType == AllTagNames.LandscapeMode 
+            _chainPieceImages[_nextFreeIndex].sprite = _parentCanvas.canvasType == AllTagNames.LandscapeMode 
                 ? Creator.chainSo.landscapeArrowSprite : Creator.chainSo.portraitArrowSprite;
-            _chainPieceImages[_nextFreeIndex].image.color = Creator.piecesSo.whiteColor;
-            _chainPieceImages[_nextFreeIndex].image.gameObject.SetActive(true);
-            _chainPieceImages[_nextFreeIndex].piece = Piece.NotChosen;
-
+            _chainPieceImages[_nextFreeIndex].color = Creator.piecesSo.whiteColor;
+            _chainPieceImages[_nextFreeIndex].gameObject.SetActive(true);
+            
             _nextFreeIndex++;
         }
 
@@ -140,27 +147,26 @@ public class UIChain : UIPanel
         movesUsed *= 2;
         UpdateAlphaValue(0.1f, movesUsed);
         
-        _chainPieceImages[_nextFreeIndex].image.sprite = GetSprite(piece);
-        _chainPieceImages[_nextFreeIndex].image.color = Creator.piecesSo.whiteColor;
-        _chainPieceImages[_nextFreeIndex].image.gameObject.SetActive(true);
-        _chainPieceImages[_nextFreeIndex].piece  = piece;
+        _chainPieceImages[_nextFreeIndex].sprite = GetSprite(piece);
+        _chainPieceImages[_nextFreeIndex].color = Creator.piecesSo.whiteColor;
+        _chainPieceImages[_nextFreeIndex].gameObject.SetActive(true);
 
         _nextFreeIndex++;
     }
     
     private void ResetChain()
     {
-        foreach (PieceImage chainPiecesImage in _chainPieceImages)
+        foreach (Image chainPiecesImage in _chainPieceImages)
         {
-            chainPiecesImage.image.color = new Color(1,1,1, 1);
+            chainPiecesImage.color = new Color(1,1,1, 1);
         }
         
-        foreach (PieceImage capturedPiecesImage in _chainPieceImages)
+        foreach (Image capturedPiecesImage in _chainPieceImages)
         {
-            capturedPiecesImage.image.gameObject.SetActive(false);
-            Color imageColor = capturedPiecesImage.image.color;
+            capturedPiecesImage.gameObject.SetActive(false);
+            Color imageColor = capturedPiecesImage.color;
             imageColor.a = 1f;
-            capturedPiecesImage.image.color = imageColor;
+            capturedPiecesImage.color = imageColor;
         }
         
         _pivot.anchoredPosition = _chainParentInitialPos;
@@ -173,9 +179,9 @@ public class UIChain : UIPanel
     {
         for (int i = 0; i < amountToChange; i++)
         {
-            Color imageColor = _chainPieceImages[i].image.color;
+            Color imageColor = _chainPieceImages[i].color;
             imageColor.a = a;
-            _chainPieceImages[i].image.color = imageColor;
+            _chainPieceImages[i].color = imageColor;
         }
     }
 

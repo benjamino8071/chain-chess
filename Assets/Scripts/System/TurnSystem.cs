@@ -34,7 +34,7 @@ public class TurnSystem : Dependency
         LoadInitialLevel();
     }
 
-    public void LoadInitialLevel()
+    private void LoadInitialLevel()
     {
         Level level = Creator.levelsSo.GetLevel(Creator.saveDataSo.sectionLastLoaded, Creator.saveDataSo.levelLastLoaded);
         LoadLevelRuntime(level, false);
@@ -52,10 +52,11 @@ public class TurnSystem : Dependency
         {
             case PieceColour.White:
                 Creator.statsTurns++;
-                List<UICurrentScore> currentScores = _uiSystem.GetUI<UICurrentScore>();
-                foreach (UICurrentScore currentScore in currentScores)
+                
+                List<UICurrentLevel> currentLevels = _uiSystem.GetUI<UICurrentLevel>();
+                foreach (UICurrentLevel uiCurrentLevel in currentLevels)
                 {
-                    currentScore.SetCurrentScoreText(Creator.statsTurns, Creator.statsMoves);
+                    uiCurrentLevel.SetCurrentScoreText(Creator.statsTurns, Creator.statsMoves);
                 }
                 
                 List<ValidMove> validMoves = _whiteSystem.playerController.GetAllValidMovesOfFirstPiece();
@@ -101,12 +102,6 @@ public class TurnSystem : Dependency
         _validMovesSystem.HideAllValidMoves();
         _playerSetTilesSystem.HideAll();
         
-        List<UICurrentLevelMenu> uiCurrentLevelMenus = _uiSystem.GetUI<UICurrentLevelMenu>();
-        foreach (UICurrentLevelMenu uiCurrentLevelMenu in uiCurrentLevelMenus)
-        {
-            uiCurrentLevelMenu.SetLevelsButtonText(level);
-        }
-        
         _whiteSystem.SpawnPieces(level);
         _whiteSystem.SetLost(false);
         
@@ -127,10 +122,10 @@ public class TurnSystem : Dependency
         Creator.saveDataSo.levelLastLoaded = level.level;
         Creator.SaveToDisk();
 
-        List<UICurrentScore> currentScores = _uiSystem.GetUI<UICurrentScore>();
-        foreach (UICurrentScore currentScore in currentScores)
+        List<UICurrentLevel> uiCurrentLevels = _uiSystem.GetUI<UICurrentLevel>();
+        foreach (UICurrentLevel uiCurrentLevel in uiCurrentLevels)
         {
-            currentScore.SetNewLevel(level);
+            uiCurrentLevel.SetNewLevel(level);
         }
         
         if (showChain)

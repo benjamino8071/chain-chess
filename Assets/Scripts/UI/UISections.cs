@@ -68,13 +68,10 @@ public class UISections : UIPanel
 
     private void ShowSection(int section)
     {
-        List<UILevels> uiLevelss = _uiSystem.GetUI<UILevels>();
-        foreach (UILevels uiLevels in uiLevelss)
-        {
-            uiLevels.SetLevels(section);
-        }
+        Level level = Creator.levelsSo.GetLevel(section, 1);
+        _turnSystem.LoadLevelRuntime(level);
         
-        _uiSystem.ShowRightTopSideUI(AllTagNames.UILevels);
+        _uiSystem.ShowLeftBotSideUI(AllTagNames.UICurrentLevel);
     }
 
     public override void Show()

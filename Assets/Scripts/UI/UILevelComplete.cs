@@ -43,20 +43,12 @@ public class UILevelComplete : UIPanel
             _turnSystem.LoadLevelRuntime(nextLevel);
         });
 
-        ButtonManager levelSelect = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLevels);
-        levelSelect.onClick.AddListener(() =>
+        ButtonManager resetButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonReset);
+        resetButton.onClick.AddListener(() =>
         {
-            _audioSystem.PlayMenuOpenSfx();
-            
-            List<UILevels> uiLevelss = _uiSystem.GetUI<UILevels>();
-            foreach (UILevels uiLevels in uiLevelss)
-            {
-                uiLevels.SetLevels(_turnSystem.currentLevel.section);
-            }
-            
-            _uiSystem.ShowRightTopSideUI(AllTagNames.UILevels);
-            
-            _uiSystem.ShowLeftBotSideUI(AllTagNames.UISections);
+            _audioSystem.PlayUIClickSfx();
+
+            _turnSystem.ReloadCurrentLevel();
         });
     }
 
@@ -65,10 +57,10 @@ public class UILevelComplete : UIPanel
         Level levelCompleted = _turnSystem.currentLevel;
         int score = Creator.statsTurns * Creator.statsMoves;
 
-        List<UISections> uiSectionss = _uiSystem.GetUI<UISections>();
-        foreach (UISections uiSections in uiSectionss)
+        List<UISections> uiSections = _uiSystem.GetUI<UISections>();
+        foreach (UISections uiSection in uiSections)
         {
-            uiSections.UpdateStarCount();
+            uiSection.UpdateStarCount();
         }
         
         if (_uiSystem.canvasType == _parentCanvas.canvasType)
@@ -133,6 +125,12 @@ public class UILevelComplete : UIPanel
             {
                 _audioSystem.PlayerGameOverSfx();
             }
+        }
+        
+        List<UICurrentLevel> uiCurrentLevels = _uiSystem.GetUI<UICurrentLevel>();
+        foreach (UICurrentLevel uiCurrentLevel in uiCurrentLevels)
+        {
+            uiCurrentLevel.SetStarsScored(levelCompleted);
         }
     }
     

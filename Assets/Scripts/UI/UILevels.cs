@@ -56,7 +56,7 @@ public class UILevels : UIPanel
         {
             _audioSystem.PlayUISignificantClickSfx();
             
-            _uiSystem.ShowLeftBotSideUI(AllTagNames.UICurrentScore);
+            _uiSystem.ShowLeftBotSideUI(AllTagNames.UICurrentLevel);
             
             _turnSystem.LoadLevelRuntime(_levelToLoad);
         });

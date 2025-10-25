@@ -153,18 +153,6 @@ public class UISystem : Dependency
 
     public void SetHomescreen(bool show)
     {
-        List<UICurrentLevelMenu> currentLevelMenus = GetUI<UICurrentLevelMenu>();
-        foreach (UICurrentLevelMenu currentLevelMenu in currentLevelMenus)
-        {
-            if (show)
-            {
-                currentLevelMenu.Hide();
-            }
-            else
-            {
-                currentLevelMenu.Show();
-            }
-        }
         List<UIBasicMenu> basicMenus = GetUI<UIBasicMenu>();
         foreach (UIBasicMenu basicMenu in basicMenus)
         {
@@ -191,7 +179,7 @@ public class UISystem : Dependency
             }
             else
             {
-                ShowLeftBotSideUI(AllTagNames.UICurrentScore);
+                ShowLeftBotSideUI(AllTagNames.UICurrentLevel);
             }
             ShowRightTopSideUI(AllTagNames.UIChain);
         }

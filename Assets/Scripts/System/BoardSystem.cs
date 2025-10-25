@@ -58,9 +58,9 @@ public class BoardSystem : Dependency
         
         if (Creator.inputSo.leftMouseButton.action.WasPressedThisFrame())
         {
-            if (_uiSystem.leftBotSidePanelOpen != AllTagNames.UICurrentScore)
+            if (_uiSystem.leftBotSidePanelOpen != AllTagNames.UICurrentLevel)
             {
-                _uiSystem.ShowLeftBotSideUI(AllTagNames.UICurrentScore);
+                _uiSystem.ShowLeftBotSideUI(AllTagNames.UICurrentLevel);
             }
 
             if (_uiSystem.rightTopSidePanelOpen != AllTagNames.UIChain)

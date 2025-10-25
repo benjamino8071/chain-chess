@@ -22,8 +22,8 @@ public class UICanvas : Dependency
     {
         new()
         {
-            TagName = AllTagNames.UICurrentScore,
-            UIPanel = new UICurrentScore()
+            TagName = AllTagNames.UICurrentLevel,
+            UIPanel = new UICurrentLevel()
         },
         new()
         {
@@ -51,11 +51,6 @@ public class UICanvas : Dependency
             UIPanel = new UICredits()
         },
     };
-    private Panel _uiCurrentLevel = new()
-    {
-        TagName = AllTagNames.UICurrentLevel,
-        UIPanel = new UICurrentLevelMenu()
-    };
     private Panel _uiBasicMenu = new()
     {
         TagName = AllTagNames.UIBasicMenu,
@@ -78,11 +73,6 @@ public class UICanvas : Dependency
         {
             TagName = AllTagNames.UIGameOver,
             UIPanel = new UIGameOver()
-        },
-        new()
-        {
-            TagName = AllTagNames.UILevels,
-            UIPanel = new UILevels()
         },
         new()
         {
@@ -131,14 +121,10 @@ public class UICanvas : Dependency
             panel.UIPanel.GameStart(creator);
             panel.UIPanel.Create(panel.TagName);
         }
-        _uiCurrentLevel.UIPanel.AssignCanvas(this);
-        _uiCurrentLevel.UIPanel.GameStart(creator);
-        _uiCurrentLevel.UIPanel.Create(_uiCurrentLevel.TagName);
         
         _uiBasicMenu.UIPanel.AssignCanvas(this);
         _uiBasicMenu.UIPanel.GameStart(creator);
         _uiBasicMenu.UIPanel.Create(_uiBasicMenu.TagName);
-
         
         foreach (Panel panel in _rightTopPanels)
         {
@@ -156,7 +142,6 @@ public class UICanvas : Dependency
         {
             panel.UIPanel.GameUpdate(dt);
         }
-        _uiCurrentLevel.UIPanel.GameUpdate(dt);
         _uiBasicMenu.UIPanel.GameUpdate(dt);
         
         foreach (Panel panel in _rightTopPanels)
@@ -255,10 +240,6 @@ public class UICanvas : Dependency
         if (_uiBasicMenu.UIPanel is T)
         {
             return (T)_uiBasicMenu.UIPanel;
-        }
-        if (_uiCurrentLevel.UIPanel is T)
-        {
-            return (T)_uiCurrentLevel.UIPanel;
         }
         
         Debug.LogError("Could not find UI Panel");

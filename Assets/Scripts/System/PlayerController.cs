@@ -123,8 +123,8 @@ public class PlayerController : Dependency
         if (_model.position == _jumpPosition)
         {
             Creator.statsMoves++;
-            List<UICurrentScore> currentScores = _uiSystem.GetUI<UICurrentScore>();
-            foreach (UICurrentScore currentScore in currentScores)
+            List<UICurrentLevel> currentScores = _uiSystem.GetUI<UICurrentLevel>();
+            foreach (UICurrentLevel currentScore in currentScores)
             {
                 currentScore.SetCurrentScoreText(Creator.statsTurns, Creator.statsMoves);
             }
