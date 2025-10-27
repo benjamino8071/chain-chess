@@ -98,8 +98,8 @@ MonoBehaviour:
     description: '<u>Pouncer</u>
 
 
-      Will capture you as soon as you enter its
-      line of sight (OM).'
+      Will capture if you move into its line of
+      sight (OM).'
   - sprite: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
     material: {fileID: 2100000, guid: b42d490520beb6846bc23a1aab35ad35, type: 2}
     pieceAbility: 9

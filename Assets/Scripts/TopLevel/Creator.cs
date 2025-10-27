@@ -112,6 +112,7 @@ public class Creator : MonoBehaviour
 
                 if (!firstMoveMade)
                 {
+                    GetDependency<UISystem>().GameUpdate(dt);
                     return;
                 }
                 

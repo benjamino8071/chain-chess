@@ -38,6 +38,15 @@ public class UISections : UIPanel
         
         _starsScoredProgressBar =
             Creator.GetChildComponentByName<MMProgressBar>(_panel.gameObject, AllTagNames.ProgressBar);
+
+        ButtonManager backButton =
+            Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonBack);
+        backButton.onClick.AddListener(() =>
+        {
+            _uiSystem.ShowLeftBotSideUI(AllTagNames.UICurrentLevel);
+            
+            _audioSystem.PlayMenuOpenSfx();
+        });
         
         SectionButtons sectionButtonsDirect = _panel.GetComponent<SectionButtons>();
         _sectionButtons = new(sectionButtonsDirect.buttons.Count);
