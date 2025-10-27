@@ -603,9 +603,9 @@ MonoBehaviour:
     - section: 2
       level: 7
       isLastInSection: 0
-      star1Score: 62
-      star2Score: 39
-      star3Score: 22
+      star1Score: 52
+      star2Score: 33
+      star3Score: 18
       positions:
       - piece: 4
         colour: 1
@@ -618,7 +618,7 @@ MonoBehaviour:
       - piece: 1
         colour: 0
         ability: 0
-        position: {x: 2, y: 4}
+        position: {x: 5, y: 3}
       - piece: 2
         colour: 0
         ability: 0
@@ -1197,9 +1197,9 @@ MonoBehaviour:
     - section: 3
       level: 10
       isLastInSection: 1
-      star1Score: 70
+      star1Score: 67
       star2Score: 46
-      star3Score: 36
+      star3Score: 17
       positions:
       - piece: 6
         colour: 1
@@ -2425,9 +2425,9 @@ MonoBehaviour:
     - section: 6
       level: 5
       isLastInSection: 0
-      star1Score: 245
-      star2Score: 188
-      star3Score: 135
+      star1Score: 255
+      star2Score: 198
+      star3Score: 145
       positions:
       - piece: 5
         colour: 1
@@ -2666,14 +2666,14 @@ MonoBehaviour:
     - section: 6
       level: 8
       isLastInSection: 0
-      star1Score: 84
-      star2Score: 60
-      star3Score: 40
+      star1Score: 102
+      star2Score: 75
+      star3Score: 52
       positions:
       - piece: 5
         colour: 1
         ability: 0
-        position: {x: 2, y: 2}
+        position: {x: 1, y: 2}
       - piece: 3
         colour: 0
         ability: 3
@@ -2681,23 +2681,27 @@ MonoBehaviour:
       - piece: 4
         colour: 0
         ability: 7
-        position: {x: 3, y: 8}
+        position: {x: 2, y: 8}
       - piece: 1
         colour: 0
         ability: 3
-        position: {x: 5, y: 3}
+        position: {x: 6, y: 4}
       - piece: 3
         colour: 0
         ability: 3
         position: {x: 6, y: 5}
-      - piece: 3
-        colour: 0
-        ability: 3
-        position: {x: 5, y: 6}
       - piece: 4
         colour: 0
         ability: 3
         position: {x: 7, y: 7}
+      - piece: 1
+        colour: 0
+        ability: 3
+        position: {x: 4, y: 4}
+      - piece: 3
+        colour: 0
+        ability: 3
+        position: {x: 5, y: 6}
     - section: 6
       level: 9
       isLastInSection: 0
@@ -2768,7 +2772,7 @@ MonoBehaviour:
         colour: 0
         ability: 3
         position: {x: 6, y: 7}
-      - piece: 6
+      - piece: 1
         colour: 0
         ability: 3
         position: {x: 8, y: 8}
@@ -3618,9 +3622,9 @@ MonoBehaviour:
     - section: 8
       level: 6
       isLastInSection: 0
-      star1Score: 540
-      star2Score: 473
-      star3Score: 410
+      star1Score: 460
+      star2Score: 393
+      star3Score: 330
       positions:
       - piece: 5
         colour: 1
@@ -3713,9 +3717,9 @@ MonoBehaviour:
     - section: 8
       level: 7
       isLastInSection: 0
-      star1Score: 495
-      star2Score: 420
-      star3Score: 351
+      star1Score: 445
+      star2Score: 370
+      star3Score: 301
       positions:
       - piece: 4
         colour: 1
@@ -3820,93 +3824,6 @@ MonoBehaviour:
     - section: 8
       level: 8
       isLastInSection: 0
-      star1Score: 480
-      star2Score: 405
-      star3Score: 336
-      positions:
-      - piece: 5
-        colour: 1
-        ability: 0
-        position: {x: 1, y: 8}
-      - piece: 4
-        colour: 0
-        ability: 5
-        position: {x: 2, y: 1}
-      - piece: 5
-        colour: 0
-        ability: 5
-        position: {x: 3, y: 2}
-      - piece: 4
-        colour: 0
-        ability: 8
-        position: {x: 4, y: 3}
-      - piece: 2
-        colour: 0
-        ability: 5
-        position: {x: 5, y: 2}
-      - piece: 2
-        colour: 0
-        ability: 1
-        position: {x: 6, y: 1}
-      - piece: 6
-        colour: 0
-        ability: 9
-        position: {x: 3, y: 4}
-      - piece: 4
-        colour: 0
-        ability: 9
-        position: {x: 4, y: 4}
-      - piece: 6
-        colour: 0
-        ability: 5
-        position: {x: 5, y: 4}
-      - piece: 1
-        colour: 0
-        ability: 3
-        position: {x: 1, y: 5}
-      - piece: 3
-        colour: 0
-        ability: 9
-        position: {x: 2, y: 5}
-      - piece: 5
-        colour: 0
-        ability: 1
-        position: {x: 3, y: 5}
-      - piece: 3
-        colour: 0
-        ability: 5
-        position: {x: 4, y: 5}
-      - piece: 6
-        colour: 0
-        ability: 1
-        position: {x: 5, y: 5}
-      - piece: 3
-        colour: 0
-        ability: 5
-        position: {x: 6, y: 5}
-      - piece: 2
-        colour: 0
-        ability: 8
-        position: {x: 7, y: 5}
-      - piece: 5
-        colour: 0
-        ability: 5
-        position: {x: 3, y: 6}
-      - piece: 2
-        colour: 0
-        ability: 9
-        position: {x: 4, y: 6}
-      - piece: 4
-        colour: 0
-        ability: 7
-        position: {x: 5, y: 6}
-      - piece: 3
-        colour: 0
-        ability: 7
-        position: {x: 4, y: 7}
-    - section: 8
-      level: 9
-      isLastInSection: 0
       star1Score: 368
       star2Score: 301
       star3Score: 240
@@ -3996,10 +3913,97 @@ MonoBehaviour:
         ability: 8
         position: {x: 6, y: 8}
     - section: 8
+      level: 9
+      isLastInSection: 0
+      star1Score: 480
+      star2Score: 405
+      star3Score: 336
+      positions:
+      - piece: 5
+        colour: 1
+        ability: 0
+        position: {x: 1, y: 8}
+      - piece: 4
+        colour: 0
+        ability: 5
+        position: {x: 2, y: 1}
+      - piece: 5
+        colour: 0
+        ability: 5
+        position: {x: 3, y: 2}
+      - piece: 4
+        colour: 0
+        ability: 8
+        position: {x: 4, y: 3}
+      - piece: 2
+        colour: 0
+        ability: 5
+        position: {x: 5, y: 2}
+      - piece: 2
+        colour: 0
+        ability: 1
+        position: {x: 6, y: 1}
+      - piece: 6
+        colour: 0
+        ability: 9
+        position: {x: 3, y: 4}
+      - piece: 4
+        colour: 0
+        ability: 9
+        position: {x: 4, y: 4}
+      - piece: 6
+        colour: 0
+        ability: 5
+        position: {x: 5, y: 4}
+      - piece: 1
+        colour: 0
+        ability: 3
+        position: {x: 1, y: 5}
+      - piece: 3
+        colour: 0
+        ability: 9
+        position: {x: 2, y: 5}
+      - piece: 5
+        colour: 0
+        ability: 1
+        position: {x: 3, y: 5}
+      - piece: 3
+        colour: 0
+        ability: 5
+        position: {x: 4, y: 5}
+      - piece: 6
+        colour: 0
+        ability: 1
+        position: {x: 5, y: 5}
+      - piece: 3
+        colour: 0
+        ability: 5
+        position: {x: 6, y: 5}
+      - piece: 2
+        colour: 0
+        ability: 8
+        position: {x: 7, y: 5}
+      - piece: 5
+        colour: 0
+        ability: 5
+        position: {x: 3, y: 6}
+      - piece: 2
+        colour: 0
+        ability: 9
+        position: {x: 4, y: 6}
+      - piece: 4
+        colour: 0
+        ability: 7
+        position: {x: 5, y: 6}
+      - piece: 3
+        colour: 0
+        ability: 7
+        position: {x: 4, y: 7}
+    - section: 8
       level: 10
       isLastInSection: 1
-      star1Score: 357
-      star2Score: 288
+      star1Score: 457
+      star2Score: 388
       star3Score: 225
       positions:
       - piece: 5
