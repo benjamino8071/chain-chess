@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
+using TMPro;
 
 public class AIController : Dependency
 {
@@ -32,6 +33,8 @@ public class AIController : Dependency
     private SpriteRenderer _spriteRenderer;
     
     private Animator _animator;
+
+    private Transform _abilityTextParent;
     
     private Piece _piece;
     private PieceAbility _pieceAbility;
@@ -63,7 +66,13 @@ public class AIController : Dependency
         _spriteRenderer = Creator.GetChildComponentByName<SpriteRenderer>(_model.gameObject, AllTagNames.PlayerSprite);
         
         _animator = _model.GetComponentInChildren<Animator>();
-        
+
+        //Player does not have an ability, so the text canvas can be disabled
+        TMP_Text abilityText = Creator.GetChildComponentByName<TMP_Text>(_model.gameObject, AllTagNames.Text);
+        abilityText.text = Creator.piecesSo.GetPieceAbilityText(pieceAbility);
+
+        _abilityTextParent = abilityText.transform.parent.parent;
+
         _jumpPosition = _model.position;
         
         _pieceAbility = pieceAbility;
@@ -118,10 +127,17 @@ public class AIController : Dependency
         }
 
         background.SetActive(false);
+
+        SetAbilityText(Creator.saveDataSo.showAbilityText);
         
         _state = PieceState.NotInUse;
         
         SetThinkingTime();
+    }
+
+    public void SetAbilityText(bool show)
+    {
+        _abilityTextParent.gameObject.SetActive(show);
     }
 
     private void FindingMove(float dt)

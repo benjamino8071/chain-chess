@@ -57,18 +57,14 @@ MonoBehaviour:
 
 
       Enemy abilities can be used to your advantage,
-      or avoided.
-
-
-      You can right-click a piece to learn more about its ability.'
+      or avoided.'
   - sprite: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
     material: {fileID: 2100000, guid: cc460e5b1c6c0bd498b44195a0c3da99, type: 2}
     pieceAbility: 0
     description: '<u>Normal</u>
 
 
-      A normal piece. If available, 1 of these
-      will be selected and moved per turn.'
+      A normal piece. No ability.'
   - sprite: {fileID: 21300000, guid: 83862f1eb8ad54449a88cbaea976cf2c, type: 3}
     material: {fileID: 2100000, guid: 2fc5c6c79c1ad5b47bada41338c43793, type: 2}
     pieceAbility: 7

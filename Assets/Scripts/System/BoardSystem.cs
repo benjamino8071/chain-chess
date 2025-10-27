@@ -9,7 +9,8 @@ public class BoardSystem : Dependency
     private TurnSystem _turnSystem;
     private UISystem _uiSystem;
     private EndGameSystem _endGameSystem;
-    
+    private AudioSystem _audioSystem;
+
     private List<float3> _validTiles;
     
     private Transform _tapPoint;
@@ -25,7 +26,8 @@ public class BoardSystem : Dependency
         _turnSystem = creator.GetDependency<TurnSystem>();
         _uiSystem = creator.GetDependency<UISystem>();
         _endGameSystem = creator.GetDependency<EndGameSystem>();
-        
+        _audioSystem = creator.GetDependency<AudioSystem>();
+
         Transform edge = Creator.GetFirstObjectWithName(AllTagNames.Edge);
         _edgeColourFlicker = edge.GetComponent<ColourFlicker>();
 
@@ -47,6 +49,14 @@ public class BoardSystem : Dependency
 
     public override void GameUpdate(float dt)
     {
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            _audioSystem.PlayUIClickSfx();
+
+            _turnSystem.ReloadCurrentLevel();
+            return;
+        }
+
         float3 gridPoint = GetGridPointNearMouse();
         
         if (_endGameSystem.isEndGame || !IsPositionValid(gridPoint))
@@ -70,7 +80,7 @@ public class BoardSystem : Dependency
         
             Creator.boardSo.hideMainMenuTrigger = true;
         }
-        else if (Creator.inputSo.rightMouseButton.action.WasPressedThisFrame())
+        else if (Creator.inputSo.middleMouseButton.action.WasPressedThisFrame())
         {
             AIController aiController = _blackSystem.GetPieceAtPosition(gridPoint);
             if (aiController != null && aiController.pieceAbility != PieceAbility.Foo)

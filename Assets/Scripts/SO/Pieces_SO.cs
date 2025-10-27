@@ -36,6 +36,44 @@ public class Pieces_SO : ScriptableObject
 
     public float aiThinkingTime;
     public float alwaysMoveThinkingTime;
+
+    public string GetPieceAbilityText(PieceAbility pieceAbility)
+    {
+        switch(pieceAbility)
+        {
+            case PieceAbility.None:
+                {
+                    return "Normal";
+                }
+            case PieceAbility.Resetter:
+                {
+                    return "Resetter";
+                }
+            case PieceAbility.MustMove:
+                {
+                    return "Turn Mover";
+                }
+            case PieceAbility.Multiplier:
+                {
+                    return "Multiplier";
+                }
+            case PieceAbility.CaptureLover:
+                {
+                    return "Pouncer";
+                }
+            case PieceAbility.StopTurn:
+                {
+                    return "Turn Stopper";
+                }
+            case PieceAbility.AlwaysMove:
+                {
+                    return "Move Mover";
+                }
+        }
+
+        Debug.Log("Invalid piece ability. We should not get here!");
+        return "";
+    }
 }
 
 public enum Piece

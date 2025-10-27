@@ -21,6 +21,8 @@ public class SaveData_SO : ScriptableObject
     
     public bool isFullscreen;
 
+    public bool showAbilityText;
+
     public int totalMoves;
     public int totalTurns;
     public int totalCaptures;

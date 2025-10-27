@@ -225,6 +225,7 @@ public class Creator : MonoBehaviour
             saveDataSo.totalMoves = diskSaveDataSo.totalMoves;
             saveDataSo.totalCaptures = diskSaveDataSo.totalCaptures;
             saveDataSo.totalSeconds = diskSaveDataSo.totalSeconds;
+            saveDataSo.showAbilityText = diskSaveDataSo.showAbilityText;
         }
         else
         {
@@ -241,6 +242,7 @@ public class Creator : MonoBehaviour
             saveDataSo.totalMoves = 0;
             saveDataSo.totalCaptures = 0;
             saveDataSo.totalSeconds = 0;
+            saveDataSo.showAbilityText = false;
         }
     }
 

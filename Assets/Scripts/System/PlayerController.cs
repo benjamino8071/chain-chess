@@ -75,6 +75,10 @@ public class PlayerController : Dependency
         
         _animator = _model.GetComponentInChildren<Animator>();
         
+        //Player does not have an ability, so the text canvas can be disabled
+        GameObject textCanvas = Creator.GetChildComponentByName<Transform>(_model.gameObject, AllTagNames.Text).parent.parent.gameObject;
+        textCanvas.SetActive(false);
+
         UpdateSprite(startingPiece);
         
         _jumpPosition = _model.position;

@@ -88,4 +88,5 @@ public enum AllTagNames
     TimeText = 166,
     UICredits = 168,
     ButtonBack = 169,
+    ButtonAbilityText = 170,
 }

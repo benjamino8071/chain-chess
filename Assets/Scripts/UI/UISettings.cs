@@ -8,8 +8,7 @@ using UnityEngine.UI;
 
 public class UISettings : UIPanel
 {
-    private TurnSystem _turnSystem;
-    private BoardSystem _boardSystem;
+    private BlackSystem _blackSystem;
     
     private Transform _settingsGui;
 
@@ -24,6 +23,13 @@ public class UISettings : UIPanel
     
     private int _width;
     private int _height;
+
+    public override void GameStart(Creator creator)
+    {
+        base.GameStart(creator);
+
+        _blackSystem = creator.GetDependency<BlackSystem>();
+    }
 
     public override void Create(AllTagNames uiTag)
     {
@@ -71,6 +77,18 @@ public class UISettings : UIPanel
             _uiSystem.ShowLeftBotSideUI(AllTagNames.UIConfirmDelete);
             
             _audioSystem.PlayUIClickSfx();
+        });
+
+        ButtonManager abilityTextButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonAbilityText);
+        abilityTextButton.onClick.AddListener(() =>
+        {
+            Creator.saveDataSo.showAbilityText = !Creator.saveDataSo.showAbilityText;
+
+            _blackSystem.SetAbilityTexts(Creator.saveDataSo.showAbilityText);
+
+            _audioSystem.PlayUIClickSfx();
+
+            Creator.SaveToDisk();
         });
 
         List<ButtonManager> colourVariants =

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 public class BlackSystem : Dependency
@@ -344,6 +345,14 @@ public class BlackSystem : Dependency
     public void SetLost(bool lost)
     {
         _lost = lost;
+    }
+
+    public void SetAbilityTexts(bool show)
+    {
+        foreach (AIController pieceController in _pieceControllers)
+        {
+            pieceController.SetAbilityText(show);
+        }
     }
 
     public void PieceFinished(AIController pieceController)
