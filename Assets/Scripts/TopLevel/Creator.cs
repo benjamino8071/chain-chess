@@ -360,9 +360,8 @@ public class Creator : MonoBehaviour
                 }
             }
         }
-        
-        Debug.LogError("Could not find object");
-        return default;
+
+        throw new NullReferenceException("Could not find object");
     }
     
     public List<T> GetChildComponentsByName<T>(GameObject parent, AllTagNames gameObjectName)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Michsky.MUIP;
 using MoreMountains.Tools;
@@ -7,38 +8,68 @@ using UnityEngine.UI;
 
 public class UISections : UIPanel
 {
-    private class SectionButton
-    {
-        public int section;
-        public int starsRequiredToUnlock;
-        public bool unlocked;
-        public ButtonManager button;
-        public List<Image> buttonBackgroundImages;
-    }
-
     private TurnSystem _turnSystem;
-    
-    private List<SectionButton> _sectionButtons;
-    
-    private TMP_Text _starsScoredText;
-    private MMProgressBar _starsScoredProgressBar;
 
+    private Transform _sectionLockedParent;
+    private Transform _sectionUnlockedParent;
+    
+    private TextMeshProUGUI _totalStarsScoredText;
+    private TextMeshProUGUI _currentSectionText;
+    
+    private TextMeshProUGUI _starsRequiredToUnlockText;
+    
+    private class LevelButton
+    {
+        public ButtonManager levelButton;
+        public Image starOneImage;
+        public Image starTwoImage;
+        public Image starThreeImage;
+        public Level level;
+    }
+    private List<LevelButton> _levelButtons;
+
+    private MMProgressBar _starsScoredProgressBar;
+    
+    private SectionData _currentSectionShown;
+    
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
 
+        _levelButtons = new(10);
+        
         _turnSystem = creator.GetDependency<TurnSystem>();
     }
 
     public override void Create(AllTagNames uiTag)
     {
         base.Create(uiTag);
-        
-        _starsScoredText = Creator.GetChildComponentByName<TMP_Text>(_panel.gameObject, AllTagNames.TextStars);
-        
-        _starsScoredProgressBar =
-            Creator.GetChildComponentByName<MMProgressBar>(_panel.gameObject, AllTagNames.ProgressBar);
 
+        _sectionLockedParent =
+            Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.SectionLockedParent);
+        _sectionUnlockedParent =
+            Creator.GetChildComponentByName<Transform>(_panel.gameObject, AllTagNames.SectionUnlockedParent);
+        
+        _totalStarsScoredText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.TextStars);
+        
+        _currentSectionText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.SectionText);
+
+        _starsRequiredToUnlockText =
+            Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.StarsRequiredText);
+
+        try
+        {
+            if (Creator.GetChildComponentByName<MMProgressBar>(_panel.gameObject, AllTagNames.ProgressBar) is
+                { } progressBar)
+            {
+                _starsScoredProgressBar = progressBar;
+            }
+        }
+        catch (NullReferenceException)
+        {
+            //Nothing to see here...
+        }
+        
         ButtonManager backButton =
             Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonBack);
         backButton.onClick.AddListener(() =>
@@ -47,116 +78,157 @@ public class UISections : UIPanel
             
             _audioSystem.PlayMenuOpenSfx();
         });
-        
-        SectionButtons sectionButtonsDirect = _panel.GetComponent<SectionButtons>();
-        _sectionButtons = new(sectionButtonsDirect.buttons.Count);
-        foreach (Section section in sectionButtonsDirect.buttons)
-        {
-            SectionButton sectionButton = new()
-            {
-                button = section.button,
-                buttonBackgroundImages = Creator.GetChildComponentsByName<Image>(section.button.gameObject, AllTagNames.BackgroundImage),
-                section = section.section,
-                starsRequiredToUnlock = Creator.levelsSo.GetSectionStarsRequirement(section.section),
-                unlocked = false,
-            };
-            
-            sectionButton.button.onClick.AddListener(() =>
-            {
-                _audioSystem.PlayUIAltClickSfx(.95f);
-                
-                if (sectionButton.unlocked)
-                {
-                    ShowSection(sectionButton.section);
-                }
-            });
-            
-            _sectionButtons.Add(sectionButton);
-        }
-    }
 
-    private void ShowSection(int section)
-    {
-        Level level = Creator.levelsSo.GetLevel(section, 1);
-        _turnSystem.LoadLevelRuntime(level);
+        ButtonManager leftButton =
+            Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonLeft);
+        leftButton.onClick.AddListener(() =>
+        {
+            _audioSystem.PlayUIClickSfx();
+            
+            int nextSection = _currentSectionShown.section == 1
+                ? Creator.levelsSo.sections.Count
+                : _currentSectionShown.section - 1;
+            
+            ShowSection(nextSection);
+        });
         
-        _uiSystem.ShowLeftBotSideUI(AllTagNames.UICurrentLevel);
+        ButtonManager rightButton =
+            Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonRight);
+        rightButton.onClick.AddListener(() =>
+        {
+            _audioSystem.PlayUIClickSfx();
+            
+            int nextSection = _currentSectionShown.section == Creator.levelsSo.sections.Count
+                ? 1
+                : _currentSectionShown.section + 1;
+            
+            ShowSection(nextSection);
+        });
+
+        List<Transform> levelButtons = Creator.GetChildComponentsByName<Transform>(_panel.gameObject, AllTagNames.ButtonLevel);
+        foreach (Transform levelButton in levelButtons)
+        {
+            LevelButton lb = new()
+            {
+                levelButton =
+                    Creator.GetChildComponentByName<ButtonManager>(levelButton.gameObject, AllTagNames.ButtonPlay),
+                starOneImage = Creator.GetChildComponentByName<Image>(levelButton.gameObject, AllTagNames.Star1Image),
+                starTwoImage = Creator.GetChildComponentByName<Image>(levelButton.gameObject, AllTagNames.Star2Image),
+                starThreeImage = Creator.GetChildComponentByName<Image>(levelButton.gameObject, AllTagNames.Star3Image),
+            };
+            _levelButtons.Add(lb);
+            
+            lb.levelButton.onClick.AddListener(() =>
+            {
+                _audioSystem.PlayUISignificantClickSfx();
+                
+                _turnSystem.LoadLevelRuntime(lb.level);
+        
+                _uiSystem.ShowLeftBotSideUI(AllTagNames.UICurrentLevel);
+            });
+        }
+        
+        SectionData sectionOnLoad = Creator.levelsSo.GetSection(Creator.saveDataSo.sectionLastLoaded);
+        ShowSection(sectionOnLoad);
     }
 
     public override void Show()
     {
-        UpdateStarCount();
+        ShowSection(_turnSystem.currentLevel.section);
         
         base.Show();
     }
 
-    public void UpdateStarCount()
+    private void ShowSection(int section)
     {
-        int starCount = 0;
+        ShowSection(Creator.levelsSo.GetSection(section));
+    }
+    
+    private void ShowSection(SectionData sectionData)
+    {
+        _currentSectionText.text = $"Section {sectionData.section}";
+        
+        _currentSectionShown = sectionData;
+        
+        int totalStarCount = 0;
+        int sectionStarCount = 0;
         foreach (LevelSaveData levelSaveData in Creator.saveDataSo.levels)
         {
-            starCount += levelSaveData.starsScored;
+            totalStarCount += levelSaveData.starsScored;
+            if (levelSaveData.section == sectionData.section)
+            {
+                sectionStarCount += levelSaveData.starsScored;
+            }
+        }
+
+        if (totalStarCount < sectionData.starsRequiredToUnlock)
+        {
+            _sectionLockedParent.gameObject.SetActive(true);
+            _sectionUnlockedParent.gameObject.SetActive(false);
+            _starsScoredProgressBar?.gameObject.SetActive(false);
+            
+            _starsRequiredToUnlockText.text = $"<sprite index=0>{sectionData.starsRequiredToUnlock}";
+            return;
         }
         
-        foreach (SectionButton sectionButton in _sectionButtons)
+        _sectionLockedParent.gameObject.SetActive(false);
+        _sectionUnlockedParent.gameObject.SetActive(true);
+        _starsScoredProgressBar?.gameObject.SetActive(true);
+
+        for (int i = 0; i < _levelButtons.Count; i++)
         {
-            int starCountInSection = 0;
-            foreach (LevelSaveData levelSaveData in Creator.saveDataSo.levels)
+            LevelButton levelInfo = _levelButtons[i];
+
+            levelInfo.starOneImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starOneImage.color = Creator.levelCompleteSo.starHollowColor;
+            
+            levelInfo.starTwoImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starTwoImage.color = Creator.levelCompleteSo.starHollowColor;
+            
+            levelInfo.starThreeImage.sprite = Creator.levelCompleteSo.starHollowSprite;
+            levelInfo.starThreeImage.color = Creator.levelCompleteSo.starHollowColor;
+            
+            if (i > sectionData.levels.Count - 1) //Allows sections to have different number of levels
             {
-                if (levelSaveData.section != sectionButton.section)
+                levelInfo.levelButton.transform.parent.gameObject.SetActive(false);
+            }
+            else
+            {
+                Level level = sectionData.levels[i];
+                
+                //Update star count
+                foreach (LevelSaveData levelSaveData in Creator.saveDataSo.levels)
                 {
-                    continue;
+                    if (levelSaveData.section != level.section || levelSaveData.level != level.level)
+                    {
+                        continue;
+                    }
+                    
+                    bool oneStar = levelSaveData.score <= level.star1Score;
+                    bool twoStar = levelSaveData.score <= level.star2Score;
+                    bool threeStar = levelSaveData.score <= level.star3Score;
+                    
+                    levelInfo.starOneImage.sprite = oneStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+                    levelInfo.starOneImage.color = oneStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+        
+                    levelInfo.starTwoImage.sprite = twoStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+                    levelInfo.starTwoImage.color = twoStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+
+                    levelInfo.starThreeImage.sprite = threeStar ? Creator.levelCompleteSo.starFilledSprite : Creator.levelCompleteSo.starHollowSprite;
+                    levelInfo.starThreeImage.color = threeStar ? Creator.levelCompleteSo.starFilledColor : Creator.levelCompleteSo.starHollowColor;
+                    
+                    break;
                 }
-                
-                starCountInSection += levelSaveData.starsScored;
+
+                levelInfo.level = level;
+                levelInfo.levelButton.SetText($"{level.section} - {level.level}");
+                levelInfo.levelButton.transform.parent.gameObject.SetActive(true);
             }
-
-            SectionData section = Creator.levelsSo.GetSection(sectionButton.section);
-            int totalStarsInSection = 3 * section.levels.Count;
-
-            SetButtonAppearance(sectionButton, starCount, starCountInSection, totalStarsInSection);
         }
         
-        float t = starCount / (float)Creator.levelsSo.totalStars;
-        _starsScoredProgressBar.SetBar01(t);
-        _starsScoredText.text = $" {starCount} ({(int)(t*100)}%)";
-    }
-
-    private void SetButtonAppearance(SectionButton sectionButton, int starsScoredInGame, int currentStarCountInSection, int totalStarCountInSection)
-    {
-        if (currentStarCountInSection == totalStarCountInSection)
-        {
-            sectionButton.button.enableIcon = true;
-            sectionButton.button.enableText = true;
-                
-            sectionButton.button.normalText.color = Color.white;
-            sectionButton.button.SetIcon(Creator.miscUiSo.tickSprite);
-            foreach (Image image in sectionButton.buttonBackgroundImages)
-            {
-                image.color = Creator.miscUiSo.sectionCompleteColour;
-            }
-            sectionButton.button.normalImage.color = Creator.miscUiSo.sectionCompleteColour;
-            sectionButton.button.highlightImage.color = Color.black;
-            sectionButton.button.SetText($"{sectionButton.section}");
-                
-            sectionButton.unlocked = true;
-        }
-        else if (starsScoredInGame >= sectionButton.starsRequiredToUnlock)
-        {
-            sectionButton.button.enableIcon = false;
-            sectionButton.button.enableText = true;
-                
-            sectionButton.button.normalText.color = Color.white;
-            sectionButton.button.SetText($"{sectionButton.section}");
-                
-            sectionButton.unlocked = true;
-        }
-        else
-        {
-            sectionButton.button.enableIcon = true;
-            sectionButton.button.enableText = true;
-            sectionButton.button.normalText.color = Creator.levelCompleteSo.starFilledColor;
-            sectionButton.button.SetText($"{sectionButton.starsRequiredToUnlock}");
-        }
+        float t = sectionStarCount / (3f * sectionData.levels.Count);
+        _starsScoredProgressBar?.SetBar01(t);
+        
+        _totalStarsScoredText.text = $"<sprite index=0>{totalStarCount} / {Creator.levelsSo.totalStars}";
     }
 }

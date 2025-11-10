@@ -36,12 +36,16 @@ MonoBehaviour:
     description: '<u>How to play (2/3)</u>
 
 
-      If an enemy can''t move, it is
-      <b>blocked</b>.
+      Try to complete each level in
+      the fewest number of turns and moves to earn 3 stars.
 
 
-      Pawn promotions, en pessant and castling are not present
-      in Chain Chess.'
+      If an enemy can''t
+      move, it is <b>blocked</b>.
+
+
+      Pawn promotions, en pessant and castling
+      are not present in Chain Chess.'
   - sprite: {fileID: 21300522, guid: ee1aa8dd1fc49614d89b7eb3f8af788b, type: 3}
     material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     pieceAbility: 10

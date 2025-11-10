@@ -90,7 +90,7 @@ public class UILevels : UIPanel
         }
 
         int levelNumber = 1;
-        List<LevelButtonRefs> levelButtonRefs = Creator.GetChildComponentsByName<LevelButtonRefs>(_panel.gameObject, AllTagNames.LevelButtonRefs);
+        List<LevelButtonRefs> levelButtonRefs = Creator.GetChildComponentsByName<LevelButtonRefs>(_panel.gameObject, AllTagNames.ButtonLevel);
         foreach (LevelButtonRefs levelButtonRef in levelButtonRefs)
         {
             LevelInfo levelInfo = new()

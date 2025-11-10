@@ -67,12 +67,6 @@ public class UILevelComplete : UIPanel
     {
         Level levelCompleted = _turnSystem.currentLevel;
         int score = Creator.statsTurns * Creator.statsMoves;
-
-        List<UISections> uiSections = _uiSystem.GetUI<UISections>();
-        foreach (UISections uiSection in uiSections)
-        {
-            uiSection.UpdateStarCount();
-        }
         
         if (_uiSystem.canvasType == _parentCanvas.canvasType)
         {
@@ -161,7 +155,7 @@ public class UILevelComplete : UIPanel
                 bool nextSectionUnlocked = starsScored >= nextSectionData.starsRequiredToUnlock;
                 int starsRequiredToUnlock = math.max(nextSectionData.starsRequiredToUnlock - starsScored, 0);
                 _nextLevelButton.gameObject.SetActive(nextSectionUnlocked);
-                _starsRequiredText.text = $"<b>{starsRequiredToUnlock}</b><sprite index=0> required for Section {nextSectionData.section}";
+                _starsRequiredText.text = $"<b>{starsRequiredToUnlock}</b><sprite index=0> more required for Section {nextSectionData.section}";
                 _starsRequiredText.gameObject.SetActive(!nextSectionUnlocked);
             }
         }
