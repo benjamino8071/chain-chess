@@ -43,7 +43,7 @@ public class Creator : MonoBehaviour
     [HideInInspector] public int statsTurns;
     [HideInInspector] public int statsMoves;
     [HideInInspector] public int statsCaptures;
-    [HideInInspector] public bool firstMoveMade;
+    [HideInInspector] public bool firstInputTaken;
     private DateTime _dateTimeSinceLastSave;
 
     private List<Dependency> _dependencies = new();
@@ -102,15 +102,15 @@ public class Creator : MonoBehaviour
         {
             case TransitionState.None:
             {
-                if (!firstMoveMade 
+                if (!firstInputTaken 
                     && (inputSo.leftMouseButton.action.WasPressedThisFrame() || inputSo.rightMouseButton.action.WasPressedThisFrame()))
                 {
                     GetDependency<UISystem>().SetHomescreen(false);
-                    firstMoveMade = true;
+                    firstInputTaken = true;
                     return;
                 }
 
-                if (!firstMoveMade)
+                if (!firstInputTaken)
                 {
                     GetDependency<UISystem>().GameUpdate(dt);
                     return;
@@ -120,6 +120,29 @@ public class Creator : MonoBehaviour
                 {
                     UnlockAll();
                     _allUnlocked = true;
+                }
+
+                if (Input.GetKeyDown(KeyCode.O))
+                {
+                    foreach (Dependency dependency in _dependencies)
+                    {
+                        if (dependency is BlackSystem blackSystem)
+                        {
+                            blackSystem.Lose(GameOverReason.Captured);
+                            break;
+                        }
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.P))
+                {
+                    foreach (Dependency dependency in _dependencies)
+                    {
+                        if (dependency is WhiteSystem whiteSystem)
+                        {
+                            whiteSystem.Lose(GameOverReason.Captured);
+                            break;
+                        }
+                    }
                 }
         
                 foreach (Dependency dependency in _dependencies)

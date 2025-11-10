@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Michsky.MUIP;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,6 +15,8 @@ public class UILevelComplete : UIPanel
     private Image _starOneImage;
     private Image _starTwoImage;
     private Image _starThreeImage;
+
+    private TextMeshProUGUI _starsRequiredText;
 
     private ParticleSystem _confetti;
     
@@ -33,16 +36,21 @@ public class UILevelComplete : UIPanel
         _starOneImage = Creator.GetChildComponentByName<Image>(_panel.gameObject, AllTagNames.Star1Image);
         _starTwoImage = Creator.GetChildComponentByName<Image>(_panel.gameObject, AllTagNames.Star2Image);
         _starThreeImage = Creator.GetChildComponentByName<Image>(_panel.gameObject, AllTagNames.Star3Image);
+
+        _starsRequiredText = Creator.GetChildComponentByName<TextMeshProUGUI>(_panel.gameObject, AllTagNames.TextStars);
         
         _nextLevelButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonNextLevel);
         _nextLevelButton.onClick.AddListener(() =>
         {
             _audioSystem.PlayUISignificantClickSfx();
-            
+
             Level currentLevel = _turnSystem.currentLevel;
-            SectionData section = Creator.levelsSo.GetSection(currentLevel.section);
-            int nextLevel = currentLevel.level == section.levels.Count ? 1 : currentLevel.level + 1;
-            currentLevel = Creator.levelsSo.GetLevel(currentLevel.section, nextLevel);
+            SectionData sectionData = Creator.levelsSo.GetSection(currentLevel.section);
+            SectionData nextSectionData = sectionData.section == Creator.levelsSo.sections.Count ? Creator.levelsSo.sections[0] : Creator.levelsSo.GetSection(sectionData.section + 1);
+
+            int nextSection = currentLevel.isLastInSection ? nextSectionData.section : sectionData.section;
+            int nextLevel = currentLevel.isLastInSection ? nextSectionData.levels[0].level : currentLevel.level + 1;
+            currentLevel = Creator.levelsSo.GetLevel(nextSection, nextLevel);
             _turnSystem.LoadLevelRuntime(currentLevel);
         });
 
@@ -103,8 +111,6 @@ public class UILevelComplete : UIPanel
         
         _confetti.Play();
         
-        _panel.gameObject.SetActive(true);
-
         if (_uiSystem.canvasType == _parentCanvas.canvasType)
         {
             SaveLatestLevelScore(levelCompleted, score);
@@ -127,6 +133,45 @@ public class UILevelComplete : UIPanel
                 _audioSystem.PlayerGameOverSfx();
             }
         }
+        
+        if (levelCompleted.isLastInSection)
+        {
+            //Have to check if the player's unlocked the next section
+            //If they haven't then we need to show the text
+            //If it's the very last level then just show a 'thank you' message
+            //Also need to update the text
+            
+            if (levelCompleted.section == Creator.levelsSo.sections.Count)
+            {
+                //Very last level!
+                _nextLevelButton.gameObject.SetActive(false);
+                _starsRequiredText.text = "Thank You for Playing!";
+                _starsRequiredText.gameObject.SetActive(true);
+            }
+            else
+            {
+                SectionData nextSectionData = Creator.levelsSo.GetSection(levelCompleted.section + 1);
+                
+                int starsScored = 0;
+                foreach (LevelSaveData level in Creator.saveDataSo.levels)
+                {
+                    starsScored += level.starsScored;
+                }
+
+                bool nextSectionUnlocked = starsScored >= nextSectionData.starsRequiredToUnlock;
+                int starsRequiredToUnlock = math.max(nextSectionData.starsRequiredToUnlock - starsScored, 0);
+                _nextLevelButton.gameObject.SetActive(nextSectionUnlocked);
+                _starsRequiredText.text = $"<b>{starsRequiredToUnlock}</b><sprite index=0> required for Section {nextSectionData.section}";
+                _starsRequiredText.gameObject.SetActive(!nextSectionUnlocked);
+            }
+        }
+        else
+        {
+            _nextLevelButton.gameObject.SetActive(true);
+            _starsRequiredText.gameObject.SetActive(false);
+        }
+        
+        _panel.gameObject.SetActive(true);
         
         List<UICurrentLevel> uiCurrentLevels = _uiSystem.GetUI<UICurrentLevel>();
         foreach (UICurrentLevel uiCurrentLevel in uiCurrentLevels)

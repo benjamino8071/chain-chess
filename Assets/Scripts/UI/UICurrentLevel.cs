@@ -61,22 +61,56 @@ public class UICurrentLevel : UIPanel
         {
             _audioSystem.PlayUISignificantClickSfx();
             
+            Level nextLevel;
             Level currentLevel = _turnSystem.currentLevel;
-            SectionData section = Creator.levelsSo.GetSection(currentLevel.section);
-            int previousLevel = currentLevel.level == 1 ? section.levels.Count : currentLevel.level - 1;
-            currentLevel = Creator.levelsSo.GetLevel(currentLevel.section, previousLevel);
-            _turnSystem.LoadLevelRuntime(currentLevel);
+            if (currentLevel is { section: 1, level: 1 })
+            {
+                SectionData latestSectionUnlocked = LatestSectionUnlocked();
+                nextLevel = latestSectionUnlocked.levels[^1];
+            }
+            else if (currentLevel.level == 1)
+            {
+                SectionData nextSectionData = Creator.levelsSo.GetSection(currentLevel.section - 1);
+                nextLevel = nextSectionData.levels[^1];
+            }
+            else
+            {
+                nextLevel = Creator.levelsSo.GetLevel(currentLevel.section, currentLevel.level - 1);
+            }
+            
+            _turnSystem.LoadLevelRuntime(nextLevel);
         });
         
         _rightButton.onClick.AddListener(() =>
         {
             _audioSystem.PlayUISignificantClickSfx();
             
+            /*
+             * If the current level.isLastInSection and current section is latest unlocked section, load section 1 level 1
+             * Else If the current level.isLastInSection, load section {X + 1} level 1
+             * Else load section X level X + 1
+             */
+            
+            SectionData latestSectionUnlocked = LatestSectionUnlocked();
+            
+            Level nextLevel;
             Level currentLevel = _turnSystem.currentLevel;
-            SectionData section = Creator.levelsSo.GetSection(currentLevel.section);
-            int nextLevel = currentLevel.level == section.levels.Count ? 1 : currentLevel.level + 1;
-            currentLevel = Creator.levelsSo.GetLevel(currentLevel.section, nextLevel);
-            _turnSystem.LoadLevelRuntime(currentLevel);
+
+            if(currentLevel.isLastInSection && latestSectionUnlocked.section == currentLevel.section)
+            {
+                nextLevel = Creator.levelsSo.GetLevel(1,1);
+            }
+            else if (currentLevel.isLastInSection)
+            {
+                SectionData nextSectionData = Creator.levelsSo.GetSection(currentLevel.section + 1);
+                nextLevel = nextSectionData.levels[0];
+            }
+            else
+            {
+                nextLevel = Creator.levelsSo.GetLevel(currentLevel.section, currentLevel.level + 1);
+            }
+            
+            _turnSystem.LoadLevelRuntime(nextLevel);
         });
         
         _sectionsButton.onClick.AddListener(() =>
@@ -134,5 +168,26 @@ public class UICurrentLevel : UIPanel
         _turnsText.text = $"{turns}";
         _movesText.text = $"{moves}";
         _scoreText.text = $"{turns*moves}";
+    }
+    
+    private SectionData LatestSectionUnlocked()
+    {
+        int starsScored = 0;
+        foreach (LevelSaveData level in Creator.saveDataSo.levels)
+        {
+            starsScored += level.starsScored;
+        }
+            
+        SectionData latestSectionUnlocked = Creator.levelsSo.sections[^1];
+        for (int i = 0; i < Creator.levelsSo.sections.Count; i++)
+        {
+            if (Creator.levelsSo.sections[i].starsRequiredToUnlock > starsScored)
+            {
+                latestSectionUnlocked = Creator.levelsSo.sections[i - 1];
+                break;
+            }
+        }
+        
+        return latestSectionUnlocked;
     }
 }
