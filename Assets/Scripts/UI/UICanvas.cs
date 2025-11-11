@@ -42,11 +42,6 @@ public class UICanvas : Dependency
         },
         new()
         {
-            TagName = AllTagNames.UIConfirmDelete,
-            UIPanel = new UIConfirmDelete()
-        },
-        new()
-        {
             TagName = AllTagNames.UICredits,
             UIPanel = new UICredits()
         },

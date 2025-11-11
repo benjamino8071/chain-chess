@@ -66,7 +66,7 @@ public class Creator : MonoBehaviour
     
     private void Awake()
     {
-        LoadFromDisk();
+        LoadSave();
         
         Application.targetFrameRate = frameRate;
         
@@ -150,24 +150,6 @@ public class Creator : MonoBehaviour
         }
     }
 
-    private void UnlockAll()
-    {
-        saveDataSo.levels.Clear();
-        foreach (SectionData sectionData in levelsSo.sections)
-        {
-            foreach (Level level in sectionData.levels)
-            {
-                saveDataSo.levels.Add(new()
-                {
-                    level = level.level,
-                    score = 0,
-                    section = level.section,
-                    starsScored = 3
-                });
-            }
-        }
-    }
-
     private void CreateDependencies()
     {
         _dependencies.Add(new PoolSystem());
@@ -182,64 +164,22 @@ public class Creator : MonoBehaviour
         _dependencies.Add(new TurnSystem());
     }
 
-    public void SaveToDisk()
+    private void LoadSave()
     {
-        TimeSpan elapsed = DateTime.Now - _dateTimeSinceLastSave;
-        saveDataSo.totalSeconds += elapsed.TotalSeconds;
-        _dateTimeSinceLastSave = DateTime.Now;
-        
-        ES3.Save(settingsSo.saveDataKey, saveDataSo);
-    }
-
-    private void LoadFromDisk()
-    {
-        if (ES3.KeyExists(settingsSo.saveDataKey))
-        {
-            SaveData_SO diskSaveDataSo = ES3.Load(settingsSo.saveDataKey, saveDataSo);
-            saveDataSo.levels = diskSaveDataSo.levels.ToList();
-            saveDataSo.audio = diskSaveDataSo.audio;
-            saveDataSo.boardVariant = diskSaveDataSo.boardVariant;
-            saveDataSo.levelLastLoaded = diskSaveDataSo.levelLastLoaded;
-            saveDataSo.isFirstTime = false;
-            saveDataSo.windowWidth = diskSaveDataSo.windowWidth;
-            saveDataSo.windowHeight = diskSaveDataSo.windowHeight;
-            saveDataSo.totalTurns = diskSaveDataSo.totalTurns;
-            saveDataSo.totalMoves = diskSaveDataSo.totalMoves;
-            saveDataSo.totalCaptures = diskSaveDataSo.totalCaptures;
-            saveDataSo.totalSeconds = diskSaveDataSo.totalSeconds;
-            saveDataSo.showAbilityText = diskSaveDataSo.showAbilityText;
-        }
-        else
-        {
-            saveDataSo.levels = new();
-            saveDataSo.audio = true;
-            saveDataSo.isFullscreen = false;
-            saveDataSo.boardVariant = boardSo.boardVariants[0];
-            saveDataSo.sectionLastLoaded = 1;
-            saveDataSo.levelLastLoaded = 1;
-            saveDataSo.isFirstTime = true;
-            saveDataSo.windowWidth = Screen.width;
-            saveDataSo.windowHeight = Screen.height;
-            saveDataSo.totalTurns = 0;
-            saveDataSo.totalMoves = 0;
-            saveDataSo.totalCaptures = 0;
-            saveDataSo.totalSeconds = 0;
-            saveDataSo.showAbilityText = true;
-        }
-    }
-
-    public void DeleteOnDisk()
-    {
-        ES3.DeleteKey(settingsSo.saveDataKey);
-        
-        SceneManager.LoadScene(0);
-    }
-    
-    [Button]
-    public void DeleteOnDiskExposed()
-    {
-        ES3.DeleteKey(settingsSo.saveDataKey);
-        Debug.Log("SAVE DATA DELETED");
+        saveDataSo.levels = new();
+        saveDataSo.audio = true;
+        saveDataSo.isFullscreen = false;
+        saveDataSo.boardVariant = boardSo.boardVariants[0];
+        saveDataSo.sectionLastLoaded = 1;
+        saveDataSo.levelLastLoaded = 1;
+        saveDataSo.isFirstTime = true;
+        saveDataSo.windowWidth = Screen.width;
+        saveDataSo.windowHeight = Screen.height;
+        saveDataSo.totalTurns = 0;
+        saveDataSo.totalMoves = 0;
+        saveDataSo.totalCaptures = 0;
+        saveDataSo.totalSeconds = 0;
+        saveDataSo.showAbilityText = true;
     }
     
     public GameObject InstantiateGameObject(GameObject creatorGridPrefab, Vector3 position, Quaternion rotation)
@@ -340,14 +280,6 @@ public class Creator : MonoBehaviour
 
         Debug.LogError("Could not find object");
         return null;
-    }
-
-    private void OnApplicationQuit()
-    {
-        saveDataSo.windowWidth = Screen.width;
-        saveDataSo.windowHeight = Screen.height;
-        
-        SaveToDisk();
     }
 }
 

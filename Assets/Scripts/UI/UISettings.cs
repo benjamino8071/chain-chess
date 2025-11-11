@@ -52,29 +52,6 @@ public class UISettings : UIPanel
             audioButton.SetIcon(Creator.saveDataSo.audio ? Creator.miscUiSo.audioOnSprite : Creator.miscUiSo.audioOffSprite);
             
             _audioSystem.PlayUIClickSfx();
-            
-            Creator.SaveToDisk();
-        });
-
-        ButtonManager fullscreenButton =
-            Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonFullscreen);
-        fullscreenButton.onClick.AddListener(() =>
-        {
-            _audioSystem.PlayUIClickSfx();
-            
-            Creator.saveDataSo.isFullscreen = !Creator.saveDataSo.isFullscreen;
-            
-            UpdateFullscreen(Creator.saveDataSo.isFullscreen);
-            
-            Creator.SaveToDisk();
-        });
-        
-        ButtonManager deleteButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonDelete);
-        deleteButton.onClick.AddListener(() =>
-        {
-            _uiSystem.ShowLeftBotSideUI(AllTagNames.UIConfirmDelete);
-            
-            _audioSystem.PlayUIClickSfx();
         });
 
         ButtonManager abilityTextButton = Creator.GetChildComponentByName<ButtonManager>(_panel.gameObject, AllTagNames.ButtonAbilityText);
@@ -85,8 +62,6 @@ public class UISettings : UIPanel
             _blackSystem.SetAbilityTexts(Creator.saveDataSo.showAbilityText);
 
             _audioSystem.PlayUIClickSfx();
-
-            Creator.SaveToDisk();
         });
 
         List<ButtonManager> colourVariants =
@@ -115,8 +90,6 @@ public class UISettings : UIPanel
                 Creator.saveDataSo.boardVariant = boardVariant;
                 
                 UpdateBoardVariant(boardVariant);
-                
-                Creator.SaveToDisk();
             });
         }
 
@@ -128,57 +101,12 @@ public class UISettings : UIPanel
         UpdateBoardVariant(Creator.saveDataSo.boardVariant);
     }
 
-    public override void GameUpdate(float dt)
-    {
-        if (_uiSystem.canvasType != _parentCanvas.canvasType)
-        {
-            return;
-        }
-        
-        if (Creator.saveDataSo.isFullscreen && Input.GetKeyDown(KeyCode.Escape))
-        {
-            Creator.saveDataSo.isFullscreen = false;
-            
-            UpdateFullscreen(false);
-            
-            Creator.SaveToDisk();
-        }
-        else if (Input.GetKeyDown(KeyCode.F))
-        {
-            Creator.saveDataSo.isFullscreen = !Creator.saveDataSo.isFullscreen;
-            UpdateFullscreen(Creator.saveDataSo.isFullscreen);
-            
-            Creator.SaveToDisk();
-        }
-    }
-
     private void UpdateBoardVariant(BoardVariant boardVariant)
     {
         _tiles.sprite = boardVariant.board;
         _edge.color = boardVariant.edgeColur;
         _background.color = boardVariant.backgroundColour;
         _uiSystem.SetBadAspectRatioColour(boardVariant.backgroundColour);
-    }
-    
-    private void UpdateFullscreen(bool isFullscreen)
-    {
-        if (Application.platform == RuntimePlatform.WebGLPlayer || Application.platform == RuntimePlatform.IPhonePlayer)
-        {
-            return;
-        }
-        
-        if (isFullscreen)
-        {
-            _width = Screen.width;
-            _height = Screen.height;
-            
-            Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.FullScreenWindow);
-        }
-        else
-        {
-            Screen.SetResolution(_width, _height, FullScreenMode.Windowed);
-        }
-        Screen.fullScreen = isFullscreen;
     }
     
     private void UpdateSoundSetting(bool audioOn)

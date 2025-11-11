@@ -28,14 +28,6 @@ public class BootLoad : MonoBehaviour
     }
     private State _state;
 
-    private void Awake()
-    {
-        if (Application.platform != RuntimePlatform.WebGLPlayer && Application.platform != RuntimePlatform.IPhonePlayer)
-        {
-            LoadScreenSize();
-        }
-    }
-
     private void Start()
     {
         _state = State.Transitioning;
@@ -94,21 +86,6 @@ public class BootLoad : MonoBehaviour
                 _state = State.None;
                 break;
             }
-        }
-    }
-    
-    private void LoadScreenSize()
-    {
-        if (ES3.KeyExists(settingsSo.saveDataKey))
-        {
-            SaveData_SO diskSaveDataSo = ES3.Load(settingsSo.saveDataKey, saveDataSo);
-            Screen.SetResolution(diskSaveDataSo.windowWidth, diskSaveDataSo.windowHeight, diskSaveDataSo.isFullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
-            Screen.fullScreen = diskSaveDataSo.isFullscreen;
-        }
-        else
-        {
-            Screen.SetResolution((int)(Screen.currentResolution.width / 1.5f), (int)(Screen.currentResolution.height / 1.5f), FullScreenMode.Windowed);
-            Screen.fullScreen = false;
         }
     }
 }

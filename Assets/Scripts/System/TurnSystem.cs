@@ -118,7 +118,6 @@ public class TurnSystem : Dependency
 
         Creator.saveDataSo.sectionLastLoaded = level.section;
         Creator.saveDataSo.levelLastLoaded = level.level;
-        Creator.SaveToDisk();
 
         List<UICurrentLevel> uiCurrentLevels = _uiSystem.GetUI<UICurrentLevel>();
         foreach (UICurrentLevel uiCurrentLevel in uiCurrentLevels)

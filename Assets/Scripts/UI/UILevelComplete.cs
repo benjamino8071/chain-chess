@@ -213,7 +213,5 @@ public class UILevelComplete : UIPanel
                 starsScored = starsScored,
             });
         }
-        
-        Creator.SaveToDisk();
     }
 }
