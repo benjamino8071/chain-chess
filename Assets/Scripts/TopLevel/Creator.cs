@@ -112,35 +112,6 @@ public class Creator : MonoBehaviour
                     GetDependency<UISystem>().GameUpdate(dt);
                     return;
                 }
-                
-                if (Input.GetKeyDown(KeyCode.S) && !_allUnlocked)
-                {
-                    UnlockAll();
-                    _allUnlocked = true;
-                }
-
-                if (Input.GetKeyDown(KeyCode.O))
-                {
-                    foreach (Dependency dependency in _dependencies)
-                    {
-                        if (dependency is BlackSystem blackSystem)
-                        {
-                            blackSystem.Lose(GameOverReason.Captured);
-                            break;
-                        }
-                    }
-                }
-                else if (Input.GetKeyDown(KeyCode.P))
-                {
-                    foreach (Dependency dependency in _dependencies)
-                    {
-                        if (dependency is WhiteSystem whiteSystem)
-                        {
-                            whiteSystem.Lose(GameOverReason.Captured);
-                            break;
-                        }
-                    }
-                }
         
                 foreach (Dependency dependency in _dependencies)
                 {
