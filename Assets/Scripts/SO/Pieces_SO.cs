@@ -8,6 +8,7 @@ public class Pieces_SO : ScriptableObject
 {
     public float pieceSpeed;
     public float alwaysMoveSpeed;
+    public float dragSpeed;
     
     public Sprite pawn;
     public Sprite rook;
@@ -111,7 +112,7 @@ public enum PieceState
     FindingMove = 1,
     Moving = 2,
     NotInUse = 3,
-    Paused = 4,
+    DragNDrop = 4,
     Blocked = 5,
     EndGame = 6
 }

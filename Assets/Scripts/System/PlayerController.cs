@@ -99,30 +99,82 @@ public class PlayerController : Dependency
         switch (_state)
         {
             case PieceState.WaitingForTurn:
+            {
                 break;
+            }
             case PieceState.FindingMove:
+            {
                 FindingMove(dt);
                 break;
+            }
+            case PieceState.DragNDrop:
+            {
+                DragNDrop(dt);
+                break;
+            }
             case PieceState.Moving:
+            {
                 Moving(dt);
                 break;
+            }
             case PieceState.NotInUse:
+            {
                 break;
+            }
             case PieceState.Blocked:
+            {
                 Blocked(dt);
                 break;
+            }
             case PieceState.EndGame:
+            {
                 break;
+            }
         }
     }
 
     private void FindingMove(float dt)
     {
+        if (!Creator.inputSo.leftMouseButton.action.WasPressedThisFrame())
+        {
+            return;
+        }
+        if(_blackSystem.IsPieceMoving())
+        {
+           return; 
+        }
+        
         //The player will find the move when they are ready
         Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
-        if (Creator.inputSo.leftMouseButton.action.WasPressedThisFrame() && CanMove(positionRequested) && !_blackSystem.IsPieceMoving())
+        if (CanMove(positionRequested))
         {
             MovePiece(positionRequested);
+        }
+        else if (positionRequested == _model.position)
+        {
+            SetState(PieceState.DragNDrop);
+        }
+    }
+
+    private void DragNDrop(float dt)
+    {
+        if (Creator.inputSo.leftMouseButton.action.WasReleasedThisFrame())
+        {
+            Vector3 positionRequested = _boardSystem.GetGridPointNearMouse();
+            if (CanMove(positionRequested))
+            {
+                _model.position = positionRequested;
+                MovePiece(_model.position);
+            }
+            else
+            {
+                SetState(PieceState.FindingMove);
+            }
+            _spriteRenderer.transform.localPosition = Vector3.zero;
+        }
+        else
+        {
+            _spriteRenderer.transform.position = math.lerp(_spriteRenderer.transform.position, _boardSystem.GetRawMousePosition(), Creator.piecesSo.dragSpeed * dt);
         }
     }
     
@@ -280,7 +332,7 @@ public class PlayerController : Dependency
         
         return d1 < 0.01f || d2 < 0.01f;
     }
-
+    
     private void MovePiece(Vector3 positionRequested)
     {
         // Set our position as a fraction of the distance between the markers.

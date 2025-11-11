@@ -566,9 +566,9 @@ public class AIController : Dependency
         _state = state;
     }
 
-    public void PlayEnlargeAnimation()
+    public void PlaySelectedAnimation()
     {
-        _scaleTween.Enlarge();
+        _scaleTween.Selected();
     }
 
     private Piece GenerateOtherRandomPiece(Piece piece)

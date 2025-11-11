@@ -138,7 +138,7 @@ public class BlackSystem : Dependency
                 
                 if (aiController.pieceAbility != PieceAbility.AlwaysMove)
                 {
-                    aiController.PlayEnlargeAnimation();
+                    aiController.PlaySelectedAnimation();
                 }
 
                 aiController.SetState(PieceState.FindingMove);
@@ -275,7 +275,7 @@ public class BlackSystem : Dependency
     public void SelectCaptureLoverPiece(AIController pieceController, float3 movePosition)
     {
         pieceController.ForceMove(movePosition);
-        pieceController.PlayEnlargeAnimation();
+        pieceController.PlaySelectedAnimation();
     }
 
     public bool IsPieceMoving()

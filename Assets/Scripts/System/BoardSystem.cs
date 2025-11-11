@@ -132,6 +132,14 @@ public class BoardSystem : Dependency
 
         return new(x, y, 0);
     }
+
+    public float3 GetRawMousePosition()
+    {
+        Vector3 screenPos = Input.mousePosition;
+        screenPos.z = 10;
+        
+        return Creator.mainCam.ScreenToWorldPoint(screenPos);
+    }
     
     public void FlickerEdge()
     {
