@@ -212,6 +212,7 @@ public class Creator : MonoBehaviour
 
     private void CreateDependencies()
     {
+        _dependencies.Add(new PoolSystem());
         _dependencies.Add(new UISystem());
         _dependencies.Add(new ValidMovesSystem());
         _dependencies.Add(new PlayerSetTilesSystem());
@@ -403,19 +404,57 @@ public class Creator : MonoBehaviour
         return null;
     }
 
-    private void OnDestroy()
-    {
-        foreach (Dependency dependency in _dependencies)
-        {
-            dependency.Destroy();
-        }
-    }
-
     private void OnApplicationQuit()
     {
         saveDataSo.windowWidth = Screen.width;
         saveDataSo.windowHeight = Screen.height;
         
         SaveToDisk();
+    }
+}
+
+public class PoolSystem : Dependency
+{
+    private List<GameObject> _piecesPool;
+
+    public override void GameStart(Creator creator)
+    {
+        base.GameStart(creator);
+        
+        _piecesPool = new List<GameObject>(64);
+        for (int i = 0; i < _piecesPool.Capacity; i++)
+        {
+            GameObject pieceGo =
+                creator.InstantiateGameObject(Creator.piecePrefab, new(-100, -100), Quaternion.identity);
+            pieceGo.SetActive(false);
+            _piecesPool.Add(pieceGo);
+        }
+    }
+
+    public GameObject GetPieceObjectFromPool(Vector3 position)
+    {
+        if (_piecesPool.Count == 0)
+        {
+            GameObject pieceGo =
+                Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity);
+            return pieceGo;
+        }
+
+        GameObject piece = _piecesPool[^1];
+        piece.transform.position = position;
+        piece.SetActive(true);
+
+        _piecesPool.Remove(piece);
+        return piece;
+    }
+
+    public void ReturnObjectToPool(GameObject go)
+    {
+        go.SetActive(false);
+        go.transform.position = new(-100, -100);
+        go.transform.rotation = Quaternion.identity;
+        go.transform.localScale = Vector3.one;
+        
+        _piecesPool.Add(go);
     }
 }

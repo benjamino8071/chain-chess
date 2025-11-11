@@ -229,7 +229,7 @@ public class UISystem : Dependency
         _tyfpTotalTimeText.text = timeSpan;
         
         _tyfpCanvas.gameObject.SetActive(true);
-        _tyfpTween.PhaseIn();
+        _tyfpTween.Enlarge();
         
         _canvasType = AllTagNames.ThankYouForPlaying;
     }

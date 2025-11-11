@@ -13,6 +13,7 @@ public class PlayerController : Dependency
     private BlackSystem _blackSystem;
     private WhiteSystem _whiteSystem;
     private TurnSystem _turnSystem;
+    private PoolSystem _poolSystem;
 
     public Piece currentPiece => _currentPiece;
     
@@ -38,9 +39,9 @@ public class PlayerController : Dependency
     private SpriteRenderer _spriteRenderer;
 
     private GameObject _background;
-    
-    private Animator _animator;
-    
+
+    private ScaleTween _scaleTween;
+
     private PieceState _state;
     private Piece _currentPiece;
     private Vector3 _startPosition;
@@ -61,19 +62,22 @@ public class PlayerController : Dependency
         _blackSystem = creator.GetDependency<BlackSystem>();
         _whiteSystem = creator.GetDependency<WhiteSystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
+        _poolSystem = creator.GetDependency<PoolSystem>();
     }
     
     public void Init(Vector3 position, Piece startingPiece)
     {
-        _model = Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity).transform;
+        _model = _poolSystem.GetPieceObjectFromPool(position).transform;
         
         _background = Creator.GetChildObjectByName(_model.gameObject, AllTagNames.Background).gameObject;
         
         _spriteRenderer = Creator.GetChildComponentByName<SpriteRenderer>(_model.gameObject, AllTagNames.PlayerSprite);
 
         _spriteRenderer.color = Creator.piecesSo.whiteColor;
-        
-        _animator = _model.GetComponentInChildren<Animator>();
+        _spriteRenderer.material = Creator.piecesSo.noneMat;
+
+        _scaleTween = _model.GetComponentInChildren<ScaleTween>();
+        _scaleTween.Enlarge();
         
         //Player does not have an ability, so the text canvas can be disabled
         GameObject textCanvas = Creator.GetChildComponentByName<Transform>(_model.gameObject, AllTagNames.Text).parent.parent.gameObject;
@@ -85,7 +89,7 @@ public class PlayerController : Dependency
         
         _capturedPieces.Add(startingPiece);
         _movesInThisTurn.Add(startingPiece);
-
+        
         _state = PieceState.NotInUse;
     }
 
@@ -618,8 +622,9 @@ public class PlayerController : Dependency
             }
             case PieceState.Blocked:
             {
-                _timer = 1.1f; //Shrink animation length
-                _animator.SetTrigger("shrink");
+                _timer = _scaleTween.phaseOutTime; //Shrink animation length
+                _scaleTween.Shrink();
+                
                 _background.SetActive(false);
                 
                 break;
@@ -631,6 +636,6 @@ public class PlayerController : Dependency
     
     public override void Destroy()
     {
-        Object.Destroy(_model.gameObject);
+        _poolSystem.ReturnObjectToPool(_model.gameObject);
     }
 }

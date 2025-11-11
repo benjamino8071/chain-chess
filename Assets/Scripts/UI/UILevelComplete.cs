@@ -139,7 +139,7 @@ public class UILevelComplete : UIPanel
             {
                 //Very last level!
                 _nextLevelButton.gameObject.SetActive(false);
-                _starsRequiredText.text = "Thank You for Playing!";
+                _starsRequiredText.text = "Thank You For Playing!";
                 _starsRequiredText.gameObject.SetActive(true);
             }
             else

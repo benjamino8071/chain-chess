@@ -7,17 +7,19 @@ public class ScaleTween : MonoBehaviour
     public float phaseInTime;
     public float phaseOutTime;
 
+    public Vector3 normalScale = Vector3.one;
+    
     [Button]
-    public void PhaseIn()
+    public void Enlarge()
     {
         transform.localScale = Vector3.zero;
-        LeanTween.scale(gameObject, Vector3.one, phaseInTime);
+        LeanTween.scale(gameObject, normalScale, phaseInTime);
     }
     
     [Button]
-    public void PhaseOut()
+    public void Shrink()
     {
-        transform.localScale = Vector3.one;
+        transform.localScale = normalScale;
         LeanTween.scale(gameObject, Vector3.zero, phaseOutTime);
     }
 }

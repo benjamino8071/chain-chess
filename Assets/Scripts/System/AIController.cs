@@ -17,6 +17,7 @@ public class AIController : Dependency
     private AudioSystem _audioSystem;
     private WhiteSystem _whiteSystem;
     private BlackSystem _blackSystem;
+    private PoolSystem _poolSystem;
 
     public Piece piece => _piece;
     
@@ -32,7 +33,7 @@ public class AIController : Dependency
     
     private SpriteRenderer _spriteRenderer;
     
-    private Animator _animator;
+    private ScaleTween _scaleTween;
 
     private Transform _abilityTextParent;
     
@@ -55,17 +56,19 @@ public class AIController : Dependency
         _audioSystem = creator.GetDependency<AudioSystem>();
         _whiteSystem = creator.GetDependency<WhiteSystem>();
         _blackSystem = creator.GetDependency<BlackSystem>();
+        _poolSystem = creator.GetDependency<PoolSystem>();
     }
 
     public void Init(Vector3 position, Piece piece, PieceAbility pieceAbility)
     {
-        _model = Creator.InstantiateGameObject(Creator.piecePrefab, position, Quaternion.identity).transform;
+        _model = _poolSystem.GetPieceObjectFromPool(position).transform;
         
         GameObject background = Creator.GetChildObjectByName(_model.gameObject, AllTagNames.Background).gameObject;
         
         _spriteRenderer = Creator.GetChildComponentByName<SpriteRenderer>(_model.gameObject, AllTagNames.PlayerSprite);
-        
-        _animator = _model.GetComponentInChildren<Animator>();
+
+        _scaleTween = _model.GetComponentInChildren<ScaleTween>();
+        _scaleTween.Enlarge();
 
         //Player does not have an ability, so the text canvas can be disabled
         TMP_Text abilityText = Creator.GetChildComponentByName<TMP_Text>(_model.gameObject, AllTagNames.Text);
@@ -553,9 +556,9 @@ public class AIController : Dependency
             }
             case PieceState.Blocked:
             {
-                _timer = 1.1f; //Shrink animation length
-                _animator.SetTrigger("shrink");
-                
+                _timer = _scaleTween.phaseOutTime; //Shrink animation length
+                _scaleTween.Shrink();
+                SetAbilityText(false);
                 break;
             }
         }
@@ -565,7 +568,7 @@ public class AIController : Dependency
 
     public void PlayEnlargeAnimation()
     {
-        _animator?.SetTrigger("enlarge");
+        _scaleTween.Enlarge();
     }
 
     private Piece GenerateOtherRandomPiece(Piece piece)
@@ -609,6 +612,6 @@ public class AIController : Dependency
     
     public override void Destroy()
     {
-        Object.Destroy(_model.gameObject);
+        _poolSystem.ReturnObjectToPool(_model.gameObject);
     }
 }

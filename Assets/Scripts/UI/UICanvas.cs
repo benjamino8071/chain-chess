@@ -156,7 +156,7 @@ public class UICanvas : Dependency
         {
             if (panel.TagName == uiTag)
             {
-                _leftBotBackgroundTween.PhaseIn();
+                _leftBotBackgroundTween.Enlarge();
                 
                 panel.UIPanel.Show();
             }
@@ -172,7 +172,7 @@ public class UICanvas : Dependency
     
     public void HideLeftBotSideUI()
     {
-        _leftBotBackgroundTween.PhaseOut();
+        _leftBotBackgroundTween.Shrink();
         
         _leftBotSidePanelOpen = AllTagNames.None;
     }
@@ -194,7 +194,7 @@ public class UICanvas : Dependency
         {
             if (panel.TagName == uiTag)
             {
-                _rightTopBackgroundTween.PhaseIn();
+                _rightTopBackgroundTween.Enlarge();
                 
                 SetBackgroundColour(_rightTopBackground, uiTag);
                 
