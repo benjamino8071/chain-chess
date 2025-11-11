@@ -99,7 +99,7 @@ public class BootLoad : MonoBehaviour
         }
         else
         {
-            Screen.SetResolution(settingsSo.defaultWidth, settingsSo.defaultHeight, FullScreenMode.Windowed);
+            Screen.SetResolution(Screen.currentResolution.width / 4, Screen.currentResolution.height / 3, FullScreenMode.Windowed);
             Screen.fullScreen = false;
         }
     }

@@ -153,19 +153,6 @@ public class UISystem : Dependency
 
     public void SetHomescreen(bool show)
     {
-        List<UIBasicMenu> basicMenus = GetUI<UIBasicMenu>();
-        foreach (UIBasicMenu basicMenu in basicMenus)
-        {
-            if (show)
-            {
-                basicMenu.Hide();
-            }
-            else
-            {
-                basicMenu.Show();
-            }
-        }
-
         if (show)
         {
             ShowRightTopSideUI(AllTagNames.UITitle);

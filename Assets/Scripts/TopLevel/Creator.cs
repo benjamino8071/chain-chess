@@ -260,8 +260,8 @@ public class Creator : MonoBehaviour
             saveDataSo.sectionLastLoaded = 1;
             saveDataSo.levelLastLoaded = 1;
             saveDataSo.isFirstTime = true;
-            saveDataSo.windowWidth = settingsSo.defaultWidth;
-            saveDataSo.windowHeight = settingsSo.defaultHeight;
+            saveDataSo.windowWidth = Screen.currentResolution.width / 4;
+            saveDataSo.windowHeight = Screen.currentResolution.height / 3;
             saveDataSo.totalTurns = 0;
             saveDataSo.totalMoves = 0;
             saveDataSo.totalCaptures = 0;
