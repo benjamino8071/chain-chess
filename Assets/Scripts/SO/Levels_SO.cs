@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -22,19 +21,6 @@ public class Levels_SO : ScriptableObject
         }
 
         return default;
-    }
-    
-    public int GetSectionStarsRequirement(int section)
-    {
-        foreach (SectionData sectionData in sections)
-        {
-            if (sectionData.section == section)
-            {
-                return sectionData.starsRequiredToUnlock;
-            }
-        }
-
-        return -1;
     }
     
     public Level GetLevel(int sectionNumber, int levelNumber)
@@ -96,9 +82,6 @@ public class Levels_SO : ScriptableObject
             sections[i] = section;
         }
     }
-    
-    [Title("Reserved Levels")]
-    public List<Level> reservedLevels;
 }
 
 [Serializable]

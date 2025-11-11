@@ -5,8 +5,6 @@ public class UIPanel : Dependency
     protected UISystem _uiSystem;
     protected AudioSystem _audioSystem;
     
-    public bool IsShowing => _panel.gameObject.activeSelf;
-    
     protected Transform _panel;
 
     protected UICanvas _parentCanvas;

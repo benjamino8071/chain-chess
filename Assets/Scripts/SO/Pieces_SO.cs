@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using SystemRandom = System.Random;
 
 [CreateAssetMenu]
 public class Pieces_SO : ScriptableObject

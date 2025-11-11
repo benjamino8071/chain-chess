@@ -1,22 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Michsky.MUIP;
-using MoreMountains.FeedbacksForThirdParty;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UISystem : Dependency
 {
-    public List<RaycastResult> objectsUnderMouse => _currentCanvas.objectsUnderMouse;
-
     public AllTagNames leftBotSidePanelOpen => _currentCanvas.leftBotSidePanelOpen;
     public AllTagNames rightTopSidePanelOpen => _currentCanvas.rightTopSidePanelOpen;
-    
-    public Image leftBotBackground => _currentCanvas.leftBotBackground;
-    public Image rightTopBackground => _currentCanvas.rightTopBackground;
-    
     public AllTagNames canvasType => _canvasType;
 
     private AudioSystem _audioSystem;
@@ -160,14 +152,7 @@ public class UISystem : Dependency
         }
         else
         {
-            if (Creator.saveDataSo.isFirstTime)
-            {
-                ShowLeftBotSideUI(AllTagNames.UIRulebook);
-            }
-            else
-            {
-                ShowLeftBotSideUI(AllTagNames.UICurrentLevel);
-            }
+            ShowLeftBotSideUI(Creator.saveDataSo.isFirstTime ? AllTagNames.UIRulebook : AllTagNames.UICurrentLevel);
             ShowRightTopSideUI(AllTagNames.UIChain);
         }
     }

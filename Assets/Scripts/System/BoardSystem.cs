@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BoardSystem : Dependency
 {
-    private WhiteSystem _whiteSystem;
     private BlackSystem _blackSystem;
     private TurnSystem _turnSystem;
     private UISystem _uiSystem;
@@ -21,7 +20,6 @@ public class BoardSystem : Dependency
     {
         base.GameStart(creator);
 
-        _whiteSystem = creator.GetDependency<WhiteSystem>();
         _blackSystem = creator.GetDependency<BlackSystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
         _uiSystem = creator.GetDependency<UISystem>();
@@ -77,8 +75,6 @@ public class BoardSystem : Dependency
             {
                 _uiSystem.ShowRightTopSideUI(AllTagNames.UIChain);
             }
-        
-            Creator.boardSo.hideMainMenuTrigger = true;
         }
         else if (Creator.inputSo.middleMouseButton.action.WasPressedThisFrame())
         {

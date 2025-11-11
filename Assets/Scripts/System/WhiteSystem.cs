@@ -1,10 +1,7 @@
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class WhiteSystem : Dependency
 {
-    private AudioSystem _audioSystem;
     private ValidMovesSystem _validMovesSystem;
     private TurnSystem _turnSystem;
     private EndGameSystem _endGameSystem;
@@ -23,13 +20,12 @@ public class WhiteSystem : Dependency
         base.GameStart(creator);
         
         _blackSystem = creator.GetDependency<BlackSystem>();
-        _audioSystem = creator.GetDependency<AudioSystem>();
         _validMovesSystem = creator.GetDependency<ValidMovesSystem>();
         _turnSystem = creator.GetDependency<TurnSystem>();
         _endGameSystem = creator.GetDependency<EndGameSystem>();
     }
 
-    public void CreatePiece(Vector2 position, Piece startingPiece)
+    private void CreatePiece(Vector2 position, Piece startingPiece)
     {
         _playerController = new PlayerController();
         _playerController.GameStart(Creator);
@@ -64,16 +60,6 @@ public class WhiteSystem : Dependency
                 break;
             }
         }
-    }
-
-    public void UpdateSelectedPieceValidMoves()
-    {
-        if (_playerController.state == PieceState.Moving)
-        {
-            return;
-        }
-        
-        _validMovesSystem.UpdateValidMoves(_playerController.GetAllValidMovesOfCurrentPiece());
     }
 
     public void FreezeSide()

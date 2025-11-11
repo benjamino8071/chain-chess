@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Michsky.MUIP;
 using Sirenix.OdinInspector;
-using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class Creator : MonoBehaviour
@@ -147,17 +144,7 @@ public class Creator : MonoBehaviour
         
                 foreach (Dependency dependency in _dependencies)
                 {
-                    dependency.GameEarlyUpdate(dt);
-                }
-        
-                foreach (Dependency dependency in _dependencies)
-                {
                     dependency.GameUpdate(dt);
-                }
-        
-                foreach (Dependency dependency in _dependencies)
-                {
-                    dependency.GameLateUpdate(dt);
                 }
                 
                 break;
@@ -305,7 +292,7 @@ public class Creator : MonoBehaviour
         }
 
         Debug.LogError("Could not find dependency");
-        return default;
+        return null;
     }
     
     public Transform GetFirstObjectWithName(AllTagNames gameObjectName)
@@ -325,26 +312,6 @@ public class Creator : MonoBehaviour
 
         Debug.LogError("Could not find object");
         return null;
-    }
-
-    public List<Transform> GetObjectsByName(AllTagNames gameObjectName)
-    {
-        List<Transform> objs = new();
-        
-        Transform[] objects = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-
-        foreach (Transform obj in objects)
-        {
-            if (obj.TryGetComponent(out TagName objName))
-            {
-                if (objName.tagName == gameObjectName)
-                {
-                    objs.Add(obj);
-                }
-            }
-        }
-        
-        return objs;
     }
 
     public T GetChildComponentByName<T>(GameObject parent, AllTagNames gameObjectName)

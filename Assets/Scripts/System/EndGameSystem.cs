@@ -2,7 +2,6 @@ using System.Collections.Generic;
 
 public class EndGameSystem : Dependency
 {
-    private TurnSystem _turnSystem;
     private ValidMovesSystem _validMovesSystem;
     private BoardSystem _boardSystem;
     private UISystem _uiSystem;
@@ -15,7 +14,6 @@ public class EndGameSystem : Dependency
     {
         base.GameStart(creator);
         
-        _turnSystem = creator.GetDependency<TurnSystem>();
         _validMovesSystem = creator.GetDependency<ValidMovesSystem>();
         _boardSystem = creator.GetDependency<BoardSystem>();
         _uiSystem = creator.GetDependency<UISystem>();

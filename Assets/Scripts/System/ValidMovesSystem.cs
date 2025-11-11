@@ -9,14 +9,13 @@ public class ValidMovesSystem : Dependency
         public GameObject enemyHere;
         public GameObject enemyNotHere;
     }
-
-    private Dictionary<Vector2, ValidPositionVisual> validPositions;
+    private Dictionary<Vector2, ValidPositionVisual> _validPositions;
     
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
 
-        validPositions = new(64);
+        _validPositions = new(64);
 
         Transform allValidMovesParent = Creator.GetFirstObjectWithName(AllTagNames.AllValidMovesParent);
         
@@ -33,7 +32,7 @@ public class ValidMovesSystem : Dependency
                 enemyHere.gameObject.SetActive(false);
                 enemyNotHere.gameObject.SetActive(false);
                 
-                validPositions[new Vector2(x, y)] = new()
+                _validPositions[new Vector2(x, y)] = new()
                 {
                     enemyHere = enemyHere.gameObject,
                     enemyNotHere = enemyNotHere.gameObject
@@ -44,15 +43,13 @@ public class ValidMovesSystem : Dependency
 
     public void UpdateValidMoves(List<ValidMove> validMoves)
     {
-        //Debug.Log("Updating valid moves");
-        
         HideAllValidMoves();
         
         for (int i = 0; i < validMoves.Count; i++)
         {
             ValidMove valid = validMoves[i];
             
-            if (validPositions.TryGetValue(new(valid.position.x, valid.position.y), out ValidPositionVisual validPosition))
+            if (_validPositions.TryGetValue(new(valid.position.x, valid.position.y), out ValidPositionVisual validPosition))
             {
                 validPosition.enemyHere.SetActive(valid.enemyHere);
                 validPosition.enemyNotHere.SetActive(!valid.enemyHere);
@@ -62,7 +59,7 @@ public class ValidMovesSystem : Dependency
     
     public void HideAllValidMoves()
     {
-        foreach (ValidPositionVisual validPositionVisual in validPositions.Values)
+        foreach (ValidPositionVisual validPositionVisual in _validPositions.Values)
         {
             validPositionVisual.enemyHere.SetActive(false);
             validPositionVisual.enemyNotHere.SetActive(false);

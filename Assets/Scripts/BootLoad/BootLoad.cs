@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -55,9 +56,16 @@ public class BootLoad : MonoBehaviour
 
     private async void Unload()
     {
-        await SceneManager.UnloadSceneAsync(0);
+        try
+        {
+            await SceneManager.UnloadSceneAsync(0);
         
-        SceneManager.sceneLoaded -= SceneManager_SceneLoaded;
+            SceneManager.sceneLoaded -= SceneManager_SceneLoaded;
+        }
+        catch (Exception)
+        {
+            Application.Quit();
+        }
     }
 
     private void Update()

@@ -18,7 +18,7 @@ public class UICanvas : Dependency
         public UIPanel UIPanel;
     }
 
-    private List<Panel> _leftBotPanels = new()
+    private readonly List<Panel> _leftBotPanels = new()
     {
         new()
         {
@@ -51,13 +51,13 @@ public class UICanvas : Dependency
             UIPanel = new UICredits()
         },
     };
-    private Panel _uiBasicMenu = new()
+    private readonly Panel _uiBasicMenu = new()
     {
         TagName = AllTagNames.UIBasicMenu,
         UIPanel = new UIBasicMenu()
     };
 
-    private List<Panel> _rightTopPanels = new()
+    private readonly List<Panel> _rightTopPanels = new()
     {
         new()
         {
@@ -86,7 +86,6 @@ public class UICanvas : Dependency
     public AllTagNames leftBotSidePanelOpen => _leftBotSidePanelOpen;
     public AllTagNames rightTopSidePanelOpen => _rightTopSidePanelOpen;
     
-    public Image leftBotBackground => _leftBotBackground;
     public Image rightTopBackground => _rightTopBackground;
     
     private AllTagNames _leftBotSidePanelOpen;
@@ -170,24 +169,6 @@ public class UICanvas : Dependency
         _leftBotBackground.gameObject.SetActive(true);
     }
     
-    public void HideLeftBotSideUI()
-    {
-        _leftBotBackgroundTween.Shrink();
-        
-        _leftBotSidePanelOpen = AllTagNames.None;
-    }
-
-    public void HideLeftBotSideUINoTween()
-    {
-        foreach (Panel panel in _leftBotPanels)
-        {
-            panel.UIPanel.Hide();
-        }
-        
-        _leftBotSidePanelOpen = AllTagNames.None;
-        _leftBotBackground.gameObject.SetActive(false);
-    }
-    
     public void ShowRightTopSideUI(AllTagNames uiTag)
     {
         foreach (Panel panel in _rightTopPanels)
@@ -208,17 +189,6 @@ public class UICanvas : Dependency
 
         _rightTopSidePanelOpen = uiTag;
         _rightTopBackground.gameObject.SetActive(true);
-    }
-    
-    public void HideRightTopSideUI()
-    {
-        foreach (Panel panel in _rightTopPanels)
-        {
-            panel.UIPanel.Hide();
-        }
-        
-        _rightTopSidePanelOpen = AllTagNames.None;
-        _rightTopBackground.gameObject.SetActive(false);
     }
 
     public T GetUI<T>() where T : UIPanel

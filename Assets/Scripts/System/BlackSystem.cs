@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 public class BlackSystem : Dependency
@@ -11,7 +10,7 @@ public class BlackSystem : Dependency
     private EndGameSystem _endGameSystem;
     private WhiteSystem _whiteSystem;
     
-    private List<AIController> _pieceControllers = new ();
+    private readonly List<AIController> _pieceControllers = new ();
     private List<AIController> _piecesToMoveThisTurn = new();
     
     private bool _lost;
@@ -94,9 +93,7 @@ public class BlackSystem : Dependency
     {
         _piecesToMoveThisTurn = new(_pieceControllers.Count);
         
-        /*
-         * Try to find a piece that can capture the other player
-         */
+        //Try to find a piece that can capture the other player
         if(FindPieceThatCanCapture() is {} pieceThatCanCapture)
         {
             _piecesToMoveThisTurn.Add(pieceThatCanCapture);
@@ -209,19 +206,6 @@ public class BlackSystem : Dependency
                 CreatePiece(pieceSpawnData.position, pieceSpawnData.piece, pieceSpawnData.ability);
             }
         }
-    }
-
-    public List<Vector3> PiecePositions()
-    {
-        List<Vector3> piecePositions = new(_pieceControllers.Count);
-
-        foreach (AIController pieceController in _pieceControllers)
-        {
-            piecePositions.Add(pieceController.piecePos);
-            piecePositions.Add(pieceController.jumpPos);
-        }
-
-        return piecePositions;
     }
 
     public AIController GetPieceAtPosition(Vector3 position)

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Michsky.MUIP;
-using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,7 +14,7 @@ public class UIChain : UIPanel
     private Vector2 _chainParentInitialPos;
     private Vector2 _chainParentNewPos;
 
-    private List<Image> _chainPieceImages = new ();
+    private readonly List<Image> _chainPieceImages = new ();
     private int _nextFreeIndex;
     
     private float _mouseOffTimer;

@@ -3,15 +3,6 @@ using UnityEngine;
 
 public class AudioSystem : Dependency
 {
-    private Transform _camera;
-    
-    public override void GameStart(Creator creator)
-    {
-        base.GameStart(creator);
-        
-        _camera = Camera.main.transform;
-    }
-    
     public void PlayPieceMoveSfx(float pitch)
     {
         PlaySfx(Creator.audioClipsSo.pieceMoved, pitch);
@@ -47,11 +38,6 @@ public class AudioSystem : Dependency
         PlaySfx(Creator.audioClipsSo.uiClick);
     }
     
-    public void PlayUIAltClickSfx(float pitch = 1)
-    {
-        PlaySfx(Creator.audioClipsSo.uiAltClick, pitch);
-    }
-    
     public void PlayUISignificantClickSfx()
     {
         PlaySfx(Creator.audioClipsSo.uiSignificantClick);
@@ -62,13 +48,13 @@ public class AudioSystem : Dependency
         PlaySfx(Creator.audioClipsSo.uiRulebookTurnClick);
     }
 
-    private void PlayMusic(AudioClip clip, float thePitch = 1)
-    {
-        MMSoundManagerSoundPlayEvent.Trigger(clip, MMSoundManager.MMSoundManagerTracks.Music, _camera.position, pitch:thePitch);
-    }
+    // private void PlayMusic(AudioClip clip, float thePitch = 1)
+    // {
+    //     MMSoundManagerSoundPlayEvent.Trigger(clip, MMSoundManager.MMSoundManagerTracks.Music, _camera.position, pitch:thePitch);
+    // }
     
     private void PlaySfx(AudioClip clip, float thePitch = 1)
     {
-        MMSoundManagerSoundPlayEvent.Trigger(clip, MMSoundManager.MMSoundManagerTracks.Sfx, _camera.position, pitch:thePitch);
+        MMSoundManagerSoundPlayEvent.Trigger(clip, MMSoundManager.MMSoundManagerTracks.Sfx, Creator.mainCam.transform.position, pitch:thePitch);
     }
 }

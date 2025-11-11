@@ -40,7 +40,6 @@ public class AIController : Dependency
     private Piece _piece;
     private PieceAbility _pieceAbility;
     private PieceState _state;
-    private Vector3 _startPosition;
     private Vector3 _jumpPosition;
     private float _timer;
     
@@ -171,8 +170,6 @@ public class AIController : Dependency
                 int chosenPositionIndex = Random.Range(0, possiblePositions.Count);
                 _jumpPosition = possiblePositions[chosenPositionIndex].position;
             }
-
-            _startPosition = _model.position;
             
             _audioSystem.PlayPieceMoveSfx(1);
             SetState(PieceState.Moving);
@@ -216,35 +213,6 @@ public class AIController : Dependency
             float t = Evaluate(_timer);
             _model.position = Vector3.Lerp(_model.position, _jumpPosition, t);
         }
-    }
-    
-    private List<Vector2Int> GetPath(Vector2Int start, Vector2Int end)
-    {
-        List<Vector2Int> path = new List<Vector2Int>();
-
-        int dx = end.x - start.x;
-        int dy = end.y - start.y;
-
-        // Determine step direction
-        int stepX = dx == 0 ? 0 : (dx > 0 ? 1 : -1);
-        int stepY = dy == 0 ? 0 : (dy > 0 ? 1 : -1);
-
-        // Make sure it's a valid straight or diagonal move
-        if (dx != 0 && dy != 0 && Mathf.Abs(dx) != Mathf.Abs(dy))
-        {
-            Debug.LogWarning("Invalid chess move: not straight or diagonal");
-            return path;
-        }
-
-        Vector2Int current = start + new Vector2Int(stepX, stepY);
-
-        while (current != end)
-        {
-            path.Add(current);
-            current += new Vector2Int(stepX, stepY);
-        }
-
-        return path;
     }
 
     public void ForceMove(float3 movePosition)
@@ -569,45 +537,6 @@ public class AIController : Dependency
     public void PlaySelectedAnimation()
     {
         _scaleTween.Selected();
-    }
-
-    private Piece GenerateOtherRandomPiece(Piece piece)
-    {
-        List<Piece> glitchedPieceChanges = new()
-        {
-            Piece.Knight,
-            Piece.Knight,
-            Piece.Rook,
-            Piece.Rook,
-            Piece.Bishop,
-            Piece.Bishop,
-            Piece.Queen
-        };
-
-        switch (piece)
-        {
-            case Piece.Knight:
-                glitchedPieceChanges.Remove(Piece.Knight);
-                glitchedPieceChanges.Remove(Piece.Knight);
-                break;
-            case Piece.Rook:
-                glitchedPieceChanges.Remove(Piece.Rook);
-                glitchedPieceChanges.Remove(Piece.Rook);
-                break;
-            case Piece.Bishop:
-                glitchedPieceChanges.Remove(Piece.Bishop);
-                glitchedPieceChanges.Remove(Piece.Bishop);
-                break;
-            case Piece.Queen:
-                glitchedPieceChanges.Remove(Piece.Queen);
-                break;
-        }
-                            
-        // Generate a random index
-        int index = Random.Range(0, glitchedPieceChanges.Count);
-
-        // Use the index to set the piece
-        return glitchedPieceChanges[index];
     }
     
     public override void Destroy()

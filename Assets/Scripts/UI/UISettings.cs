@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using Michsky.MUIP;
 using MoreMountains.Tools;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UISettings : UIPanel

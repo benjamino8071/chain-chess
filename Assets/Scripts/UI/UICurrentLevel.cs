@@ -1,6 +1,5 @@
 using Michsky.MUIP;
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class UICurrentLevel : UIPanel

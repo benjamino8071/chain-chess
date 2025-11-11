@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class PlayerController : Dependency
 {
@@ -14,22 +13,14 @@ public class PlayerController : Dependency
     private WhiteSystem _whiteSystem;
     private TurnSystem _turnSystem;
     private PoolSystem _poolSystem;
-
-    public Piece currentPiece => _currentPiece;
     
     public PieceState state => _state;
     
     public Vector3 piecePos => _model.position;
-
-    public Vector3 jumpPos => _jumpPosition;
     
     public List<Piece> capturedPieces => _capturedPieces;
     
     public int movesUsed => _capturedPieces.Count - _movesInThisTurn.Count;
-
-    public int movesRemaining => _movesInThisTurn.Count;
-    
-    public int piecesCapturedInThisTurn => _piecesCapturedInThisTurn;
     
     private List<Piece> _capturedPieces = new(16);
     private List<Piece> _movesInThisTurn = new(16);
@@ -43,10 +34,8 @@ public class PlayerController : Dependency
     private ScaleTween _scaleTween;
 
     private PieceState _state;
-    private Piece _currentPiece;
     private Vector3 _startPosition;
     private Vector3 _jumpPosition;
-    private int _piecesCapturedInThisTurn;
     private float _timer;
     
     private float _pitchAmount = 1;
@@ -204,7 +193,6 @@ public class PlayerController : Dependency
                     {
                         _capturedPieces.Clear();
                         _movesInThisTurn.Clear();
-                        _piecesCapturedInThisTurn = 0;
                     
                         AddCapturedPiece(enemyPieceController.piece);
 
@@ -395,10 +383,8 @@ public class PlayerController : Dependency
         }
     }
 
-    public void AddCapturedPiece(Piece piece)
+    private void AddCapturedPiece(Piece piece)
     {
-        _piecesCapturedInThisTurn++;
-        
         _capturedPieces.Add(piece);
         _movesInThisTurn.Add(piece);
     }
@@ -627,7 +613,6 @@ public class PlayerController : Dependency
                 _spriteRenderer.sprite = Creator.piecesSo.king;
                 break;
         }
-        _currentPiece = piece;
     }
 
     public void SetState(PieceState state)
@@ -667,7 +652,6 @@ public class PlayerController : Dependency
                         _movesInThisTurn.Add(capturedPiece);
                     }
                 }
-                _piecesCapturedInThisTurn = 0; //For next time the player uses this piece
                 _background.SetActive(false);
                 
                 break;
