@@ -266,7 +266,7 @@ public class Creator : MonoBehaviour
             saveDataSo.totalMoves = 0;
             saveDataSo.totalCaptures = 0;
             saveDataSo.totalSeconds = 0;
-            saveDataSo.showAbilityText = false;
+            saveDataSo.showAbilityText = true;
         }
     }
 
