@@ -74,4 +74,5 @@ public enum AllTagNames
     SectionUnlockedParent = 171,
     SectionLockedParent = 172,
     StarsRequiredText = 173,
+    Hidden = 174,
 }

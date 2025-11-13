@@ -85,6 +85,11 @@ public class UISystem : Dependency
     
     public override void GameUpdate(float dt)
     {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            _canvasType = _canvasType == AllTagNames.Hidden ? AllTagNames.None : AllTagNames.Hidden;
+        }
+        
         UpdateCurrentCanvas();
         
         _landscapeCanvas.GameUpdate(dt);
@@ -98,7 +103,12 @@ public class UISystem : Dependency
         
         float aspect = width / height;
 
-        if (_canvasType == AllTagNames.ThankYouForPlaying)
+        if (_canvasType == AllTagNames.Hidden)
+        {
+            _landscapeCanvas.SetVisibility(false);
+            _portraitCanvas.SetVisibility(false);
+        }
+        else if (_canvasType == AllTagNames.ThankYouForPlaying)
         {
             //nothing here...
         }
