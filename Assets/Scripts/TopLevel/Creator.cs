@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
@@ -30,6 +31,7 @@ public class Creator : MonoBehaviour
     public GameObject selectedBackgroundPrefab;
     public GameObject imagePrefab;
     public GameObject rulebookHighlightImagePrefab;
+    public GameObject blockedTextEffect;
 
     [Title("Camera")]
     public Camera mainCam;
@@ -355,18 +357,26 @@ public class PoolSystem : Dependency
 {
     private List<GameObject> _piecesPool;
 
+    private List<ScaleTween> _blockedTextEffectPool;
+
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
-        
-        _piecesPool = new List<GameObject>(64);
+
+        int capacity = 64;
+        _piecesPool = new (capacity);
+        _blockedTextEffectPool = new(capacity);
         for (int i = 0; i < _piecesPool.Capacity; i++)
         {
-            GameObject pieceGo =
-                creator.InstantiateGameObject(Creator.piecePrefab, new(-100, -100), Quaternion.identity);
+            GameObject pieceGo = creator.InstantiateGameObject(Creator.piecePrefab, new(-100, -100), Quaternion.identity);
             pieceGo.SetActive(false);
             _piecesPool.Add(pieceGo);
+
+            GameObject blockEffectGo = creator.InstantiateGameObject(Creator.blockedTextEffect, new(-100, -100), Creator.blockedTextEffect.transform.rotation);
+            blockEffectGo.SetActive(false);
+            _blockedTextEffectPool.Add(blockEffectGo.GetComponent<ScaleTween>());
         }
+        
     }
 
     public GameObject GetPieceObjectFromPool(Vector3 position)
@@ -394,5 +404,36 @@ public class PoolSystem : Dependency
         go.transform.localScale = Vector3.one;
         
         _piecesPool.Add(go);
+    }
+
+    public void ShowBlockedTextEffect(Vector3 position)
+    {
+        Debug.Log("Showing blocked text effect at "+position);
+
+        position.x += 0.5f;
+        position.y += 0.5f;
+        
+        ScaleTween blockedEffect = _blockedTextEffectPool[0];
+        blockedEffect.transform.position = position;
+        Fing(blockedEffect);
+    }
+
+    private async void Fing(ScaleTween scaleTween)
+    {
+        scaleTween.gameObject.SetActive(true);
+
+        _blockedTextEffectPool.Remove(scaleTween);
+        
+        scaleTween.Enlarge();
+
+        await Task.Delay((int)((scaleTween.phaseInTime + scaleTween.phaseOutTime) * 1000));
+        
+        scaleTween.Shrink();
+        
+        await Task.Delay((int)(scaleTween.phaseOutTime * 1000));
+        
+        _blockedTextEffectPool.Add(scaleTween);
+        
+        scaleTween.gameObject.SetActive(false);
     }
 }

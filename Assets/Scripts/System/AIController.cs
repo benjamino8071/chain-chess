@@ -528,6 +528,9 @@ public class AIController : Dependency
                 _timer = _scaleTween.phaseOutTime; //Shrink animation length
                 _scaleTween.Shrink();
                 SetAbilityText(false);
+                
+                _poolSystem.ShowBlockedTextEffect(_model.position);
+                
                 break;
             }
         }
