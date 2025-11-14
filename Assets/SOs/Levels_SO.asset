@@ -2949,22 +2949,18 @@ MonoBehaviour:
     - section: 7
       level: 6
       isLastInSection: 0
-      star1Score: 340
-      star2Score: 260
-      star3Score: 190
+      star1Score: 580
+      star2Score: 450
+      star3Score: 320
       positions:
       - piece: 1
         colour: 1
-        ability: 0
-        position: {x: 5, y: 4}
-      - piece: 1
-        colour: 0
         ability: 0
         position: {x: 4, y: 5}
       - piece: 3
         colour: 0
         ability: 9
-        position: {x: 3, y: 6}
+        position: {x: 2, y: 7}
       - piece: 2
         colour: 0
         ability: 9
@@ -3186,7 +3182,7 @@ MonoBehaviour:
       star2Score: 423
       star3Score: 354
       positions:
-      - piece: 6
+      - piece: 5
         colour: 1
         ability: 0
         position: {x: 6, y: 5}
@@ -3208,7 +3204,7 @@ MonoBehaviour:
         position: {x: 6, y: 6}
       - piece: 5
         colour: 0
-        ability: 9
+        ability: 0
         position: {x: 2, y: 2}
       - piece: 2
         colour: 0
@@ -3232,7 +3228,7 @@ MonoBehaviour:
         position: {x: 5, y: 4}
       - piece: 2
         colour: 0
-        ability: 9
+        ability: 0
         position: {x: 4, y: 5}
       - piece: 4
         colour: 0
@@ -3272,7 +3268,7 @@ MonoBehaviour:
         position: {x: 8, y: 4}
       - piece: 2
         colour: 0
-        ability: 9
+        ability: 0
         position: {x: 7, y: 4}
       - piece: 6
         colour: 0
@@ -3289,9 +3285,9 @@ MonoBehaviour:
     - section: 7
       level: 10
       isLastInSection: 1
-      star1Score: 528
+      star1Score: 550
       star2Score: 450
-      star3Score: 336
+      star3Score: 350
       positions:
       - piece: 5
         colour: 1
@@ -3516,9 +3512,9 @@ MonoBehaviour:
     - section: 8
       level: 4
       isLastInSection: 0
-      star1Score: 328
-      star2Score: 228
-      star3Score: 140
+      star1Score: 410
+      star2Score: 290
+      star3Score: 190
       positions:
       - piece: 3
         colour: 1
@@ -3662,9 +3658,9 @@ MonoBehaviour:
     - section: 8
       level: 6
       isLastInSection: 0
-      star1Score: 460
-      star2Score: 393
-      star3Score: 330
+      star1Score: 550
+      star2Score: 450
+      star3Score: 350
       positions:
       - piece: 5
         colour: 1
@@ -3757,9 +3753,9 @@ MonoBehaviour:
     - section: 8
       level: 7
       isLastInSection: 0
-      star1Score: 445
-      star2Score: 370
-      star3Score: 301
+      star1Score: 550
+      star2Score: 440
+      star3Score: 330
       positions:
       - piece: 4
         colour: 1
@@ -3955,9 +3951,9 @@ MonoBehaviour:
     - section: 8
       level: 9
       isLastInSection: 0
-      star1Score: 480
-      star2Score: 405
-      star3Score: 336
+      star1Score: 630
+      star2Score: 510
+      star3Score: 420
       positions:
       - piece: 5
         colour: 1
@@ -4042,9 +4038,9 @@ MonoBehaviour:
     - section: 8
       level: 10
       isLastInSection: 1
-      star1Score: 457
-      star2Score: 388
-      star3Score: 225
+      star1Score: 699
+      star2Score: 599
+      star3Score: 499
       positions:
       - piece: 5
         colour: 1
@@ -4082,9 +4078,9 @@ MonoBehaviour:
         colour: 0
         ability: 9
         position: {x: 3, y: 5}
-      - piece: 3
+      - piece: 1
         colour: 0
-        ability: 5
+        ability: 0
         position: {x: 4, y: 5}
       - piece: 1
         colour: 0
@@ -4094,7 +4090,7 @@ MonoBehaviour:
         colour: 0
         ability: 7
         position: {x: 6, y: 5}
-      - piece: 1
+      - piece: 2
         colour: 0
         ability: 5
         position: {x: 3, y: 6}
@@ -4130,7 +4126,7 @@ MonoBehaviour:
         colour: 0
         ability: 8
         position: {x: 7, y: 1}
-      - piece: 3
+      - piece: 4
         colour: 0
         ability: 3
         position: {x: 8, y: 3}
@@ -4154,9 +4150,9 @@ MonoBehaviour:
         colour: 0
         ability: 5
         position: {x: 7, y: 8}
-      - piece: 2
+      - piece: 6
         colour: 0
-        ability: 3
+        ability: 8
         position: {x: 8, y: 7}
   - section: 9
     starsRequiredToUnlock: 240
