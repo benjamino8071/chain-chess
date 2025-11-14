@@ -82,6 +82,7 @@ public class AIController : Dependency
         _piece = piece;
         
         UpdateSprite(piece);
+        _spriteRenderer.color = Color.white; //Colour is defined on the material
         switch (pieceAbility)
         {
             case PieceAbility.None:
