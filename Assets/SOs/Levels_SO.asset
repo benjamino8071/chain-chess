@@ -3178,9 +3178,9 @@ MonoBehaviour:
     - section: 7
       level: 9
       isLastInSection: 0
-      star1Score: 497
-      star2Score: 423
-      star3Score: 354
+      star1Score: 643
+      star2Score: 552
+      star3Score: 462
       positions:
       - piece: 5
         colour: 1

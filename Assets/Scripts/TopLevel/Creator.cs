@@ -114,6 +114,48 @@ public class Creator : MonoBehaviour
                     GetDependency<UISystem>().GameUpdate(dt);
                     return;
                 }
+
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    //Give 3 stars to all levels up to 7 - 8
+                    saveDataSo.levels = new();
+                    for (int sec = 1; sec <= 7; sec++)
+                    {
+                        for (int lev = 1; lev <= 8; lev++)
+                        {
+                            saveDataSo.levels.Add(new()
+                            {
+                                section = sec,
+                                level = lev,
+                                score = 0,
+                                starsScored = 3
+                            });
+                        }
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.W))
+                {
+                    //Give 3  stars to all levels up to 8 - 9
+                    saveDataSo.levels = new();
+                    for (int sec = 1; sec <= 8; sec++)
+                    {
+                        for (int lev = 1; lev <= 10; lev++)
+                        {
+                            if (sec == 8 && lev == 10)
+                            {
+                                continue;
+                            }
+                            
+                            saveDataSo.levels.Add(new()
+                            {
+                                section = sec,
+                                level = lev,
+                                score = 0,
+                                starsScored = 3
+                            });
+                        }
+                    }
+                }
         
                 foreach (Dependency dependency in _dependencies)
                 {
