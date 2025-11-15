@@ -663,6 +663,8 @@ public class PlayerController : Dependency
                 
                 _background.SetActive(false);
                 
+                _poolSystem.ShowBlockedTextEffect(_model.position);
+                
                 break;
             }
         }
