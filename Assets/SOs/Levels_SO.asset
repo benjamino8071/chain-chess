@@ -4160,9 +4160,9 @@ MonoBehaviour:
     - section: 9
       level: 1
       isLastInSection: 1
-      star1Score: 9997
+      star1Score: 9999
       star2Score: 9998
-      star3Score: 9999
+      star3Score: 9997
       positions:
       - piece: 5
         colour: 1
