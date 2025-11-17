@@ -291,6 +291,15 @@ public class PoolSystem : Dependency
 
     private List<ScaleTween> _blockedTextEffectPool;
 
+    private class WaitingTween
+    {
+        public float timer;
+        public ScaleTween ScaleTween;
+    }
+    private List<WaitingTween> _waitingTween;
+
+    private const float MaxWaitingTime = 1;
+    
     public override void GameStart(Creator creator)
     {
         base.GameStart(creator);
@@ -298,6 +307,7 @@ public class PoolSystem : Dependency
         int capacity = 64;
         _piecesPool = new (capacity);
         _blockedTextEffectPool = new(capacity);
+        _waitingTween = new(capacity);
         for (int i = 0; i < _piecesPool.Capacity; i++)
         {
             GameObject pieceGo = creator.InstantiateGameObject(Creator.piecePrefab, new(-100, -100), Quaternion.identity);
@@ -309,6 +319,21 @@ public class PoolSystem : Dependency
             _blockedTextEffectPool.Add(blockEffectGo.GetComponent<ScaleTween>());
         }
         
+    }
+
+    public override void GameUpdate(float dt)
+    {
+        foreach (WaitingTween waitingTween in _waitingTween)
+        {
+            waitingTween.timer -= dt;
+            if (waitingTween.timer <= 0)
+            {
+                waitingTween.ScaleTween.Shrink();
+                waitingTween.ScaleTween.OnShrinkFinished += BlockedEffect_OnShrinkFinished;
+                _waitingTween.Remove(waitingTween);
+                break;
+            }
+        }
     }
 
     public GameObject GetPieceObjectFromPool(Vector3 position)
@@ -340,32 +365,34 @@ public class PoolSystem : Dependency
 
     public void ShowBlockedTextEffect(Vector3 position)
     {
-        Debug.Log("Showing blocked text effect at "+position);
-
         position.x += 0.5f;
         position.y += 0.5f;
         
         ScaleTween blockedEffect = _blockedTextEffectPool[0];
         blockedEffect.transform.position = position;
-        Fing(blockedEffect);
+        blockedEffect.Enlarge();
+        blockedEffect.gameObject.SetActive(true);
+        _blockedTextEffectPool.Remove(blockedEffect);
+        blockedEffect.OnEnlargeFinished += BlockedEffect_OnEnlargeFinished;
     }
 
-    private async void Fing(ScaleTween scaleTween)
+    private void BlockedEffect_OnEnlargeFinished(ScaleTween blockedEffect)
     {
-        scaleTween.gameObject.SetActive(true);
-
-        _blockedTextEffectPool.Remove(scaleTween);
+        _waitingTween.Add(new()
+        {
+            ScaleTween = blockedEffect,
+            timer = MaxWaitingTime
+        });
         
-        scaleTween.Enlarge();
-
-        await Task.Delay((int)((scaleTween.phaseInTime + scaleTween.phaseOutTime) * 1000));
+        blockedEffect.OnEnlargeFinished -= BlockedEffect_OnEnlargeFinished;
+    }
+    
+    private void BlockedEffect_OnShrinkFinished(ScaleTween blockedEffect)
+    {
+        _blockedTextEffectPool.Add(blockedEffect);
         
-        scaleTween.Shrink();
+        blockedEffect.gameObject.SetActive(false);
         
-        await Task.Delay((int)(scaleTween.phaseOutTime * 1000));
-        
-        _blockedTextEffectPool.Add(scaleTween);
-        
-        scaleTween.gameObject.SetActive(false);
+        blockedEffect.OnShrinkFinished -= BlockedEffect_OnShrinkFinished;
     }
 }

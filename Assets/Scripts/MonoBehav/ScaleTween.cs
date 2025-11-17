@@ -20,18 +20,31 @@ public class ScaleTween : MonoBehaviour
     {
         LeanTween.scale(gameObject, normalScale, phaseInTime);
     }
-    
+
+    public event Action<ScaleTween> OnEnlargeFinished   = delegate { };
+    public event Action<ScaleTween> OnShrinkFinished   = delegate { };
+
     [Button]
     public void Enlarge()
     {
         transform.localScale = Vector3.zero;
-        LeanTween.scale(gameObject, normalScale, phaseInTime);
+        LeanTween.scale(gameObject, normalScale, phaseInTime).setOnComplete(EnlargeFinished);
+    }
+
+    private void EnlargeFinished()
+    {
+        OnEnlargeFinished?.Invoke(this);
     }
     
     [Button]
     public void Shrink()
     {
         transform.localScale = normalScale;
-        LeanTween.scale(gameObject, Vector3.zero, phaseOutTime);
+        LeanTween.scale(gameObject, Vector3.zero, phaseOutTime).setOnComplete(ShrinkFinished);
+    }
+
+    private void ShrinkFinished()
+    {
+        OnShrinkFinished?.Invoke(this);
     }
 }
